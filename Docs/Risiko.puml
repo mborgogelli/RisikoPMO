@@ -1,3 +1,153 @@
 @startuml
-Alice -> Bob: Hello
+
+' Interfaces
+interface IGameMode {
+    +getGameMode(): IGameMode
+    +getRules(): IRuleBook
+    +isCompatibleWith(IGameExpansion exp): Boolean;
+}
+
+interface IGameExpansion {
+    +getParentGame(): GameType
+    +isEnabled(): Boolean
+    +getRules(): IRuleBook
+    +isCompatibleWith(IGameMode mode): Boolean;
+}
+
+interface IGame {
+    +getGameType(): GameType
+    +initialize(): void
+    +getBoard(): IBoard
+    +getRules(): IRuleBook
+    +getDeck(): IDeck
+    +getPlayers(): List<IPlayer>
+    +getCurrentState(): IGameState
+}
+
+interface IPlayer {
+    +getId(): String
+    +getName(): String
+    +getColor(): Color
+    +getArmies(): int
+    +getControlledTerritories(): Set<IZone>
+    +getCards(): List<ICard>
+    +getObjective(): IObjective
+    +canPerformAction(IAction action): Boolean
+    +addArmies(int amount): void
+    +removeArmies(int amount): void
+    +addTerritory(IZone territory): void
+    +removeTerritory(IZone territory): void
+}
+
+interface IRuleBook {
+    +getRules(): Set<IRule>
+    +validateAction(action: IAction): Boolean
+    +getPhaseRules(phase: IPhase): List<IRule>
+    +getTurnRules(): List<IRule>
+}
+
+interface IRule {
+    +isEnabled(): Boolean
+    +getGameType(): GameType
+    +getRuleCondition: Boolean
+    +getRuleAction(): IAction
+    +getRuleException(): Boolean
+}
+
+interface IBoard {
+    +getRegions(): Set<IRegion>
+    +getConnections(): Map<IRegion, Set<IRegion>>
+    +validateMove(from: IRegion, to: IRegion): Boolean
+}
+
+interface IZone {
+    +getZones(): Set<IZone>
+    +getOwner(): IPlayer
+    +getValue(): int
+    +getBorders(): Set<IZone>
+    +getBonus(): int
+}
+
+interface IPlaceholder {
+    +getType(): PlaceholderType
+    +isPlaced(): Boolean
+    +getOwner(): IPlayer
+    +getValue(): int
+    +getPosition(): Position
+    +setPosition(Position): void
+    +canMoveTo(Zone zone): Boolean
+}
+
+interface IObjective {
+    +isComplete(context: IGameContext): Boolean
+    +getAssignedPalyer(): Player
+    +getDescription(): String
+    +getValue(): int
+    +getType(): ObjectiveType
+}
+
+interface ICard {
+    +isVisible(): Boolean
+    +show(): void
+    +cover(): void
+    +getValue(): int
+    +getCardType(): CardType
+    +isPlayable(): Boolean
+    +onPlay(): void
+}
+
+interface IDice {
+    +getSides(): int
+    +roll(): int
+    +getLastRoll(IPlayer player): int
+    +getRollHistory(IPlayer player): List<int>
+}
+
+interface ITurn {
+    +start(): void
+    +end(): void
+    +getCurrentPlayer(): IPlayer
+    +getNextPlayer(): IPlayer
+    +getPhase(): IPhase
+    +getActions(): List<IAction>
+}
+
+interface IPhase {
+    +getType(): PhaseType
+    +canStart(): Boolean
+    +canEnd(): Boolean
+    +onStart(): void
+    +onEnd(): void
+    +isComplete(): Boolean
+    +getAllowedActions(): Set<IAction>
+}
+
+interface IDeck {
+    +shuffle(): void
+    +drawOnTop(): ICard
+    +drawRandon(): ICard
+    +addCards(cards: List<ICard>): void
+    +removeCards(cards: List<ICard>): void
+    +getSize(): int
+}
+
+' Relationships
+IGameMode <-- IGame : uses
+IGameExpansion <-- IGame : may use
+IGame *-- IBoard : has
+IGame *-- IRuleBook : has
+IGame *-- IDeck : has
+ITurn *-- IPhase : contains
+IBoard *-- IZone : contains
+IZone -- IPlaceholder : places
+IDeck *-- ICard : contains
+IRuleBook *-- IRule : contains
+IPlayer -- IDice : uses
+IGame "1" *-- "2..6" IPlayer : has
+IPlayer "1" -- "0..*" IZone : controls
+IPlayer "1" -- "0..*" ICard : holds
+IPlayer "1" -- "1" IObjective : has assigned
+ITurn -- IPlayer : manages current
+IPlaceholder -- IPlayer : owned by
+
 @enduml
