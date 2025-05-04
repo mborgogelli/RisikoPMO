@@ -20,8 +20,16 @@ interface IGame {
     +getBoard(): IBoard
     +getRules(): IRuleBook
     +getDeck(): IDeck
-    +getPlayers(): List<IPlayer>
-    +getCurrentState(): IGameState
+    +getPlayers(): List<IPlayer>    
+}
+
+interface IGameContext {
+    +getCurrentState(): IGameContext
+    +getCurrentPlayer(): IPlayer
+    +getCurrentPhase(): IPhase
+    +getLastAction(): IAction
+    +isGameOver(): Boolean
+    +getWinner(): IPlayer
 }
 
 interface IPlayer {
@@ -55,14 +63,25 @@ interface IRule {
 }
 
 interface IBoard {
-    +getRegions(): Set<IRegion>
-    +getConnections(): Map<IRegion, Set<IRegion>>
-    +validateMove(from: IRegion, to: IRegion): Boolean
+    +getRootZones(): Set<IZone>
+    +getAllZones(): Set<IZone>
+    +validateMove(from: IZone, to: IZone): Boolean
+    +getZoneByType(ZoneType type): Set<IZone>
+    +getZoneByName(String name): IZone
+    
 }
 
 interface IZone {
+	+getName(): String
+	+getType(): ZoneType
     +getZones(): Set<IZone>
+    +getParentZone(): IZone
     +getOwner(): IPlayer
+    +setOwner(Player p): void
+    +isControlledBy(IPlayer p): Boolean
+    +getArmies(): int
+    +addArmies(int amount): void
+    +removeArmies(int amount): void
     +getValue(): int
     +getBorders(): Set<IZone>
     +getBonus(): int
@@ -80,9 +99,8 @@ interface IPlaceholder {
 
 interface IObjective {
     +isComplete(context: IGameContext): Boolean
-    +getAssignedPalyer(): Player
+    +getAssignedPlayer(): Player
     +getDescription(): String
-    +getValue(): int
     +getType(): ObjectiveType
 }
 
@@ -125,7 +143,7 @@ interface IPhase {
 interface IDeck {
     +shuffle(): void
     +drawOnTop(): ICard
-    +drawRandon(): ICard
+    +drawRandonm(): ICard
     +addCards(cards: List<ICard>): void
     +removeCards(cards: List<ICard>): void
     +getSize(): int
@@ -133,13 +151,14 @@ interface IDeck {
 
 interface IAction{
 	+execute(IGameContext context): IGameContext
-	+isValid(IGameContext context)
+	+isValid(IGameContext context): Boolean
 	+undo(IGameContext context): IGameContext
 }
 
 ' Relationships
 IGameMode <-- IGame : uses
 IGameExpansion <-- IGame : may use
+IGame *-- IGameContext
 IGame *-- IBoard : has
 IGame *-- IRuleBook : has
 IGame *-- IDeck : has
@@ -157,5 +176,20 @@ ITurn -- IPlayer : manages current
 IPlaceholder -- IPlayer : owned by
 Class Continent implements IZone
 Class Territory implements IZone
-
+Class DeploymentPhase implements IPhase
+Class AttackPhase implements IPhase
+Class FortifyPhase implements IPhase
+DeploymentPhase *-- IAction
+AttackPhase *-- IAction
+FortifyPhase *-- IAction
+Class RisikoTurn implements ITurn
+Class MissionCard implements ICard
+MissionCard *-- IObjective
+Class WildCard implements ICard
+Class GameCard implements ICard
+Class GameDeck implements IDeck
+GameDeck *-- GameCard : contains
+GameDeck *-- WildCard
+Class MissionDeck implements IDeck
+MissionDeck *-- MissionCard
 @enduml
