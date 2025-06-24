@@ -1,0 +1,23 @@
+package model.tabletop;
+
+/**
+ * Enumerazione che definisce i diversi tipi di zone nel gioco.
+ * Ogni tipo ha caratteristiche specifiche per il gameplay.
+ */
+public enum ZoneType {
+    /** Territorio base - l'unità fondamentale del gioco */
+    TERRITORIO("Territorio"),
+    
+    /** Continente - raggruppa più territori */
+    CONTINENTE("Continente");
+    
+    private final String descrizione;
+    
+    ZoneType(String descrizione) {
+        this.descrizione = descrizione;
+    }
+    
+    public String getDescrizione() {
+        return descrizione;
+    }
+}
