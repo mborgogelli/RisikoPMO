@@ -5,7 +5,7 @@ package model.tabletop;
  * Ogni tipo ha caratteristiche specifiche per il gameplay.
  */
 public enum ZoneType {
-    /** Territorio base - l'unità fondamentale del gioco */
+    /** Territorio - l'unità fondamentale del gioco classico */
     TERRITORIO("Territorio"),
     
     /** Continente - raggruppa più territori */
