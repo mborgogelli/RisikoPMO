@@ -66,6 +66,6 @@ public interface IZone {
      * 
      * @return set delle zone confinanti
      */
-    public Set<IZone> getBorders();
+    public Set<IZone> getNeighbours();
    
 }
