@@ -25,7 +25,7 @@ public class Continent implements IZone {
 	}
 	
 	@Override
-	public List<IPlayer> getOwner() {
+	public List<IPlayer> getOwners() {
 		return Collections.unmodifiableList(this.players);
 	}
 

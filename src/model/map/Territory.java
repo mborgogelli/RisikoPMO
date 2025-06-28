@@ -34,7 +34,7 @@ public class Territory implements IZone {
 	}
 
 	@Override
-	public List<IPlayer> getOwner() {
+	public List<IPlayer> getOwners() {
 		// TODO Auto-generated method stub
 		return null;
 	}

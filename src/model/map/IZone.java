@@ -51,7 +51,7 @@ public interface IZone {
      * 
      * @return Lista dei possessori
      */
-    public List<IPlayer> getOwner();
+    public List<IPlayer> getOwners();
     
     /**
      * Verifica se un giocatore ha il controllo completo di questa zona.
