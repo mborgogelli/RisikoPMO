@@ -14,7 +14,7 @@
 *.sig
 
 pkg/
-src/
+scratch/
 
 ### Eclipse ###
 .metadata
