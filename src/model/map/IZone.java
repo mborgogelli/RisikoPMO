@@ -1,10 +1,11 @@
-package model.tabletop;
+package model.map;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import model.IPlayer;
+import model.utils.ZoneType;
 
 /**
  * Interfaccia che rappresenta una generica zona della mappa di gioco, modellata come un contenitore che,

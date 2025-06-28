@@ -1,4 +1,4 @@
-package model.tabletop;
+package model.utils;
 
 /**
  * Enumerazione che definisce i diversi tipi di zone nel gioco.

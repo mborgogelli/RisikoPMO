@@ -41,7 +41,7 @@ public class MapLoaderTest {
 	void testingJsonKeys() throws FileNotFoundException {
 		this.map = mapLoader.loadMapFile("risiko");
 		assertTrue(map.has("continents"));
-		assertTrue(map.has("territories"));
+		assertTrue(map.has("neighbourhood"));
 	
 	}
 	
