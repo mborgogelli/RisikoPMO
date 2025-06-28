@@ -15,7 +15,7 @@
 		{
 			"name": "africa",
 			"territories": [
-				"egitto",
+				"egitto", {"neighbours": ["islanda"]}
 				"congo",
 				"madagascar",
 				"africa_settentrionale",
