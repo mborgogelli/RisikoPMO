@@ -15,7 +15,7 @@ public class MapLoader {
 	
 	public JsonObject loadMapFile(String gameVersion) throws FileNotFoundException {
 		
-		String map = this.path + gameVersion + this.mapSuffix;
+		String map = this.path + gameVersion.toLowerCase() + this.mapSuffix;
 		FileReader fileReader;
 		
 		try {
