@@ -1,4 +1,4 @@
-package model.tabletop;
+package model.map;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import model.IPlayer;
+import model.utils.ZoneType;
 
 public class Continent implements IZone {
 	

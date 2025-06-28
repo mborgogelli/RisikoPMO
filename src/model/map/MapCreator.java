@@ -1,4 +1,4 @@
-package model.utils;
+package model.map;
 
 public class MapCreator {
 
