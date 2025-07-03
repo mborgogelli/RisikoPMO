@@ -8,21 +8,24 @@ import java.io.FileReader;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-public class MapLoader {
+public final class MapLoader {
 	
-	private final String path = "asset/";
-	private final String mapSuffix = "_map.json";
+	private static final String PATH = "asset/";
+	private static final String MAP_SUFFIX= "_map.json";
 	
-	public JsonObject loadMapFile(String gameVersion) throws FileNotFoundException {
+	private MapLoader() {
+	}
+	
+	public static JsonObject loadMapFile(String gameVersion) throws FileNotFoundException {
 		
-		String map = this.path + gameVersion.toLowerCase() + this.mapSuffix;
+		String map = PATH + gameVersion.toLowerCase() + MAP_SUFFIX;
 		FileReader fileReader;
 		
 		try {
 			fileReader = new FileReader(map);
 		
 		} catch(FileNotFoundException ex) {
-			throw new FileNotFoundException("File " + map + " non trovato.");
+			throw new FileNotFoundException("File " + map + " not found.");
 		}
 		
 		BufferedReader bufferedReader = new BufferedReader(fileReader);

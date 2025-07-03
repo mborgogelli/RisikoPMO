@@ -1,5 +1,9 @@
 package game;
 
+import java.io.FileNotFoundException;
+
+import com.google.gson.JsonObject;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -7,6 +11,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import model.map.MapCreator;
+import model.utils.MapLoader;
 
 public class MainTest extends Application {
     
@@ -36,6 +42,18 @@ public class MainTest extends Application {
     
     public static void main(String[] args) {
         // Avvio dell'applicazione JavaFX
-        launch(args);
+        //launch(args);
+        
+    	JsonObject map = new JsonObject();
+    	
+    	
+    	try {
+			map = MapLoader.loadMapFile("risiko");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+    	MapCreator mapc = new MapCreator(map);
+    	System.out.println(mapc.getContinentsFromJson());
+    	
     }
 }

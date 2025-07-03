@@ -6,10 +6,10 @@ package model.utils;
  */
 public enum ZoneType {
     /** Territorio - l'unità fondamentale del gioco classico */
-    TERRITORIO("Territorio"),
+    TERRITORIO("territory"),
     
     /** Continente - raggruppa più territori */
-    CONTINENTE("Continente");
+    CONTINENTE("continents");
     
     private final String descrizione;
     
