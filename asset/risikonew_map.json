@@ -1,0 +1,198 @@
+{
+  "continents": [
+    {
+      "name": "europa",
+      "territories": [
+        {
+          "name": "islanda",
+          "neighbours": ["gran_bretagna", "scandinavia", "groenlandia"]
+        },
+        {
+          "name": "gran_bretagna",
+          "neighbours": ["islanda", "scandinavia", "europa_occidentale", "europa_settentrionale"]
+        },
+        {
+          "name": "scandinavia",
+          "neighbours": ["islanda", "gran_bretagna", "europa_settentrionale", "ucraina"]
+        },
+        {
+          "name": "ucraina",
+          "neighbours": ["scandinavia", "europa_settentrionale", "europa_meridionale", "medio_oriente", "urali", "afghanistan"]
+        },
+        {
+          "name": "europa_settentrionale",
+          "neighbours": ["scandinavia", "gran_bretagna", "europa_occidentale", "ucraina", "europa_meridionale"]
+        },
+        {
+          "name": "europa_occidentale",
+          "neighbours": ["gran_bretagna", "europa_settentrionale", "europa_meridionale", "ucraina", "africa_settentrionale"]
+        },
+        {
+          "name": "europa_meridionale",
+          "neighbours": ["europa_occidentale", "europa_settentrionale", "ucraina", "medio_oriente", "africa_settentrionale", "egitto"]
+        }
+      ]
+    },
+    {
+      "name": "africa",
+      "territories": [
+        {
+          "name": "egitto",
+          "neighbours": ["africa_settentrionale", "africa_orientale", "medio_oriente", "europa_meridionale"]
+        },
+        {
+          "name": "congo",
+          "neighbours": ["africa_settentrionale", "africa_orientale", "africa_meridionale"]
+        },
+        {
+          "name": "madagascar",
+          "neighbours": ["africa_orientale", "africa_meridionale"]
+        },
+        {
+          "name": "africa_settentrionale",
+          "neighbours": ["europa_occidentale", "europa_meridionale", "egitto", "congo", "africa_orientale", "brasile"]
+        },
+        {
+          "name": "africa_orientale",
+          "neighbours": ["egitto", "madagascar", "africa_settentrionale", "congo", "africa_meridionale"]
+        },
+        {
+          "name": "africa_meridionale",
+          "neighbours": ["congo", "africa_orientale", "madagascar"]
+        }
+      ]
+    },
+    {
+      "name": "asia",
+      "territories": [
+        {
+          "name": "afghanistan",
+          "neighbours": ["urali", "ucraina", "medio_oriente", "cina"]
+        },
+        {
+          "name": "medio_oriente",
+          "neighbours": ["ucraina", "europa_meridionale", "egitto", "cina", "afghanistan", "india"]
+        },
+        {
+          "name": "india",
+          "neighbours": ["medio_oriente", "cina", "siam"]
+        },
+        {
+          "name": "cina",
+          "neighbours": ["india", "afghanistan", "siam", "medio_oriente", "mongolia", "siberia", "urali"]
+        },
+        {
+          "name": "siam",
+          "neighbours": ["india", "cina", "indonesia"]
+        },
+        {
+          "name": "urali",
+          "neighbours": ["ucraina", "afghanistan", "cina", "siberia"]
+        },
+        {
+          "name": "mongolia",
+          "neighbours": ["cina", "siberia", "cita", "kamchatka", "giappone"]
+        },
+        {
+          "name": "jacuzia",
+          "neighbours": ["mongolia", "cita", "kamchatka"]
+        },
+        {
+          "name": "cita",
+          "neighbours": ["mongolia", "jacuzia", "kamchatka", "siberia"]
+        },
+        {
+          "name": "kamchatka",
+          "neighbours": ["mongolia", "jacuzia", "cita", "giappone", "alaska"]
+        },
+        {
+          "name": "giappone",
+          "neighbours": ["kamchatka", "mongolia"]
+        }
+      ]
+    },
+    {
+      "name": "oceania",
+      "territories": [
+        {
+          "name": "nuova_guinea",
+          "neighbours": ["indonesia", "australia_occidentale", "australia_orientale"]
+        },
+        {
+          "name": "australia_occidentale",
+          "neighbours": ["nuova_guinea", "indonesia", "australia_orientale"]
+        },
+        {
+          "name": "australia_orientale",
+          "neighbours": ["australia_occidentale", "nuova_guinea"]
+        },
+        {
+          "name": "indonesia",
+          "neighbours": ["siam", "nuova_guinea", "australia_occidentale"]
+        }
+      ]
+    },
+    {
+      "name": "america_settentrionale",
+      "territories": [
+        {
+          "name": "alaska",
+          "neighbours": ["kamchatka", "territori_del_nord_ovest", "alberta"]
+        },
+        {
+          "name": "alberta",
+          "neighbours": ["alaska", "territori_del_nord_ovest", "stati_uniti_occidentali", "ontario"]
+        },
+        {
+          "name": "groenlandia",
+          "neighbours": ["territori_del_nord_ovest", "ontario", "quebec", "islanda"]
+        },
+        {
+          "name": "territori_del_nord_ovest",
+          "neighbours": ["alaska", "alberta", "groenlandia", "ontario"]
+        },
+        {
+          "name": "ontario",
+          "neighbours": ["alberta", "territori_del_nord_ovest", "quebec", "groenlandia", "stati_uniti_occidentali", "stati_uniti_orientali"]
+        },
+        {
+          "name": "quebec",
+          "neighbours": ["ontario", "groenlandia", "stati_uniti_orientali"]
+        },
+        {
+          "name": "stati_uniti_orientali",
+          "neighbours": ["ontario", "quebec", "stati_uniti_occidentali"]
+        },
+        {
+          "name": "stati_uniti_occidentali",
+          "neighbours": ["ontario", "stati_uniti_orientali", "alberta", "america_centrale"]
+        },
+        {
+          "name": "america_centrale",
+          "neighbours": ["stati_uniti_occidentali", "venezuela"]
+        }
+      ]
+    },
+    {
+      "name": "america_meridionale",
+      "territories": [
+        {
+          "name": "argentina",
+          "neighbours": ["peru", "brasile"]
+        },
+        {
+          "name": "brasile",
+          "neighbours": ["argentina", "peru", "venezuela", "africa_settentrionale"]
+        },
+        {
+          "name": "venezuela",
+          "neighbours": ["brasile", "peru", "america_centrale"]
+        },
+        {
+          "name": "peru",
+          "neighbours": ["argentina", "brasile", "venezuela"]
+        }
+      ]
+    }
+  ]
+}
