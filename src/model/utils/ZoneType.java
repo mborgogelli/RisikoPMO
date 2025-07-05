@@ -9,7 +9,7 @@ public enum ZoneType {
     TERRITORIO("territory"),
     
     /** Continente - raggruppa più territori */
-    CONTINENTE("continents");
+    CONTINENTS("continents");
     
     private final String descrizione;
     

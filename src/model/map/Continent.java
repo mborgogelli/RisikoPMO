@@ -21,7 +21,7 @@ public class Continent implements IZone {
 		this.name = name;
 		this.players = new ArrayList<>();
 		this.territories = new HashSet<>();
-		this.type = ZoneType.CONTINENTE;
+		this.type = ZoneType.CONTINENTS;
 	}
 	
 	@Override

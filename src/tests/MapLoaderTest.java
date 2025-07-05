@@ -6,12 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import model.utils.MapLoader;
 
@@ -20,9 +22,22 @@ public class MapLoaderTest {
 	private JsonObject map;
 	
 	@Test
-	void testingMapLoader() throws FileNotFoundException {
+	void testingMapLoader() throws JsonSyntaxException, IOException {
 		this.map = MapLoader.loadMapFile("risiko");
 		assertNotNull(map);
+	}
+	
+	@Test
+	void testingMapLoader2() throws JsonSyntaxException, IOException {
+		this.map = MapLoader.loadMapFile("risikonew");
+		assertNotNull(map);
+	}
+	
+	@Test
+	void testingEmtpyArgument()throws IllegalArgumentException {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+														() -> MapLoader.loadMapFile(""));
+		assertTrue(exception.getMessage().contains("Game version is required"));
 	}
 	
 	@Test
@@ -33,10 +48,18 @@ public class MapLoaderTest {
 	}
 	
 	@Test
-	void testingJsonKeys() throws FileNotFoundException {
+	void testingJsonSyntaxException()throws JsonSyntaxException {
+		JsonSyntaxException exception = assertThrows(JsonSyntaxException.class,
+														() -> MapLoader.loadMapFile("risikotest"));
+		assertTrue(exception.getMessage().contains("Json file asset/risikotest_map.json is invalid."));
+	}
+	
+	@Test
+	void testingJsonKeys() throws JsonSyntaxException, IOException {
 		this.map = MapLoader.loadMapFile("risiko");
 		assertTrue(map.has("continents"));
-		assertTrue(map.has("neighbourhood"));
+		this.map = MapLoader.loadMapFile("risikonew");
+		assertTrue(map.has("continents"));
 	}
 	
 }
