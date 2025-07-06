@@ -1,5 +1,6 @@
 package model.map;
 
+import java.util.ArrayList;
 /**
 * Classe astratta che offre il comportamento di base per costruire una mappa di gioco a partire da un file JSON.
 * <p>
@@ -20,27 +21,29 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 abstract class MapCreator {
 
-	private final JsonObject jsonMap;
 	
-	MapCreator(JsonObject jsonMap) {
-		this.jsonMap = jsonMap;
+	MapCreator() {
 	}
 	
 	 /** Metodo astratto: deve essere implementato per creare la mappa specifica */
     abstract void createMap();
     
+    List<IZone> createZone(String key, JsonObject jsonMap, ZoneFactory factory) {
+		List<String> elements = this.getListFromJson(key, jsonMap);
+		return this.insertZoneByKey(elements, factory);
+    }
+    
 	/**
      * Inserisce nella mappa tutte le zone di tipo IZone ricavate dalla chiave JSON specificata.
      * Usa la interfaccia Factory per garantire la creazione del tipo corretto.
      */
-	Set<IZone> insertZoneByKey(String key, ZoneFactory factory) {
-		List<String> element = this.getListFromJson(key);
-		Set<IZone> zones = new HashSet<IZone>();
-		for(String str : element) {
+	private List<IZone> insertZoneByKey(List<String> zones, ZoneFactory factory) {
+		List<IZone> zoneSet = new ArrayList<IZone>();
+		for(String str : zones) {
 			IZone zone = factory.createZone(str);
-			zones.add(zone);
+			zoneSet.add(zone);
 		}
-		return zones;
+		return zoneSet;
 	}
 	
 	 /**
@@ -48,20 +51,28 @@ abstract class MapCreator {
      *
      * @return Una lista contenente nomi
      **/
-	List<String> getListFromJson(String key) {
-        List<String> list = new LinkedList<>();
-        JsonArray array = this.jsonMap.getAsJsonArray(key);
+	List<String> getListFromJson(String key, JsonObject jsonMap) {
+        List<String> set = new ArrayList<>();
+        JsonArray array = jsonMap.getAsJsonArray(key);
         for (JsonElement element : array) {
         	if(element.isJsonObject()) {
         		JsonObject obj = element.getAsJsonObject();
         		String name = obj.get("name").getAsString();
-            	list.add(name);
+            	set.add(name);
         	} else {
         		throw new IllegalStateException(element + " is not a jsonObject");
         	}
         }
-        return list;
+        return set;
     }
+	
+	Set<JsonElement> getElementsByArray(JsonArray array){
+		Set<JsonElement> jsonSet = new HashSet<>();
+		for(JsonElement elem : array) {
+			jsonSet.add(elem);
+		}
+		return jsonSet;
+	}
 	
 	// Interfaccia factory da passare per la creazione delle istanze di IZone
 	@FunctionalInterface

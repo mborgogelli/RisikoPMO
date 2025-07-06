@@ -2,10 +2,8 @@ package model.map;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import model.IPlayer;
 import model.utils.ZoneType;
@@ -14,13 +12,13 @@ public class Continent implements IZone {
 	
 	private final String name;
 	private List<IPlayer> players;
-	private Set<IZone> territories;
+	private List<IZone> territories;
 	private final ZoneType type;
 	
 	public Continent(String name) {
 		this.name = name;
 		this.players = new ArrayList<>();
-		this.territories = new HashSet<>();
+		this.territories = new ArrayList<>();
 		this.type = ZoneType.CONTINENTS;
 	}
 	
@@ -45,8 +43,7 @@ public class Continent implements IZone {
 	}
 	
 	@Override
-	public Set<IZone> getChildZones() {
-		// TO DO
+	public List<IZone> getChildZones() {
 		return this.territories;
 	}
 
@@ -60,8 +57,8 @@ public class Continent implements IZone {
 	}
 
 	@Override
-	public Set<IZone> getNeighbours() {
-		// TODO
+	public List<IZone> getNeighbours() {
+		// TO DO
 		return null;
 	}
 

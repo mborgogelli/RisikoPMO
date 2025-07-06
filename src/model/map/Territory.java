@@ -28,7 +28,7 @@ public class Territory implements IZone {
 	}
 
 	@Override
-	public Set<IZone> getChildZones() {
+	public List<IZone> getChildZones() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -46,7 +46,7 @@ public class Territory implements IZone {
 	}
 
 	@Override
-	public Set<IZone> getNeighbours() {
+	public List<IZone> getNeighbours() {
 		// TODO Auto-generated method stub
 		return null;
 	}

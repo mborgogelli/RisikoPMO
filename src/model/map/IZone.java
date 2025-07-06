@@ -2,7 +2,6 @@ package model.map;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import model.IPlayer;
 import model.utils.ZoneType;
@@ -40,9 +39,9 @@ public interface IZone {
      * Restituisce una collezione non modificabile delle zone figlie.
      * Ad esempio, un continente conterrà i suoi territori.
      * 
-     * @return Set delle zone figlie
+     * @return Lista delle zone figlie
      */
-    Set<IZone> getChildZones();
+    List<IZone> getChildZones();
     
     /**
      * Restituisce tutti i giocatori che possiedono parti di questa zona.
@@ -67,6 +66,6 @@ public interface IZone {
      * 
      * @return set delle zone confinanti
      */
-    public Set<IZone> getNeighbours();
+    public List<IZone> getNeighbours();
    
 }
