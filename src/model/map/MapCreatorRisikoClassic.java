@@ -27,6 +27,14 @@ public class MapCreatorRisikoClassic extends MapCreator {
 	}
 	
 	private void insertTerritories() {
+		String territories = ZoneType.TERRITORIO.getDescrizione();
+		super.createZone(territories, this.jsonMap, Territory::new);
+	}
+
+	@Override
+	void getMap() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

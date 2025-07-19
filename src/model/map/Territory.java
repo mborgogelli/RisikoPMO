@@ -1,5 +1,7 @@
 package model.map;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -9,46 +11,55 @@ import model.utils.ZoneType;
 
 public class Territory implements IZone {
 
+	private final String name;
+	private List<IPlayer> players;
+	private List<IZone> neighbours;
+	private final ZoneType type;
+	
+	public Territory(String name) {
+		this.name = name;
+		this.players = new ArrayList<>();
+		this.neighbours = new ArrayList<>();
+		this.type = ZoneType.CONTINENTS;
+	}
+	
+	@Override
+	public List<IPlayer> getOwners() {
+		return Collections.unmodifiableList(this.players);
+	}
+
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.name;
 	}
 
 	@Override
 	public ZoneType getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.type;
 	}
 
 	@Override
 	public Optional<IZone> getParentZone() {
-		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
-
+	
 	@Override
 	public List<IZone> getChildZones() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<IPlayer> getOwners() {
-		// TODO Auto-generated method stub
+		// TO DO
 		return null;
 	}
 
 	@Override
 	public Boolean isControlledBy(IPlayer p) {
-		// TODO Auto-generated method stub
-		return null;
+		Boolean isIn = false;
+		if ((this.players.size() == 1) & (this.players.contains(p))) {
+			isIn = true;
+		}
+		return isIn;
 	}
 
 	@Override
 	public List<IZone> getNeighbours() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.neighbours;
 	}
-
 }
