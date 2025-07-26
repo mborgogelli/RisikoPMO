@@ -1,10 +1,7 @@
 package model.map;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -64,94 +61,95 @@ abstract class MapCreator {
         return list;
     }
 	
-	/*public List<JsonObject> getListByKey(String extKey, String inKey, JsonObject jsonMap) {
-	    return Optional.ofNullable(jsonMap)
-	        .filter(map -> map.has(extKey))
-	        .map(map -> map.get(extKey))
-	        .filter(JsonElement::isJsonArray)
-	        .map(JsonElement::getAsJsonArray)
-	        .map(array -> extractJsonObjects(array, inKey, extKey.equals(inKey)))
-	        .orElse(new ArrayList<>());
+	private boolean isValidKey(String key, JsonObject json) {
+		return (json.has(key) && !json.get(key).isJsonNull());
 	}
-
-	private List<JsonObject> extractJsonObjects(JsonArray array, String inKey, boolean directExtraction) {
-	    List<JsonObject> list = new ArrayList<>();
-	    
-	    for (JsonElement element : array) {
-	        if (!element.isJsonObject()) {
-	            continue; // Skip non-object elements
-	        }
-	        
-	        JsonObject obj = element.getAsJsonObject();
-	        
-	        if (directExtraction) {
-	            list.add(obj);
-	        } else {
-	            Optional.ofNullable(obj.get(inKey))
-	                .filter(JsonElement::isJsonObject)
-	                .map(JsonElement::getAsJsonObject)
-	                .ifPresent(list::add);
-	        }
-	    }
-	    
-	    return list;
-	}*/
-	List<String> getListByKey(String extKey, String inKey, JsonObject jsonMap) {
-        List<String> list = new ArrayList<>();
-        JsonArray array = jsonMap.getAsJsonArray(extKey);
-        if(extKey.equals(inKey)) {
-        	getListFromJson(extKey, jsonMap);
-        }else {	
-	        for (JsonElement element : array) {
-	        	System.out.println(element);
-	        	if(element.isJsonArray()) {
-	        		JsonArray obj = element.getAsJsonArray();
-	        		System.out.println(obj);
-	        		//String obj2= obj.get(inKey).getAsString();
-	            	//list.add(obj2);
-	        	} else {
-	        		throw new IllegalStateException(element + " is not a jsonObject");
-	        	}
-	        }
+	
+	List<String> getStringList (String key, JsonObject jsonMap) {
+		List<String> values = new ArrayList<>();
+		if (isValidKey(key, jsonMap)) {
+			JsonElement element = jsonMap.get(key);
+			if (element.isJsonArray()) {
+				JsonArray array = element.getAsJsonArray();
+				for (JsonElement item : array) {
+					if (!item.isJsonNull() && item.isJsonPrimitive()) {
+						values.add(item.getAsString());
+					}
+				}
+			} else if (element.isJsonPrimitive()) {
+				values.add(element.getAsString());
+			}
+		}
+		return values;
+	}
+	
+	
+	/**
+	 * Ritorna una lista di JsonElement a partire da un array json.
+	 *
+	 * @return Una lista contenente JsonElement
+	 **/
+	private List<JsonElement> getElements(JsonArray jsonArray) {
+		List<JsonElement> list = new ArrayList<>();
+		for (JsonElement element : jsonArray) {
+			if(element.isJsonObject() && !element.isJsonNull()) {
+				JsonObject obj = element.getAsJsonObject();
+				list.add(obj);
+			} else if(element.isJsonPrimitive()) {
+				list.add(element.getAsJsonPrimitive());
+			} else {
+				throw new IllegalStateException(element + " is not a jsonObject or jsonPrimitive");
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * Ritorna una lista di JsonElement a partire da una chiave dell'oggetto json
+	 * in un dato Array di json.
+	 *
+	 * @return Una lista contenente JsonElement
+	 **/
+	private List<JsonElement> getValueByKey(String key, JsonArray jsonArray) {
+        List<JsonElement> list = new ArrayList<>();
+		for (JsonElement element : jsonArray) {
+        	if(element.isJsonObject() && isValidKey(key, element.getAsJsonObject())) {
+				JsonObject obj = element.getAsJsonObject();
+				list.add(obj.get(key));
+        	} else {
+        		throw new IllegalStateException(element + " is not a jsonObject");
+        	}
         }
         return list;
     }
 	
-	boolean isValidKey(String key, JsonObject json) {
-		return json.keySet().contains(key);
-	}
 	
-	
-	private String getJsonElementType(JsonElement element) {
-	    if (element.isJsonObject()) return "OBJECT";
-	    if (element.isJsonArray()) return "ARRAY";
-	    if (element.isJsonPrimitive()) return "PRIMITIVE";
-	    if (element.isJsonNull()) return "NULL";
-	    return "UNKNOWN";
+	private List<JsonElement> getValueByKey(String rootKey, JsonObject jsonObject){
+		List<JsonElement> list = new ArrayList<>();
+		if(isValidKey(rootKey, jsonObject)) {
+			if(jsonObject.get(rootKey).isJsonArray()) {
+				JsonArray array = jsonObject.get(rootKey).getAsJsonArray();
+				list = this.getElements(array);
+			}else {
+				list.add(jsonObject.get(rootKey));
+			}
+		}else {
+			throw new IllegalStateException("Key " + rootKey + " not found or is null in the provided JsonObject.");
+		}
+		return list;
+		
 	}
 	
 	List<JsonElement> getValue(String rootKey, JsonElement jsonMap){
 		List<JsonElement> list = new ArrayList<>();
 		switch(jsonMap) {
-			case JsonObject jsonObject -> {
-				if(isValidKey(rootKey, jsonObject))
-					list.add(jsonObject.get(rootKey));
-			}
-			case JsonArray jsonArray -> {
-	            for (JsonElement element : jsonArray) {
-	                list.addAll(getValue(rootKey, element));
-	            }
-	        }
-	        case JsonPrimitive jsonPrimitive -> {
-	            // Handle primitive case
-	        }
-	        case JsonNull jsonNull -> {
-	            // Handle null case
-	        }
-	        default -> {
-	            // Handle any other cases
-	        }
-		}	
+				case JsonObject jsonObject -> this.getValueByKey(rootKey, jsonObject).forEach(list::add);
+				case JsonArray jsonArray -> this.getValueByKey(rootKey, jsonArray).forEach(list::add);
+				case JsonPrimitive jsonPrimitive -> list.add(jsonPrimitive.getAsJsonPrimitive());
+		        default -> {
+		        	throw new IllegalStateException("Unexpected value: " + jsonMap.getClass());
+		        }
+		}
 		return list;
 	}
 	
@@ -161,5 +159,3 @@ abstract class MapCreator {
 		IZone createZone(String name);
 	}
 }
-
-	
