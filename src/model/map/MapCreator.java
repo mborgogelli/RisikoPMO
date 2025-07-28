@@ -2,6 +2,12 @@ package model.map;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -24,7 +30,7 @@ abstract class MapCreator {
     abstract void getMap();
     
     List<IZone> createZone(String key, JsonObject jsonMap, ZoneFactory factory) {
-		List<String> elements = this.getListFromJson(key, jsonMap);
+		List<String> elements = this.getStringList(key, jsonMap);
 		return this.insertZoneByKey(elements, factory);
     }
     
@@ -41,67 +47,56 @@ abstract class MapCreator {
 		return zoneSet;
 	}
 	
-	 /**
-     * Ritorna una lista di nomi a partire da una chiave dell'oggetto json.
-     *
-     * @return Una lista contenente nomi
-     **/
-	List<String> getListFromJson(String key, JsonObject jsonMap) {
-        List<String> list = new ArrayList<>();
-        JsonArray array = jsonMap.getAsJsonArray(key);
-        for (JsonElement element : array) {
-        	if(element.isJsonObject()) {
-        		JsonObject obj = element.getAsJsonObject();
-        		String name = obj.get("name").getAsString();
-            	list.add(name);
-        	} else {
-        		throw new IllegalStateException(element + " is not a jsonObject");
-        	}
-        }
-        return list;
-    }
-	
-	private boolean isValidKey(String key, JsonObject json) {
-		return (json.has(key) && !json.get(key).isJsonNull());
-	}
-	
-	List<String> getStringList (String key, JsonObject jsonMap) {
+	//TO DO
+	protected List<String> getStringList (String key, JsonObject jsonMap) {
 		List<String> values = new ArrayList<>();
 		if (isValidKey(key, jsonMap)) {
 			JsonElement element = jsonMap.get(key);
 			if (element.isJsonArray()) {
 				JsonArray array = element.getAsJsonArray();
 				for (JsonElement item : array) {
-					if (!item.isJsonNull() && item.isJsonPrimitive()) {
+					if (!item.isJsonNull() && item.isJsonPrimitive() && item.getAsJsonPrimitive().isString()) {
 						values.add(item.getAsString());
 					}
 				}
-			} else if (element.isJsonPrimitive()) {
+			} else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
 				values.add(element.getAsString());
 			}
 		}
 		return values;
 	}
 	
+	/**
+	 * Verifica se una chiave è valida in un oggetto JSON.
+	 * Una chiave è considerata valida se esiste nell'oggetto e il suo valore non è null.
+	 * Se la chiave non è valida o il suo valore è null, viene lanciata un'eccezione.
+	 *
+	 * @param key La chiave da verificare
+	 * @param json L'oggetto JSON in cui cercare la chiave
+	 * @return true se la chiave è valida
+	 * @throws IllegalArgumentException se la chiave non è valida
+	 */
+	private boolean isValidKey(String key, JsonObject json) {
+		if (!json.has(key) || json.get(key).isJsonNull()) {
+			throw new IllegalArgumentException(key + " is not a valid key in the JSON object, or its value is null.");
+		}
+		return true;
+	}
 	
 	/**
-	 * Ritorna una lista di JsonElement a partire da un array json.
+	 * Ritorna uno stream di JsonElement a partire da un JsonElement.
+	 * Se l'elemento è un JsonArray, ritorna gli elementi al suo interno.
 	 *
-	 * @return Una lista contenente JsonElement
+	 * @return Uno stream di JsonElement
 	 **/
-	private List<JsonElement> getElements(JsonArray jsonArray) {
-		List<JsonElement> list = new ArrayList<>();
-		for (JsonElement element : jsonArray) {
-			if(element.isJsonObject() && !element.isJsonNull()) {
-				JsonObject obj = element.getAsJsonObject();
-				list.add(obj);
-			} else if(element.isJsonPrimitive()) {
-				list.add(element.getAsJsonPrimitive());
-			} else {
-				throw new IllegalStateException(element + " is not a jsonObject or jsonPrimitive");
-			}
-		}
-		return list;
+	private Stream<JsonElement> expandElement(JsonElement element) {
+	    if (element.isJsonArray()) {
+	        return StreamSupport.stream(element.getAsJsonArray().spliterator(), false)
+	            .filter(e -> !e.isJsonNull())
+	            .filter(e -> e.isJsonObject() || e.isJsonPrimitive());
+	    } else {
+	        return Stream.of(element);
+	    }
 	}
 	
 	/**
@@ -111,41 +106,40 @@ abstract class MapCreator {
 	 * @return Una lista contenente JsonElement
 	 **/
 	private List<JsonElement> getValueByKey(String key, JsonArray jsonArray) {
-        List<JsonElement> list = new ArrayList<>();
-		for (JsonElement element : jsonArray) {
-        	if(element.isJsonObject() && isValidKey(key, element.getAsJsonObject())) {
-				JsonObject obj = element.getAsJsonObject();
-				list.add(obj.get(key));
-        	} else {
-        		throw new IllegalStateException(element + " is not a jsonObject");
-        	}
-        }
-        return list;
+		return StreamSupport.stream(jsonArray.spliterator(),false)
+        		             .filter(JsonElement::isJsonObject)
+        		             .map(JsonElement::getAsJsonObject)
+        		             .filter(obj -> isValidKey(key, obj))
+        		             .map(obj -> obj.get(key))
+        		             .collect(Collectors.toList());
     }
 	
-	
+	/**
+	 * Ritorna una lista di JsonElement a partire da una chiave dell'oggetto json
+	 * in un dato oggetto json.
+	 *
+	 * @return Una lista contenente JsonElement
+	 **/
 	private List<JsonElement> getValueByKey(String rootKey, JsonObject jsonObject){
-		List<JsonElement> list = new ArrayList<>();
-		if(isValidKey(rootKey, jsonObject)) {
-			if(jsonObject.get(rootKey).isJsonArray()) {
-				JsonArray array = jsonObject.get(rootKey).getAsJsonArray();
-				list = this.getElements(array);
-			}else {
-				list.add(jsonObject.get(rootKey));
-			}
-		}else {
-			throw new IllegalStateException("Key " + rootKey + " not found or is null in the provided JsonObject.");
-		}
-		return list;
-		
+	    return Optional.ofNullable(rootKey)
+	            .filter(key -> isValidKey(key, jsonObject))
+	            .map(jsonObject::get)
+	            .stream()
+	            .flatMap(this::expandElement)
+	            .collect(Collectors.toList());
 	}
 	
-	List<JsonElement> getValue(String rootKey, JsonElement jsonMap){
+	/**
+	 * Ritorna una lista di JsonElement a partire da una chiave dell'oggetto json.
+	 * Gestisce sia JsonObject che JsonArray.
+	 *
+	 * @return Una lista contenente JsonElement
+	 **/
+	protected List<JsonElement> getValue(String rootKey, JsonElement jsonMap){
 		List<JsonElement> list = new ArrayList<>();
 		switch(jsonMap) {
 				case JsonObject jsonObject -> this.getValueByKey(rootKey, jsonObject).forEach(list::add);
 				case JsonArray jsonArray -> this.getValueByKey(rootKey, jsonArray).forEach(list::add);
-				case JsonPrimitive jsonPrimitive -> list.add(jsonPrimitive.getAsJsonPrimitive());
 		        default -> {
 		        	throw new IllegalStateException("Unexpected value: " + jsonMap.getClass());
 		        }
@@ -155,7 +149,7 @@ abstract class MapCreator {
 	
 	// Interfaccia factory da passare per la creazione delle istanze di IZone
 	@FunctionalInterface
-	interface ZoneFactory {
+	protected interface ZoneFactory {
 		IZone createZone(String name);
 	}
 }
