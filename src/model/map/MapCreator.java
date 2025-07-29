@@ -3,16 +3,12 @@ package model.map;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Spliterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 /**
 * Classe astratta che offre il comportamento di base per costruire una mappa di gioco a partire da un file JSON.
@@ -30,8 +26,9 @@ abstract class MapCreator {
     abstract void getMap();
     
     List<IZone> createZone(String key, JsonObject jsonMap, ZoneFactory factory) {
-		List<String> elements = this.getStringList(key, jsonMap);
-		return this.insertZoneByKey(elements, factory);
+		List<JsonElement> elements = this.getValue(key, jsonMap);
+		List<String> elementsString = this.getStringList(elements);
+		return this.insertZoneByKey(elementsString, factory);
     }
     
 	/**
@@ -47,23 +44,53 @@ abstract class MapCreator {
 		return zoneSet;
 	}
 	
-	//TO DO
-	protected List<String> getStringList (String key, JsonObject jsonMap) {
-		List<String> values = new ArrayList<>();
-		if (isValidKey(key, jsonMap)) {
-			JsonElement element = jsonMap.get(key);
-			if (element.isJsonArray()) {
-				JsonArray array = element.getAsJsonArray();
-				for (JsonElement item : array) {
-					if (!item.isJsonNull() && item.isJsonPrimitive() && item.getAsJsonPrimitive().isString()) {
-						values.add(item.getAsString());
-					}
-				}
-			} else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
-				values.add(element.getAsString());
-			}
+	/**
+	 * Ritorna una lista di JsonElement a partire da una chiave dell'oggetto json.
+	 * Gestisce sia JsonObject che JsonArray.
+	 *
+	 * @return Una lista contenente JsonElement
+	 **/
+	List<JsonElement> getValue(String rootKey, JsonElement jsonMap){
+		if (jsonMap == null || jsonMap.isJsonNull()) {
+			throw new IllegalArgumentException("jsonMap is null or JsonNull");
 		}
-		return values;
+		List<JsonElement> list = new ArrayList<>();
+		switch(jsonMap) {
+				case JsonObject jsonObject -> this.getValueByKey(rootKey, jsonObject).forEach(list::add);
+				case JsonArray jsonArray -> this.getValueByKey(rootKey, jsonArray).forEach(list::add);
+		        default -> {
+		        	throw new IllegalStateException("Unexpected value: " + jsonMap.getClass());
+		        }
+		}
+		return list;
+	}
+	
+	/**
+	 * Ritorna una lista di stringhe a partire da una Lista di JsonElements.
+	 * Gestisce sia JsonObject che JsonArray.
+	 *
+	 * @return Una lista contenente stringhe
+	 **/
+	List<String> getStringList (List<JsonElement> jsonElements) {
+		return jsonElements.stream()
+				.filter(JsonElement::isJsonPrimitive)
+				.filter(e -> e.getAsJsonPrimitive().isString())
+				.map(JsonElement::getAsString)
+				.collect(Collectors.toList());
+	}
+	
+	/**
+	 * Ritorna una lista di interi a partire da una Lista di JsonElements.
+	 * Gestisce sia JsonObject che JsonArray.
+	 *
+	 * @return Una lista contenente stringhe
+	 **/
+	List<Integer> getIntList (List<JsonElement> jsonElements) {
+		return jsonElements.stream()
+				.filter(JsonElement::isJsonPrimitive)
+				.filter(e -> e.getAsJsonPrimitive().isNumber())
+				.map(e -> e.getAsInt())
+				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -129,27 +156,9 @@ abstract class MapCreator {
 	            .collect(Collectors.toList());
 	}
 	
-	/**
-	 * Ritorna una lista di JsonElement a partire da una chiave dell'oggetto json.
-	 * Gestisce sia JsonObject che JsonArray.
-	 *
-	 * @return Una lista contenente JsonElement
-	 **/
-	protected List<JsonElement> getValue(String rootKey, JsonElement jsonMap){
-		List<JsonElement> list = new ArrayList<>();
-		switch(jsonMap) {
-				case JsonObject jsonObject -> this.getValueByKey(rootKey, jsonObject).forEach(list::add);
-				case JsonArray jsonArray -> this.getValueByKey(rootKey, jsonArray).forEach(list::add);
-		        default -> {
-		        	throw new IllegalStateException("Unexpected value: " + jsonMap.getClass());
-		        }
-		}
-		return list;
-	}
-	
 	// Interfaccia factory da passare per la creazione delle istanze di IZone
 	@FunctionalInterface
-	protected interface ZoneFactory {
+	interface ZoneFactory {
 		IZone createZone(String name);
 	}
 }
