@@ -35,7 +35,7 @@ abstract class MapCreator {
      * Inserisce nella mappa tutte le zone di tipo IZone ricavate dalla chiave JSON specificata.
      * Usa la interfaccia Factory per garantire la creazione del tipo corretto.
      */
-	private List<IZone> insertZoneByKey(List<String> zones, ZoneFactory factory) {
+	List<IZone> insertZoneByKey(List<String> zones, ZoneFactory factory) {
 		List<IZone> zoneSet = new ArrayList<IZone>();
 		for(String str : zones) {
 			IZone zone = factory.createZone(str);
@@ -62,6 +62,11 @@ abstract class MapCreator {
 		        	throw new IllegalStateException("Unexpected value: " + jsonMap.getClass());
 		        }
 		}
+		return list;
+	}
+	
+	List<JsonElement> getValue(String rootKey, List<JsonElement> jsonMap){
+		List<JsonElement> list = new ArrayList<>();
 		return list;
 	}
 	
