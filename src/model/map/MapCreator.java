@@ -2,7 +2,6 @@ package model.map;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -259,34 +258,6 @@ abstract class MapCreator {
 	            .filter(key -> isValidKey(key, jsonObject))
 	            .map(jsonObject::get)
 	            .collect(Collectors.toCollection(ArrayList::new));
-	}
-	
-	/**
-	 * Ritorna una lista di stringhe a partire da una Lista di JsonElements.
-	 * Gestisce sia JsonObject che JsonArray.
-	 *
-	 * @return Una lista contenente stringhe
-	 **/
-	private List<String> getStringList (List<JsonElement> jsonElements) {
-		return jsonElements.stream()
-				.filter(JsonElement::isJsonPrimitive)
-				.filter(e -> e.getAsJsonPrimitive().isString())
-				.map(JsonElement::getAsString)
-				.collect(Collectors.toList());
-	}
-	
-	/**
-	 * Ritorna una lista di interi a partire da una Lista di JsonElements.
-	 * Gestisce sia JsonObject che JsonArray.
-	 *
-	 * @return Una lista contenente stringhe
-	 **/
-	private List<Integer> getIntList (List<JsonElement> jsonElements) {
-		return jsonElements.stream()
-				.filter(JsonElement::isJsonPrimitive)
-				.filter(e -> e.getAsJsonPrimitive().isNumber())
-				.map(e -> e.getAsInt())
-				.collect(Collectors.toList());
 	}
 	
 	// Interfaccia factory da passare per la creazione delle istanze di IZone
