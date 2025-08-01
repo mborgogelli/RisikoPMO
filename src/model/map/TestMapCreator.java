@@ -1,25 +1,21 @@
 package model.map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
 import model.utils.MapLoader;
 
 public class TestMapCreator {
 	
 	private JsonObject jsonMap;
 	private MapCreator map;
-	private JsonNull testNull;
-	private JsonPrimitive testPrimitive;
 	
 	@BeforeEach
 	void loadMap() {
@@ -28,19 +24,14 @@ public class TestMapCreator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		this.map = new MapCreatorRisikoClassic();
 	}
 	
 	@Test
-	public void getContinentsFromJson(){
-		List<JsonElement> json = this.map.getValue("continents", this.jsonMap);
-		List<JsonElement> json2 = new ArrayList<>();
-		for(JsonElement elem : json) {
-			JsonObject obj = elem.getAsJsonObject();
-			json2.add(this.map.getValue("name", obj).get(0));
-		}
-		List<String> list = this.map.getStringList(json2);
+	public void getContinentsNameFromJson(){
+		List<JsonElement> continents = this.map.getValues("continents", this.jsonMap);
+		List<String> list = this.map.getValues("name", continents, String.class);
+		
 		assertTrue(list.contains("europa"));
 	    assertTrue(list.contains("america_settentrionale"));
 	    assertTrue(list.contains("africa"));
@@ -51,23 +42,35 @@ public class TestMapCreator {
 	}
 	
 	@Test
+	public void cannotReturnEmptyList() {
+	    List<JsonElement> continents = this.map.getValues("continents", this.jsonMap);
+	    List<JsonElement> territories = this.map.getValues("territories", continents);
+	    List<JsonElement> islandaNeighbours = this.map.getValues("neighbours", territories.get(0));
+
+	    // Qui ci aspettiamo che venga lanciata un'eccezione perché la lista sarà vuota
+	    assertThrows(IllegalArgumentException.class, () -> {
+	        this.map.getValues("neighbours", islandaNeighbours);
+	    }, "List is empty.");
+	}
+
+	
+	@Test
 	public void keyVerify(){
 		
-		List<JsonElement> json = this.map.getValue("continents", this.jsonMap);
-		List<JsonElement> json2 = this.map.getValue("territories", json.get(0).getAsJsonObject());
-		List<JsonElement> json3 = this.map.getValue("neighbours", json2.get(1).getAsJsonObject());
-		JsonObject obj = this.jsonMap.getAsJsonArray("continents").get(0).getAsJsonObject().getAsJsonArray("territories").get(0).getAsJsonObject();
-		List<JsonElement> jsonTest = this.map.getValue("neighbours", obj);
-		
-		//System.out.println(jsonTest);
-		//json2.stream().forEach(element -> this.map.getValue("neighbours", element).forEach(System.out::println));
-		//System.out.println(json3);
-		/*for(JsonElement elem : json3) {
-			if(elem.isJsonObject()) {
-				JsonObject obj = elem.getAsJsonObject();
-				String name = obj.get("name").getAsString();
-				System.out.println(name);
-			}
-		}*/
-	}
+		List<JsonElement> json1 = this.map.getValues("continents", this.jsonMap);
+		List<JsonElement> continents = this.map.getValues("name", json1);
+		List<String> names = this.map.getValues("name", json1, String.class);
+		List<JsonElement> json2 = this.map.getValues("territories", json1);
+		List<JsonElement> json3 = this.map.getValues("neighbours", json2.get(0));
+		json1.stream().forEach(System.out::println);
+		System.out.println();
+		continents.stream().forEach(System.out::println);
+		System.out.println();
+		names.stream().forEach(System.out::println);
+		System.out.println();
+		json2.stream().forEach(System.out::println);
+		System.out.println();
+		json3.stream().forEach(System.out::println);
+		System.out.println();
+		}
 }
