@@ -3,19 +3,20 @@ package model.map;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import model.IPlayer;
 import model.utils.ZoneType;
 
-public class Continent implements IZone {
+class Continent implements IZone {
 	
 	private final String name;
 	private List<IPlayer> players;
 	private List<IZone> territories;
 	private final ZoneType type;
 	
-	public Continent(String name) {
+	Continent(String name) {
 		this.name = name;
 		this.players = new ArrayList<>();
 		this.territories = new ArrayList<>();
@@ -62,4 +63,27 @@ public class Continent implements IZone {
 		return null;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Continent other = (Continent) obj;
+		return Objects.equals(name, other.name);
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+	
+	
 }

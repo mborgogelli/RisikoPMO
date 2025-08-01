@@ -2,7 +2,6 @@ package model.map;
 
 import java.util.List;
 import java.util.Optional;
-
 import model.IPlayer;
 import model.utils.ZoneType;
 
@@ -11,21 +10,21 @@ import model.utils.ZoneType;
  * possibilmente, contiene o è contenuto a sua volta, in altre zone.
  * 
  */
-public interface IZone {
+interface IZone {
 	 
 	/**
      * Restituisce il nome univoco della zona.
      * 
      * @return il nome della zona, non può essere null o vuoto
      */
-	public String getName();
+	String getName();
 	
     /**
      * Restituisce il tipo di zona (territorio, continente, ecc.).
      * 
      * @return il tipo di zona
      */
-	public ZoneType getType();
+	ZoneType getType();
         
       /**
      * Restituisce la zona contenitore di questa zona.
@@ -33,7 +32,7 @@ public interface IZone {
      * 
      * @return la zona contenitore, null se questa è una zona di livello radice
      */
-    public Optional<IZone> getParentZone();
+    Optional<IZone> getParentZone();
     
     /**
      * Restituisce una collezione non modificabile delle zone figlie.
@@ -50,7 +49,7 @@ public interface IZone {
      * 
      * @return Lista dei possessori
      */
-    public List<IPlayer> getOwners();
+    List<IPlayer> getOwners();
     
     /**
      * Verifica se un giocatore ha il controllo completo di questa zona.
@@ -58,7 +57,7 @@ public interface IZone {
      * @param giocatore l'ID del giocatore da verificare
      * @return true se il giocatore controlla completamente la zona
      */     
-    public Boolean isControlledBy(IPlayer p);
+    Boolean isControlledBy(IPlayer p);
     
     /**
      * Restituisce le zone confinanti o collegate con questa zona
@@ -66,6 +65,6 @@ public interface IZone {
      * 
      * @return set delle zone confinanti
      */
-    public List<IZone> getNeighbours();
+    List<IZone> getNeighbours();
    
 }

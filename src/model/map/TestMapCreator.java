@@ -28,7 +28,7 @@ public class TestMapCreator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.map = new MapCreatorRisikoClassic();
+		this.map = new MapCreatorRisikoClassic(jsonMap);
 	}
 	
 	@Test

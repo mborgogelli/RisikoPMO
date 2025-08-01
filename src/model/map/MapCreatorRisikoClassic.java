@@ -1,7 +1,10 @@
 package model.map;
 
+import java.io.IOException;
 import java.util.List;
 import com.google.gson.JsonObject;
+
+import model.utils.MapLoader;
 import model.utils.ZoneType;
 
 public class MapCreatorRisikoClassic extends MapCreator {
@@ -9,8 +12,8 @@ public class MapCreatorRisikoClassic extends MapCreator {
 	private List<IZone> continents;
 	JsonObject jsonMap;
 	
-	MapCreatorRisikoClassic() {
-		this.jsonMap = new JsonObject();
+	MapCreatorRisikoClassic(JsonObject jsonObject) {
+		this.jsonMap = jsonObject;
 	}
 
 	@Override
@@ -26,12 +29,16 @@ public class MapCreatorRisikoClassic extends MapCreator {
 	}
 	private void createContinents() {
 		String continents = ZoneType.CONTINENTS.getDescrizione();
-		super.createZone(continents,this.jsonMap,Continent::new);
 	}
 	
 	private void insertTerritories() {
 		String territories = ZoneType.TERRITORIO.getDescrizione();
-		super.createZone(territories, this.jsonMap, Territory::new);
+	}
+
+	@Override
+	List<IZone> createZone(String key, JsonObject jsonMap, ZoneFactory factory) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

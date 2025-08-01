@@ -25,10 +25,16 @@ abstract class MapCreator {
     /** Metodo astratto: deve essere implementato per restituire la mappa al MapManager */
     abstract void getMap();
     
-    List<IZone> createZone(String key, JsonObject jsonMap, ZoneFactory factory) {
-		return null;
-		//return this.insertZoneByKey(elementsString, factory);
-    }
+    /**
+	 * Metodo astratto: deve essere implementato per creare una lista di zone a partire da una chiave JSON.
+	 * Utilizza la interfaccia Factory per garantire la creazione del tipo corretto di IZone.
+	 *
+	 * @param key La chiave JSON da cui estrarre le zone
+	 * @param jsonMap L'oggetto JSON contenente le informazioni sulle zone
+	 * @param factory La factory per creare le istanze di IZone
+	 * @return Una lista di IZone create dalla chiave JSON
+	 */
+    abstract List<IZone> createZone(String key, JsonObject jsonMap, ZoneFactory factory);
     
 	/**
      * Inserisce nella mappa tutte le zone di tipo IZone ricavate dalla chiave JSON specificata.
@@ -77,48 +83,20 @@ abstract class MapCreator {
 	}
 	
 	/**
-	 * Restituisce una lista generica di JsonElement (JsonObject, JsonArray o JsonPrimitive) a seconda del tipo degli elementi nella lista.
+	 * Ritorna una lista di valori di tipo T a partire da una chiave dell'oggetto json.
+	 * Gestisce sia JsonObject che JsonArray.
 	 *
-	 * @param rootKey la chiave da cercare
-	 * @param jsonMap la lista di JsonElement
-	 * @return una lista di elementi del tipo corretto
-	 */
+	 * @param rootKey La chiave da verificare
+	 * @param jsonMap La lista in cui cercare la chiave (gestisce sia JsonObject che JsonArray)
+	 * @return Una lista contenente valori di tipo T
+	 **/
 	<T> List<T> getValues(String rootKey, List<JsonElement> jsonMap, Class<T> myClass) {
-		checkInputList(jsonMap);
-		List<JsonElement> elements = this.getValueFromList(rootKey, jsonMap);
+		List<JsonElement> elements = this.getValues(rootKey, jsonMap);
 		List<T> result = new ArrayList<>();
-		for (JsonElement elem : elements) {
-			String type = this.checkType(elem);
-			switch (type) {
-				case "JSONPRIMITIVE" -> {
-					if (myClass == String.class && elem.getAsJsonPrimitive().isString()) {
-						result.add(myClass.cast(elem.getAsString()));
-					} else if (myClass == Integer.class && elem.getAsJsonPrimitive().isNumber()) {
-						result.add(myClass.cast(elem.getAsInt()));
-					} else if (myClass == Boolean.class) {
-						result.add(myClass.cast(elem.getAsJsonPrimitive()));
-					} else if (myClass == JsonPrimitive.class) {
-						result.add(myClass.cast(elem.getAsJsonPrimitive()));
-					} else {
-						throw new IllegalArgumentException("Element " + elem + " cannot be cast to " + myClass.getSimpleName());
-					}
-				}
-				case "JSONOBJECT" -> {
-					if (myClass == JsonObject.class) {
-						result.add(myClass.cast(elem.getAsJsonObject()));
-					} else {
-						throw new IllegalArgumentException("Element " + elem + " cannot be cast to " + myClass.getSimpleName());
-					}
-				}
-				case "JSONARRAY" -> {
-					if (myClass == JsonArray.class) {
-						result.add(myClass.cast(elem.getAsJsonArray()));
-					} else {
-						throw new IllegalArgumentException("Element " + elem + " cannot be cast to " + myClass.getSimpleName());
-					}
-				}
-				default -> throw new IllegalArgumentException("Element " + elem + " is of unknown type");
-			}
+		if (elements.get(0).isJsonPrimitive()) {
+				result = convertJsonPrimitiveList(elements, myClass);
+		} else {
+			throw new IllegalArgumentException("Cannot convert elements to " + myClass.getSimpleName());
 		}
 		return result;
 	}
@@ -158,6 +136,14 @@ abstract class MapCreator {
 		}
 	}
 	
+	/**
+	 * Controlla la validità di una lista di JsonElement.
+	 * Lancia un'eccezione se la lista è null, vuota, contiene elementi di tipi diversi,
+	 * o se gli elementi sono JsonNull.
+	 *
+	 * @param list La lista di JsonElement da controllare
+	 * @throws IllegalArgumentException se la lista non è valida
+	 */
 	private void checkOutputList(List<JsonElement> list) {
 		if (list == null) {
 			throw new IllegalArgumentException("List is null.");
@@ -170,23 +156,31 @@ abstract class MapCreator {
 		}
 	}
 	
-	/** * Controlla il tipo di un JsonElement e ritorna una stringa rappresentativa del tipo.
+	/**
+	 * Converte una lista di JsonElement in una lista di tipo T.
 	 * 
-	 * @param elem Il JsonElement da controllare
-	 * @return Una stringa che rappresenta il tipo del JsonElement
-	 * @throws IllegalArgumentException se l'elemento non è valido
+	 * @param list La lista di JsonElement da convertire
+	 * @param myClass La classe di tipo T in cui convertire gli elementi
+	 * @return Una lista di tipo T
+	 * @throws IllegalArgumentException se gli elementi non possono essere convertiti al tipo specificato
 	 */
-	private String checkType(JsonElement elem) {
-		String str;
-		switch(elem) {
-			case JsonObject jsonObject -> str = "JSONOBJECT";
-			case JsonArray jsonArray -> str = "JSONARRAY";
-			case JsonPrimitive jsonPrimitive -> str = "JSONPRIMITIVE";
-			default -> {
-				throw new IllegalArgumentException("Parameter " + elem + " is not valid");
-			}
+    private <T> List<T> convertJsonPrimitiveList(List<JsonElement> list, Class<T> myClass) {
+    	List<T> result = new ArrayList<>();
+    	JsonPrimitive elem = list.get(0).getAsJsonPrimitive();
+    	if (myClass == String.class && elem.isString()) {
+			result = list.stream().map(e -> myClass.cast(e.getAsString())).collect(Collectors.toList());
+		} else if (myClass == Integer.class && elem.isNumber()) {
+			result = list.stream().map(e -> myClass.cast(e.getAsInt())).collect(Collectors.toList());
+		} else if (myClass == Double.class && elem.isNumber()) {
+			result = list.stream().map(e -> myClass.cast(e.getAsDouble())).collect(Collectors.toList());	
+		} else if (myClass == Boolean.class) {
+			result = list.stream().map(e -> myClass.cast(e.getAsBoolean())).collect(Collectors.toList());
+		} else if (myClass == JsonPrimitive.class) {
+			result = list.stream().map(e -> myClass.cast(e.getAsJsonPrimitive())).collect(Collectors.toList());
+		} else {
+			throw new IllegalArgumentException("Elements cannot be cast to " + myClass.getSimpleName());
 		}
-		return str;
+		return result;
 	}
 	
 	/**
