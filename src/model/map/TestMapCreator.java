@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -14,21 +13,18 @@ import org.junit.jupiter.api.BeforeEach;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import model.utils.MapLoader;
+
+import model.utils.ZoneTypeClassic;
 
 public class TestMapCreator {
 	
 	private JsonObject jsonMap;
-	private MapCreator map;
+	private MapCreatorRisikoClassic map;
 	
 	@BeforeEach
 	void loadMap() {
-		try {
-			this.jsonMap = MapLoader.loadMapFile("risikonew");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		this.map = new MapCreatorRisikoClassic(jsonMap);
+		this.map = MapCreatorRisikoClassic.getInstance();
+		this.jsonMap = this.map.getJsonObject();
 	}
 	
 	@Test
@@ -43,6 +39,22 @@ public class TestMapCreator {
 	    assertTrue(list.contains("oceania"));
 	    assertTrue(list.contains("asia"));
 	    assertEquals(6, list.size());
+	}
+	
+	@Test
+	public void createContinents() {
+		List<JsonElement> continents = this.map.getValues(ZoneTypeClassic.CONTINENTS.getDescrizione(), this.jsonMap);
+		List<IZone> list = this.map.createZones("name", continents, Continent::new);
+		
+		assertEquals(6, list.size());
+		assertTrue(list.stream().allMatch(zone -> zone instanceof Continent));
+	}
+	
+	@Test
+	public void createTerritories() {
+		this.map.createMap();
+		List<IZone> continents = this.map.getMap();
+		System.out.println(continents.get(0).getChildZones().toString());
 	}
 	
 	@Test

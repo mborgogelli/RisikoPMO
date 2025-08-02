@@ -3,24 +3,24 @@ package model.map;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 import model.IPlayer;
-import model.utils.ZoneType;
+import model.utils.ZoneTypeClassic;
 
 public class Territory implements IZone {
 
 	private final String name;
 	private List<IPlayer> players;
 	private List<IZone> neighbours;
-	private final ZoneType type;
+	private final ZoneTypeClassic type;
 	
 	public Territory(String name) {
 		this.name = name;
 		this.players = new ArrayList<>();
 		this.neighbours = new ArrayList<>();
-		this.type = ZoneType.CONTINENTS;
+		this.type = ZoneTypeClassic.TERRITORIES;
 	}
 	
 	@Override
@@ -34,7 +34,7 @@ public class Territory implements IZone {
 	}
 
 	@Override
-	public ZoneType getType() {
+	public ZoneTypeClassic getType() {
 		return this.type;
 	}
 
@@ -45,7 +45,6 @@ public class Territory implements IZone {
 	
 	@Override
 	public List<IZone> getChildZones() {
-		// TO DO
 		return null;
 	}
 
@@ -61,5 +60,31 @@ public class Territory implements IZone {
 	@Override
 	public List<IZone> getNeighbours() {
 		return this.neighbours;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Territory other = (Territory) obj;
+		return Objects.equals(name, other.name);
+	}
+
+	@Override
+	public String toString() {
+		return this.name;
+	}
+
+	@Override
+	public void setChildZones(List<IZone> zone) {
 	}
 }

@@ -7,20 +7,20 @@ import java.util.Objects;
 import java.util.Optional;
 
 import model.IPlayer;
-import model.utils.ZoneType;
+import model.utils.ZoneTypeClassic;
 
 class Continent implements IZone {
 	
 	private final String name;
 	private List<IPlayer> players;
 	private List<IZone> territories;
-	private final ZoneType type;
+	private final ZoneTypeClassic type;
 	
 	Continent(String name) {
 		this.name = name;
 		this.players = new ArrayList<>();
 		this.territories = new ArrayList<>();
-		this.type = ZoneType.CONTINENTS;
+		this.type = ZoneTypeClassic.CONTINENTS;
 	}
 	
 	@Override
@@ -34,7 +34,7 @@ class Continent implements IZone {
 	}
 
 	@Override
-	public ZoneType getType() {
+	public ZoneTypeClassic getType() {
 		return this.type;
 	}
 
@@ -83,6 +83,11 @@ class Continent implements IZone {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public void setChildZones(List<IZone> zone) {
+		this.territories.addAll(zone);
 	}
 	
 	

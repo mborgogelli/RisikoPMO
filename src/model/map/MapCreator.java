@@ -18,12 +18,15 @@ import com.google.gson.JsonPrimitive;
 * 
 */
 abstract class MapCreator {
-
+	
+	
+	abstract void loadMap(String gameVersion);
+	
 	 /** Metodo astratto: deve essere implementato per creare la mappa specifica */
     abstract void createMap();
     
     /** Metodo astratto: deve essere implementato per restituire la mappa al MapManager */
-    abstract void getMap();
+    abstract List<IZone> getMap();
     
     /**
 	 * Metodo astratto: deve essere implementato per creare una lista di zone a partire da una chiave JSON.
@@ -34,19 +37,21 @@ abstract class MapCreator {
 	 * @param factory La factory per creare le istanze di IZone
 	 * @return Una lista di IZone create dalla chiave JSON
 	 */
-    abstract List<IZone> createZone(String key, JsonObject jsonMap, ZoneFactory factory);
+    List<IZone> createZones(String rootey, List<JsonElement> jsonMap, ZoneFactory factory) {
+    	this.checkInputList(jsonMap);
+    	List<String> list = this.getValues(rootey, jsonMap, String.class);
+    	List<IZone> elements = this.insertZoneByKey(list, factory);
+		return elements;
+	}
     
 	/**
      * Inserisce nella mappa tutte le zone di tipo IZone ricavate dalla chiave JSON specificata.
      * Usa la interfaccia Factory per garantire la creazione del tipo corretto.
      */
-	List<IZone> insertZoneByKey(List<String> zones, ZoneFactory factory) {
-		List<IZone> zoneSet = new ArrayList<IZone>();
-		for(String str : zones) {
-			IZone zone = factory.createZone(str);
-			zoneSet.add(zone);
-		}
-		return zoneSet;
+	private List<IZone> insertZoneByKey(List<String> zones, ZoneFactory factory) {
+		return zones.stream()
+				.map(factory::createZone)
+				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -157,6 +162,17 @@ abstract class MapCreator {
 	}
 	
 	/**
+	 * Controlla se tutti gli elementi della lista sono dello stesso tipo.
+	 * 
+	 * @param jsonElements La lista di JsonElement da controllare
+	 * @return true se tutti gli elementi sono dello stesso tipo, false altrimenti
+	 */
+	private boolean checkSameType(List<JsonElement> jsonElements) {
+		Class<?> firstType = jsonElements.get(0).getClass();
+		return jsonElements.stream().allMatch(e -> e.getClass().equals(firstType));
+	}
+	
+	/**
 	 * Converte una lista di JsonElement in una lista di tipo T.
 	 * 
 	 * @param list La lista di JsonElement da convertire
@@ -181,17 +197,6 @@ abstract class MapCreator {
 			throw new IllegalArgumentException("Elements cannot be cast to " + myClass.getSimpleName());
 		}
 		return result;
-	}
-	
-	/**
-	 * Controlla se tutti gli elementi della lista sono dello stesso tipo.
-	 * 
-	 * @param jsonElements La lista di JsonElement da controllare
-	 * @return true se tutti gli elementi sono dello stesso tipo, false altrimenti
-	 */
-	private boolean checkSameType(List<JsonElement> jsonElements) {
-		Class<?> firstType = jsonElements.get(0).getClass();
-		return jsonElements.stream().allMatch(e -> e.getClass().equals(firstType));
 	}
 	
 	/**

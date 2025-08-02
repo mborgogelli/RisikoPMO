@@ -3,7 +3,7 @@ package model.map;
 import java.util.List;
 import java.util.Optional;
 import model.IPlayer;
-import model.utils.ZoneType;
+import model.utils.ZoneTypeClassic;
 
 /**
  * Interfaccia che rappresenta una generica zona della mappa di gioco, modellata come un contenitore che,
@@ -24,7 +24,7 @@ interface IZone {
      * 
      * @return il tipo di zona
      */
-	ZoneType getType();
+	ZoneTypeClassic getType();
         
       /**
      * Restituisce la zona contenitore di questa zona.
@@ -41,6 +41,13 @@ interface IZone {
      * @return Lista delle zone figlie
      */
     List<IZone> getChildZones();
+    
+    /**
+	 * Imposta le zone figlie per questa zona.
+	 * Utilizzato per costruire la gerarchia delle zone.
+	 * 
+	 */
+    void setChildZones(List<IZone> zone);
     
     /**
      * Restituisce tutti i giocatori che possiedono parti di questa zona.
