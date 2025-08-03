@@ -1,22 +1,23 @@
-package model.map;
+package model.board.risikoclassic;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import model.IPlayer;
+import model.board.IZone;
 import model.utils.ZoneTypeClassic;
 
-class Continent implements IZone {
+public class Continent implements IZone {
 	
 	private final String name;
 	private List<IPlayer> players;
 	private List<IZone> territories;
 	private final ZoneTypeClassic type;
+	private Integer armyValue;
 	
-	Continent(String name) {
+	public Continent(String name) {
 		this.name = name;
 		this.players = new ArrayList<>();
 		this.territories = new ArrayList<>();
@@ -25,7 +26,7 @@ class Continent implements IZone {
 	
 	@Override
 	public List<IPlayer> getOwners() {
-		return Collections.unmodifiableList(this.players);
+		return this.players;
 	}
 
 	@Override
@@ -88,6 +89,16 @@ class Continent implements IZone {
 	@Override
 	public void setChildZones(List<IZone> zone) {
 		this.territories.addAll(zone);
+	}
+
+	@Override
+	public Integer getValue() {
+		return this.armyValue;
+	}
+
+	@Override
+	public void setValue(Integer value) {
+		this.armyValue = value;		
 	}
 	
 	

@@ -1,4 +1,4 @@
-package model.map;
+package model.board.risikoclassic;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import model.IPlayer;
+import model.board.IZone;
 import model.utils.ZoneTypeClassic;
 
 public class Territory implements IZone {
@@ -15,6 +16,7 @@ public class Territory implements IZone {
 	private List<IPlayer> players;
 	private List<IZone> neighbours;
 	private final ZoneTypeClassic type;
+	private Integer armyValue;
 	
 	public Territory(String name) {
 		this.name = name;
@@ -87,4 +89,14 @@ public class Territory implements IZone {
 	@Override
 	public void setChildZones(List<IZone> zone) {
 	}
+
+	@Override
+	public Integer getValue() {
+		return this.armyValue;
+	}
+
+	@Override
+	public void setValue(Integer value) {
+		this.armyValue = value;
+	}		
 }

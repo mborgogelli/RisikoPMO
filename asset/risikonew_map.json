@@ -2,7 +2,7 @@
   "continents": [
     {
       "name": "europa",
-	  "armate": 5,
+	  "army": 5,
       "territories": [
         {
           "name": "islanda",
@@ -36,7 +36,7 @@
     },
     {
       "name": "africa",
-	  "armate": 3,
+	  "army": 3,
       "territories": [
         {
           "name": "egitto",
@@ -66,7 +66,7 @@
     },
     {
       "name": "asia",
-	  "armate": 7,
+	  "army": 7,
       "territories": [
         {
           "name": "afghanistan",
@@ -116,7 +116,7 @@
     },
     {
       "name": "oceania",
-	  "armate": 2,
+	  "army": 2,
       "territories": [
         {
           "name": "nuova_guinea",
@@ -138,7 +138,7 @@
     },
     {
       "name": "america_settentrionale",
-	  "armate": 5,
+	  "army": 5,
       "territories": [
         {
           "name": "alaska",
@@ -180,7 +180,7 @@
     },
     {
       "name": "america_meridionale",
-	  "armate": 2,
+	  "army": 2,
       "territories": [
         {
           "name": "argentina",

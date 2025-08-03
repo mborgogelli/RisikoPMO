@@ -1,4 +1,4 @@
-package model.map;
+package model.board;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +10,7 @@ import model.utils.ZoneTypeClassic;
  * possibilmente, contiene o è contenuto a sua volta, in altre zone.
  * 
  */
-interface IZone {
+public interface IZone {
 	 
 	/**
      * Restituisce il nome univoco della zona.
@@ -18,6 +18,21 @@ interface IZone {
      * @return il nome della zona, non può essere null o vuoto
      */
 	String getName();
+	
+	/**
+	 * Restituisce il valore numerico associato alla zona.
+	 * Ad esempio, il numero di armate iniziali per un territorio.
+	 * 
+	 * @return il valore della zona, non può essere null
+	 */
+	Integer getValue();
+	
+	 /**
+	 * Imposta il valore numerico associato alla zona.
+	 * 
+	 * @param value il nuovo valore della zona, non può essere null
+	 */
+	void setValue(Integer value);
 	
     /**
      * Restituisce il tipo di zona (territorio, continente, ecc.).

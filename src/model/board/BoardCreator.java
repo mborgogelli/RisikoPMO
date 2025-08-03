@@ -1,4 +1,4 @@
-package model.map;
+package model.board;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +17,16 @@ import com.google.gson.JsonPrimitive;
 * (ad esempio le adiacenze o altri dati particolari).
 * 
 */
-abstract class MapCreator {
+public abstract class BoardCreator {
 	
 	
-	abstract void loadMap(String gameVersion);
+	protected abstract void loadMap(String gameVersion);
 	
 	 /** Metodo astratto: deve essere implementato per creare la mappa specifica */
-    abstract void createMap();
+    protected abstract void createMap();
     
     /** Metodo astratto: deve essere implementato per restituire la mappa al MapManager */
-    abstract List<IZone> getMap();
+    protected abstract List<IZone> getMap();
     
     /**
 	 * Metodo astratto: deve essere implementato per creare una lista di zone a partire da una chiave JSON.
@@ -37,21 +37,11 @@ abstract class MapCreator {
 	 * @param factory La factory per creare le istanze di IZone
 	 * @return Una lista di IZone create dalla chiave JSON
 	 */
-    List<IZone> createZones(String rootey, List<JsonElement> jsonMap, ZoneFactory factory) {
+    protected List<IZone> createZones(String rootey, List<JsonElement> jsonMap, ZoneFactory factory) {
     	this.checkInputList(jsonMap);
     	List<String> list = this.getValues(rootey, jsonMap, String.class);
     	List<IZone> elements = this.insertZoneByKey(list, factory);
 		return elements;
-	}
-    
-	/**
-     * Inserisce nella mappa tutte le zone di tipo IZone ricavate dalla chiave JSON specificata.
-     * Usa la interfaccia Factory per garantire la creazione del tipo corretto.
-     */
-	private List<IZone> insertZoneByKey(List<String> zones, ZoneFactory factory) {
-		return zones.stream()
-				.map(factory::createZone)
-				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -60,7 +50,7 @@ abstract class MapCreator {
 	 *
 	 * @return Una lista contenente JsonElement
 	 **/
-	List<JsonElement> getValues(String rootKey, JsonElement jsonMap){
+	protected List<JsonElement> getValues(String rootKey, JsonElement jsonMap){
 		if (jsonMap == null || jsonMap.isJsonNull() || jsonMap.isJsonPrimitive()) {
 			throw new IllegalArgumentException("Parameter is null or JsonNull or JsonPrimitive");
 		}
@@ -75,7 +65,7 @@ abstract class MapCreator {
 	 *
 	 * @return Una lista contenente JsonElement
 	 **/
-	List<JsonElement> getValues(String rootKey, List<JsonElement> jsonMap){
+	protected List<JsonElement> getValues(String rootKey, List<JsonElement> jsonMap){
 		this.checkInputList(jsonMap);
 		List<JsonElement> list = new ArrayList<>();
 		if (jsonMap.get(0).isJsonArray() || jsonMap.get(0).isJsonObject()) {
@@ -95,7 +85,7 @@ abstract class MapCreator {
 	 * @param jsonMap La lista in cui cercare la chiave (gestisce sia JsonObject che JsonArray)
 	 * @return Una lista contenente valori di tipo T
 	 **/
-	<T> List<T> getValues(String rootKey, List<JsonElement> jsonMap, Class<T> myClass) {
+	protected <T> List<T> getValues(String rootKey, List<JsonElement> jsonMap, Class<T> myClass) {
 		List<JsonElement> elements = this.getValues(rootKey, jsonMap);
 		List<T> result = new ArrayList<>();
 		if (elements.get(0).isJsonPrimitive()) {
@@ -106,7 +96,11 @@ abstract class MapCreator {
 		return result;
 	}
 	
-
+	protected List<JsonElement> splitJsonArray(JsonArray jsonArray){
+		return StreamSupport.stream(jsonArray.spliterator(),false)
+	             .collect(Collectors.toList());
+	}
+	
 	/**
 	 * Verifica se una chiave è valida in un oggetto JSON.
 	 * Una chiave è considerata valida se esiste nell'oggetto e il suo valore non è null.
@@ -259,9 +253,19 @@ abstract class MapCreator {
 	            .collect(Collectors.toCollection(ArrayList::new));
 	}
 	
+	/**
+     * Inserisce nella mappa tutte le zone di tipo IZone ricavate dalla chiave JSON specificata.
+     * Usa la interfaccia Factory per garantire la creazione del tipo corretto.
+     */
+	private List<IZone> insertZoneByKey(List<String> zones, ZoneFactory factory) {
+		return zones.stream()
+				.map(factory::createZone)
+				.collect(Collectors.toList());
+	}
+	
 	// Interfaccia factory da passare per la creazione delle istanze di IZone
 	@FunctionalInterface
-	interface ZoneFactory {
+	public interface ZoneFactory {
 		IZone createZone(String name);
 	}
 }
