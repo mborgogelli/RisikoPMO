@@ -23,6 +23,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 		this.loadMap(GAMEVERSION);
 		this.jsonMap = super.splitJsonArray(super.getValues(ZoneTypeClassic.CONTINENTS.getDescrizione(), this.jsonObject)
 							.get(0).getAsJsonArray());
+		this.createMap();
 	}
 	
 	public static BoardCreatorRisikoClassic getInstance() {

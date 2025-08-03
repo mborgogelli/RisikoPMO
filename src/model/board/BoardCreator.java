@@ -19,7 +19,11 @@ import com.google.gson.JsonPrimitive;
 */
 public abstract class BoardCreator {
 	
-	
+	/** Metodo astratto: deve essere implementato per caricare la mappa da un file JSON.
+	 * Il nome del file JSON è specificato dal parametro gameVersion.
+	 * 
+	 * @param gameVersion La versione del gioco per cui caricare la mappa
+	 */
 	protected abstract void loadMap(String gameVersion);
 	
 	 /** Metodo astratto: deve essere implementato per creare la mappa specifica */

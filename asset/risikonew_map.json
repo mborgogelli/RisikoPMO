@@ -6,30 +6,37 @@
       "territories": [
         {
           "name": "islanda",
+		  "army": 3,
           "neighbours": ["gran_bretagna", "scandinavia", "groenlandia"]
         },
         {
           "name": "gran_bretagna",
+		  "army": 4,
           "neighbours": ["islanda", "scandinavia", "europa_occidentale", "europa_settentrionale"]
         },
         {
           "name": "scandinavia",
+		  "army": 4,
           "neighbours": ["islanda", "gran_bretagna", "europa_settentrionale", "ucraina"]
         },
         {
           "name": "ucraina",
+		  "army": 6,
           "neighbours": ["scandinavia", "europa_settentrionale", "europa_meridionale", "medio_oriente", "urali", "afghanistan"]
         },
         {
           "name": "europa_settentrionale",
+		  "army": 5,
           "neighbours": ["scandinavia", "gran_bretagna", "europa_occidentale", "ucraina", "europa_meridionale"]
         },
         {
           "name": "europa_occidentale",
+		  "army": 4,
           "neighbours": ["gran_bretagna", "europa_settentrionale", "europa_meridionale", "ucraina", "africa_settentrionale"]
         },
         {
           "name": "europa_meridionale",
+		  "army": 6,
           "neighbours": ["europa_occidentale", "europa_settentrionale", "ucraina", "medio_oriente", "africa_settentrionale", "egitto"]
         }
       ]

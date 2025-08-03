@@ -1,5 +1,5 @@
 package model.board;
 
-interface IGameBoard {
+public interface IGameBoard {
 
 }

@@ -11,16 +11,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 /**
- * Utility class finalizzata al caricamento di file mappa in formato JSON relativi a diverse versioni di gioco.
- * <p>
- * La classe fornisce metodi statici per:
- * <ul>
- *   <li>Costruire il percorso del file mappa a partire dal nome della versione del gioco</li>
- *   <li>Effettuare la validazione dell'input</li>
- *   <li>Gestire il caricamento, la lettura e il parsing del file nel formato {@link com.google.gson.JsonObject}</li>
- * </ul>
- * <p>
- * */
+ * Classe MapLoader per il caricamento delle mappe di gioco in formato JSON.
+ * 
+ * Questa classe fornisce un metodo statico per caricare una mappa di gioco specificata da una versione del gioco.
+ * Utilizza la libreria Gson per il parsing del file JSON e gestisce le eccezioni relative a file mancanti,
+ * JSON malformati o versioni di gioco invalide.
+ */
 public final class MapLoader {
 	
 	private static final String PATH = "asset/";
@@ -70,6 +66,7 @@ public final class MapLoader {
 		}
 		
 	}
+	
 	/** Restituisce il percorso del file JSON associato alla variante specificata di gioco.
 	 * 
 	* @return il percorso del file Json che rappresenta la mappa

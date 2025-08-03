@@ -16,7 +16,6 @@ import model.board.IZone;
 import model.board.risikoclassic.BoardCreatorRisikoClassic;
 import model.board.risikoclassic.Continent;
 import model.board.risikoclassic.Territory;
-import model.utils.ZoneTypeClassic;
 
 public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	
@@ -39,6 +38,7 @@ public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	    assertTrue(list.contains("oceania"));
 	    assertTrue(list.contains("asia"));
 	    assertEquals(6, list.size());
+	    
 	}
 	
 	@Test
