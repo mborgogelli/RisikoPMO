@@ -10,6 +10,8 @@ import model.board.IZone;
 import model.utils.MapLoader;
 import model.utils.ZoneTypeClassic;
 
+import static model.utils.ZoneTypeClassic.*;
+
 public class BoardCreatorRisikoClassic extends BoardCreator {
 	
 	private final static String GAMEVERSION = "risikonew";
@@ -21,7 +23,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	
 	protected BoardCreatorRisikoClassic() {
 		this.loadMap(GAMEVERSION);
-		this.jsonMap = super.splitJsonArray(super.getValues(ZoneTypeClassic.CONTINENTS.getDescrizione(), this.jsonObject)
+		this.jsonMap = super.splitJsonArray(super.getValues(CONTINENTS.getDescrizione(), this.jsonObject)
 							.get(0).getAsJsonArray());
 		this.createMap();
 	}
@@ -70,7 +72,13 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 */
 	private void createContinents() {
 		this.continents = super.createZones("name", this.jsonMap, Continent::new);
-		this.setArmyValues();
+		this.setArmyValues(CONTINENTS);
+	}
+	
+	private List<IZone> createTerritories(List<JsonElement> continentTerritories) {
+		List<IZone> zones = (super.createZones("name", continentTerritories, Territory::new));
+		this.setArmyValues(TERRITORIES);
+		return zones;
 	}
 	
 	/**
@@ -88,7 +96,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * I valori sono ottenuti dal file JSON caricato.
 	 * 
 	 */
-	private void setArmyValues() {
+	private void setArmyValues(ZoneTypeClassic zoneType) {
 		List<Integer> armyValues = super.getValues("army", this.jsonMap, Integer.class);
 		for(int i = 0; i < this.continents.size(); i++) {
 			this.continents.get(i).setValue(armyValues.get(i));
@@ -104,7 +112,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 		List<JsonElement> allTerritories = this.getTerritoriesFromJson();
 		for(int i = 0; i < this.continents.size(); i++) {
 			List<JsonElement> continentTerritories = List.of(allTerritories.get(i));
-			List<IZone> zones = (super.createZones("name", continentTerritories, Territory::new));
+			List<IZone> zones = this.createTerritories(continentTerritories);
 			this.continents.get(i).setChildZones(zones);
 		}
 	}
