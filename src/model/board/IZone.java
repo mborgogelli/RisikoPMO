@@ -3,7 +3,7 @@ package model.board;
 import java.util.List;
 import java.util.Optional;
 import model.IPlayer;
-import model.utils.ZoneTypeClassic;
+import model.utils.EnumRisikoClassic;
 
 /**
  * Interfaccia che rappresenta una generica zona della mappa di gioco, modellata come un contenitore che,
@@ -39,7 +39,7 @@ public interface IZone {
      * 
      * @return il tipo di zona
      */
-	ZoneTypeClassic getType();
+	EnumRisikoClassic getType();
         
       /**
      * Restituisce la zona contenitore di questa zona.

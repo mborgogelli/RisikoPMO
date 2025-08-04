@@ -4,7 +4,10 @@ package model.utils;
  * Enumerazione che definisce i diversi tipi di zone nel gioco.
  * Ogni tipo ha caratteristiche specifiche per il gameplay.
  */
-public enum ZoneTypeClassic {
+public enum EnumRisikoClassic {
+	
+	GAMEVERSION("risikonew"),
+	
     /** Territorio - l'unità fondamentale del gioco classico */
     TERRITORIES("territories"),
     
@@ -13,7 +16,7 @@ public enum ZoneTypeClassic {
     
     private final String descrizione;
     
-    ZoneTypeClassic(String descrizione) {
+    EnumRisikoClassic(String descrizione) {
         this.descrizione = descrizione;
     }
     

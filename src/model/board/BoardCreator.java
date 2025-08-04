@@ -17,7 +17,7 @@ import com.google.gson.JsonPrimitive;
 * (ad esempio le adiacenze o altri dati particolari).
 * 
 */
-public abstract class BoardCreator {
+public abstract class BoardCreator implements IBoardCreator {
 	
 	/** Metodo astratto: deve essere implementato per caricare la mappa da un file JSON.
 	 * Il nome del file JSON è specificato dal parametro gameVersion.
@@ -30,7 +30,7 @@ public abstract class BoardCreator {
     protected abstract void createMap();
     
     /** Metodo astratto: deve essere implementato per restituire la mappa al MapManager */
-    protected abstract List<IZone> getMap();
+    public abstract List<IZone> getMap();
     
     /**
 	 * Metodo astratto: deve essere implementato per creare una lista di zone a partire da una chiave JSON.

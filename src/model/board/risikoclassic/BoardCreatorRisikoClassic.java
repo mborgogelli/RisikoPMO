@@ -8,21 +8,25 @@ import com.google.gson.JsonObject;
 import model.board.BoardCreator;
 import model.board.IZone;
 import model.utils.MapLoader;
-import model.utils.ZoneTypeClassic;
+import model.utils.EnumRisikoClassic;
 
-import static model.utils.ZoneTypeClassic.*;
+import static model.utils.EnumRisikoClassic.*;
 
 public class BoardCreatorRisikoClassic extends BoardCreator {
 	
-	private final static String GAMEVERSION = "risikonew";
 	private static BoardCreatorRisikoClassic instance;
 	
 	private List<IZone> continents;
 	private JsonObject jsonObject;
 	private List<JsonElement> jsonMap;
 	
+	/**
+	 * Costruttore privato per implementare il pattern Singleton.
+	 * protected solo per la classe TestBoardCreator.
+	 * Carica la mappa dal file JSON specificato nella versione del gioco.
+	 */
 	protected BoardCreatorRisikoClassic() {
-		this.loadMap(GAMEVERSION);
+		this.loadMap(GAMEVERSION.getDescrizione());
 		this.jsonMap = super.splitJsonArray(super.getValues(CONTINENTS.getDescrizione(), this.jsonObject)
 							.get(0).getAsJsonArray());
 		this.createMap();
@@ -38,7 +42,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	@Override
 	protected void loadMap(String gameVersion) {
 		try {
-			this.jsonObject = MapLoader.loadMapFile(GAMEVERSION);
+			this.jsonObject = MapLoader.loadMapFile(gameVersion);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -51,7 +55,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	}
 	
 	@Override
-	protected List<IZone> getMap() {
+	public List<IZone> getMap() {
 		return this.continents;
 	}
 	
@@ -96,7 +100,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * I valori sono ottenuti dal file JSON caricato.
 	 * 
 	 */
-	private void setArmyValues(ZoneTypeClassic zoneType) {
+	private void setArmyValues(EnumRisikoClassic zoneType) {
 		List<Integer> armyValues = super.getValues("army", this.jsonMap, Integer.class);
 		for(int i = 0; i < this.continents.size(); i++) {
 			this.continents.get(i).setValue(armyValues.get(i));
