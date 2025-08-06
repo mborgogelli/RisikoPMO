@@ -7,8 +7,8 @@ import com.google.gson.JsonObject;
 
 import model.board.BoardCreator;
 import model.board.IZone;
+import model.utils.IEnumRisiko;
 import model.utils.MapLoader;
-import model.utils.EnumRisikoClassic;
 
 import static model.utils.EnumRisikoClassic.*;
 
@@ -100,7 +100,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * I valori sono ottenuti dal file JSON caricato.
 	 * 
 	 */
-	private void setArmyValues(EnumRisikoClassic zoneType) {
+	private void setArmyValues(IEnumRisiko zoneType) {
 		List<Integer> armyValues = super.getValues("army", this.jsonMap, Integer.class);
 		for(int i = 0; i < this.continents.size(); i++) {
 			this.continents.get(i).setValue(armyValues.get(i));

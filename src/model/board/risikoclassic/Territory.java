@@ -9,13 +9,14 @@ import java.util.Optional;
 import model.IPlayer;
 import model.board.IZone;
 import model.utils.EnumRisikoClassic;
+import model.utils.IEnumRisiko;
 
 public class Territory implements IZone {
 
 	private final String name;
 	private List<IPlayer> players;
 	private List<IZone> neighbours;
-	private final EnumRisikoClassic type;
+	private final IEnumRisiko type;
 	private Integer armyValue;
 	
 	public Territory(String name) {
@@ -36,7 +37,7 @@ public class Territory implements IZone {
 	}
 
 	@Override
-	public EnumRisikoClassic getType() {
+	public IEnumRisiko getType() {
 		return this.type;
 	}
 

@@ -4,7 +4,7 @@ package model.utils;
  * Enumerazione che definisce i diversi tipi di zone nel gioco.
  * Ogni tipo ha caratteristiche specifiche per il gameplay.
  */
-public enum EnumRisikoClassic {
+public enum EnumRisikoClassic implements IEnumRisiko {
 	
 	GAMEVERSION("risikonew"),
 	
@@ -20,7 +20,12 @@ public enum EnumRisikoClassic {
         this.descrizione = descrizione;
     }
     
-    public String getDescrizione() {
-        return descrizione;
+    @Override
+	public String getDescrizione() {
+        return this.descrizione;
+    }
+    
+    public String getGameVersion() {
+    	return GAMEVERSION.getDescrizione();
     }
 }

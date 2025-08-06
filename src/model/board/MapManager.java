@@ -8,21 +8,19 @@ public class MapManager {
 	 */
 	private static MapManager instance;
 
-	private IBoardCreator boardCreator;
 
-	private MapManager(IBoardCreator boardCreator) {
-		this.boardCreator = boardCreator;
+	private MapManager() {
 	}
 
-	public static MapManager getInstance(IBoardCreator boardCreator) {
+	public static MapManager getInstance() {
 		if (instance == null) {
-			instance = new MapManager(boardCreator);
+			instance = new MapManager();
 		}
 		return instance;
 	}
-
-	public IBoardCreator getBoardCreator() {
-		return this.boardCreator;
+	
+	public void requestGameVersion(String Gameversion) {
+		
 	}
-
+	
 }
