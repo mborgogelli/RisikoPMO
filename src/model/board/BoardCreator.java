@@ -24,10 +24,16 @@ import model.utils.MapLoader;
 public abstract class BoardCreator{
 	
     /** Metodo astratto: deve essere implementato per creare la mappa specifica */
-    protected abstract void createMap();
+    protected abstract IGameBoard createMap();
     
     /** Metodo astratto: deve essere implementato per restituire la mappa al MapManager */
-    public abstract IGameBoard getMap();
+    public IGameBoard getMap() {
+		IGameBoard gameBoard = this.createMap();
+		if (gameBoard == null) {
+			throw new IllegalStateException("Game board cannot be null");
+		}
+		return gameBoard;
+    }
     
 	// Interfaccia factory da passare per la creazione delle istanze di IZone
 	@FunctionalInterface

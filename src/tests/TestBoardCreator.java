@@ -16,6 +16,7 @@ import model.board.IZone;
 import model.board.risikoclassic.BoardCreatorRisikoClassic;
 import model.board.risikoclassic.Continent;
 import model.board.risikoclassic.Territory;
+import model.utils.GameVersion;
 
 public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	
@@ -23,7 +24,7 @@ public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	
 	@BeforeEach
 	void loadMap() {
-		this.jsonMap = super.getLoadedJson();
+		this.jsonMap = super.loadMap(GameVersion.RISIKOCLASSIC);
 	}
 	
 	@Test
@@ -43,7 +44,6 @@ public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	
 	@Test
 	public void createContinents() {
-		super.createMap();
 		List<IZone> continents = super.getMap().getZones();
 		
 		assertEquals(6, continents.size());
@@ -52,7 +52,6 @@ public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	
 	@Test
 	public void createTerritories() {
-		super.createMap();
 		List<IZone> continents = super.getMap().getZones();
 		
 		assertEquals(7, continents.get(0).getChildZones().size());
@@ -61,7 +60,6 @@ public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	
 	@Test
 	public void getArmyFromContinent() {
-		super.createMap();
 		List<IZone> continents = super.getMap().getZones();
 		
 		assertEquals(5, continents.get(0).getValue());
@@ -82,6 +80,25 @@ public class TestBoardCreator extends BoardCreatorRisikoClassic {
 			
 		assertEquals(expected.size(), list.size());
 		assertTrue(list.containsAll(expected));
+	}
+	
+	@Test
+	public void testEuropaTerritoriesArmyValues() {
+	    List<IZone> continents = super.getMap().getZones();
+	    IZone europa = continents.stream()
+						        .filter(zone -> zone instanceof Continent && zone.getName().equals("europa"))
+						        .findFirst()
+						        .orElseThrow(() -> new IllegalArgumentException("Europa continent not found"));
+
+	    List<IZone> europaTerritories = europa.getChildZones();
+
+	    List<Integer> expectedArmyValues = List.of(3, 4, 4, 6, 5, 4, 6);
+
+	    List<Integer> actualArmyValues = europaTerritories.stream()
+												        .map(IZone::getValue)
+												        .toList();
+
+	    assertEquals(expectedArmyValues, actualArmyValues);
 	}
 	
 	@Test

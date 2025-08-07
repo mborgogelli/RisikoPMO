@@ -18,19 +18,23 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	
 	private JsonObject jsonObject;
 	private List<IZone> continents;
-	private List<JsonElement> jsonMap;
 	
 	/**
 	 * Costruttore privato per implementare il pattern Singleton.
-	 * protected solo per la classe TestBoardCreator.
+	 * NOTA: Protected solo per la classe di test TestBoardCreator.
 	 * Carica la mappa dal file JSON specificato nella versione del gioco.
 	 */
 	protected BoardCreatorRisikoClassic() {
 		this.jsonObject = super.loadMap(GameVersion.RISIKOCLASSIC);
-		this.jsonMap = this.getContinentsAsList();
-		this.createMap();
+		
 	}
 	
+	/**
+	 * Restituisce l'istanza singleton di BoardCreatorRisikoClassic.
+	 * Se l'istanza non esiste, la crea.
+	 * 
+	 * @return Istanza di BoardCreatorRisikoClassic
+	 */
 	public static BoardCreatorRisikoClassic getInstance() {
 		if (instance == null) {
 			instance = new BoardCreatorRisikoClassic();
@@ -39,24 +43,10 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	}
 	
 	@Override
-	public IGameBoard getMap() {
-		return new GameBoardRisikoClassic(this.continents);
-	}
-	
-	@Override
-	protected void createMap() {
+	protected IGameBoard createMap() {
 		this.createContinents();
 		this.insertTerritories();
-	}
-	
-	/**
-	 * Restituisce l'oggetto JsonObject caricato.
-	 * Questo oggetto contiene i dati della mappa in formato JSON.
-	 * 
-	 * @return JsonObject che rappresenta la mappa caricata
-	 */
-	protected JsonObject getLoadedJson() {
-		return this.jsonObject;
+		return new GameBoardRisikoClassic(this.continents);
 	}
 	
 	/**
@@ -77,14 +67,9 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * 
 	 */
 	private void createContinents() {
-		this.continents = super.createZones("name", this.jsonMap, Continent::new);
+		List<JsonElement> continents = this.getContinentsAsList();
+		this.continents = super.createZones("name", continents, Continent::new);
 		this.setArmyValues(CONTINENTS);
-	}
-	
-	private List<IZone> createTerritories(List<JsonElement> continentTerritories) {
-		List<IZone> zones = (super.createZones("name", continentTerritories, Territory::new));
-		this.setArmyValues(TERRITORIES);
-		return zones;
 	}
 	
 	/**
@@ -94,18 +79,47 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * @return Lista di JsonElement che rappresentano i territori
 	 */
 	private List<JsonElement> getTerritoriesFromJson() {
-		return super.getValues("territories", this.jsonMap);
+		List<JsonElement> continents = this.getContinentsAsList();
+		return super.getValues("territories", continents);
 	}
 	
 	/**
-	 * Imposta i valori di armata per ogni continente.
-	 * I valori sono ottenuti dal file JSON caricato.
+	 * Crea le zone di tipo Territory a partire dai territori di un continente.
+	 * Le zone vengono create utilizzando il metodo createZones della classe padre.
 	 * 
+	 * @param continentTerritories Lista di JsonElement che rappresentano i territori di un continente
+	 * @return Lista di IZone che rappresentano i territori creati
+	 */
+	private List<IZone> createTerritories(List<JsonElement> continentTerritories) {
+		List<IZone> zones = (super.createZones("name", continentTerritories, Territory::new));
+		this.setArmyValues(TERRITORIES);
+		return zones;
+	}
+	
+	/**
+	 * Imposta i valori di armata per i continenti o i territori a seconda del tipo di zona.
+	 * Se il tipo di zona è CONTINENTS, imposta i valori per i continenti.
+	 * Se il tipo di zona è TERRITORIES, imposta i valori per i territori all'interno dei continenti.
+	 * 
+	 * @param zoneType Tipo di zona (CONTINENTS o TERRITORIES)
 	 */
 	private void setArmyValues(IEnumRisiko zoneType) {
-		List<Integer> armyValues = super.getValues("army", this.jsonMap, Integer.class);
-		for(int i = 0; i < this.continents.size(); i++) {
-			this.continents.get(i).setValue(armyValues.get(i));
+		if (zoneType == CONTINENTS) {
+			List<JsonElement> continents = this.getContinentsAsList();
+			List<Integer> armyValues = super.getValues("army", continents, Integer.class);
+			for(int i = 0; i < this.continents.size(); i++) {
+				this.continents.get(i).setValue(armyValues.get(i));
+			}
+		} else if(zoneType == TERRITORIES) {
+			List<JsonElement> allTerritories = this.getTerritoriesFromJson();
+			for(int i = 0; i < this.continents.size(); i++) {
+				List<IZone> territories = this.continents.get(i).getChildZones();
+				List<JsonElement> continentTerritories = List.of(allTerritories.get(i));
+				List<Integer> armyValues = super.getValues("army", continentTerritories, Integer.class);
+				for(int j = 0; j < territories.size(); j++) {
+					territories.get(j).setValue(armyValues.get(j));
+				}
+			}
 		}
 	}
 	
@@ -122,8 +136,4 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 			this.continents.get(i).setChildZones(zones);
 		}
 	}
-
-
-
-
 }
