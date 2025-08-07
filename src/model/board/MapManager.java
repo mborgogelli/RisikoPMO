@@ -1,5 +1,7 @@
 package model.board;
 
+import model.utils.GameVersion;
+
 public class MapManager {
 	
 	/**
@@ -19,7 +21,7 @@ public class MapManager {
 		return instance;
 	}
 	
-	public void requestGameVersion(String Gameversion) {
+	public void requestGameVersion(GameVersion Gameversion) {
 		
 	}
 	

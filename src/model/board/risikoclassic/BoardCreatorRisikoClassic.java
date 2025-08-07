@@ -1,14 +1,14 @@
 package model.board.risikoclassic;
 
-import java.io.IOException;
 import java.util.List;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import model.board.BoardCreator;
+import model.board.IGameBoard;
 import model.board.IZone;
+import model.utils.GameVersion;
 import model.utils.IEnumRisiko;
-import model.utils.MapLoader;
 
 import static model.utils.EnumRisikoClassic.*;
 
@@ -16,8 +16,8 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	
 	private static BoardCreatorRisikoClassic instance;
 	
-	private List<IZone> continents;
 	private JsonObject jsonObject;
+	private List<IZone> continents;
 	private List<JsonElement> jsonMap;
 	
 	/**
@@ -26,9 +26,8 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * Carica la mappa dal file JSON specificato nella versione del gioco.
 	 */
 	protected BoardCreatorRisikoClassic() {
-		this.loadMap(GAMEVERSION.getDescrizione());
-		this.jsonMap = super.splitJsonArray(super.getValues(CONTINENTS.getDescrizione(), this.jsonObject)
-							.get(0).getAsJsonArray());
+		this.jsonObject = super.loadMap(GameVersion.RISIKOCLASSIC);
+		this.jsonMap = this.getContinentsAsList();
 		this.createMap();
 	}
 	
@@ -40,12 +39,8 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	}
 	
 	@Override
-	protected void loadMap(String gameVersion) {
-		try {
-			this.jsonObject = MapLoader.loadMapFile(gameVersion);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public IGameBoard getMap() {
+		return new GameBoardRisikoClassic(this.continents);
 	}
 	
 	@Override
@@ -54,18 +49,25 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 		this.insertTerritories();
 	}
 	
-	@Override
-	public List<IZone> getMap() {
-		return this.continents;
-	}
-	
 	/**
-	 * Restituisce l'oggetto JSON che rappresenta la mappa.
+	 * Restituisce l'oggetto JsonObject caricato.
+	 * Questo oggetto contiene i dati della mappa in formato JSON.
 	 * 
-	 * @return JsonObject contenente i dati della mappa
+	 * @return JsonObject che rappresenta la mappa caricata
 	 */
 	protected JsonObject getLoadedJson() {
 		return this.jsonObject;
+	}
+	
+	/**
+	 * Restituisce la lista di continenti come JsonElement.
+	 * I continenti sono ottenuti dal file JSON caricato.
+	 * 
+	 * @return Lista di JsonElement che rappresentano i continenti
+	 */
+	private List<JsonElement> getContinentsAsList() {
+		return super.splitJsonArray(super.getValues(CONTINENTS.getDescrizione(), this.jsonObject)
+				.get(0).getAsJsonArray());
 	}
 	
 	/**
@@ -120,6 +122,8 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 			this.continents.get(i).setChildZones(zones);
 		}
 	}
+
+
 
 
 }

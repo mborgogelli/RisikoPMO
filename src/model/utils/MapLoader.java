@@ -56,15 +56,13 @@ public final class MapLoader {
 			if (mapJson == null) {
                 throw new JsonSyntaxException("File " + path + " is empty or contains null");
             }
-			
 			return mapJson; 
-		
+			
 		} catch (FileNotFoundException ex) {
 				throw new FileNotFoundException("File " + path + " not found.");
 		} catch (JsonSyntaxException ex){
 				throw new JsonSyntaxException("Json file " + path + " is invalid.");
 		}
-		
 	}
 	
 	/** Restituisce il percorso del file JSON associato alla variante specificata di gioco.

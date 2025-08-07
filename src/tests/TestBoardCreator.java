@@ -44,7 +44,7 @@ public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	@Test
 	public void createContinents() {
 		super.createMap();
-		List<IZone> continents = super.getMap();
+		List<IZone> continents = super.getMap().getZones();
 		
 		assertEquals(6, continents.size());
 		assertTrue(continents.stream().allMatch(zone -> zone instanceof Continent));
@@ -53,7 +53,7 @@ public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	@Test
 	public void createTerritories() {
 		super.createMap();
-		List<IZone> continents = super.getMap();
+		List<IZone> continents = super.getMap().getZones();
 		
 		assertEquals(7, continents.get(0).getChildZones().size());
 		assertTrue(continents.get(0).getChildZones().stream().allMatch(zone -> zone instanceof Territory));
@@ -62,7 +62,7 @@ public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	@Test
 	public void getArmyFromContinent() {
 		super.createMap();
-		List<IZone> continents = super.getMap();
+		List<IZone> continents = super.getMap().getZones();
 		
 		assertEquals(5, continents.get(0).getValue());
 		assertEquals(3, continents.get(1).getValue());

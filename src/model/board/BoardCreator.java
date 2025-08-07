@@ -1,5 +1,6 @@
 package model.board;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +11,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import model.utils.GameVersion;
+import model.utils.MapLoader;
+
 /**
 * Classe astratta che offre il comportamento di base per costruire una mappa di gioco a partire da un file JSON.
 * Questa classe serve come “scheletro” per tutte le varianti di giochi: fornisce metodi utili per creare e gestire
@@ -17,21 +21,38 @@ import com.google.gson.JsonPrimitive;
 * (ad esempio le adiacenze o altri dati particolari).
 * 
 */
-public abstract class BoardCreator implements IBoardCreator {
+public abstract class BoardCreator{
 	
-	/** Metodo astratto: deve essere implementato per caricare la mappa da un file JSON.
-	 * Il nome del file JSON è specificato dal parametro gameVersion.
-	 * 
-	 * @param gameVersion La versione del gioco per cui caricare la mappa
-	 */
-	protected abstract void loadMap(String gameVersion);
-	
-	 /** Metodo astratto: deve essere implementato per creare la mappa specifica */
+    /** Metodo astratto: deve essere implementato per creare la mappa specifica */
     protected abstract void createMap();
     
     /** Metodo astratto: deve essere implementato per restituire la mappa al MapManager */
-    public abstract List<IZone> getMap();
+    public abstract IGameBoard getMap();
     
+	// Interfaccia factory da passare per la creazione delle istanze di IZone
+	@FunctionalInterface
+	public interface ZoneFactory {
+		IZone createZone(String name);
+	}
+    
+	/** Metodo astratto: deve essere implementato per caricare la mappa da un file JSON.
+	 *  e restituisce un oggetto JsonObject che rappresenta la mappa.
+	 * Il nome del file JSON è specificato dal parametro gameVersion.
+	 * 
+	 * @param gameVersion La versione del gioco per cui caricare la mappa.
+	 * @return Un oggetto JsonObject che rappresenta la mappa del gioco.
+	 * @throws IOException 
+	 */
+	protected JsonObject loadMap(GameVersion gameVersion) {
+		JsonObject jsonObject = null;
+		try {
+			jsonObject = MapLoader.loadMapFile(gameVersion.getDescrizione());
+		} catch (IOException e) {
+			System.err.println("Cannot Load Map: " + e.getMessage());
+		}
+		return jsonObject;
+	}
+	
     /**
 	 * Metodo astratto: deve essere implementato per creare una lista di zone a partire da una chiave JSON.
 	 * Utilizza la interfaccia Factory per garantire la creazione del tipo corretto di IZone.
@@ -267,9 +288,5 @@ public abstract class BoardCreator implements IBoardCreator {
 				.collect(Collectors.toList());
 	}
 	
-	// Interfaccia factory da passare per la creazione delle istanze di IZone
-	@FunctionalInterface
-	public interface ZoneFactory {
-		IZone createZone(String name);
-	}
+
 }
