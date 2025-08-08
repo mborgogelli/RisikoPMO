@@ -16,7 +16,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	
 	private static BoardCreatorRisikoClassic instance;
 	
-	private JsonObject jsonObject;
+	private JsonObject jsonMap;
 	private List<IZone> continents;
 	
 	/**
@@ -25,8 +25,8 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * Carica la mappa dal file JSON specificato nella versione del gioco.
 	 */
 	protected BoardCreatorRisikoClassic() {
-		this.jsonObject = super.loadMap(GameVersion.RISIKOCLASSIC);
-		
+		super(GameVersion.RISIKOCLASSIC);
+		this.jsonMap = super.getLoadedMap();
 	}
 	
 	/**
@@ -56,7 +56,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * @return Lista di JsonElement che rappresentano i continenti
 	 */
 	private List<JsonElement> getContinentsAsList() {
-		return super.splitJsonArray(super.getValues(CONTINENTS.getDescrizione(), this.jsonObject)
+		return super.splitJsonArray(super.getValues(CONTINENTS.getDescrizione(), this.jsonMap)
 				.get(0).getAsJsonArray());
 	}
 	

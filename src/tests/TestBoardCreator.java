@@ -3,8 +3,9 @@ package tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -16,16 +17,17 @@ import model.board.IZone;
 import model.board.risikoclassic.BoardCreatorRisikoClassic;
 import model.board.risikoclassic.Continent;
 import model.board.risikoclassic.Territory;
-import model.utils.GameVersion;
 
 public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	
 	private JsonObject jsonMap;
 	
 	@BeforeEach
-	void loadMap() {
-		this.jsonMap = super.loadMap(GameVersion.RISIKOCLASSIC);
-	}
+	public void setUp() {
+		BoardCreatorRisikoClassic.getInstance();
+		this.jsonMap = super.getLoadedMap();
+	}	
+
 	
 	@Test
 	public void getContinentsNameFromJson(){

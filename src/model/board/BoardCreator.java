@@ -23,6 +23,17 @@ import model.utils.MapLoader;
 */
 public abstract class BoardCreator{
 	
+	private JsonObject jsonMap;
+	
+	/**
+	 * Costruttore protetto che carica la mappa dal file JSON in base alla versione del gioco.
+	 * 
+	 * @param gameVersion La versione del gioco per cui caricare la mappa.
+	 */	
+	protected BoardCreator(GameVersion gameVersion) {
+		this.jsonMap = this.loadMap(gameVersion);
+	}
+	
     /** Metodo astratto: deve essere implementato per creare la mappa specifica */
     protected abstract IGameBoard createMap();
     
@@ -40,23 +51,14 @@ public abstract class BoardCreator{
 	public interface ZoneFactory {
 		IZone createZone(String name);
 	}
-    
-	/** Metodo astratto: deve essere implementato per caricare la mappa da un file JSON.
-	 *  e restituisce un oggetto JsonObject che rappresenta la mappa.
-	 * Il nome del file JSON è specificato dal parametro gameVersion.
-	 * 
-	 * @param gameVersion La versione del gioco per cui caricare la mappa.
-	 * @return Un oggetto JsonObject che rappresenta la mappa del gioco.
-	 * @throws IOException 
+
+	/**
+	 * Ritorna un oggetto JsonObject che rappresenta la mappa.
+	 *
+	 * @return Un oggetto JsonObject che rappresenta la mappa del gioco
 	 */
-	protected JsonObject loadMap(GameVersion gameVersion) {
-		JsonObject jsonObject = null;
-		try {
-			jsonObject = MapLoader.loadMapFile(gameVersion.getDescrizione());
-		} catch (IOException e) {
-			System.err.println("Cannot Load Map: " + e.getMessage());
-		}
-		return jsonObject;
+	protected JsonObject getLoadedMap() {
+		return this.jsonMap;
 	}
 	
     /**
@@ -130,6 +132,24 @@ public abstract class BoardCreator{
 	protected List<JsonElement> splitJsonArray(JsonArray jsonArray){
 		return StreamSupport.stream(jsonArray.spliterator(),false)
 	             .collect(Collectors.toList());
+	}
+	
+    
+	/** Caricare la mappa da un file JSON in base alla versione di gioco richiesta.
+	 *  Restituisce un oggetto JsonObject che rappresenta la mappa.
+	 * 
+	 * @param gameVersion La versione del gioco per cui caricare la mappa.
+	 * @return Un oggetto JsonObject che rappresenta la mappa del gioco.
+	 * @throws IOException 
+	 */
+	private JsonObject loadMap(GameVersion gameVersion) {
+		JsonObject jsonObject = null;
+		try {
+			jsonObject = MapLoader.loadMapFile(gameVersion.getDescrizione());
+		} catch (IOException e) {
+			System.err.println("Cannot Load Map: " + e.getMessage());
+		}
+		return jsonObject;
 	}
 	
 	/**
