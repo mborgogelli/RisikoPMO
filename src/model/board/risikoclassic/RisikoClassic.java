@@ -1,12 +1,14 @@
-package model.utils;
+package model.board.risikoclassic;
+
+import model.utils.GameVersion;
 
 /**
  * Enumerazione che definisce i diversi tipi di zone nel gioco.
  * Ogni tipo ha caratteristiche specifiche per il gameplay.
  */
-public enum EnumRisikoClassic implements IEnumRisiko {
+public enum RisikoClassic implements GameVersion {
 	
-	GAMEVERSION("risikonew"),
+	RISIKOCLASSIC("risikonew"),
 	
     /** Territorio - l'unità fondamentale del gioco classico */
     TERRITORIES("territories"),
@@ -16,7 +18,7 @@ public enum EnumRisikoClassic implements IEnumRisiko {
     
     private final String descrizione;
     
-    EnumRisikoClassic(String descrizione) {
+    RisikoClassic(String descrizione) {
         this.descrizione = descrizione;
     }
     
@@ -25,7 +27,8 @@ public enum EnumRisikoClassic implements IEnumRisiko {
         return this.descrizione;
     }
     
+    @Override
     public String getGameVersion() {
-    	return GAMEVERSION.getDescrizione();
+    	return RISIKOCLASSIC.getDescrizione();
     }
 }

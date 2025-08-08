@@ -5,13 +5,16 @@ import java.util.List;
 import model.board.IGameBoard;
 import model.board.IZone;
 import model.utils.GameVersion;
+import static model.board.risikoclassic.RisikoClassic.*;
 
 class GameBoardRisikoClassic implements IGameBoard {
 	
 	private List<IZone> continents;
+	private final GameVersion gameVersion;
 	
 	GameBoardRisikoClassic(List<IZone> continents) {
 		this.continents = continents;
+		this.gameVersion = RISIKOCLASSIC;
 	}
 	
 	@Override
@@ -20,12 +23,7 @@ class GameBoardRisikoClassic implements IGameBoard {
 	}
 	
 	@Override
-	public String getMapName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
 	public GameVersion getGameVersion() {
-		return GameVersion.RISIKOCLASSIC;
+		return this.gameVersion;
 	}
 }

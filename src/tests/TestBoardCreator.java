@@ -24,11 +24,9 @@ public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	
 	@BeforeEach
 	public void setUp() {
-		BoardCreatorRisikoClassic.getInstance();
 		this.jsonMap = super.getLoadedMap();
 	}	
 
-	
 	@Test
 	public void getContinentsNameFromJson(){
 		List<JsonElement> continents = super.getValues("continents", this.jsonMap);

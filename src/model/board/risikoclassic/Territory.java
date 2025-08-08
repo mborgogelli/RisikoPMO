@@ -8,22 +8,21 @@ import java.util.Optional;
 
 import model.IPlayer;
 import model.board.IZone;
-import model.utils.EnumRisikoClassic;
-import model.utils.IEnumRisiko;
+import model.utils.GameVersion;
 
 public class Territory implements IZone {
 
 	private final String name;
 	private List<IPlayer> players;
 	private List<IZone> neighbours;
-	private final IEnumRisiko type;
+	private final GameVersion type;
 	private Integer armyValue;
 	
 	public Territory(String name) {
 		this.name = name;
 		this.players = new ArrayList<>();
 		this.neighbours = new ArrayList<>();
-		this.type = EnumRisikoClassic.TERRITORIES;
+		this.type = RisikoClassic.TERRITORIES;
 	}
 	
 	@Override
@@ -37,7 +36,7 @@ public class Territory implements IZone {
 	}
 
 	@Override
-	public IEnumRisiko getType() {
+	public GameVersion getType() {
 		return this.type;
 	}
 

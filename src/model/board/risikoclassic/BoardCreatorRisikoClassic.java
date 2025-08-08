@@ -1,5 +1,7 @@
 package model.board.risikoclassic;
 
+import static model.board.risikoclassic.RisikoClassic.*;
+
 import java.util.List;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -8,9 +10,6 @@ import model.board.BoardCreator;
 import model.board.IGameBoard;
 import model.board.IZone;
 import model.utils.GameVersion;
-import model.utils.IEnumRisiko;
-
-import static model.utils.EnumRisikoClassic.*;
 
 public class BoardCreatorRisikoClassic extends BoardCreator {
 	
@@ -25,7 +24,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * Carica la mappa dal file JSON specificato nella versione del gioco.
 	 */
 	protected BoardCreatorRisikoClassic() {
-		super(GameVersion.RISIKOCLASSIC);
+		super(RisikoClassic.RISIKOCLASSIC);
 		this.jsonMap = super.getLoadedMap();
 	}
 	
@@ -103,7 +102,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * 
 	 * @param zoneType Tipo di zona (CONTINENTS o TERRITORIES)
 	 */
-	private void setArmyValues(IEnumRisiko zoneType) {
+	private void setArmyValues(GameVersion zoneType) {
 		if (zoneType == CONTINENTS) {
 			List<JsonElement> continents = this.getContinentsAsList();
 			List<Integer> armyValues = super.getValues("army", continents, Integer.class);

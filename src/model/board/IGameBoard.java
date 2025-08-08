@@ -14,16 +14,11 @@ public interface IGameBoard {
 	public List<IZone> getZones();
 	
 	/**
-	 * Restituisce il nome della mappa di gioco.
-	 * 
-	 * @return nome della mappa
-	 */
-	public String getMapName();
-	
-	/**
 	 * Restituisce la versione del gioco.
 	 * 
 	 * @return versione del gioco
 	 */
 	public GameVersion getGameVersion();
+	
+	
 }

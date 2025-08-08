@@ -1,4 +1,4 @@
-package model.board;
+package model.management;
 
 import model.utils.GameVersion;
 
