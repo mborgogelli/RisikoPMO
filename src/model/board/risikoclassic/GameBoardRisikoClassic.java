@@ -26,4 +26,16 @@ class GameBoardRisikoClassic implements IGameBoard {
 	public GameVersion getGameVersion() {
 		return this.gameVersion;
 	}
+
+	@Override
+	public IZone findZoneByName(String zoneName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<IZone> getNeighbours(String zoneName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -20,5 +20,8 @@ public interface IGameBoard {
 	 */
 	public GameVersion getGameVersion();
 	
+	public IZone findZoneByName(String zoneName);
+	
+	public List<IZone> getNeighbours(String zoneName);
 	
 }
