@@ -10,7 +10,7 @@ import model.utils.GameVersion;
 
 class GameBoardRisikoClassic implements IGameBoard {
 	
-	private List<IZone> continents;
+	private final List<IZone> continents;
 	private final GameVersion gameVersion;
 	
 	GameBoardRisikoClassic(List<IZone> continents) {
@@ -35,7 +35,25 @@ class GameBoardRisikoClassic implements IGameBoard {
 	}
 
 	@Override
-	public List<IZone> getNeighbours(String zoneName) {
+	public List<String> getNeighbours(String zoneName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IZone whereIsZone(String zoneName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean canReach(String zoneTo, String zoneFrom) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Integer getValue(String zoneName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
