@@ -1,11 +1,12 @@
-package model.board.risikoclassic;
+package model.versions.risikockassic.board;
+
+import static model.versions.risikockassic.RisikoClassic.*;
 
 import java.util.List;
 
 import model.board.IGameBoard;
 import model.board.IZone;
 import model.utils.GameVersion;
-import static model.board.risikoclassic.RisikoClassic.*;
 
 class GameBoardRisikoClassic implements IGameBoard {
 	

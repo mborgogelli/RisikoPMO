@@ -37,7 +37,13 @@ public abstract class BoardCreator{
     /** Metodo astratto: deve essere implementato per creare la mappa specifica */
     protected abstract IGameBoard createMap();
     
-    /** Metodo astratto: deve essere implementato per restituire la mappa al MapManager */
+    /**
+	 * Metodo che restituisce la mappa del gioco.
+	 * Se la mappa non è stata creata correttamente, lancia un'eccezione.
+	 *
+	 * @return Un oggetto IGameBoard che rappresenta la mappa del gioco
+	 * @throws IllegalStateException se la mappa non è stata creata correttamente
+	 */
     public IGameBoard getMap() {
 		IGameBoard gameBoard = this.createMap();
 		if (gameBoard == null) {
@@ -313,6 +319,4 @@ public abstract class BoardCreator{
 				.map(factory::createZone)
 				.collect(Collectors.toList());
 	}
-	
-
 }

@@ -1,6 +1,6 @@
-package model.board.risikoclassic;
+package model.versions.risikockassic.board;
 
-import static model.board.risikoclassic.RisikoClassic.*;
+import static model.versions.risikockassic.RisikoClassic.*;
 
 import java.util.List;
 import com.google.gson.JsonElement;
@@ -10,6 +10,7 @@ import model.board.BoardCreator;
 import model.board.IGameBoard;
 import model.board.IZone;
 import model.utils.GameVersion;
+import model.versions.risikockassic.RisikoClassic;
 
 public class BoardCreatorRisikoClassic extends BoardCreator {
 	
@@ -17,6 +18,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	
 	private JsonObject jsonMap;
 	private List<IZone> continents;
+	private IGameBoard gameBoard;
 	
 	/**
 	 * Costruttore privato per implementare il pattern Singleton.
@@ -48,16 +50,13 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 		return new GameBoardRisikoClassic(this.continents);
 	}
 	
-	/**
-	 * Restituisce la lista di continenti come JsonElement.
-	 * I continenti sono ottenuti dal file JSON caricato.
-	 * 
-	 * @return Lista di JsonElement che rappresentano i continenti
-	 */
-	private List<JsonElement> getContinentsAsList() {
-		return super.splitJsonArray(super.getValues(CONTINENTS.getDescrizione(), this.jsonMap)
-				.get(0).getAsJsonArray());
-	}
+	@Override
+    public IGameBoard getMap() {
+		if (this.gameBoard == null) {
+			this.gameBoard = super.getMap();
+		} 		
+		return this.gameBoard;
+    }
 	
 	/**
 	 * Crea le zone di tipo Continente e le inserisce nella lista continents.
@@ -69,6 +68,31 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 		List<JsonElement> continents = this.getContinentsAsList();
 		this.continents = super.createZones("name", continents, Continent::new);
 		this.setArmyValues(CONTINENTS);
+	}
+	
+	/**
+	 * Inserisce i territori all'interno dei rispettivi continenti.
+	 * I territori sono ottenuti dal file JSON caricato e associati ai continenti.
+	 * 
+	 */
+	private void insertTerritories() {
+		List<JsonElement> allTerritories = this.getTerritoriesFromJson();
+		for(int i = 0; i < this.continents.size(); i++) {
+			List<JsonElement> continentTerritories = List.of(allTerritories.get(i));
+			List<IZone> zones = this.createTerritories(continentTerritories);
+			this.continents.get(i).setChildZones(zones);
+		}
+	}
+	
+	/**
+	 * Restituisce la lista di continenti come JsonElement.
+	 * I continenti sono ottenuti dal file JSON caricato.
+	 * 
+	 * @return Lista di JsonElement che rappresentano i continenti
+	 */
+	private List<JsonElement> getContinentsAsList() {
+		return super.splitJsonArray(super.getValues(CONTINENTS.getDescrizione(), this.jsonMap)
+				.get(0).getAsJsonArray());
 	}
 	
 	/**
@@ -119,20 +143,6 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 					territories.get(j).setValue(armyValues.get(j));
 				}
 			}
-		}
-	}
-	
-	/**
-	 * Inserisce i territori all'interno dei rispettivi continenti.
-	 * I territori sono ottenuti dal file JSON caricato e associati ai continenti.
-	 * 
-	 */
-	private void insertTerritories() {
-		List<JsonElement> allTerritories = this.getTerritoriesFromJson();
-		for(int i = 0; i < this.continents.size(); i++) {
-			List<JsonElement> continentTerritories = List.of(allTerritories.get(i));
-			List<IZone> zones = this.createTerritories(continentTerritories);
-			this.continents.get(i).setChildZones(zones);
 		}
 	}
 }

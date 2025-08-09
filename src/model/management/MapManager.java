@@ -1,6 +1,8 @@
 package model.management;
 
+import model.board.IGameBoard;
 import model.utils.GameVersion;
+import model.versions.risikockassic.board.BoardCreatorRisikoClassic;
 
 public class MapManager {
 	
@@ -9,7 +11,6 @@ public class MapManager {
 	 * Utilizza il pattern Singleton per garantire un'unica istanza.
 	 */
 	private static MapManager instance;
-
 
 	private MapManager() {
 	}
@@ -21,8 +22,9 @@ public class MapManager {
 		return instance;
 	}
 	
-	public void requestGameVersion(GameVersion Gameversion) {
-		
+	public void requestGameVersion(GameVersion gameversion) {
+		switch(gameversion) {
+		case GameVersion RisikoClassic:	IGameBoard gb = BoardCreatorRisikoClassic.getInstance().getMap();
+		}
 	}
-	
 }

@@ -1,4 +1,4 @@
-package model.board.risikoclassic;
+package model.versions.risikockassic;
 
 import model.utils.GameVersion;
 
@@ -14,7 +14,10 @@ public enum RisikoClassic implements GameVersion {
     TERRITORIES("territories"),
     
     /** Continente - raggruppa più territori */
-    CONTINENTS("continents");
+    CONTINENTS("continents"),
+	
+	ARMY("army");
+	
     
     private final String descrizione;
     

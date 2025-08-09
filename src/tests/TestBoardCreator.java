@@ -14,9 +14,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import model.board.IZone;
-import model.board.risikoclassic.BoardCreatorRisikoClassic;
-import model.board.risikoclassic.Continent;
-import model.board.risikoclassic.Territory;
+import model.versions.risikockassic.board.BoardCreatorRisikoClassic;
+import model.versions.risikockassic.board.Continent;
+import model.versions.risikockassic.board.Territory;
 
 public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	
