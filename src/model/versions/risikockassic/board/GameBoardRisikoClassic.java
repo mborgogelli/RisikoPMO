@@ -17,7 +17,7 @@ class GameBoardRisikoClassic implements IGameBoard {
 	private final GameVersion gameVersion;
 	private final Map<String, List<String>> neighbours;
 	
-	public GameBoardRisikoClassic(List<IZone> continents) {
+	GameBoardRisikoClassic(List<IZone> continents) {
 		this.continents = continents;
 		this.gameVersion = RISIKOCLASSIC;
 		this.neighbours = getNeighboursFromMap();

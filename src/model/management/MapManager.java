@@ -24,11 +24,16 @@ public class MapManager {
 		return instance;
 	}
 	
-	public IGameBoard requestGameMap(GameVersion gameversion) {
-		IGameBoard gameBoard = null;
+	public void requestGameMap(GameVersion gameversion) {
 		switch(gameversion) {
-		case GameVersion RisikoClassic:	gameBoard = BoardCreatorRisikoClassic.getInstance().getMap();
+		case GameVersion RisikoClassic:	this.gameBoard = BoardCreatorRisikoClassic.getInstance().getMap();
 		}
-		return gameBoard;
+	}
+	
+	public IGameBoard getGameBoard() {
+		if (this.gameBoard == null) {
+			throw new IllegalStateException("Game board has not been initialized. Please request a game map first.");
+		}
+		return this.gameBoard;
 	}
 }

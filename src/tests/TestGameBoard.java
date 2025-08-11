@@ -18,7 +18,8 @@ public class TestGameBoard {
     @BeforeEach
     void setUp() {
     	MapManager mapManager = MapManager.getInstance();
-        this.gameBoard = mapManager.requestGameMap(RisikoClassic.RISIKOCLASSIC);
+        mapManager.requestGameMap(RisikoClassic.RISIKOCLASSIC);
+        this.gameBoard = mapManager.getGameBoard();
     }
     
     @Test
