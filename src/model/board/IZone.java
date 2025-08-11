@@ -50,6 +50,14 @@ public interface IZone {
     Optional<IZone> getParentZone();
     
     /**
+	 * Imposta la zona contenitore per questa zona.
+	 * Utilizzato per costruire la gerarchia delle zone.
+	 * 
+	 * @param parent la zona contenitore, può essere null se questa è una zona di livello radice
+	 */
+    void setParentZone(IZone parent);
+    
+    /**
      * Restituisce una collezione non modificabile delle zone figlie.
      * Ad esempio, un continente conterrà i suoi territori.
      * 
@@ -87,6 +95,15 @@ public interface IZone {
      * 
      * @return set delle zone confinanti
      */
-    List<IZone> getNeighbours();
+    List<String> getNeighbours();
+    
+    /**
+	 * Imposta le zone confinanti per questa zona.
+	 * Utilizzato per costruire la mappa delle connessioni tra le zone.
+	 * 
+	 * @param neighbours Lista dei nomi delle zone confinanti
+	 */
+    void setNeighbours(List<String> neighbours);
+
    
 }

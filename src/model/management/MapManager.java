@@ -11,7 +11,9 @@ public class MapManager {
 	 * Utilizza il pattern Singleton per garantire un'unica istanza.
 	 */
 	private static MapManager instance;
-
+	private IGameBoard gameBoard;
+	
+	
 	private MapManager() {
 	}
 
@@ -22,9 +24,11 @@ public class MapManager {
 		return instance;
 	}
 	
-	public void requestGameVersion(GameVersion gameversion) {
+	public IGameBoard requestGameMap(GameVersion gameversion) {
+		IGameBoard gameBoard = null;
 		switch(gameversion) {
-		case GameVersion RisikoClassic:	IGameBoard gb = BoardCreatorRisikoClassic.getInstance().getMap();
+		case GameVersion RisikoClassic:	gameBoard = BoardCreatorRisikoClassic.getInstance().getMap();
 		}
+		return gameBoard;
 	}
 }

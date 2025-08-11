@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.StreamSupport;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -140,21 +139,21 @@ public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	        super.getValues("neighbours", islandaNeighbours);
 	    }, "List is empty.");
 	}
-	/*
+	
 	@Test
 	public void testSetNeighbours() {
 	    IGameBoard gameBoard = super.getMap();
-	    Map<String, List<String>> neighboursMap = gameBoard.getNeighboursMap();
 	    
-	    assertTrue(neighboursMap.size() > 0);
+	    List<String> islandaNeighbours = gameBoard.getNeighbours("islanda");
 	    
-	    List<String> islandaNeighbours = gameBoard.getNeighboursOf("islanda");
+	    /*gameBoard.getZones().stream().forEach(c -> c.getChildZones().stream().map(IZone::getNeighbours)
+	    		 .forEach(System.out::println));*/
 	    assertNotNull(islandaNeighbours);
 	    assertTrue(islandaNeighbours.contains("gran_bretagna"));
 	    assertTrue(islandaNeighbours.contains("scandinavia"));
 	    assertEquals(3, islandaNeighbours.size());
 	    
-	    List<String> ucrainaNeighbours = gameBoard.getNeighboursOf("ucraina");
+	    List<String> ucrainaNeighbours = gameBoard.getNeighbours("ucraina");
 	    assertNotNull(ucrainaNeighbours);
 	    assertTrue(ucrainaNeighbours.contains("scandinavia"));
 	    assertTrue(ucrainaNeighbours.contains("europa_settentrionale"));
@@ -163,6 +162,6 @@ public class TestBoardCreator extends BoardCreatorRisikoClassic {
 	    assertTrue(ucrainaNeighbours.contains("medio_oriente"));
 	    assertTrue(ucrainaNeighbours.contains("urali"));
 	    assertEquals(6, ucrainaNeighbours.size());
-	}*/
+	}
 
 }

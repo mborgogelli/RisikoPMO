@@ -140,6 +140,32 @@ public abstract class BoardCreator{
 	             .collect(Collectors.toList());
 	}
 	
+	/**
+	 * Converte una lista di JsonElement in una lista di tipo T.
+	 * 
+	 * @param list La lista di JsonElement da convertire
+	 * @param myClass La classe di tipo T in cui convertire gli elementi
+	 * @return Una lista di tipo T
+	 * @throws IllegalArgumentException se gli elementi non possono essere convertiti al tipo specificato
+	 */
+    protected <T> List<T> convertJsonPrimitiveList(List<JsonElement> list, Class<T> myClass) {
+    	List<T> result = new ArrayList<>();
+    	JsonPrimitive elem = list.get(0).getAsJsonPrimitive();
+    	if (myClass == String.class && elem.isString()) {
+			result = list.stream().map(e -> myClass.cast(e.getAsString())).collect(Collectors.toList());
+		} else if (myClass == Integer.class && elem.isNumber()) {
+			result = list.stream().map(e -> myClass.cast(e.getAsInt())).collect(Collectors.toList());
+		} else if (myClass == Double.class && elem.isNumber()) {
+			result = list.stream().map(e -> myClass.cast(e.getAsDouble())).collect(Collectors.toList());	
+		} else if (myClass == Boolean.class) {
+			result = list.stream().map(e -> myClass.cast(e.getAsBoolean())).collect(Collectors.toList());
+		} else if (myClass == JsonPrimitive.class) {
+			result = list.stream().map(e -> myClass.cast(e.getAsJsonPrimitive())).collect(Collectors.toList());
+		} else {
+			throw new IllegalArgumentException("Elements cannot be cast to " + myClass.getSimpleName());
+		}
+		return result;
+	}
     
 	/** Caricare la mappa da un file JSON in base alla versione di gioco richiesta.
 	 *  Restituisce un oggetto JsonObject che rappresenta la mappa.
@@ -222,33 +248,7 @@ public abstract class BoardCreator{
 		Class<?> firstType = jsonElements.get(0).getClass();
 		return jsonElements.stream().allMatch(e -> e.getClass().equals(firstType));
 	}
-	
-	/**
-	 * Converte una lista di JsonElement in una lista di tipo T.
-	 * 
-	 * @param list La lista di JsonElement da convertire
-	 * @param myClass La classe di tipo T in cui convertire gli elementi
-	 * @return Una lista di tipo T
-	 * @throws IllegalArgumentException se gli elementi non possono essere convertiti al tipo specificato
-	 */
-    private <T> List<T> convertJsonPrimitiveList(List<JsonElement> list, Class<T> myClass) {
-    	List<T> result = new ArrayList<>();
-    	JsonPrimitive elem = list.get(0).getAsJsonPrimitive();
-    	if (myClass == String.class && elem.isString()) {
-			result = list.stream().map(e -> myClass.cast(e.getAsString())).collect(Collectors.toList());
-		} else if (myClass == Integer.class && elem.isNumber()) {
-			result = list.stream().map(e -> myClass.cast(e.getAsInt())).collect(Collectors.toList());
-		} else if (myClass == Double.class && elem.isNumber()) {
-			result = list.stream().map(e -> myClass.cast(e.getAsDouble())).collect(Collectors.toList());	
-		} else if (myClass == Boolean.class) {
-			result = list.stream().map(e -> myClass.cast(e.getAsBoolean())).collect(Collectors.toList());
-		} else if (myClass == JsonPrimitive.class) {
-			result = list.stream().map(e -> myClass.cast(e.getAsJsonPrimitive())).collect(Collectors.toList());
-		} else {
-			throw new IllegalArgumentException("Elements cannot be cast to " + myClass.getSimpleName());
-		}
-		return result;
-	}
+
 	
 	/**
 	 * Ritorna una lista di JsonElement a partire da una chiave dell'oggetto json

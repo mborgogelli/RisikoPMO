@@ -60,27 +60,11 @@ public class Continent implements IZone {
 	}
 
 	@Override
-	public List<IZone> getNeighbours() {
+	public List<String> getNeighbours() {
 		// TO DO
 		return null;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(name);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Continent other = (Continent) obj;
-		return Objects.equals(name, other.name);
-	}
 
 	@Override
 	public String toString() {
@@ -100,6 +84,33 @@ public class Continent implements IZone {
 	@Override
 	public void setValue(Integer value) {
 		this.armyValue = value;		
+	}
+
+	@Override
+	public void setNeighbours(List<String> neighbours) {
+	}
+
+	@Override
+	public void setParentZone(IZone parent) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Continent other = (Continent) obj;
+		return Objects.equals(name, other.name);
 	}
 	
 	
