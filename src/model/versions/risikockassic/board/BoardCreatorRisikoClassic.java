@@ -26,7 +26,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * Carica la mappa dal file JSON specificato nella versione del gioco.
 	 */
 	protected BoardCreatorRisikoClassic() {
-		super(RisikoClassic.RISIKOCLASSIC);
+		super(GameVersion.RISIKOCLASSIC);
 		this.jsonMap = super.getLoadedMap();
 	}
 	
@@ -125,7 +125,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * 
 	 * @param zoneType Tipo di zona (CONTINENTS o TERRITORIES)
 	 */
-	private void setArmyValues(GameVersion zoneType) {
+	private void setArmyValues(RisikoClassic zoneType) {
 	    if (zoneType == CONTINENTS) {
 	        setArmyValuesForContinents();
 	    } else if (zoneType == TERRITORIES) {

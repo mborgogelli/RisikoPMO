@@ -8,13 +8,10 @@ import java.util.Optional;
 
 import model.IPlayer;
 import model.board.IZone;
-import model.utils.GameVersion;
-import model.versions.risikockassic.RisikoClassic;
 
 public class Territory implements IZone {
 
 	private final String name;
-	private final GameVersion type;
 	private final List<IPlayer> players;
 	private final List<String> neighbours;
 	private IZone parentZone;
@@ -24,7 +21,6 @@ public class Territory implements IZone {
 		this.name = name;
 		this.players = new ArrayList<>();
 		this.neighbours = new ArrayList<>();
-		this.type = RisikoClassic.TERRITORIES;
 	}
 	
 	@Override
@@ -35,11 +31,6 @@ public class Territory implements IZone {
 	@Override
 	public String getName() {
 		return this.name;
-	}
-
-	@Override
-	public GameVersion getType() {
-		return this.type;
 	}
 
 	@Override

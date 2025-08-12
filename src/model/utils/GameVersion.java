@@ -1,10 +1,16 @@
 package model.utils;
 
-public interface GameVersion {
-
+public enum GameVersion {
 	
-	String getDescrizione();
-
-	String getGameVersion();
-
+	RISIKOCLASSIC("risikonew");
+	
+    private final String descrizione;
+    
+    GameVersion(String descrizione) {
+        this.descrizione = descrizione;
+    }
+    
+	public String getDescrizione() {
+        return this.descrizione;
+    }
 }

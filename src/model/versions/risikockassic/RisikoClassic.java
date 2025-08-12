@@ -1,12 +1,10 @@
 package model.versions.risikockassic;
 
-import model.utils.GameVersion;
-
 /**
  * Enumerazione che definisce i diversi tipi di zone nel gioco.
  * Ogni tipo ha caratteristiche specifiche per il gameplay.
  */
-public enum RisikoClassic implements GameVersion {
+public enum RisikoClassic {
 	
 	RISIKOCLASSIC("risikonew"),
 	
@@ -25,13 +23,8 @@ public enum RisikoClassic implements GameVersion {
         this.descrizione = descrizione;
     }
     
-    @Override
 	public String getDescrizione() {
         return this.descrizione;
     }
     
-    @Override
-    public String getGameVersion() {
-    	return RISIKOCLASSIC.getDescrizione();
-    }
 }

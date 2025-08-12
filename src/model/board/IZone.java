@@ -3,7 +3,6 @@ package model.board;
 import java.util.List;
 import java.util.Optional;
 import model.IPlayer;
-import model.utils.GameVersion;
 
 /**
  * Interfaccia che rappresenta una generica zona della mappa di gioco, modellata come un contenitore che,
@@ -34,13 +33,6 @@ public interface IZone {
 	 */
 	void setValue(Integer value);
 	
-    /**
-     * Restituisce il tipo di zona (territorio, continente, ecc.).
-     * 
-     * @return il tipo di zona
-     */
-	GameVersion getType();
-        
       /**
      * Restituisce la zona contenitore di questa zona.
      * Ad esempio, un territorio apparterrà a un continente.

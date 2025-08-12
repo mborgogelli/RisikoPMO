@@ -1,7 +1,5 @@
 package model.versions.risikockassic.board;
 
-import static model.versions.risikockassic.RisikoClassic.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +17,7 @@ class GameBoardRisikoClassic implements IGameBoard {
 	
 	GameBoardRisikoClassic(List<IZone> continents) {
 		this.continents = continents;
-		this.gameVersion = RISIKOCLASSIC;
+		this.gameVersion = GameVersion.RISIKOCLASSIC;
 		this.neighbours = getNeighboursFromMap();
 	}
 	

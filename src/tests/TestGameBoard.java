@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import model.board.IGameBoard;
 import model.board.IZone;
 import model.management.MapManager;
-import model.versions.risikockassic.RisikoClassic;
+import model.utils.GameVersion;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class TestGameBoard {
     @BeforeEach
     void setUp() {
     	MapManager mapManager = MapManager.getInstance();
-        mapManager.requestGameMap(RisikoClassic.RISIKOCLASSIC);
+        mapManager.requestGameMap(GameVersion.RISIKOCLASSIC);
         this.gameBoard = mapManager.getGameBoard();
     }
     

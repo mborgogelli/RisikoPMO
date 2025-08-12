@@ -7,22 +7,18 @@ import java.util.Optional;
 
 import model.IPlayer;
 import model.board.IZone;
-import model.utils.GameVersion;
-import model.versions.risikockassic.RisikoClassic;
 
 public class Continent implements IZone {
 	
 	private final String name;
 	private List<IPlayer> players;
 	private List<IZone> territories;
-	private final GameVersion type;
 	private Integer armyValue;
 	
 	public Continent(String name) {
 		this.name = name;
 		this.players = new ArrayList<>();
 		this.territories = new ArrayList<>();
-		this.type = RisikoClassic.CONTINENTS;
 	}
 	
 	@Override
@@ -33,11 +29,6 @@ public class Continent implements IZone {
 	@Override
 	public String getName() {
 		return this.name;
-	}
-
-	@Override
-	public GameVersion getType() {
-		return this.type;
 	}
 
 	@Override
