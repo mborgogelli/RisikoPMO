@@ -48,8 +48,10 @@ class GameBoardRisikoClassic implements IGameBoard {
 
 	@Override
 	public Optional<IZone> whereIsZone(String zoneName) {
-		IZone zone = findZoneByName(zoneName);
-		return zone.getParentZone();
+	    return this.continents.stream()
+	        .filter(continent -> continent.getChildZones().stream()
+            .anyMatch(zone -> zone.getName().equalsIgnoreCase(zoneName)))
+	        .findFirst();
 	}
 
 	@Override
