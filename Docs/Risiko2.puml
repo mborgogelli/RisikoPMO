@@ -1,0 +1,196 @@
+@startuml
+
+' Interfaces
+interface IGameMode {
+    +getGameMode(): IGameMode
+    +getRules(): IRuleBook
+    +isCompatibleWith(IGameExpansion exp): Boolean;
+}
+
+interface IGameExpansion {
+    +getParentGame(): GameType
+    +isEnabled(): Boolean
+    +getRules(): IRuleBook
+    +isCompatibleWith(IGameMode mode): Boolean;
+}
+
+interface IGame {
+    +getGameType(): GameType
+    +initialize(): void
+    +getBoard(): IBoard
+    +getRules(): IRuleBook
+    +getDeck(): IDeck
+    +getPlayers(): List<IPlayer>    
+}
+
+interface IGameContext {
+    +getCurrentState(): IGameContext
+    +getCurrentPlayer(): IPlayer
+    +getCurrentPhase(): IPhase
+    +getLastAction(): IAction
+    +isGameOver(): Boolean
+    +getWinner(): IPlayer
+}
+
+interface IPlayer {
+    +getId(): String
+    +getName(): String
+    +getColor(): Color
+    +getArmies(): int
+    +getControlledTerritories(): Set<IZone>
+    +getCards(): List<ICard>
+    +getGoal(): IGoal
+    +canPerformAction(IAction action): Boolean
+    +addArmies(int amount): void
+    +removeArmies(int amount): void
+    +addTerritory(IZone territory): void
+    +removeTerritory(IZone territory): void
+}
+
+interface IRuleBook {
+    +getRules(): Set<IRule>
+    +validateAction(action: IAction): Boolean
+    +getPhaseRules(phase: IPhase): List<IRule>
+    +getTurnRules(): List<IRule>
+}
+
+interface IRule {
+    +isEnabled(): Boolean
+    +getGameType(): GameType
+    +getRuleCondition: Boolean
+    +getRuleAction(): IAction
+    +getRuleException(): Boolean
+}
+
+interface IBoard {
+    +getRootZones(): Set<IZone>
+    +getAllZones(): Set<IZone>
+    +validateMove(from: IZone, to: IZone): Boolean
+    +getZoneByType(ZoneType type): Set<IZone>
+    +getZoneByName(String name): IZone
+    
+}
+
+interface IZone {
+	+getName(): String
+	+getType(): ZoneType
+    +getZones(): Set<IZone>
+    +getParentZone(): IZone
+    +getOwner(): IPlayer
+    +setOwner(Player p): void
+    +isControlledBy(IPlayer p): Boolean
+    +getArmies(): int
+    +addArmies(int amount): void
+    +removeArmies(int amount): void
+    +getValue(): int
+    +getBorders(): Set<IZone>
+    +getBonus(): int
+}
+
+interface IPlaceholder {
+    +getType(): PlaceholderType
+    +isPlaced(): Boolean
+    +getOwner(): IPlayer
+    +getValue(): int
+    +getPosition(): Position
+    +setPosition(Position): void
+    +canMoveTo(Zone zone): Boolean
+}
+
+interface IGoal {
+    +isComplete(context: IGameContext): Boolean
+    +getAssignedPlayer(): Player
+    +getDescription(): String
+    +getType(): GoalType
+}
+
+interface ICard {
+    +isVisible(): Boolean
+    +show(): void
+    +cover(): void
+    +getValue(): int
+    +getCardType(): CardType
+    +isPlayable(): Boolean
+    +onPlay(): void
+}
+
+interface IDice {
+    +getSides(): int
+    +roll(): int
+    +getLastRoll(IPlayer player): int
+    +getRollHistory(IPlayer player): List<int>
+}
+
+interface ITurn {
+    +start(): void
+    +end(): void
+    +getCurrentPlayer(): IPlayer
+    +getNextPlayer(): IPlayer
+    +getPhase(): IPhase
+    +getActions(): List<IAction>
+}
+
+interface IPhase {
+    +getType(): PhaseType
+    +canStart(): Boolean
+    +canEnd(): Boolean
+    +onStart(): void
+    +onEnd(): void
+    +isComplete(): Boolean
+    +getAllowedActions(IGameContext context): Set<IAction>
+}
+
+interface IDeck {
+    +shuffle(): void
+    +drawOnTop(): ICard
+    +drawRandonm(): ICard
+    +addCards(cards: List<ICard>): void
+    +removeCards(cards: List<ICard>): void
+    +getSize(): int
+}
+
+interface IAction{
+	+execute(IGameContext context): IGameContext
+	+isValid(IGameContext context): Boolean
+	+undo(IGameContext context): IGameContext
+}
+
+' Relationships
+IGameMode <-- IGame : uses
+IGameExpansion <-- IGame : may use
+IGame *-- IGameContext
+IGame *-- IBoard : has
+IGame *-- IRuleBook : has
+IGame *-- IDeck : has
+ITurn *-- IPhase : contains
+IBoard *-- IZone : contains
+IZone -- IPlaceholder : places
+IDeck *-- ICard : contains
+IRuleBook *-- IRule : contains
+IPlayer -- IDice : uses
+IGame "1" *-- "2..6" IPlayer : has
+IPlayer "1" -- "0..n" IZone : controls
+IPlayer "1" -- "0..n" ICard : holds
+IPlayer "1" -- "1" IGoal : has assigned
+ITurn -- IPlayer : manages current
+IPlaceholder -- IPlayer : owned by
+Class Continent implements IZone
+Class Territory implements IZone
+Class DeploymentPhase implements IPhase
+Class AttackPhase implements IPhase
+Class FortifyPhase implements IPhase
+DeploymentPhase *-- IAction
+AttackPhase *-- IAction
+FortifyPhase *-- IAction
+Class RisikoTurn implements ITurn
+Class MissionCard implements ICard
+MissionCard *-- IGoal
+Class WildCard implements ICard
+Class GameCard implements ICard
+Class GameDeck implements IDeck
+GameDeck *-- GameCard : contains
+GameDeck *-- WildCard
+Class MissionDeck implements IDeck
+MissionDeck *-- MissionCard
+@enduml
+
