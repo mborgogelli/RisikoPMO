@@ -3,7 +3,6 @@ package model.board;
 import java.util.List;
 import java.util.Optional;
 import model.IPlayer;
-import model.utils.GameVersion;
 
 /**
  * Interfaccia che rappresenta una generica zona della mappa di gioco, modellata come un contenitore che,
@@ -34,13 +33,6 @@ public interface IZone {
 	 */
 	void setValue(Integer value);
 	
-    /**
-     * Restituisce il tipo di zona (territorio, continente, ecc.).
-     * 
-     * @return il tipo di zona
-     */
-	GameVersion getType();
-        
       /**
      * Restituisce la zona contenitore di questa zona.
      * Ad esempio, un territorio apparterrà a un continente.
@@ -48,6 +40,14 @@ public interface IZone {
      * @return la zona contenitore, null se questa è una zona di livello radice
      */
     Optional<IZone> getParentZone();
+    
+    /**
+	 * Imposta la zona contenitore per questa zona.
+	 * Utilizzato per costruire la gerarchia delle zone.
+	 * 
+	 * @param parent la zona contenitore, può essere null se questa è una zona di livello radice
+	 */
+    void setParentZone(IZone parent);
     
     /**
      * Restituisce una collezione non modificabile delle zone figlie.
@@ -87,6 +87,15 @@ public interface IZone {
      * 
      * @return set delle zone confinanti
      */
-    List<IZone> getNeighbours();
+    List<String> getNeighbours();
+    
+    /**
+	 * Imposta le zone confinanti per questa zona.
+	 * Utilizzato per costruire la mappa delle connessioni tra le zone.
+	 * 
+	 * @param neighbours Lista dei nomi delle zone confinanti
+	 */
+    void setNeighbours(List<String> neighbours);
+
    
 }

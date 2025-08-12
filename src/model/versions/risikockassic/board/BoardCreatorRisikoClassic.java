@@ -26,7 +26,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * Carica la mappa dal file JSON specificato nella versione del gioco.
 	 */
 	protected BoardCreatorRisikoClassic() {
-		super(RisikoClassic.RISIKOCLASSIC);
+		super(GameVersion.RISIKOCLASSIC);
 		this.jsonMap = super.getLoadedMap();
 	}
 	
@@ -47,6 +47,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	protected IGameBoard createMap() {
 		this.createContinents();
 		this.insertTerritories();
+		this.setNeighbours();
 		return new GameBoardRisikoClassic(this.continents);
 	}
 	
@@ -120,29 +121,96 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	}
 	
 	/**
-	 * Imposta i valori di armata per i continenti o i territori a seconda del tipo di zona.
-	 * Se il tipo di zona è CONTINENTS, imposta i valori per i continenti.
-	 * Se il tipo di zona è TERRITORIES, imposta i valori per i territori all'interno dei continenti.
+	 * Imposta i valori di armata per i continenti o i territori.
 	 * 
 	 * @param zoneType Tipo di zona (CONTINENTS o TERRITORIES)
 	 */
-	private void setArmyValues(GameVersion zoneType) {
-		if (zoneType == CONTINENTS) {
-			List<JsonElement> continents = this.getContinentsAsList();
-			List<Integer> armyValues = super.getValues("army", continents, Integer.class);
-			for(int i = 0; i < this.continents.size(); i++) {
-				this.continents.get(i).setValue(armyValues.get(i));
-			}
-		} else if(zoneType == TERRITORIES) {
-			List<JsonElement> allTerritories = this.getTerritoriesFromJson();
-			for(int i = 0; i < this.continents.size(); i++) {
-				List<IZone> territories = this.continents.get(i).getChildZones();
-				List<JsonElement> continentTerritories = List.of(allTerritories.get(i));
-				List<Integer> armyValues = super.getValues("army", continentTerritories, Integer.class);
-				for(int j = 0; j < territories.size(); j++) {
-					territories.get(j).setValue(armyValues.get(j));
-				}
-			}
-		}
+	private void setArmyValues(RisikoClassic zoneType) {
+	    if (zoneType == CONTINENTS) {
+	        setArmyValuesForContinents();
+	    } else if (zoneType == TERRITORIES) {
+	        setArmyValuesForTerritories();
+	    }
+	}
+
+	/**
+	 * Imposta i valori di armata per tutti i continenti.
+	 */
+	private void setArmyValuesForContinents() {
+	    List<JsonElement> continents = this.getContinentsAsList();
+	    List<Integer> armyValues = super.getValues("army", continents, Integer.class);
+	    
+	    for (int i = 0; i < this.continents.size(); i++) {
+	        this.continents.get(i).setValue(armyValues.get(i));
+	    }
+	}
+
+	/**
+	 * Imposta i valori di armata per tutti i territori di ogni continente.
+	 */
+	private void setArmyValuesForTerritories() {
+	    List<JsonElement> allTerritories = this.getTerritoriesFromJson();
+	    
+	    for (int continentIndex = 0; continentIndex < this.continents.size(); continentIndex++) {
+	        setArmyValuesForContinentTerritories(allTerritories, continentIndex);
+	    }
+	}
+
+	/**
+	 * Imposta i valori di armata per i territori di un continente specifico.
+	 * 
+	 * @param allTerritories Lista di tutti i territori dal JSON
+	 * @param continentIndex Indice del continente da processare
+	 */
+	private void setArmyValuesForContinentTerritories(List<JsonElement> allTerritories, int continentIndex) {
+	    List<IZone> territories = this.continents.get(continentIndex).getChildZones();
+	    List<JsonElement> continentTerritories = List.of(allTerritories.get(continentIndex));
+	    List<Integer> armyValues = super.getValues("army", continentTerritories, Integer.class);
+	    
+	    for (int territoryIndex = 0; territoryIndex < territories.size(); territoryIndex++) {
+	        territories.get(territoryIndex).setValue(armyValues.get(territoryIndex));
+	    }
+	}
+
+	/**
+	 * Imposta le adiacenze per tutti i territori della mappa.
+	 * Per ogni territorio, recupera la lista dei suoi vicini dal JSON e li assegna.
+	 */
+	private void setNeighbours() {
+	    List<JsonElement> allTerritories = this.getTerritoriesFromJson();
+	    
+	    for (int continentIndex = 0; continentIndex < this.continents.size(); continentIndex++) {
+	        setNeighboursForContinent(allTerritories, continentIndex);
+	    }
+	}
+
+	/**
+	 * Imposta le adiacenze per tutti i territori di un continente specifico.
+	 * 
+	 * @param allTerritories Lista di tutti i territori dal JSON
+	 * @param continentIndex Indice del continente da processare
+	 */
+	private void setNeighboursForContinent(List<JsonElement> allTerritories, int continentIndex) {
+	    List<IZone> territories = this.continents.get(continentIndex).getChildZones();
+	    List<JsonElement> continentTerritories = List.of(allTerritories.get(continentIndex));
+	    List<List<String>> neighboursList = getNeighboursListForContinent(continentTerritories);
+	    
+	    for (int territoryIndex = 0; territoryIndex < territories.size(); territoryIndex++) {
+	        territories.get(territoryIndex).setNeighbours(neighboursList.get(territoryIndex));
+	    }
+	}
+
+	/**
+	 * Estrae la lista dei vicini per tutti i territori di un continente dal JSON.
+	 * 
+	 * @param continentTerritories Territori del continente in formato JSON
+	 * @return Lista di liste contenenti i nomi dei territori vicini
+	 */
+	private List<List<String>> getNeighboursListForContinent(List<JsonElement> continentTerritories) {
+	    return super.getValues("neighbours", continentTerritories).stream()
+	        .map(JsonElement::getAsJsonArray)
+	        .map(super::splitJsonArray)
+	        .map(neighbours -> super.convertJsonPrimitiveList(neighbours, String.class))
+	        .toList();
 	}
 }

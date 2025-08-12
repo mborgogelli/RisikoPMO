@@ -1,6 +1,7 @@
 package model.board;
 
 import java.util.List;
+import java.util.Optional;
 
 import model.utils.GameVersion;
 
@@ -34,7 +35,7 @@ public interface IGameBoard {
 	 * @param zoneName il nome della zona di cui vogliamo sapere il contenitore
 	 * @return l'istanza di IZone corrispondente al conteniture, o null se non trovata
 	 */
-	public IZone whereIsZone(String zoneName);
+	public Optional<IZone> whereIsZone(String zoneName);
 	
 	/**
 	 * Restituisce le zone adiacenti a quella specificata.
@@ -60,5 +61,6 @@ public interface IGameBoard {
 	 * @return il valore della zona, o null se non trovata
 	 */
 	public Integer getValue(String zoneName);
+
 	
 }

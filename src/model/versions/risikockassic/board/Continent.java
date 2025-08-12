@@ -7,22 +7,18 @@ import java.util.Optional;
 
 import model.IPlayer;
 import model.board.IZone;
-import model.utils.GameVersion;
-import model.versions.risikockassic.RisikoClassic;
 
 public class Continent implements IZone {
 	
 	private final String name;
 	private List<IPlayer> players;
 	private List<IZone> territories;
-	private final GameVersion type;
 	private Integer armyValue;
 	
 	public Continent(String name) {
 		this.name = name;
 		this.players = new ArrayList<>();
 		this.territories = new ArrayList<>();
-		this.type = RisikoClassic.CONTINENTS;
 	}
 	
 	@Override
@@ -33,11 +29,6 @@ public class Continent implements IZone {
 	@Override
 	public String getName() {
 		return this.name;
-	}
-
-	@Override
-	public GameVersion getType() {
-		return this.type;
 	}
 
 	@Override
@@ -60,27 +51,11 @@ public class Continent implements IZone {
 	}
 
 	@Override
-	public List<IZone> getNeighbours() {
+	public List<String> getNeighbours() {
 		// TO DO
 		return null;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(name);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Continent other = (Continent) obj;
-		return Objects.equals(name, other.name);
-	}
 
 	@Override
 	public String toString() {
@@ -100,6 +75,33 @@ public class Continent implements IZone {
 	@Override
 	public void setValue(Integer value) {
 		this.armyValue = value;		
+	}
+
+	@Override
+	public void setNeighbours(List<String> neighbours) {
+	}
+
+	@Override
+	public void setParentZone(IZone parent) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Continent other = (Continent) obj;
+		return Objects.equals(name, other.name);
 	}
 	
 	

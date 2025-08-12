@@ -8,22 +8,19 @@ import java.util.Optional;
 
 import model.IPlayer;
 import model.board.IZone;
-import model.utils.GameVersion;
-import model.versions.risikockassic.RisikoClassic;
 
 public class Territory implements IZone {
 
 	private final String name;
-	private List<IPlayer> players;
-	private List<IZone> neighbours;
-	private final GameVersion type;
+	private final List<IPlayer> players;
+	private final List<String> neighbours;
+	private IZone parentZone;
 	private Integer armyValue;
 	
 	public Territory(String name) {
 		this.name = name;
 		this.players = new ArrayList<>();
 		this.neighbours = new ArrayList<>();
-		this.type = RisikoClassic.TERRITORIES;
 	}
 	
 	@Override
@@ -37,18 +34,13 @@ public class Territory implements IZone {
 	}
 
 	@Override
-	public GameVersion getType() {
-		return this.type;
-	}
-
-	@Override
 	public Optional<IZone> getParentZone() {
-		return Optional.empty();
+		return Optional.ofNullable(this.parentZone);
 	}
 	
 	@Override
 	public List<IZone> getChildZones() {
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -61,25 +53,8 @@ public class Territory implements IZone {
 	}
 
 	@Override
-	public List<IZone> getNeighbours() {
+	public List<String> getNeighbours() {
 		return this.neighbours;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(name);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Territory other = (Territory) obj;
-		return Objects.equals(name, other.name);
 	}
 
 	@Override
@@ -99,5 +74,33 @@ public class Territory implements IZone {
 	@Override
 	public void setValue(Integer value) {
 		this.armyValue = value;
-	}		
+	}
+
+	@Override
+	public void setNeighbours(List<String> neighbours) {
+			this.neighbours.addAll(neighbours);
+	}
+
+	@Override
+	public void setParentZone(IZone parent) {
+		this.parentZone = parent;	
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Territory other = (Territory) obj;
+		return Objects.equals(name, other.name);
+	}
+
 }
