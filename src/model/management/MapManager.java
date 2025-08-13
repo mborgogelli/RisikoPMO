@@ -2,52 +2,74 @@ package model.management;
 
 import model.board.IGameBoard;
 import model.utils.GameVersion;
-import model.versions.risikockassic.board.BoardCreatorRisikoClassic;
 
-public class MapManager {
+/* Classe astratta per la gestione delle mappe di gioco.
+ * Fornisce metodi per ottenere la mappa di gioco in base alla versione del gioco.
+ * 
+ */
+public abstract class MapManager {
 	
-	/**
-	 * Gestisce la creazione e il caricamento della mappa di gioco.
-	 * Utilizza il pattern Singleton per garantire un'unica istanza.
-	 */
-	private static MapManager instance;
 	private IGameBoard gameBoard;
 	
-	
-	private MapManager() {
-	}
-
-	public static MapManager getInstance() {
-		if (instance == null) {
-			instance = new MapManager();
+	protected MapManager(GameVersion gameVersion) {
+		if (gameVersion == null || !gameVersionIsValid(gameVersion)) {
+			throw new IllegalArgumentException("Invalid game version: " + gameVersion);
 		}
-		return instance;
+		this.gameBoard = this.getGameBoard();
 	}
 	
-	private void requestGameMap(GameVersion gameversion) {
-	    switch(gameversion) {
-	        case RISIKOCLASSIC:
-	            this.gameBoard = BoardCreatorRisikoClassic.getInstance().getMap();
-	            break;
-	        default:
-	            throw new IllegalArgumentException("Unsupported game version: " + gameversion);
-	    }
-	}
-
+	public abstract void resetInstance();
 	
-	public IGameBoard getGameBoard() {
+	public abstract void initializeGameMap();
+	
+	/**
+	 * Richiede la mappa di gioco per la versione specificata.
+	 */
+	protected abstract IGameBoard requestGameMap();
+	
+	/**
+	 * Ottiene la versione del gioco corrente.
+	 * Se la mappa di gioco non è stata ancora inizializzata, lancia un'eccezione.
+	 * 
+	 * @return la versione del gioco corrente
+	 * @throws IllegalStateException se la mappa non è stata inizializzata
+	 */
+	public GameVersion getGameVersion() {
 		if (this.gameBoard == null) {
 			throw new IllegalStateException("Game board has not been initialized. Please request a game map first.");
 		}
+		return this.gameBoard.getGameVersion();
+	}
+	
+	/**
+	 * Ottiene la mappa di gioco in base alla versione del gioco.
+	 * Se la mappa è già stata inizializzata per la versione richiesta, la restituisce.
+	 * Altrimenti, richiede una nuova mappa per la versione specificata.
+	 * 
+	 * @param gameversion la versione del gioco
+	 * @return la mappa di gioco per la versione specificata
+	 */
+	public IGameBoard getGameBoard() {
+		this.gameBoard = this.requestGameMap();
 		return this.gameBoard;
 	}
 	
-	public IGameBoard getGameBoard(GameVersion gameversion) {
-		if (this.gameBoard != null && this.gameBoard.getGameVersion() == gameversion) {
-			;
-		}else {
-			this.requestGameMap(gameversion);
+	/**
+	 * Verifica se la versione del gioco è valida.
+	 * 
+	 * @param gameVersion la versione del gioco da verificare
+	 * @return true se la versione è valida, false altrimenti
+	 */
+	private boolean gameVersionIsValid(GameVersion gameVersion) {
+		Boolean isValid = false;
+		for (GameVersion version : GameVersion.values()) {
+			if (version == gameVersion) {
+				isValid = true;
+				break;
+			}
 		}
-		return this.getGameBoard();
+		return isValid;
 	}
+	
+
 }

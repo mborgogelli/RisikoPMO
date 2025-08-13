@@ -9,13 +9,13 @@ import model.board.IGameBoard;
 import model.board.IZone;
 import model.utils.GameVersion;
 
-class GameBoardRisikoClassic implements IGameBoard {
+class GameBoardRisikoNew implements IGameBoard {
 	
 	private final List<IZone> continents;
 	private final GameVersion gameVersion;
 	private final Map<String, List<String>> neighbours;
 	
-	GameBoardRisikoClassic(List<IZone> continents) {
+	GameBoardRisikoNew(List<IZone> continents) {
 		this.continents = continents;
 		this.gameVersion = GameVersion.RISIKOCLASSIC;
 		this.neighbours = getNeighboursFromMap();

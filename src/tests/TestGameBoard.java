@@ -8,6 +8,7 @@ import model.board.IGameBoard;
 import model.board.IZone;
 import model.management.MapManager;
 import model.utils.GameVersion;
+import model.versions.risikockassic.MapManagerRisikoNew;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +19,9 @@ public class TestGameBoard {
     
     @BeforeEach
     void setUp() {
-    	MapManager mapManager = MapManager.getInstance();
-        this.gameBoard = mapManager.getGameBoard(GameVersion.RISIKOCLASSIC);
+    	MapManager mapManager = MapManagerRisikoNew.getInstance();
+        this.gameBoard = mapManager.getGameBoard();
+        System.out.println(gameBoard);
     }
     
     @Test

@@ -16,11 +16,11 @@ import com.google.gson.JsonObject;
 
 import model.board.IGameBoard;
 import model.board.IZone;
-import model.versions.risikockassic.board.BoardCreatorRisikoClassic;
+import model.versions.risikockassic.board.BoardCreatorRisikoNew;
 import model.versions.risikockassic.board.Continent;
 import model.versions.risikockassic.board.Territory;
 
-public class TestBoardCreator extends BoardCreatorRisikoClassic {
+public class TestBoardCreator extends BoardCreatorRisikoNew {
 	
 	private JsonObject jsonMap;
 	

@@ -4,7 +4,7 @@ package model.versions.risikockassic;
  * Enumerazione che definisce i diversi tipi di zone nel gioco.
  * Ogni tipo ha caratteristiche specifiche per il gameplay.
  */
-public enum RisikoClassic {
+public enum RisikoNew {
 	
 	RISIKOCLASSIC("risikonew"),
 	
@@ -19,7 +19,7 @@ public enum RisikoClassic {
     
     private final String descrizione;
     
-    RisikoClassic(String descrizione) {
+    RisikoNew(String descrizione) {
         this.descrizione = descrizione;
     }
     

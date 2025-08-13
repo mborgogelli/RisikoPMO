@@ -1,6 +1,6 @@
 package model.versions.risikockassic.board;
 
-import static model.versions.risikockassic.RisikoClassic.*;
+import static model.versions.risikockassic.RisikoNew.*;
 
 import java.util.List;
 import com.google.gson.JsonElement;
@@ -10,11 +10,11 @@ import model.board.BoardCreator;
 import model.board.IGameBoard;
 import model.board.IZone;
 import model.utils.GameVersion;
-import model.versions.risikockassic.RisikoClassic;
+import model.versions.risikockassic.RisikoNew;
 
-public class BoardCreatorRisikoClassic extends BoardCreator {
+public class BoardCreatorRisikoNew extends BoardCreator {
 	
-	private static BoardCreatorRisikoClassic instance;
+	private static BoardCreatorRisikoNew instance;
 	
 	private JsonObject jsonMap;
 	private List<IZone> continents;
@@ -25,7 +25,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * NOTA: Protected solo per la classe di test TestBoardCreator.
 	 * Carica la mappa dal file JSON specificato nella versione del gioco.
 	 */
-	protected BoardCreatorRisikoClassic() {
+	protected BoardCreatorRisikoNew() {
 		super(GameVersion.RISIKOCLASSIC);
 		this.jsonMap = super.getLoadedMap();
 	}
@@ -36,9 +36,9 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * 
 	 * @return Istanza di BoardCreatorRisikoClassic
 	 */
-	public static BoardCreatorRisikoClassic getInstance() {
+	public static BoardCreatorRisikoNew getInstance() {
 		if (instance == null) {
-			instance = new BoardCreatorRisikoClassic();
+			instance = new BoardCreatorRisikoNew();
 		}
 		return instance;
 	}
@@ -48,7 +48,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 		this.createContinents();
 		this.insertTerritories();
 		this.setNeighbours();
-		return new GameBoardRisikoClassic(this.continents);
+		return new GameBoardRisikoNew(this.continents);
 	}
 	
 	@Override
@@ -125,7 +125,7 @@ public class BoardCreatorRisikoClassic extends BoardCreator {
 	 * 
 	 * @param zoneType Tipo di zona (CONTINENTS o TERRITORIES)
 	 */
-	private void setArmyValues(RisikoClassic zoneType) {
+	private void setArmyValues(RisikoNew zoneType) {
 	    if (zoneType == CONTINENTS) {
 	        setArmyValuesForContinents();
 	    } else if (zoneType == TERRITORIES) {
