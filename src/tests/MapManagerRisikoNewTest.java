@@ -11,48 +11,76 @@ import org.junit.jupiter.api.Test;
 import model.board.IZone;
 import model.versions.risikockassic.MapManagerRisikoNew;
 
+/**
+ * Classe di test per MapManagerRisikoNew che verifica tutte le funzionalità
+ * del gestore della mappa di gioco per la versione classica di Risiko.
+ */
 class MapManagerRisikoNewTest {
 
     private MapManagerRisikoNew mapManager;
 
+    /**
+     * Metodo di setup eseguito prima di ogni test.
+     * Inizializza una nuova istanza del MapManager e configura il gioco.
+     */
     @BeforeEach
     void setUp() {
+        // Ottiene l'istanza singleton del MapManager
         mapManager = MapManagerRisikoNew.getInstance();
+        // Resetta l'istanza per garantire uno stato pulito
         mapManager.resetInstance();
+        // Ottiene una nuova istanza e inizializza il gioco
         mapManager = MapManagerRisikoNew.getInstance();
         mapManager.initializeGame();
     }
 
+    /**
+     * Testa il pattern Singleton verificando che getInstance()
+     * restituisca sempre la stessa istanza.
+     */
     @Test
     void testGetInstance() {
         MapManagerRisikoNew instance1 = MapManagerRisikoNew.getInstance();
         MapManagerRisikoNew instance2 = MapManagerRisikoNew.getInstance();
 
+        // Verifica che l'istanza non sia null
         assertNotNull(instance1);
+        // Verifica che le due chiamate restituiscano la stessa istanza
         assertSame(instance1, instance2);
     }
 
+    /**
+     * Testa la funzionalità di reset dell'istanza singleton.
+     * Dopo il reset, getInstance() dovrebbe restituire una nuova istanza.
+     */
     @Test
     void testResetInstance() {
         MapManagerRisikoNew instance1 = MapManagerRisikoNew.getInstance();
         instance1.resetInstance();
         MapManagerRisikoNew instance2 = MapManagerRisikoNew.getInstance();
 
+        // Verifica che dopo il reset si ottenga una nuova istanza
         assertNotSame(instance1, instance2);
     }
 
+    /**
+     * Testa il recupero di tutti i continenti della mappa.
+     * Verifica che ci siano esattamente 6 continenti con i nomi corretti.
+     */
     @Test
     void testGetAllContinents() {
         List<IZone> continents = mapManager.getAllContinents();
 
+        // Verifica che la lista non sia null e contenga 6 continenti
         assertNotNull(continents);
         assertEquals(6, continents.size());
         
-        // Verify continent names
+        // Estrae i nomi dei continenti per la verifica
         List<String> continentNames = continents.stream()
             .map(IZone::getName)
             .toList();
         
+        // Verifica che tutti i continenti del gioco classico siano presenti
         assertTrue(continentNames.contains("europa"));
         assertTrue(continentNames.contains("africa"));
         assertTrue(continentNames.contains("asia"));
@@ -61,9 +89,13 @@ class MapManagerRisikoNewTest {
         assertTrue(continentNames.contains("america_meridionale"));
     }
 
+    /**
+     * Testa la ricerca di territori esistenti per nome.
+     * Verifica che i territori vengano trovati correttamente.
+     */
     @Test
     void testFindTerritoryByName() {
-        // Test existing territories
+        // Testa territori esistenti di diversi continenti
         IZone alaska = mapManager.findTerritoryByName("alaska");
         assertNotNull(alaska);
         assertEquals("alaska", alaska.getName());
@@ -77,15 +109,23 @@ class MapManagerRisikoNewTest {
         assertEquals("cina", cina.getName());
     }
 
+    /**
+     * Testa la ricerca di un territorio inesistente.
+     * Dovrebbe restituire null quando il territorio non esiste.
+     */
     @Test
     void testFindTerritoryByNameNotFound() {
         IZone nonExistent = mapManager.findTerritoryByName("territorio_inesistente");
         assertNull(nonExistent);
     }
 
+    /**
+     * Testa la ricerca del continente di appartenenza per diversi territori.
+     * Verifica che ogni territorio sia correttamente associato al suo continente.
+     */
     @Test
     void testFindContinentOfTerritory() {
-        // Test territories from different continents
+        // Testa territori di diversi continenti
         Optional<IZone> europaContinent = mapManager.findContinentOfTerritory("islanda");
         assertTrue(europaContinent.isPresent());
         assertEquals("europa", europaContinent.get().getName());
@@ -103,9 +143,13 @@ class MapManagerRisikoNewTest {
         assertEquals("oceania", oceaniaContinent.get().getName());
     }
 
+    /**
+     * Testa il recupero dei territori adiacenti per vari territori chiave.
+     * Verifica che le connessioni della mappa siano corrette.
+     */
     @Test
     void testGetAdjacentTerritories() {
-        // Test Alaska neighbors
+        // Testa i vicini dell'Alaska (connessione intercontinentale importante)
         List<String> alaskaNeighbors = mapManager.getAdjacentTerritories("alaska");
         assertNotNull(alaskaNeighbors);
         assertEquals(3, alaskaNeighbors.size());
@@ -113,7 +157,7 @@ class MapManagerRisikoNewTest {
         assertTrue(alaskaNeighbors.contains("territori_del_nord_ovest"));
         assertTrue(alaskaNeighbors.contains("alberta"));
 
-        // Test China neighbors (has many neighbors)
+        // Testa i vicini della Cina (territorio con molte connessioni)
         List<String> cinaNeighbors = mapManager.getAdjacentTerritories("cina");
         assertNotNull(cinaNeighbors);
         assertEquals(7, cinaNeighbors.size());
@@ -125,7 +169,7 @@ class MapManagerRisikoNewTest {
         assertTrue(cinaNeighbors.contains("siberia"));
         assertTrue(cinaNeighbors.contains("urali"));
 
-        // Test Iceland neighbors
+        // Testa i vicini dell'Islanda (territorio insulare)
         List<String> islandaNeighbors = mapManager.getAdjacentTerritories("islanda");
         assertNotNull(islandaNeighbors);
         assertEquals(3, islandaNeighbors.size());
@@ -134,47 +178,61 @@ class MapManagerRisikoNewTest {
         assertTrue(islandaNeighbors.contains("groenlandia"));
     }
 
+    /**
+     * Testa la possibilità di attaccare territori adiacenti e non adiacenti.
+     * Verifica le regole di base del gioco per gli attacchi.
+     */
     @Test
     void testCanAttackTerritory() {
-        // Test adjacent territories - should be able to attack
+        // Testa territori adiacenti - dovrebbe essere possibile attaccare
         assertTrue(mapManager.canAttackTerritory("alaska", "alberta"));
         assertTrue(mapManager.canAttackTerritory("alaska", "kamchatka"));
         assertTrue(mapManager.canAttackTerritory("cina", "india"));
         assertTrue(mapManager.canAttackTerritory("islanda", "gran_bretagna"));
 
-        // Test non-adjacent territories - should not be able to attack
+        // Testa territori non adiacenti - non dovrebbe essere possibile attaccare
         assertFalse(mapManager.canAttackTerritory("alaska", "brasile"));
         assertFalse(mapManager.canAttackTerritory("islanda", "australia_orientale"));
         assertFalse(mapManager.canAttackTerritory("egitto", "groenlandia"));
     }
 
+    /**
+     * Testa la possibilità di spostare armate tra territori.
+     * Le regole per il movimento sono simili a quelle per gli attacchi.
+     */
     @Test
     void testCanMoveArmiesBetween() {
-        // Test adjacent territories - should be able to move armies
+        // Testa territori adiacenti - dovrebbe essere possibile spostare armate
         assertTrue(mapManager.canMoveArmiesBetween("alaska", "alberta"));
         assertTrue(mapManager.canMoveArmiesBetween("cina", "mongolia"));
         assertTrue(mapManager.canMoveArmiesBetween("brasile", "venezuela"));
 
-        // Test non-adjacent territories - should not be able to move armies
+        // Testa territori non adiacenti - non dovrebbe essere possibile spostare armate
         assertFalse(mapManager.canMoveArmiesBetween("alaska", "egitto"));
         assertFalse(mapManager.canMoveArmiesBetween("islanda", "giappone"));
         assertFalse(mapManager.canMoveArmiesBetween("australia_orientale", "argentina"));
     }
-/*
+
+    /**
+     * Testa i bonus in armate per il controllo completo dei continenti.
+     * Ogni continente ha un valore specifico nel gioco classico.
+     */
     @Test
     void testGetContinentArmyBonus() {
-        // Test continent army bonuses from JSON
         assertEquals(5, mapManager.getContinentArmyBonus("europa"));
         assertEquals(3, mapManager.getContinentArmyBonus("africa"));
         assertEquals(7, mapManager.getContinentArmyBonus("asia"));
         assertEquals(2, mapManager.getContinentArmyBonus("oceania"));
         assertEquals(5, mapManager.getContinentArmyBonus("america_settentrionale"));
         assertEquals(2, mapManager.getContinentArmyBonus("america_meridionale"));
-    }*/
+    }
 
+    /**
+     * Testa i valori strategici dei singoli territori.
+     * Alcuni territori hanno valori più alti per la loro posizione strategica.
+     */
     @Test
-    void testGetTerritoryValue() {
-        // Test specific territory values from JSON
+    void testGetTerritoryArmyBonus() {
         assertEquals(3, mapManager.getTerritoryValue("alaska"));
         assertEquals(3, mapManager.getTerritoryValue("islanda"));
         assertEquals(7, mapManager.getTerritoryValue("cina"));
@@ -185,34 +243,44 @@ class MapManagerRisikoNewTest {
         assertEquals(2, mapManager.getTerritoryValue("australia_orientale"));
     }
 
+    /**
+     * Testa specifiche connessioni intercontinentali cruciali nel gioco.
+     * Verifica che le connessioni strategiche tra continenti funzionino correttamente.
+     */
     @Test
     void testSpecificTerritoryConnections() {
-        // Test intercontinental connections
+        // Testa connessioni intercontinentali importanti
         assertTrue(mapManager.canAttackTerritory("kamchatka", "alaska"));
         assertTrue(mapManager.canAttackTerritory("groenlandia", "islanda"));
         assertTrue(mapManager.canAttackTerritory("brasile", "africa_settentrionale"));
         assertTrue(mapManager.canAttackTerritory("siam", "indonesia"));
 
-        // Verify these are bidirectional
+        // Verifica che queste connessioni siano bidirezionali
         assertTrue(mapManager.canAttackTerritory("alaska", "kamchatka"));
         assertTrue(mapManager.canAttackTerritory("islanda", "groenlandia"));
         assertTrue(mapManager.canAttackTerritory("africa_settentrionale", "brasile"));
         assertTrue(mapManager.canAttackTerritory("indonesia", "siam"));
     }
 
+    /**
+     * Testa territori con poche connessioni.
+     * Verifica territori insulari o isolati.
+     */
     @Test
     void testEdgeCasesTerritories() {
-        // Test territories with few neighbors
+        // Testa il Madagascar (territorio isolato con solo 2 connessioni)
         List<String> madagascarNeighbors = mapManager.getAdjacentTerritories("madagascar");
         assertEquals(2, madagascarNeighbors.size());
         assertTrue(madagascarNeighbors.contains("africa_orientale"));
         assertTrue(madagascarNeighbors.contains("africa_meridionale"));
 
+        // Testa il Giappone (territorio insulare)
         List<String> giapponeNeighbors = mapManager.getAdjacentTerritories("giappone");
         assertEquals(2, giapponeNeighbors.size());
         assertTrue(giapponeNeighbors.contains("kamchatka"));
         assertTrue(giapponeNeighbors.contains("mongolia"));
 
+        // Testa l'Australia Orientale (territorio insulare dell'Oceania)
         List<String> australiaOrientaleNeighbors = mapManager.getAdjacentTerritories("australia_orientale");
         assertEquals(2, australiaOrientaleNeighbors.size());
         assertTrue(australiaOrientaleNeighbors.contains("australia_occidentale"));

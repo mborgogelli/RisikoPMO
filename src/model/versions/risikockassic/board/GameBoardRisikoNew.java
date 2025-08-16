@@ -33,11 +33,14 @@ class GameBoardRisikoNew implements IGameBoard {
 
 	@Override
 	public IZone findZoneByName(String zoneName) {
-		return this.continents.stream()
-				.flatMap(continent -> continent.getChildZones().stream())
-				.filter(zone -> zone.getName().equalsIgnoreCase(zoneName))
-				.findFirst()
-				.orElse(null);
+	    return this.continents.stream()
+	            .flatMap(continent -> continent.getChildZones().stream())
+	            .filter(territory -> territory.getName().equalsIgnoreCase(zoneName))
+	            .findFirst()
+	            .orElseGet(() -> this.continents.stream()
+	                .filter(continent -> continent.getName().equalsIgnoreCase(zoneName))
+	                .findFirst()
+	                .orElse(null));
 	}
 
 	@Override

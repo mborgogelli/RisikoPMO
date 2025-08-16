@@ -48,6 +48,7 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 		this.createContinents();
 		this.insertTerritories();
 		this.setNeighbours();
+		this.setArmyValues(TERRITORIES);
 		return new GameBoardRisikoNew(this.continents);
 	}
 	
@@ -116,7 +117,6 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 	 */
 	private List<IZone> createTerritories(List<JsonElement> continentTerritories) {
 		List<IZone> zones = (super.createZones("name", continentTerritories, Territory::new));
-		this.setArmyValues(TERRITORIES);
 		return zones;
 	}
 	
