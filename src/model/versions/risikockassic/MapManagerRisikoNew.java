@@ -14,9 +14,11 @@ public class MapManagerRisikoNew extends MapManager {
 	private static MapManagerRisikoNew instance;
 	
 	private IGameBoard gameBoard;
+	private Boolean isReady;
 	
 	private MapManagerRisikoNew() {
 		super(GameVersion.RISIKOCLASSIC);
+		this.isReady = false;
 	
 	}
 	
@@ -30,6 +32,7 @@ public class MapManagerRisikoNew extends MapManager {
 	public void resetInstance() {
 		instance = null;
 		this.gameBoard = null;
+		this.isReady = false;
 	}
 
 	@Override
@@ -40,6 +43,17 @@ public class MapManagerRisikoNew extends MapManager {
 	@Override
 	public void initializeGame() {
 		this.gameBoard = super.getGameBoard();
+		if (this.gameBoard != null) {
+			this.isReady = true;
+		} else {
+			this.isReady = false;
+			throw new IllegalStateException("Game board is not initialized.");
+		}
+	}
+	
+	@Override
+	public Boolean isReady() {
+		return this.isReady;
 	}
 	
 	/**
