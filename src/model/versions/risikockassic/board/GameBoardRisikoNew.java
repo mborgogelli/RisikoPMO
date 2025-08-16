@@ -42,7 +42,6 @@ class GameBoardRisikoNew implements IGameBoard {
 
 	@Override
 	public List<String> getNeighbours(String zoneName) {
-		
 		return this.neighbours.get(zoneName);
 	}
 

@@ -7,7 +7,7 @@ import model.utils.GameVersion;
  * Fornisce metodi per ottenere la mappa di gioco in base alla versione del gioco.
  * 
  */
-public abstract class MapManager {
+public abstract class MapManager implements IManager {
 	
 	private IGameBoard gameBoard;
 	
@@ -17,10 +17,6 @@ public abstract class MapManager {
 		}
 		this.gameBoard = this.getGameBoard();
 	}
-	
-	public abstract void resetInstance();
-	
-	public abstract void initializeGameMap();
 	
 	/**
 	 * Richiede la mappa di gioco per la versione specificata.

@@ -6,22 +6,19 @@ import org.junit.jupiter.api.Test;
 
 import model.board.IGameBoard;
 import model.board.IZone;
-import model.management.MapManager;
 import model.utils.GameVersion;
-import model.versions.risikockassic.MapManagerRisikoNew;
+import model.versions.risikockassic.board.BoardCreatorRisikoNew;
 
 import java.util.List;
 import java.util.Optional;
 
-public class TestGameBoard {
+public class GameBoardTest {
     
     private IGameBoard gameBoard;
     
     @BeforeEach
     void setUp() {
-    	MapManager mapManager = MapManagerRisikoNew.getInstance();
-        this.gameBoard = mapManager.getGameBoard();
-        System.out.println(gameBoard);
+        this.gameBoard = BoardCreatorRisikoNew.getInstance().getMap();
     }
     
     @Test

@@ -20,7 +20,7 @@ import model.versions.risikockassic.board.BoardCreatorRisikoNew;
 import model.versions.risikockassic.board.Continent;
 import model.versions.risikockassic.board.Territory;
 
-public class TestBoardCreator extends BoardCreatorRisikoNew {
+public class BoardCreatorTest extends BoardCreatorRisikoNew {
 	
 	private JsonObject jsonMap;
 	
