@@ -72,6 +72,17 @@ public class MapManagerRisikoNew extends MapManager {
 	}
 	
 	/**
+	 * Restituisce tutti i territori del Risiko Classico.
+	 * 
+	 * @return lista dei continenti
+	 */
+	public List<IZone> getAllTerritories() {
+		return this.gameBoard.getZones().stream()
+				.flatMap(continent -> continent.getChildZones().stream())
+				.toList();
+	}
+	
+	/**
 	 * Trova un territorio specifico per nome.
 	 * 
 	 * @param territoryName il nome del territorio da cercare
