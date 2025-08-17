@@ -233,14 +233,14 @@ class MapManagerRisikoNewTest {
      */
     @Test
     void testGetTerritoryArmyBonus() {
-        assertEquals(3, mapManager.getTerritoryArmyBonus("alaska"));
-        assertEquals(3, mapManager.getTerritoryArmyBonus("islanda"));
-        assertEquals(7, mapManager.getTerritoryArmyBonus("cina"));
-        assertEquals(6, mapManager.getTerritoryArmyBonus("ucraina"));
-        assertEquals(4, mapManager.getTerritoryArmyBonus("egitto"));
-        assertEquals(2, mapManager.getTerritoryArmyBonus("giappone"));
-        assertEquals(2, mapManager.getTerritoryArmyBonus("venezuela"));
-        assertEquals(2, mapManager.getTerritoryArmyBonus("australia_orientale"));
+        assertEquals(3, mapManager.getTerritoryValue("alaska"));
+        assertEquals(3, mapManager.getTerritoryValue("islanda"));
+        assertEquals(7, mapManager.getTerritoryValue("cina"));
+        assertEquals(6, mapManager.getTerritoryValue("ucraina"));
+        assertEquals(4, mapManager.getTerritoryValue("egitto"));
+        assertEquals(2, mapManager.getTerritoryValue("giappone"));
+        assertEquals(2, mapManager.getTerritoryValue("venezuela"));
+        assertEquals(2, mapManager.getTerritoryValue("australia_orientale"));
     }
 
     /**
