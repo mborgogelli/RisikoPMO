@@ -13,7 +13,7 @@ public class Continent implements IZone {
 	private final String name;
 	private List<IPlayer> players;
 	private List<IZone> territories;
-	private Integer armyValue;
+	private Integer armyBonus;
 	
 	public Continent(String name) {
 		this.name = name;
@@ -69,12 +69,12 @@ public class Continent implements IZone {
 
 	@Override
 	public Integer getValue() {
-		return this.armyValue;
+		return this.armyBonus;
 	}
 
 	@Override
 	public void setValue(Integer value) {
-		this.armyValue = value;		
+		this.armyBonus = value;		
 	}
 
 	@Override
@@ -83,8 +83,6 @@ public class Continent implements IZone {
 
 	@Override
 	public void setParentZone(IZone parent) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override

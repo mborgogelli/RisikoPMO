@@ -15,7 +15,7 @@ public class Territory implements IZone {
 	private final List<IPlayer> players;
 	private final List<String> neighbours;
 	private IZone parentZone;
-	private Integer armyValue;
+	private Integer armyBonus;
 	
 	public Territory(String name) {
 		this.name = name;
@@ -68,12 +68,12 @@ public class Territory implements IZone {
 
 	@Override
 	public Integer getValue() {
-		return this.armyValue;
+		return this.armyBonus;
 	}
 
 	@Override
 	public void setValue(Integer value) {
-		this.armyValue = value;
+		this.armyBonus = value;
 	}
 
 	@Override

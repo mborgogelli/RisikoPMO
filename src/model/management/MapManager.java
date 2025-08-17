@@ -1,6 +1,10 @@
 package model.management;
 
+import java.util.List;
+
+import model.IPlayer;
 import model.board.IGameBoard;
+import model.board.IZone;
 import model.utils.GameVersion;
 
 /* Classe astratta per la gestione delle mappe di gioco.
@@ -24,6 +28,18 @@ public abstract class MapManager implements IManager {
 	protected abstract IGameBoard requestGameMap();
 	
 	/**
+	 * Inizializza l'assegnamento delle zone ai giocatori.
+	 */
+	protected abstract void initPlayerZones();
+	
+	protected List<IZone> getZonesByPlayer(IPlayer player) {
+		this.gameBoardCheck();
+		return this.gameBoard.getZones().stream()
+				.filter(zone -> zone.isControlledBy(player))
+				.toList();
+	}
+	
+	/**
 	 * Ottiene la versione del gioco corrente.
 	 * Se la mappa di gioco non è stata ancora inizializzata, lancia un'eccezione.
 	 * 
@@ -31,9 +47,7 @@ public abstract class MapManager implements IManager {
 	 * @throws IllegalStateException se la mappa non è stata inizializzata
 	 */
 	public GameVersion getGameVersion() {
-		if (this.gameBoard == null) {
-			throw new IllegalStateException("Game board has not been initialized. Please request a game map first.");
-		}
+		this.gameBoardCheck();
 		return this.gameBoard.getGameVersion();
 	}
 	
@@ -65,6 +79,12 @@ public abstract class MapManager implements IManager {
 			}
 		}
 		return isValid;
+	}
+	
+	private void gameBoardCheck() {
+		if (this.gameBoard == null) {
+			throw new IllegalStateException("Game board has not been initialized. Please request a game map first.");
+		}
 	}
 	
 

@@ -41,6 +41,12 @@ public class MapManagerRisikoNew extends MapManager {
 	}    
 	
 	@Override
+	protected void initPlayerZones() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
 	public void initializeGame() {
 		this.gameBoard = super.getGameBoard();
 		if (this.gameBoard != null) {
