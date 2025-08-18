@@ -1,10 +1,10 @@
-package model.versions.risikockassic;
+package model.versions.risikockassic.board;
 
 /**
  * Enumerazione che definisce i diversi tipi di zone nel gioco.
  * Ogni tipo ha caratteristiche specifiche per il gameplay.
  */
-public enum RisikoNew {
+public enum EnumMap {
 	
 	RISIKOCLASSIC("risikonew"),
 	
@@ -19,7 +19,7 @@ public enum RisikoNew {
     
     private final String descrizione;
     
-    RisikoNew(String descrizione) {
+    EnumMap(String descrizione) {
         this.descrizione = descrizione;
     }
     

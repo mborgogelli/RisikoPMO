@@ -1,15 +1,14 @@
 package model.versions.risikockassic;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import model.board.IGameBoard;
 import model.board.IZone;
 import model.management.MapManager;
 import model.players.IPlayer;
-import model.utils.GameVersion;
 import model.versions.risikockassic.board.BoardCreatorRisikoNew;
 
 public class MapManagerRisikoNew extends MapManager {
@@ -20,7 +19,7 @@ public class MapManagerRisikoNew extends MapManager {
 	private Boolean isReady;
 	
 	private MapManagerRisikoNew() {
-		super(GameVersion.RISIKOCLASSIC);
+		super();
 		this.isReady = false;
 	
 	}
@@ -45,7 +44,7 @@ public class MapManagerRisikoNew extends MapManager {
 	
 	@Override
 	protected void initPlayerZones(List<IPlayer> players) {
-		List<IZone> territories = new ArrayList<>(this.getAllTerritories());
+		List<IZone> territories = this.getTerritories();
 		Collections.shuffle(territories);
 		for (IZone territory : territories) {
 			IPlayer player = players.get(territories.indexOf(territory) % players.size());
@@ -57,8 +56,8 @@ public class MapManagerRisikoNew extends MapManager {
 	public void initializeGame(List<IPlayer> players) {
 		this.gameBoard = super.getGameBoard();
 		if (this.gameBoard != null) {
-			this.isReady = true;
 			this.initPlayerZones(players);
+			this.isReady = true;
 		} else {
 			this.isReady = false;
 			throw new IllegalStateException("Game board is not initialized.");
@@ -87,9 +86,7 @@ public class MapManagerRisikoNew extends MapManager {
 	 */
 	public List<IZone> getAllTerritories() {
 		checkReady();
-		return this.gameBoard.getZones().stream()
-				.flatMap(continent -> continent.getChildZones().stream())
-				.toList();
+		return this.getTerritories();
 	}
 	
 	/**
@@ -169,6 +166,17 @@ public class MapManagerRisikoNew extends MapManager {
 		return this.getAllTerritories().stream()
 				.filter(territory -> territory.getOwners().contains(player))
 				.toList();
+	}
+	
+	/**
+	 * Restituisce tutti i territori della mappa.
+	 * 
+	 * @return lista dei territori
+	 */
+	private List<IZone> getTerritories() {
+		return this.gameBoard.getZones().stream()
+				.flatMap(continent -> continent.getChildZones().stream())
+				.collect(Collectors.toList());
 	}
 	
 	/**
