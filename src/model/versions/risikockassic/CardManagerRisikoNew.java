@@ -45,18 +45,4 @@ public class CardManagerRisikoNew extends CardManager {
 		
 	}
 	
-//	private List<IZone> getTerritoriesList(){
-//		return MapManagerRisikoNew.getInstance().getAllTerritories();
-//	}
-
-	@Test
-	public void getTerritoriesList(){
-		MapManagerRisikoNew.getInstance().initializeGame();
-		List<IZone> territories = MapManagerRisikoNew.getInstance().getAllTerritories();
-		System.out.println(territories);
-
-	}
-
-
-
 }
