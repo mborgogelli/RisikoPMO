@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import model.board.IGameBoard;
 import model.board.IZone;
+import model.IPlayer;
 import model.management.MapManager;
 import model.utils.GameVersion;
 import model.versions.risikockassic.board.BoardCreatorRisikoNew;
@@ -41,9 +42,7 @@ public class MapManagerRisikoNew extends MapManager {
 	}    
 	
 	@Override
-	protected void initPlayerZones() {
-		// TODO Auto-generated method stub
-		
+	protected void initPlayerZones(List<IPlayer> players) {
 	}
 	
 	@Override
@@ -68,6 +67,7 @@ public class MapManagerRisikoNew extends MapManager {
 	 * @return lista dei continenti
 	 */
 	public List<IZone> getAllContinents() {
+		checkReady();
 		return this.gameBoard.getZones();
 	}
 	
@@ -77,6 +77,7 @@ public class MapManagerRisikoNew extends MapManager {
 	 * @return lista dei continenti
 	 */
 	public List<IZone> getAllTerritories() {
+		checkReady();
 		return this.gameBoard.getZones().stream()
 				.flatMap(continent -> continent.getChildZones().stream())
 				.toList();
@@ -89,6 +90,7 @@ public class MapManagerRisikoNew extends MapManager {
 	 * @return il territorio trovato o null se non esiste
 	 */
 	public IZone findTerritoryByName(String territoryName) {
+		checkReady();
 		return this.gameBoard.findZoneByName(territoryName);
 	}
 	
@@ -99,6 +101,7 @@ public class MapManagerRisikoNew extends MapManager {
 	 * @return il continente che contiene il territorio
 	 */
 	public Optional<IZone> findContinentOfTerritory(String territoryName) {
+		checkReady();
 		return this.gameBoard.whereIsZone(territoryName);
 	}
 	
@@ -109,18 +112,8 @@ public class MapManagerRisikoNew extends MapManager {
 	 * @return lista dei nomi dei territori confinanti
 	 */
 	public List<String> getAdjacentTerritories(String territoryName) {
+		checkReady();
 		return this.gameBoard.getNeighbours(territoryName);
-	}
-	
-	/**
-	 * Controlla se un territorio può attaccare un altro territorio.
-	 * 
-	 * @param attackingTerritory il territorio che attacca
-	 * @param defendingTerritory il territorio che difende
-	 * @return true se l'attacco è possibile, false altrimenti
-	 */
-	public boolean canAttackTerritory(String attackingTerritory, String defendingTerritory) {
-		return this.gameBoard.canReach(defendingTerritory, attackingTerritory);
 	}
 	
 	/**
@@ -130,7 +123,8 @@ public class MapManagerRisikoNew extends MapManager {
 	 * @param toTerritory il territorio di destinazione
 	 * @return true se lo spostamento è possibile, false altrimenti
 	 */
-	public boolean canMoveArmiesBetween(String fromTerritory, String toTerritory) {
+	public boolean canMoveBetween(String fromTerritory, String toTerritory) {
+		checkReady();
 		return this.gameBoard.canReach(toTerritory, fromTerritory);
 	}
 	
@@ -141,6 +135,7 @@ public class MapManagerRisikoNew extends MapManager {
 	 * @return il numero di armate bonus
 	 */
 	public Integer getContinentArmyBonus(String continentName) {
+		checkReady();
 		return this.gameBoard.getValue(continentName);
 	}
 	
@@ -151,7 +146,17 @@ public class MapManagerRisikoNew extends MapManager {
 	 * @return il valore del territorio
 	 */
 	public Integer getTerritoryValue(String territoryName) {
+		checkReady();
 		return this.gameBoard.getValue(territoryName);
 	}
-
+	
+	/**
+	 * Controlla se il MapManager è pronto per l'uso.
+	 */
+	private void checkReady() {
+		if (!this.isReady) {
+			throw new IllegalStateException("MapManagerRisikoNew is not ready. Call initializeGame() first.");
+		}
+	}
+	
 }

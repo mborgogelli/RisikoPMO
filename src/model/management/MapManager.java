@@ -19,7 +19,7 @@ public abstract class MapManager implements IManager {
 		if (gameVersion == null || !gameVersionIsValid(gameVersion)) {
 			throw new IllegalArgumentException("Invalid game version: " + gameVersion);
 		}
-		this.gameBoard = this.getGameBoard();
+		//this.gameBoard = this.getGameBoard();
 	}
 	
 	/**
@@ -30,14 +30,7 @@ public abstract class MapManager implements IManager {
 	/**
 	 * Inizializza l'assegnamento delle zone ai giocatori.
 	 */
-	protected abstract void initPlayerZones();
-	
-	protected List<IZone> getZonesByPlayer(IPlayer player) {
-		this.gameBoardCheck();
-		return this.gameBoard.getZones().stream()
-				.filter(zone -> zone.isControlledBy(player))
-				.toList();
-	}
+	protected abstract void initPlayerZones(List<IPlayer> players);
 	
 	/**
 	 * Ottiene la versione del gioco corrente.
@@ -59,9 +52,23 @@ public abstract class MapManager implements IManager {
 	 * @param gameversion la versione del gioco
 	 * @return la mappa di gioco per la versione specificata
 	 */
-	public IGameBoard getGameBoard() {
+	protected IGameBoard getGameBoard() {
 		this.gameBoard = this.requestGameMap();
 		return this.gameBoard;
+	}
+	
+	/**
+	 * Ottiene tutte le zone della mappa di gioco che appartengono ad un dato Player.
+	 * Se la mappa di gioco non è stata ancora inizializzata, lancia un'eccezione.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	protected List<IZone> getZonesByPlayer(IPlayer player) {
+		this.gameBoardCheck();
+		return this.gameBoard.getZones().stream()
+				.filter(zone -> zone.isControlledBy(player))
+				.toList();
 	}
 	
 	/**

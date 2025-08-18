@@ -11,21 +11,30 @@ import model.board.IZone;
 public class Continent implements IZone {
 	
 	private final String name;
-	private List<IPlayer> players;
 	private List<IZone> territories;
 	private Integer armyBonus;
 	
 	public Continent(String name) {
 		this.name = name;
-		this.players = new ArrayList<>();
 		this.territories = new ArrayList<>();
 	}
 	
 	@Override
 	public List<IPlayer> getOwners() {
-		return this.players;
+		return this.territories.stream()
+				.flatMap(zone -> zone.getOwners().stream())
+				.distinct()
+				.toList();
 	}
 
+	@Override
+	public void setOwner(IPlayer player) {
+	}
+
+	@Override
+	public void removeOwner(IPlayer player) {
+	}
+	
 	@Override
 	public String getName() {
 		return this.name;
@@ -43,19 +52,21 @@ public class Continent implements IZone {
 
 	@Override
 	public Boolean isControlledBy(IPlayer p) {
-		Boolean isIn = false;
-		if ((this.players.size() == 1) & (this.players.contains(p))) {
-			isIn = true;
-		}
-		return isIn;
+		return this.territories.stream()
+				.allMatch(zone -> zone.getOwners().contains(p));
 	}
 
 	@Override
 	public List<String> getNeighbours() {
-		// TO DO
-		return null;
+		List<String> territories = this.territories.stream()
+	            .map(zone -> zone.getName())
+	            .toList();
+	    return this.territories.stream()
+	            .flatMap(zone -> zone.getNeighbours().stream())
+	            .filter(neighbourName -> !territories.contains(neighbourName))
+	            .distinct()
+	            .toList();
 	}
-
 
 	@Override
 	public String toString() {
@@ -101,6 +112,6 @@ public class Continent implements IZone {
 		Continent other = (Continent) obj;
 		return Objects.equals(name, other.name);
 	}
-	
+
 	
 }

@@ -33,7 +33,13 @@ class MapManagerRisikoNewTest {
         mapManager = MapManagerRisikoNew.getInstance();
         mapManager.initializeGame();
     }
-
+    
+    @Test
+    void testGameVersion() {
+		// Verifica che la versione del gioco sia RISIKOCLASSIC
+		assertEquals("RISIKOCLASSIC", mapManager.getGameVersion().toString());
+	}
+    
     /**
      * Testa il pattern Singleton verificando che getInstance()
      * restituisca sempre la stessa istanza.
@@ -179,39 +185,22 @@ class MapManagerRisikoNewTest {
     }
 
     /**
-     * Testa la possibilità di attaccare territori adiacenti e non adiacenti.
-     * Verifica le regole di base del gioco per gli attacchi.
+     * Testa la possibilità di raggiungere territori adiacenti e non adiacenti.
      */
     @Test
-    void testCanAttackTerritory() {
+    void testCanReachTerritory() {
         // Testa territori adiacenti - dovrebbe essere possibile attaccare
-        assertTrue(mapManager.canAttackTerritory("alaska", "alberta"));
-        assertTrue(mapManager.canAttackTerritory("alaska", "kamchatka"));
-        assertTrue(mapManager.canAttackTerritory("cina", "india"));
-        assertTrue(mapManager.canAttackTerritory("islanda", "gran_bretagna"));
+        assertTrue(mapManager.canMoveBetween("alaska", "alberta"));
+        assertTrue(mapManager.canMoveBetween("alaska", "kamchatka"));
+        assertTrue(mapManager.canMoveBetween("cina", "india"));
+        assertTrue(mapManager.canMoveBetween("islanda", "gran_bretagna"));
 
         // Testa territori non adiacenti - non dovrebbe essere possibile attaccare
-        assertFalse(mapManager.canAttackTerritory("alaska", "brasile"));
-        assertFalse(mapManager.canAttackTerritory("islanda", "australia_orientale"));
-        assertFalse(mapManager.canAttackTerritory("egitto", "groenlandia"));
+        assertFalse(mapManager.canMoveBetween("alaska", "brasile"));
+        assertFalse(mapManager.canMoveBetween("islanda", "australia_orientale"));
+        assertFalse(mapManager.canMoveBetween("egitto", "groenlandia"));
     }
 
-    /**
-     * Testa la possibilità di spostare armate tra territori.
-     * Le regole per il movimento sono simili a quelle per gli attacchi.
-     */
-    @Test
-    void testCanMoveArmiesBetween() {
-        // Testa territori adiacenti - dovrebbe essere possibile spostare armate
-        assertTrue(mapManager.canMoveArmiesBetween("alaska", "alberta"));
-        assertTrue(mapManager.canMoveArmiesBetween("cina", "mongolia"));
-        assertTrue(mapManager.canMoveArmiesBetween("brasile", "venezuela"));
-
-        // Testa territori non adiacenti - non dovrebbe essere possibile spostare armate
-        assertFalse(mapManager.canMoveArmiesBetween("alaska", "egitto"));
-        assertFalse(mapManager.canMoveArmiesBetween("islanda", "giappone"));
-        assertFalse(mapManager.canMoveArmiesBetween("australia_orientale", "argentina"));
-    }
 
     /**
      * Testa i bonus in armate per il controllo completo dei continenti.
@@ -232,7 +221,7 @@ class MapManagerRisikoNewTest {
      * Alcuni territori hanno valori più alti per la loro posizione strategica.
      */
     @Test
-    void testGetTerritoryArmyBonus() {
+    void testGetTerritoryValues() {
         assertEquals(3, mapManager.getTerritoryValue("alaska"));
         assertEquals(3, mapManager.getTerritoryValue("islanda"));
         assertEquals(7, mapManager.getTerritoryValue("cina"));
@@ -250,16 +239,16 @@ class MapManagerRisikoNewTest {
     @Test
     void testSpecificTerritoryConnections() {
         // Testa connessioni intercontinentali importanti
-        assertTrue(mapManager.canAttackTerritory("kamchatka", "alaska"));
-        assertTrue(mapManager.canAttackTerritory("groenlandia", "islanda"));
-        assertTrue(mapManager.canAttackTerritory("brasile", "africa_settentrionale"));
-        assertTrue(mapManager.canAttackTerritory("siam", "indonesia"));
+        assertTrue(mapManager.canMoveBetween("kamchatka", "alaska"));
+        assertTrue(mapManager.canMoveBetween("groenlandia", "islanda"));
+        assertTrue(mapManager.canMoveBetween("brasile", "africa_settentrionale"));
+        assertTrue(mapManager.canMoveBetween("siam", "indonesia"));
 
         // Verifica che queste connessioni siano bidirezionali
-        assertTrue(mapManager.canAttackTerritory("alaska", "kamchatka"));
-        assertTrue(mapManager.canAttackTerritory("islanda", "groenlandia"));
-        assertTrue(mapManager.canAttackTerritory("africa_settentrionale", "brasile"));
-        assertTrue(mapManager.canAttackTerritory("indonesia", "siam"));
+        assertTrue(mapManager.canMoveBetween("alaska", "kamchatka"));
+        assertTrue(mapManager.canMoveBetween("islanda", "groenlandia"));
+        assertTrue(mapManager.canMoveBetween("africa_settentrionale", "brasile"));
+        assertTrue(mapManager.canMoveBetween("indonesia", "siam"));
     }
 
     /**

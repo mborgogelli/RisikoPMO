@@ -74,6 +74,23 @@ public interface IZone {
     List<IPlayer> getOwners();
     
     /**
+	 * Imposta il proprietario di questa zona.
+	 * Utilizzato per assegnare il controllo iniziale o dopo un attacco.
+	 * 
+	 * @param players il giocatore che possiede la zona, può essere null se la zona è libera
+	 */
+    void setOwner(IPlayer player);
+    
+    
+    /**
+	 * Rimuove un giocatore dalla lista dei proprietari di questa zona.
+	 * Utilizzato quando un giocatore perde il controllo della zona.
+	 * 
+	 * @param player il giocatore da rimuovere, se non presente non fa nulla
+	 */
+    void removeOwner(IPlayer player);
+    
+    /**
      * Verifica se un giocatore ha il controllo completo di questa zona.
      * 
      * @param giocatore l'ID del giocatore da verificare

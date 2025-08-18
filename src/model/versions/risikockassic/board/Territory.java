@@ -29,6 +29,20 @@ public class Territory implements IZone {
 	}
 
 	@Override
+	public void setOwner(IPlayer player) {
+		if (!this.players.contains(player)) {
+			this.players.add(player);
+		}
+	}
+
+	@Override
+	public void removeOwner(IPlayer player) {
+		if (this.players.contains(player)) {
+			this.players.remove(player);
+		}		
+	}
+	
+	@Override
 	public String getName() {
 		return this.name;
 	}
