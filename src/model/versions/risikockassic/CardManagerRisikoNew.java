@@ -3,6 +3,8 @@ package model.versions.risikockassic;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
+
 import model.board.IZone;
 import model.card.ICard;
 import model.management.CardManager;
@@ -31,8 +33,28 @@ public class CardManagerRisikoNew extends CardManager {
 		return null;
 	}
 	
-	private List<IZone> getTerritoriesList(){
-		return MapManagerRisikoNew.getInstance().getAllTerritories();
+	@Override
+	protected void addCard(List<ICard> cards, ICard card) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	protected void removeCard(List<ICard> cards, ICard card) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+//	private List<IZone> getTerritoriesList(){
+//		return MapManagerRisikoNew.getInstance().getAllTerritories();
+//	}
+
+	@Test
+	public void getTerritoriesList(){
+		MapManagerRisikoNew.getInstance().initializeGame();
+		List<IZone> territories = MapManagerRisikoNew.getInstance().getAllTerritories();
+		System.out.println(territories);
+
 	}
 
 }
