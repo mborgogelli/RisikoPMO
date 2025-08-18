@@ -1,12 +1,14 @@
 package model.versions.risikockassic;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import model.board.IGameBoard;
 import model.board.IZone;
-import model.IPlayer;
 import model.management.MapManager;
+import model.players.IPlayer;
 import model.utils.GameVersion;
 import model.versions.risikockassic.board.BoardCreatorRisikoNew;
 
@@ -43,13 +45,20 @@ public class MapManagerRisikoNew extends MapManager {
 	
 	@Override
 	protected void initPlayerZones(List<IPlayer> players) {
+		List<IZone> territories = new ArrayList<>(this.getAllTerritories());
+		Collections.shuffle(territories);
+		for (IZone territory : territories) {
+			IPlayer player = players.get(territories.indexOf(territory) % players.size());
+			territory.setOwner(player);
+		}
 	}
 	
 	@Override
-	public void initializeGame() {
+	public void initializeGame(List<IPlayer> players) {
 		this.gameBoard = super.getGameBoard();
 		if (this.gameBoard != null) {
 			this.isReady = true;
+			this.initPlayerZones(players);
 		} else {
 			this.isReady = false;
 			throw new IllegalStateException("Game board is not initialized.");
@@ -151,6 +160,18 @@ public class MapManagerRisikoNew extends MapManager {
 	}
 	
 	/**
+	 * Restituisce tutti i territori posseduti da un giocatore specifico.
+	 * 
+	 * @param player il giocatore di cui si vogliono ottenere i territori
+	 * @return lista dei territori posseduti dal giocatore
+	 */
+	public List<IZone> getTerritoriesOwnedBy(IPlayer player) {
+		return this.getAllTerritories().stream()
+				.filter(territory -> territory.getOwners().contains(player))
+				.toList();
+	}
+	
+	/**
 	 * Controlla se il MapManager è pronto per l'uso.
 	 */
 	private void checkReady() {
@@ -158,5 +179,6 @@ public class MapManagerRisikoNew extends MapManager {
 			throw new IllegalStateException("MapManagerRisikoNew is not ready. Call initializeGame() first.");
 		}
 	}
+
 	
 }

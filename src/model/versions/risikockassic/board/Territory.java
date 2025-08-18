@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import model.IPlayer;
 import model.board.IZone;
+import model.players.IPlayer;
 
 public class Territory implements IZone {
 
@@ -25,14 +25,14 @@ public class Territory implements IZone {
 	
 	@Override
 	public List<IPlayer> getOwners() {
-		return Collections.unmodifiableList(this.players);
+		return this.players;
 	}
 
 	@Override
 	public void setOwner(IPlayer player) {
-		if (!this.players.contains(player)) {
-			this.players.add(player);
-		}
+		this.players.clear();
+		this.players.add(player);
+		
 	}
 
 	@Override

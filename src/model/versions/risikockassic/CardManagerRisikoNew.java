@@ -6,6 +6,7 @@ import java.util.List;
 import model.board.IZone;
 import model.card.ICard;
 import model.management.CardManager;
+import model.players.IPlayer;
 
 public class CardManagerRisikoNew extends CardManager {
 	
@@ -20,11 +21,10 @@ public class CardManagerRisikoNew extends CardManager {
 	}
 	
 	@Override
-	public void initializeGame() {
+	public void initializeGame(List<IPlayer> players) {
 		// TODO Auto-generated method stub
-
 	}
-
+	
 	@Override
 	public Boolean isReady() {
 		// TODO Auto-generated method stub
@@ -34,5 +34,7 @@ public class CardManagerRisikoNew extends CardManager {
 	private List<IZone> getTerritoriesList(){
 		return MapManagerRisikoNew.getInstance().getAllTerritories();
 	}
+
+
 
 }

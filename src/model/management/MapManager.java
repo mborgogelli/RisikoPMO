@@ -2,9 +2,9 @@ package model.management;
 
 import java.util.List;
 
-import model.IPlayer;
 import model.board.IGameBoard;
 import model.board.IZone;
+import model.players.IPlayer;
 import model.utils.GameVersion;
 
 /* Classe astratta per la gestione delle mappe di gioco.
@@ -93,6 +93,6 @@ public abstract class MapManager implements IManager {
 			throw new IllegalStateException("Game board has not been initialized. Please request a game map first.");
 		}
 	}
-	
 
+	
 }

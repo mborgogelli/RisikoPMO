@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import model.IPlayer;
 import model.board.IZone;
+import model.players.IPlayer;
 
 public class Continent implements IZone {
 	

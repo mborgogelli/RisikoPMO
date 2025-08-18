@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import model.board.IZone;
+import model.players.IPlayer;
+import model.players.Player;
 import model.versions.risikockassic.MapManagerRisikoNew;
+import static model.utils.EnumColors.*;
 
 /**
  * Classe di test per MapManagerRisikoNew che verifica tutte le funzionalità
@@ -18,6 +22,7 @@ import model.versions.risikockassic.MapManagerRisikoNew;
 class MapManagerRisikoNewTest {
 
     private MapManagerRisikoNew mapManager;
+    private List<IPlayer> players;
 
     /**
      * Metodo di setup eseguito prima di ogni test.
@@ -25,13 +30,17 @@ class MapManagerRisikoNewTest {
      */
     @BeforeEach
     void setUp() {
+    	this.players = List.of(new Player("Giocatore 1", BLACK),
+							   new Player("Giocatore 2", RED),
+							   new Player("Giocatore 3", BLUE));
+	
         // Ottiene l'istanza singleton del MapManager
         mapManager = MapManagerRisikoNew.getInstance();
         // Resetta l'istanza per garantire uno stato pulito
         mapManager.resetInstance();
         // Ottiene una nuova istanza e inizializza il gioco
         mapManager = MapManagerRisikoNew.getInstance();
-        mapManager.initializeGame();
+        mapManager.initializeGame(this.players);
     }
     
     @Test
@@ -294,5 +303,25 @@ class MapManagerRisikoNewTest {
         assertEquals(2, australiaOrientaleNeighbors.size());
         assertTrue(australiaOrientaleNeighbors.contains("australia_occidentale"));
         assertTrue(australiaOrientaleNeighbors.contains("nuova_guinea"));
+    }
+    
+    @Test
+    void testTerritoryDistribution() {
+		// Controlla che ogni giocatore abbia almeno un territorio
+		List<IZone> ownedByPlayer1 = mapManager.getTerritoriesOwnedBy(this.players.get(0));
+		List<IZone> ownedByPlayer2 = mapManager.getTerritoriesOwnedBy(this.players.get(1));
+		List<IZone> ownedByPlayer3 = mapManager.getTerritoriesOwnedBy(this.players.get(2));
+		
+	    // Verifica che non ci siano sovrapposizioni tra i territori dei giocatori
+	    assertTrue(Collections.disjoint(ownedByPlayer1, ownedByPlayer2), 
+	               "I giocatori 1 e 2 non dovrebbero condividere territori");
+	    assertTrue(Collections.disjoint(ownedByPlayer1, ownedByPlayer3), 
+	               "I giocatori 1 e 3 non dovrebbero condividere territori");
+	    assertTrue(Collections.disjoint(ownedByPlayer2, ownedByPlayer3), 
+	               "I giocatori 2 e 3 non dovrebbero condividere territori");
+	    
+		// Verifica che il numero totale di territori sia 42
+		int totalTerritories = mapManager.getAllTerritories().size();
+		assertEquals(totalTerritories, (ownedByPlayer1.size() + ownedByPlayer2.size() + ownedByPlayer3.size()));
     }
 }

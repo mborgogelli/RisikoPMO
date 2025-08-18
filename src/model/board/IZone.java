@@ -2,7 +2,8 @@ package model.board;
 
 import java.util.List;
 import java.util.Optional;
-import model.IPlayer;
+
+import model.players.IPlayer;
 
 /**
  * Interfaccia che rappresenta una generica zona della mappa di gioco, modellata come un contenitore che,

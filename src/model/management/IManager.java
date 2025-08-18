@@ -1,12 +1,15 @@
 package model.management;
 
+import java.util.List;
+
+import model.players.IPlayer;
+
 public interface IManager {
 	
 	/**
-	 * Initialize managed aspect of the game.
+	 * Inizializza il gioco
 	 */
-	void initializeGame();
-	
+	void initializeGame(List<IPlayer> players);
 	
 	Boolean isReady();
 
