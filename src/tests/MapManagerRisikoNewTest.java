@@ -94,7 +94,27 @@ class MapManagerRisikoNewTest {
         assertTrue(continentNames.contains("america_settentrionale"));
         assertTrue(continentNames.contains("america_meridionale"));
     }
+    
+    @Test
+    void testGetAllTerritories() {
+		List<IZone> territories = mapManager.getAllTerritories();
 
+		// Verifica che la lista non sia null e contenga 42 territori
+		assertNotNull(territories);
+		assertEquals(42, territories.size());
+
+		// Verifica che i nomi dei territori siano corretti
+		List<String> territoryNames = territories.stream()
+			.map(IZone::getName)
+			.toList();
+		
+		assertTrue(territoryNames.contains("alaska"));
+		assertTrue(territoryNames.contains("islanda"));
+		assertTrue(territoryNames.contains("cina"));
+		assertTrue(territoryNames.contains("egitto"));
+		assertTrue(territoryNames.contains("australia_orientale"));
+	}
+    
     /**
      * Testa la ricerca di territori esistenti per nome.
      * Verifica che i territori vengano trovati correttamente.

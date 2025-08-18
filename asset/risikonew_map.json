@@ -135,7 +135,12 @@
           "name": "giappone",
 		  "army": 2,
           "neighbours": ["kamchatka", "mongolia"]
-        }
+        },
+		{
+		   "name": "siberia",
+		   "army": 5,
+	       "neighbours": ["urali", "jacuzia", "cita", "cina", "mongolia"]
+	     }
       ]
     },
     {
