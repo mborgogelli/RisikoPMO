@@ -13,11 +13,11 @@ public enum EnumMissionCard {
 	    CONQUER_EUROPE_OCEANIA_AND_ONE("Conquistare tutta l’Europa, l’Oceania e un terzo continente a scelta."),
 	    CONQUER_18_TERRITORIES_WITH_2_ARMIES("Conquistare 18 territori e presidiarli con almeno 2 armate ciascuno."),
 	    CONQUER_24_TERRITORIES("Conquistare 24 territori."),
-	    ELIMINATE_RED_ARMY("Distruggere completamente l’armata Rossa. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."),
-	    ELIMINATE_BLUE_ARMY("Distruggere completamente l’armata Blu. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."),
-	    ELIMINATE_GREEN_ARMY("Distruggere completamente l’armata Verde. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."),
-	    ELIMINATE_YELLOW_ARMY("Distruggere completamente l’armata Gialla. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."),
-	    ELIMINATE_BLACK_ARMY("Distruggere completamente l’armata Nera. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."),
+	    DESTROY_RED_ARMY("Distruggere completamente l’armata Rossa. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."),
+	    DESTROY_BLUE_ARMY("Distruggere completamente l’armata Blu. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."),
+	    DESTROY_GREEN_ARMY("Distruggere completamente l’armata Verde. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."),
+	    DESTROY_YELLOW_ARMY("Distruggere completamente l’armata Gialla. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."),
+	    DESTROY_BLACK_ARMY("Distruggere completamente l’armata Nera. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."),
 	    ELIMINATE_PURPLE_ARMY("Distruggere completamente l’armata Viola. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'.");
 
 	    private final String description;
@@ -40,12 +40,15 @@ public enum EnumMissionCard {
 	     * 
 	     * @return Lista di descrizioni delle carte Obiettivo
 	     */
-	    public static List<String> getAllMissions() {
-	    	List<String> missions = new ArrayList<>();
-	    	for (EnumMissionCard card : EnumMissionCard.values()) {
-	    		missions.add(card.getDescription());
-	    	}
-			return missions;	
-	    }
+//	    public static List<String> getAllMissions() {
+//	    	List<String> missions = new ArrayList<>();
+//	    	for (EnumMissionCard card : EnumMissionCard.values()) {
+//	    		missions.add(card.getDescription());
+//	    	}
+//			return missions;	
+//	    }
 	    
+	    public static List<EnumMissionCard> GetAllMissions(){
+	    	return List.of(EnumMissionCard.values());
+	    }
 }

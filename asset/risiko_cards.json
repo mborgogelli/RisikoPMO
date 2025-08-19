@@ -1,60 +1,60 @@
 {
-  "missions": 	[
-	  {
-	    "name": "Mission 1",
-	    "descrizione": "Conquistare 18 territori e presidiarli con almeno 2 armate ciascuno."
-	  },
-	  {
-	    "name": "Mission 2",
-	    "descrizione": "Conquistare 24 territori."
-	  },
-	  {
-	    "name": "Mission 3",
-	    "descrizione": "Conquistare tutto il Nord America e l’Africa."
-	  },
-	  {
-	    "name": "Mission 4",
-	    "descrizione": "Conquistare tutto il Nord America e l’Oceania."
-	  },
-	  {
-	    "name": "Mission 5",
-	    "descrizione": "Conquistare tutta l’Asia e il Sud America."
-	  },
-	  {
-	    "name": "Mission 6",
-	    "descrizione": "Conquistare tutta l’Asia e l’Africa."
-	  },
-	  {
-	    "name": "Mission 7",
-	    "descrizione": "Conquistare tutta l’Europa, il Sud America e un terzo continente a scelta."
-	  },
-	  {
-	    "name": "Mission 8",
-	    "descrizione": "Conquistare tutta l’Europa, l’Oceania e un terzo continente a scelta."
-	  },
-	  {
-	    "name": "Mission 9",
-	    "descrizione": "Distruggere completamente l’armata Rossa. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."
-	  },
-	  {
-	    "name": "Mission 10",
-	    "descrizione": "Distruggere completamente l’armata Blu. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."
-	  },
-	  {
-	    "name": "Mission 11",
-	    "descrizione": "Distruggere completamente l’armata Verde. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."
-	  },
-	  {
-	    "name": "Mission 12",
-	    "descrizione": "Distruggere completamente l’armata Gialla. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."
-	  },
-	  {
-	    "name": "Mission 13",
-	    "descrizione": "Distruggere completamente l’armata Nera. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."
-	  },
-	  {
-	    "name": "Mission 14",
-	    "descrizione": "Distruggere completamente l’armata Viola. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."
-	  }
-	]
+  "missions": [
+    {
+      "name": "CONQUER_NORTH_AMERICA_AND_AFRICA",
+      "description": "Conquistare tutto il Nord America e l’Africa."
+    },
+    {
+      "name": "CONQUER_NORTH_AMERICA_AND_OCEANIA",
+      "description": "Conquistare tutto il Nord America e l’Oceania."
+    },
+    {
+      "name": "CONQUER_ASIA_AND_SOUTH_AMERICA",
+      "description": "Conquistare tutta l’Asia e il Sud America."
+    },
+    {
+      "name": "CONQUER_ASIA_AND_AFRICA",
+      "description": "Conquistare tutta l’Asia e l’Africa."
+    },
+    {
+      "name": "CONQUER_EUROPE_SOUTH_AMERICA_AND_ONE",
+      "description": "Conquistare tutta l’Europa, il Sud America e un terzo continente a scelta."
+    },
+    {
+      "name": "CONQUER_EUROPE_OCEANIA_AND_ONE",
+      "description": "Conquistare tutta l’Europa, l’Oceania e un terzo continente a scelta."
+    },
+    {
+      "name": "CONQUER_18_TERRITORIES_WITH_2_ARMIES",
+      "description": "Conquistare 18 territori e presidiarli con almeno 2 armate ciascuno."
+    },
+    {
+      "name": "CONQUER_24_TERRITORIES",
+      "description": "Conquistare 24 territori."
+    },
+    {
+      "name": "DESTROY_RED_ARMY",
+      "description": "Distruggere completamente l’armata Rossa. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."
+    },
+    {
+      "name": "DESTROY_BLUE_ARMY",
+      "description": "Distruggere completamente l’armata Blu. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."
+    },
+    {
+      "name": "DESTROY_GREEN_ARMY",
+      "description": "Distruggere completamente l’armata Verde. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."
+    },
+    {
+      "name": "DESTROY_YELLOW_ARMY",
+      "description": "Distruggere completamente l’armata Gialla. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."
+    },
+    {
+      "name": "DESTROY_BLACK_ARMY",
+      "description": "Distruggere completamente l’armata Nera. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."
+    },
+    {
+      "name": "DESTROY_PURPLE_ARMY",
+      "description": "Distruggere completamente l’armata Viola. Se questo obiettivo non è possibile, sostituirlo con 'Conquistare 24 territori'."
+    }
+  ]
 }
