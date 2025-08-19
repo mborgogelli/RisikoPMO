@@ -7,6 +7,7 @@ import java.util.List;
  */
 public enum EnumToken {
 	
+	// RisikoNew tokens
 	TANK(1),
 	FLAG(10);
 	

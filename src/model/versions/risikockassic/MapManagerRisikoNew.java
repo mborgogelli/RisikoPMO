@@ -1,7 +1,9 @@
 package model.versions.risikockassic;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,10 +19,12 @@ public class MapManagerRisikoNew extends MapManager {
 	
 	private IGameBoard gameBoard;
 	private Boolean isReady;
+	private final Map<IPlayer,List<IZone>> playerTerritories;
 	
 	private MapManagerRisikoNew() {
 		super();
 		this.isReady = false;
+		this.playerTerritories = new HashMap<>();
 	
 	}
 	
@@ -43,20 +47,11 @@ public class MapManagerRisikoNew extends MapManager {
 	}    
 	
 	@Override
-	protected void initPlayerZones(List<IPlayer> players) {
-		List<IZone> territories = this.getTerritories();
-		Collections.shuffle(territories);
-		for (IZone territory : territories) {
-			IPlayer player = players.get(territories.indexOf(territory) % players.size());
-			territory.setOwner(player);
-		}
-	}
-	
-	@Override
 	public void initializeGame(List<IPlayer> players) {
 		this.gameBoard = super.getGameBoard();
 		if (this.gameBoard != null) {
 			this.initPlayerZones(players);
+			this.setPlayerTerritories(players);
 			this.isReady = true;
 		} else {
 			this.isReady = false;
@@ -65,8 +60,22 @@ public class MapManagerRisikoNew extends MapManager {
 	}
 	
 	@Override
+	protected void initPlayerZones(List<IPlayer> players) {
+		List<IZone> territories = this.getTerritories();
+		Collections.shuffle(territories);
+		for (IZone territory : territories) {
+			IPlayer player = players.get(territories.indexOf(territory) % players.size());
+			territory.setOwner(player);
+		}
+	}
+
+	@Override
 	public Boolean isReady() {
 		return this.isReady;
+	}
+	
+	public Map<IPlayer, List<IZone>> getPlayerTerritories(){
+		return this.playerTerritories;
 	}
 	
 	/**
@@ -187,6 +196,13 @@ public class MapManagerRisikoNew extends MapManager {
 			throw new IllegalStateException("MapManagerRisikoNew is not ready. Call initializeGame() first.");
 		}
 	}
-
 	
+	private void setPlayerTerritories(List<IPlayer> players) {
+	    for (IPlayer p : players) {
+	        List<IZone> territories = this.getTerritories().stream()
+	                .filter(territory -> territory.getOwners().contains(p))
+	                .toList();
+	        this.playerTerritories.put(p, territories);
+	    }
+	}
 }

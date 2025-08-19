@@ -342,4 +342,13 @@ class MapManagerRisikoNewTest {
 										ownedByPlayer4.size() +
 										ownedByPlayer5.size()));
     }
+    
+    @Test
+    public void TestPlayerTerritories() {
+		
+    	for(IPlayer p : this.players) {
+    		System.out.println(p.getName() + " has: " + mapManager.getPlayerTerritories().get(p));
+    	}
+    	
+    }
 }
