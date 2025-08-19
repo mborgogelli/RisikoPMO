@@ -22,6 +22,13 @@ public class CardManagerRisikoNew extends CardManager {
 		this.missionCards = new ArrayList<ICard>();
 		this.playedCards = new ArrayList<ICard>();
 	}
+
+	@Override
+	public void initializeGame(List<IPlayer> players) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 //	@Override
 //	public void initializeGame() {
@@ -55,11 +62,6 @@ public class CardManagerRisikoNew extends CardManager {
 		return MapManagerRisikoNew.getInstance().getAllTerritories();
 	}
 
-	@Override
-	public void initializeGame(List<IPlayer> players) {
-		// TODO Auto-generated method stub
-		
-	}
 
 //	@Test
 //	public void getTerritoriesList(){
