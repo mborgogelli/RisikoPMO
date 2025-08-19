@@ -1,6 +1,6 @@
 package model.versions.risikockassic.board;
 
-import static model.versions.risikockassic.RisikoNew.*;
+import static model.versions.risikockassic.board.EnumMap.*;
 
 import java.util.List;
 import com.google.gson.JsonElement;
@@ -10,7 +10,6 @@ import model.board.BoardCreator;
 import model.board.IGameBoard;
 import model.board.IZone;
 import model.utils.GameVersion;
-import model.versions.risikockassic.RisikoNew;
 
 public class BoardCreatorRisikoNew extends BoardCreator {
 	
@@ -125,7 +124,7 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 	 * 
 	 * @param zoneType Tipo di zona (CONTINENTS o TERRITORIES)
 	 */
-	private void setArmyValues(RisikoNew zoneType) {
+	private void setArmyValues(EnumMap zoneType) {
 	    if (zoneType == CONTINENTS) {
 	        setArmyValuesForContinents();
 	    } else if (zoneType == TERRITORIES) {

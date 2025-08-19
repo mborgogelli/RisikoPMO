@@ -32,7 +32,9 @@ class MapManagerRisikoNewTest {
     void setUp() {
     	this.players = List.of(new Player("Giocatore 1", BLACK),
 							   new Player("Giocatore 2", RED),
-							   new Player("Giocatore 3", BLUE));
+							   new Player("Giocatore 3", BLUE),
+							   new Player("Giocatore 4", GREEN),
+							   new Player("Giocatore 5", YELLOW));
 	
         // Ottiene l'istanza singleton del MapManager
         mapManager = MapManagerRisikoNew.getInstance();
@@ -307,10 +309,12 @@ class MapManagerRisikoNewTest {
     
     @Test
     void testTerritoryDistribution() {
-		// Controlla che ogni giocatore abbia almeno un territorio
 		List<IZone> ownedByPlayer1 = mapManager.getTerritoriesOwnedBy(this.players.get(0));
 		List<IZone> ownedByPlayer2 = mapManager.getTerritoriesOwnedBy(this.players.get(1));
 		List<IZone> ownedByPlayer3 = mapManager.getTerritoriesOwnedBy(this.players.get(2));
+		List<IZone> ownedByPlayer4 = mapManager.getTerritoriesOwnedBy(this.players.get(3));
+		List<IZone> ownedByPlayer5 = mapManager.getTerritoriesOwnedBy(this.players.get(4));
+		
 		
 	    // Verifica che non ci siano sovrapposizioni tra i territori dei giocatori
 	    assertTrue(Collections.disjoint(ownedByPlayer1, ownedByPlayer2), 
@@ -319,9 +323,23 @@ class MapManagerRisikoNewTest {
 	               "I giocatori 1 e 3 non dovrebbero condividere territori");
 	    assertTrue(Collections.disjoint(ownedByPlayer2, ownedByPlayer3), 
 	               "I giocatori 2 e 3 non dovrebbero condividere territori");
+	    assertTrue(Collections.disjoint(ownedByPlayer1, ownedByPlayer4), 
+	               "I giocatori 1 e 4 non dovrebbero condividere territori");
+	    assertTrue(Collections.disjoint(ownedByPlayer2, ownedByPlayer5),
+	               "I giocatori 2 e 5 non dovrebbero condividere territori");
 	    
-		// Verifica che il numero totale di territori sia 42
+	    assertTrue(ownedByPlayer1.size() == 9);
+	    assertTrue(ownedByPlayer2.size() == 9);
+	    assertTrue(ownedByPlayer3.size() == 8);
+	    assertTrue(ownedByPlayer4.size() == 8);
+    	assertTrue(ownedByPlayer5.size() == 8);
+	    
+	    // Verifica che il numero totale di territori assegnati sia corretto
 		int totalTerritories = mapManager.getAllTerritories().size();
-		assertEquals(totalTerritories, (ownedByPlayer1.size() + ownedByPlayer2.size() + ownedByPlayer3.size()));
+		assertEquals(totalTerritories, (ownedByPlayer1.size() +
+										ownedByPlayer2.size() +
+										ownedByPlayer3.size() +
+										ownedByPlayer4.size() +
+										ownedByPlayer5.size()));
     }
 }

@@ -15,13 +15,6 @@ public abstract class MapManager implements IManager {
 	
 	private IGameBoard gameBoard;
 	
-	protected MapManager(GameVersion gameVersion) {
-		if (gameVersion == null || !gameVersionIsValid(gameVersion)) {
-			throw new IllegalArgumentException("Invalid game version: " + gameVersion);
-		}
-		//this.gameBoard = this.getGameBoard();
-	}
-	
 	/**
 	 * Richiede la mappa di gioco per la versione specificata.
 	 */
@@ -69,23 +62,6 @@ public abstract class MapManager implements IManager {
 		return this.gameBoard.getZones().stream()
 				.filter(zone -> zone.isControlledBy(player))
 				.toList();
-	}
-	
-	/**
-	 * Verifica se la versione del gioco è valida.
-	 * 
-	 * @param gameVersion la versione del gioco da verificare
-	 * @return true se la versione è valida, false altrimenti
-	 */
-	private boolean gameVersionIsValid(GameVersion gameVersion) {
-		Boolean isValid = false;
-		for (GameVersion version : GameVersion.values()) {
-			if (version == gameVersion) {
-				isValid = true;
-				break;
-			}
-		}
-		return isValid;
 	}
 	
 	private void gameBoardCheck() {
