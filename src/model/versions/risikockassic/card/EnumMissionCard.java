@@ -40,13 +40,6 @@ public enum EnumMissionCard {
 	     * 
 	     * @return Lista di descrizioni delle carte Obiettivo
 	     */
-//	    public static List<String> getAllMissions() {
-//	    	List<String> missions = new ArrayList<>();
-//	    	for (EnumMissionCard card : EnumMissionCard.values()) {
-//	    		missions.add(card.getDescription());
-//	    	}
-//			return missions;	
-//	    }
 	    
 	    public static List<EnumMissionCard> GetAllMissions(){
 	    	return List.of(EnumMissionCard.values());
