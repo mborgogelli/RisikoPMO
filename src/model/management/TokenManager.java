@@ -3,8 +3,10 @@ package model.management;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import model.board.IZone;
+import model.management.interfaces.IManager;
 import model.players.IPlayer;
 import model.utils.EnumToken;
 
@@ -22,16 +24,57 @@ public abstract class TokenManager implements IManager{
 	    this.tokenOwned = new HashMap<>();
 	}
 
-	protected abstract void assignTokensToZones(List<IZone> zones);
+	/**
+	 * Restituisce i tipi di token gestiti da questo manager
+	 * @return Set dei token gestiti
+	 */
+	protected abstract Set<EnumToken> getManagedTokens();
 	
-	protected abstract void assignTokensToPlayers(List<IPlayer> players);
+	/**
+	 * Calcola i token iniziali per giocatore basandosi sul numero di giocatori
+	 * @param playerCount numero di giocatori
+	 * @return Map con i token per tipo
+	 */
+	protected abstract Map<EnumToken, Integer> calculateInitialTokensPerPlayer(int playerCount);
 	
-	protected Map<IZone,Map<EnumToken,Integer>> getTokenDeployed(){
-		return this.tokenDeployed;
+	/**
+	 * Determina i token iniziali per zona
+	 * @param zone la zona
+	 * @return Map con i token per tipo, o mappa vuota se la zona non ha token iniziali
+	 */
+	protected abstract Map<EnumToken, Integer> calculateInitialTokensPerZone(IZone zone);
+	
+	/**
+	 * Restituisce il MapManager specifico per questa versione del gioco
+	 * @return il MapManager da utilizzare per le validazioni territoriali
+	 */
+	protected abstract MapManager getMapManager();
+	
+	/**
+	 * Inizializza le zone con i token appropriati
+	 * @param zones lista delle zone
+	 */
+	protected void assignTokensToZones(List<IZone> zones) {
+		for (IZone zone : zones) {
+			Map<EnumToken, Integer> initialTokens = this.calculateInitialTokensPerZone(zone);
+			for (Map.Entry<EnumToken, Integer> entry : initialTokens.entrySet()) {
+				this.addZoneToken(zone, entry.getKey(), entry.getValue());
+			}
+		}
 	}
 	
-	protected Map<IPlayer,Map<EnumToken,Integer>> getPlayerToken(){
-		return this.tokenOwned;
+	/**
+	 * Assegna i token iniziali ai giocatori
+	 * @param players lista dei giocatori
+	 */
+	protected void assignTokensToPlayers(List<IPlayer> players) {
+		Map<EnumToken, Integer> tokensPerPlayer = this.calculateInitialTokensPerPlayer(players.size());
+		
+		for (IPlayer player : players) {
+			for (Map.Entry<EnumToken, Integer> entry : tokensPerPlayer.entrySet()) {
+				this.addPlayerToken(player, entry.getKey(), entry.getValue());
+			}
+		}
 	}
 	
 	protected Integer getZoneToken(IZone zone, EnumToken tokenType) {
@@ -52,10 +95,6 @@ public abstract class TokenManager implements IManager{
 	    }
 	}
 	
-	private void setZoneToken(IZone zone, EnumToken tokenType, Integer count) {
-        tokenDeployed.computeIfAbsent(zone, z -> new HashMap<>()).put(tokenType, count);
-	}
-	
 	protected Integer getPlayerToken(IPlayer player, EnumToken tokenType) {
 	    return tokenOwned.getOrDefault(player, Map.of()).getOrDefault(tokenType, 0);
 	}
@@ -74,8 +113,37 @@ public abstract class TokenManager implements IManager{
 	    }
 	}
 	
+	/**
+	 * Imposta il numero di token in una zona
+	 * @param zone la zona
+	 * @param tokenType il tipo di token
+	 * @param count il numero di token da impostare
+	 */
+	private void setZoneToken(IZone zone, EnumToken tokenType, Integer count) {
+        this.tokenDeployed.computeIfAbsent(zone, z -> new HashMap<>()).put(tokenType, count);
+	}
+	
+	/**
+	 * Imposta il numero di token posseduti da un giocatore
+	 * @param player il giocatore
+	 * @param tokenType il tipo di token
+	 * @param count il numero di token da impostare
+	 */
 	private void setPlayerToken(IPlayer player, EnumToken tokenType, Integer count) {
-	    tokenOwned.computeIfAbsent(player, p -> new HashMap<>()).put(tokenType, count);
+	    this.tokenOwned.computeIfAbsent(player, p -> new HashMap<>()).put(tokenType, count);
+	}
+	
+	/**
+	 * Verifica se un giocatore ha un numero sufficiente di token di un certo tipo.
+	 * 
+	 * @param player il giocatore da verificare
+	 * @param tokenType il tipo di token da controllare
+	 * @param required il numero minimo di token richiesti
+	 * @return true se il giocatore ha almeno il numero richiesto di token, false altrimenti
+	 */
+	protected Boolean validatePlayerHasTokens(IPlayer player, EnumToken tokenType, int required) {
+		int available = getPlayerToken(player, tokenType);
+		return available >= required;
 	}
 
 }

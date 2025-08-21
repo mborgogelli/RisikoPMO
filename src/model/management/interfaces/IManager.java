@@ -1,4 +1,4 @@
-package model.management;
+package model.management.interfaces;
 
 import java.util.List;
 
@@ -11,6 +11,10 @@ public interface IManager {
 	 */
 	void initializeGame(List<IPlayer> players);
 	
+	/**
+	 * Verifica se il manager è pronto per l'uso
+	 * @return true se il manager è pronto, false altrimenti
+	 */
 	Boolean isReady();
 
 }

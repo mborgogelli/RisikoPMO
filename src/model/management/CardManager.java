@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import model.card.ICard;
+import model.management.interfaces.IManager;
 
 public abstract class CardManager implements IManager{
 

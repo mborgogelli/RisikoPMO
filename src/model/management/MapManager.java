@@ -4,6 +4,7 @@ import java.util.List;
 
 import model.board.IGameBoard;
 import model.board.IZone;
+import model.management.interfaces.IManager;
 import model.players.IPlayer;
 import model.utils.GameVersion;
 
