@@ -75,6 +75,7 @@ public class MapManagerRisikoNew extends MapManager {
 	}
 	
 	public Map<IPlayer, List<IZone>> getPlayerTerritories(){
+		checkReady();
 		return this.playerTerritories;
 	}
 	
@@ -193,7 +194,7 @@ public class MapManagerRisikoNew extends MapManager {
 	 */
 	private void checkReady() {
 		if (!this.isReady) {
-			throw new IllegalStateException("MapManagerRisikoNew is not ready. Call initializeGame() first.");
+			throw new IllegalStateException("MapManager must be initialized first.");
 		}
 	}
 	
