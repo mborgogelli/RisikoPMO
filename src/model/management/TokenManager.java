@@ -91,13 +91,6 @@ public abstract class TokenManager implements IManager{
 		}
 	}
 	
-	/**
-	 * Verifica se il manager è pronto per le operazioni.
-	 * Le classi figlie devono implementare questo metodo.
-	 * @return true se il manager è inizializzato e pronto
-	 */
-	public abstract Boolean isReady();
-	
 	protected Integer getZoneToken(IZone zone, EnumToken tokenType) {
 	    return tokenDeployed.getOrDefault(zone, Map.of()).getOrDefault(tokenType, 0);
 	}
@@ -150,7 +143,7 @@ public abstract class TokenManager implements IManager{
 	 * @param required il numero minimo di token richiesti
 	 * @return true se il giocatore ha almeno il numero richiesto di token, false altrimenti
 	 */
-	protected Boolean playerHasTokens(IPlayer player, EnumToken tokenType, int required) {
+	protected Boolean checkPlayerToken(IPlayer player, EnumToken tokenType, int required) {
 		int available = getPlayerToken(player, tokenType);
 		return available >= required;
 	}

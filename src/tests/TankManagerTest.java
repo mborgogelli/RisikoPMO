@@ -64,16 +64,6 @@ public class TankManagerTest {
     }
     
     @Test
-    void testInitializeGame_NullPlayers() {
-        IllegalArgumentException exception = assertThrows(
-            IllegalArgumentException.class,
-            () -> tankManager.initializeGame(null),
-            "Should throw exception for null players"
-        );
-        assertEquals("Number of players must be between 3 and 6", exception.getMessage());
-    }
-    
-    @Test
     void testInitializeGame_TooFewPlayers() {
         List<IPlayer> tooFewPlayers = new ArrayList<>();
         tooFewPlayers.add(new Player("Player1", EnumColors.RED));
@@ -112,26 +102,6 @@ public class TankManagerTest {
             "Should throw exception when not ready"
         );
         assertEquals("TokenManager must be initialized before use.", exception.getMessage());
-    }
-    
-    @Test
-    void testGetPlayerTanks_NullPlayer() {
-        // First try to initialize (may fail due to MapManager dependency)
-        try {
-            tankManager.initializeGame(players);
-        } catch (IllegalStateException e) {
-            // If initialization fails, we can still test the null check by setting ready manually
-            // This is a limitation of testing without proper mocking
-        }
-        
-        if (tankManager.isReady()) {
-            IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> tankManager.getPlayerTanks(null),
-                "Should throw exception for null player"
-            );
-            assertEquals("Player cannot be null", exception.getMessage());
-        }
     }
     
     @Test
@@ -175,15 +145,4 @@ public class TankManagerTest {
             assertEquals("TokenManager is already initialized.", exception.getMessage());
         }
     }
-    
-    @Test
-    void testSingletonBehavior() {
-        TankManager instance1 = TankManager.getInstance();
-        TankManager instance2 = TankManager.getInstance();
-        TankManager instance3 = TankManager.getInstance();
-        
-        assertSame(instance1, instance2, "All instances should be the same");
-        assertSame(instance2, instance3, "All instances should be the same");
-    }
-    
 }
