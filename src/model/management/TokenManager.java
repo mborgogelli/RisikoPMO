@@ -155,9 +155,7 @@ public abstract class TokenManager implements IManager{
 	 * @param count il numero di token da impostare
 	 */
 	private void setZoneToken(IZone zone, EnumToken tokenType, Integer count) {
-		if (isInitialized()) {
-			this.tokenDeployed.computeIfAbsent(zone, z -> new HashMap<>()).put(tokenType, count);
-		}
+		this.tokenDeployed.computeIfAbsent(zone, z -> new HashMap<>()).put(tokenType, count);
 	}
 	
 	/**
@@ -167,9 +165,7 @@ public abstract class TokenManager implements IManager{
 	 * @param count il numero di token da impostare
 	 */
 	private void setPlayerToken(IPlayer player, EnumToken tokenType, Integer count) {
-		if (isInitialized()) {
-			this.tokenOwned.computeIfAbsent(player, p -> new HashMap<>()).put(tokenType, count);
-		}
+		this.tokenOwned.computeIfAbsent(player, p -> new HashMap<>()).put(tokenType, count);
 	}
 	
 	/**

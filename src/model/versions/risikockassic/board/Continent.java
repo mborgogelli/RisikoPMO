@@ -2,11 +2,13 @@ package model.versions.risikockassic.board;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 import model.board.IZone;
 import model.players.IPlayer;
+import model.utils.EnumToken;
 
 public class Continent implements IZone {
 	
@@ -95,6 +97,21 @@ public class Continent implements IZone {
 	@Override
 	public void setParentZone(IZone parent) {
 	}
+
+	@Override
+	public int getTokens(EnumToken token) {
+		return 0;
+	}
+
+	@Override
+	public void addTokens(EnumToken token, Integer amount) {
+		throw new UnsupportedOperationException("Cannot add tokens to a continent");
+	}
+
+	@Override
+	public void removeTokens(EnumToken token, Integer amount) {
+		throw new UnsupportedOperationException("Cannot remove tokens from a continent");		
+	}
 	
 	@Override
 	public int hashCode() {
@@ -112,6 +129,5 @@ public class Continent implements IZone {
 		Continent other = (Continent) obj;
 		return Objects.equals(name, other.name);
 	}
-
 	
 }

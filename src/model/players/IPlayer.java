@@ -11,8 +11,6 @@ public interface IPlayer {
 
 	Boolean isReady();
 
-	void setReady(Boolean ready);
-
 	EnumColors getColor();
 	
 	Map<EnumToken, Integer> getAllTokens();
@@ -21,4 +19,5 @@ public interface IPlayer {
 
 	void addToken(EnumToken token, Integer amount);
 	
+	void setReady(Boolean ready);
 }

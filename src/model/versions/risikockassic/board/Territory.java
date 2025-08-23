@@ -2,18 +2,22 @@ package model.versions.risikockassic.board;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 import model.board.IZone;
 import model.players.IPlayer;
+import model.utils.EnumToken;
 
 public class Territory implements IZone {
 
 	private final String name;
 	private final List<IPlayer> players;
 	private final List<String> neighbours;
+	private final Map<EnumToken,Integer> tokens;
 	private IZone parentZone;
 	private Integer armyBonus;
 	
@@ -21,6 +25,7 @@ public class Territory implements IZone {
 		this.name = name;
 		this.players = new ArrayList<>();
 		this.neighbours = new ArrayList<>();
+		this.tokens = new HashMap<>();
 	}
 	
 	@Override
@@ -101,6 +106,29 @@ public class Territory implements IZone {
 	}
 
 	@Override
+	public int getTokens(EnumToken token) {
+		return this.tokens.getOrDefault(token, 0);
+	}
+
+	@Override
+	public void addTokens(EnumToken token, Integer amount) {
+		this.checkAmount(amount);
+		int total = amount;
+		if(this.tokens.containsKey(token)) {
+			total += this.getTokens(token);
+		}
+		this.tokens.put(token, total);
+	}
+
+	@Override
+	public void removeTokens(EnumToken token, Integer amount) {
+		checkAmount(amount);
+		int total = this.getTokens(token) - amount;
+		int newAmount = (total < 0)? 0: total;
+		this.tokens.put(token, newAmount);
+	}
+	
+	@Override
 	public int hashCode() {
 		return Objects.hash(name);
 	}
@@ -116,5 +144,11 @@ public class Territory implements IZone {
 		Territory other = (Territory) obj;
 		return Objects.equals(name, other.name);
 	}
-
+	
+	private void checkAmount(int amount) {
+		if(amount <= 0) {
+			throw new IllegalArgumentException("Cannot use negative values.");
+		}
+	}
+	
 }

@@ -1,9 +1,11 @@
 package model.board;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import model.players.IPlayer;
+import model.utils.EnumToken;
 
 /**
  * Interfaccia che rappresenta una generica zona della mappa di gioco, modellata come un contenitore che,
@@ -12,26 +14,16 @@ import model.players.IPlayer;
  */
 public interface IZone {
 	 
-	/**
-     * Restituisce il nome univoco della zona.
-     * 
-     * @return il nome della zona, non può essere null o vuoto
-     */
 	String getName();
 	
 	/**
 	 * Restituisce il valore numerico associato alla zona.
-	 * Ad esempio, il numero di armate iniziali per un territorio.
+	 * Valore per la modalità "TIME ATTACK"
 	 * 
 	 * @return il valore della zona, non può essere null
 	 */
 	Integer getValue();
 	
-	 /**
-	 * Imposta il valore numerico associato alla zona.
-	 * 
-	 * @param value il nuovo valore della zona, non può essere null
-	 */
 	void setValue(Integer value);
 	
       /**
@@ -51,7 +43,7 @@ public interface IZone {
     void setParentZone(IZone parent);
     
     /**
-     * Restituisce una collezione non modificabile delle zone figlie.
+     * Restituisce una collezione (idealmente non modificabile) delle zone figlie.
      * Ad esempio, un continente conterrà i suoi territori.
      * 
      * @return Lista delle zone figlie
@@ -108,12 +100,19 @@ public interface IZone {
     List<String> getNeighbours();
     
     /**
-	 * Imposta le zone confinanti per questa zona.
+	 * Imposta le zone confinanti o raggiungibili da questa zona.
 	 * Utilizzato per costruire la mappa delle connessioni tra le zone.
 	 * 
 	 * @param neighbours Lista dei nomi delle zone confinanti
 	 */
     void setNeighbours(List<String> neighbours);
-
-   
+    
+    /**
+	 * Restituisce la mappa dei token presenti in questa zona.
+	 */
+    int getTokens(EnumToken token);
+    
+    void addTokens(EnumToken token, Integer amount);
+    
+    void removeTokens(EnumToken token, Integer amount);
 }
