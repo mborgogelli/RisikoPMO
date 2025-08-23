@@ -41,7 +41,7 @@ public class Player implements IPlayer {
 	public EnumColors getColor() {
 		return this.color;
 	}
-
+/*
 	@Override
 	public Map<EnumToken, Integer> getAllTokens() {
 		return Collections.unmodifiableMap(this.tokens);
@@ -58,7 +58,7 @@ public class Player implements IPlayer {
 			int current = this.getToken(token);
 			this.setToken(token, amount + current);
 		}
-	}
+	}*/
 	
 	@Override
 	public String toString() {

@@ -13,11 +13,11 @@ public interface IPlayer {
 
 	EnumColors getColor();
 	
-	Map<EnumToken, Integer> getAllTokens();
+	/*Map<EnumToken, Integer> getAllTokens();
 	
 	Integer getToken(EnumToken token);
 
-	void addToken(EnumToken token, Integer amount);
+	void addToken(EnumToken token, Integer amount);*/
 	
 	void setReady(Boolean ready);
 }

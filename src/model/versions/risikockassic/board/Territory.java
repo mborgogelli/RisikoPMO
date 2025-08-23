@@ -104,7 +104,7 @@ public class Territory implements IZone {
 	public void setParentZone(IZone parent) {
 		this.parentZone = parent;	
 	}
-
+/*
 	@Override
 	public int getTokens(EnumToken token) {
 		return this.tokens.getOrDefault(token, 0);
@@ -126,7 +126,7 @@ public class Territory implements IZone {
 		int total = this.getTokens(token) - amount;
 		int newAmount = (total < 0)? 0: total;
 		this.tokens.put(token, newAmount);
-	}
+	}*/
 	
 	@Override
 	public int hashCode() {

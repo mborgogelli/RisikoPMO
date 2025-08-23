@@ -97,7 +97,7 @@ public class Continent implements IZone {
 	@Override
 	public void setParentZone(IZone parent) {
 	}
-
+/*
 	@Override
 	public int getTokens(EnumToken token) {
 		return 0;
@@ -111,7 +111,7 @@ public class Continent implements IZone {
 	@Override
 	public void removeTokens(EnumToken token, Integer amount) {
 		throw new UnsupportedOperationException("Cannot remove tokens from a continent");		
-	}
+	}*/
 	
 	@Override
 	public int hashCode() {

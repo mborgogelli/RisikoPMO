@@ -13,14 +13,19 @@ import model.utils.EnumToken;
 public class TankManager extends TokenManager {
 
 	private Boolean isReady;
-	private final static int MIN_PLAYERS = 3;
+	//i valori MIN e MAX non dovrebbero essere qui
+	private final static int MIN_PLAYERS = 3; 
 	private final static int MAX_PLAYERS = 6;
 	
 	private static TankManager instance;
+	private final Map<IZone, Integer> deployedTank;
+	private final Map<IPlayer, Integer> availableTanks;
 	
 	private TankManager() {
 		super();
 		this.isReady = false;
+		this.availableTanks = new HashMap<>();
+		this.deployedTank = new HashMap<>();
 	}
 	
 	public static TankManager getInstance() {
@@ -33,7 +38,6 @@ public class TankManager extends TokenManager {
 	public void resetInstance() {
 		instance = null;
 		this.isReady = false;
-		super.resetTokenData();
 	}
 	
 	@Override
@@ -42,14 +46,18 @@ public class TankManager extends TokenManager {
 		if (players == null || players.size() < MIN_PLAYERS || players.size() > MAX_PLAYERS) {
 			throw new IllegalArgumentException("Number of players must be between 3 and 6");
 		}
-		this.assignTokensToPlayers(players);
-		this.initializeZones(MapManagerRisikoNew.getInstance().getAllTerritories());
+		this.initTokensPerZone(this.getMapManager().getAllTerritories());
+		this.initTokensPerPlayer(players);
 		this.isReady = true;
 	}
 	
 	@Override
 	public Boolean isReady() {
 		return this.isReady;
+	}
+		
+
+	public void removeTanksFromPlayer(IPlayer player, int tanks) {
 	}
 	
 	/**
@@ -59,10 +67,7 @@ public class TankManager extends TokenManager {
 	 */
 	public int getPlayerTanks(IPlayer player) {
 		checkReady();
-		if (player == null) {
-			throw new IllegalArgumentException("Player cannot be null");
-		}
-		return super.getPlayerToken(player, EnumToken.TANK);
+		return this.availableTanks.getOrDefault(player, 0);
 	}
 	
 	/**
@@ -72,7 +77,7 @@ public class TankManager extends TokenManager {
 	 */
 	public int getZoneTanks(IZone zone) {
 		checkReady();
-		return super.getZoneToken(zone, EnumToken.TANK);
+		return this.deployedTank.getOrDefault(zone, 0);
 	}
 	
 	@Override
@@ -96,47 +101,16 @@ public class TankManager extends TokenManager {
 		if (!zone.getOwners().contains(player)) {
 			throw new IllegalStateException("Player " + player + " does not own zone " + zone.getName());
 		}
-		if (checkPlayerToken(player, EnumToken.TANK, amount)) {
-			super.removePlayerToken(player, EnumToken.TANK, amount);
-			super.addZoneToken(zone, EnumToken.TANK, amount);
-		}
 	}
 	
 	public void moveTanks(IPlayer player, IZone fromZone, IZone toZone, int amount) {
 		checkReady();
-		if (this.playerCanMoveBetween(player, fromZone, toZone) &&
-			super.checkPlayerToken(player, EnumToken.TANK, amount) &&
-			(getZoneTanks(fromZone) <= amount)) {
-			
-		}
-		
-		// Validazioni tank (deve lasciare almeno 1 tank)
-		if (getZoneTanks(fromZone) <= amount) {
-			throw new IllegalStateException("Zone " + fromZone.getName() + " has only " + 
-				getZoneTanks(fromZone) + " tanks, cannot move " + amount + " (must leave at least 1)");
-		}
-		
-		// Operazione
-		super.removeZoneToken(fromZone, EnumToken.TANK, amount);
-		super.addZoneToken(toZone, EnumToken.TANK, amount);
 	}
 	
 	@Override
-	protected Map<EnumToken, Integer> initTokensPerPlayer(int playerCount) {
-		checkInitialized();
-		int tanksPerPlayer = this.calculateTanksPerPlayer(playerCount);
-		Map<EnumToken, Integer> tokens = new HashMap<>();
-		tokens.put(EnumToken.TANK, tanksPerPlayer);
-		return tokens;
-	}
-
-	@Override
-	protected Map<EnumToken, Integer> initTokensPerZone(IZone zone) {
-		checkInitialized();
-		Map<EnumToken, Integer> tokens = new HashMap<>();
-		tokens.put(EnumToken.TANK, 1);
-		super.removePlayerToken(zone.getOwners().get(0), EnumToken.TANK, 1);
-		return tokens; 
+	protected void resetTokenData() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	// TO DO Valutare implementazione interfaccia IMapManager
@@ -145,6 +119,19 @@ public class TankManager extends TokenManager {
 		return MapManagerRisikoNew.getInstance();
 	}
 	
+	private void initTokensPerPlayer(List<IPlayer> players) {
+		int tanksPerPlayer = this.calculateTanksPerPlayer(players.size());
+		players.stream().forEach(p -> this.availableTanks.put(p, tanksPerPlayer));
+	}
+
+	private void initTokensPerZone(List<IZone> territories) {
+		territories.stream().forEach(z -> this.deployedTank.put(z, 1));
+		for (IPlayer p : this.availableTanks.keySet()) {
+			int deployed = this.getMapManager().getTerritoriesOwnedBy(p).size(); 
+			this.removeTanksFromPlayer(p, deployed);
+		}
+	}
+
 	/**
 	 * Calcola il numero di tank per giocatore basandosi sul numero di giocatori
 	 * @param playerCount numero di giocatori
@@ -183,13 +170,6 @@ public class TankManager extends TokenManager {
 			throw new IllegalStateException("TokenManager is already initialized.");
 		}
 	}
-	
-	/**
-	 * Inizializza le zone con i tank. Da chiamare dopo che il board è stato creato.
-	 * @param zones le zone del gioco
-	 */
-	private void initializeZones(List<IZone> zones) {
-		super.assignTokensToZones(zones);
-	}
+
 
 }
