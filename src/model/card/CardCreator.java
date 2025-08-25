@@ -12,7 +12,15 @@ import java.util.List;
 
 public abstract class CardCreator {
 
+	/**
+	 * Crea e restituisce una lista di carte.
+	 * Utilizza i metodi astratti createCards() e resetCards() per creare e inizializzare le carte.
+	 * 
+	 * @return una lista di carte create e inizializzate
+	 */
 	protected abstract List<ICard> createCards();
 	
-
+	protected abstract void resetCards(List<ICard> cards);
+	
+	
 }

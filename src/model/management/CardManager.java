@@ -6,6 +6,11 @@ import java.util.List;
 import model.card.ICard;
 import model.management.interfaces.IManager;
 
+
+/**
+ * Classe astratta che gestire un mazzo di carte
+ * Fornisce metodi per gestire i mazzi di carte
+ */
 public abstract class CardManager implements IManager{
 
 	/**
@@ -43,11 +48,19 @@ public abstract class CardManager implements IManager{
 	protected  void shuffleCards(List<ICard> cards){
 		Collections.shuffle(cards);
 	}
-	
+
+	/**
+	 * Controlla se una carta esiste nel mazzo specificato.
+	 * @param cards
+	 * @param card
+	 * @return true se la carta esiste nel mazzo, false altrimenti
+	 */
 	private boolean checkCard(List<ICard> cards, ICard card) {
 		if (cards == null || card == null) {
-			throw new IllegalArgumentException("Cards list and card cannot be null");
+			throw new IllegalArgumentException("Cards or card is null");
 		}
 		return cards.contains(card);
 	}
+	 
+	
 }

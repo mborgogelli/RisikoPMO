@@ -31,6 +31,7 @@ public class CardManagerRisikoNew extends CardManager {
 
 	
 //	@Override
+	// io non lo devo inizializzare ma controllare che sia stato inizializzato dal mapmanager
 //	public void initializeGame() {
 //		//TODO -- Assegnazione 
 ////	    List<IZone> territories = MapManagerRisikoNew.getInstance().getAllTerritories();
