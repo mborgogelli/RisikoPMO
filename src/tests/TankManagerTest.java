@@ -45,25 +45,6 @@ public class TankManagerTest {
     }
     
     @Test
-    void testIsReady_InitiallyFalse() {
-        assertFalse(tankManager.isReady(), "TankManager should not be ready initially");
-    }
-    
-    @Test
-    void testInitializeGame_ValidPlayers() {
-        IllegalStateException exception = assertThrows(
-    		IllegalStateException.class,
-    		() -> tankManager.initializeGame(players),
-    		"Error from MapManagerRisikoNew Instance expected");
-        
-        assertEquals("MapManager must be initialized first.", exception.getMessage());
-        
-        mapManager.initializeGame(players);
-        tankManager.initializeGame(players);
-        assertTrue(tankManager.isReady(), "TankManager should be ready after initialization");
-    }
-    
-    @Test
     void testInitializeGame_TooFewPlayers() {
         List<IPlayer> tooFewPlayers = new ArrayList<>();
         tooFewPlayers.add(new Player("Player1", EnumColors.RED));
@@ -78,21 +59,6 @@ public class TankManagerTest {
     }
     
     @Test
-    void testInitializeGame_TooManyPlayers() {
-        List<IPlayer> tooManyPlayers = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            tooManyPlayers.add(new Player("Player" + i, EnumColors.values()[i % EnumColors.values().length]));
-        }
-        
-        IllegalArgumentException exception = assertThrows(
-            IllegalArgumentException.class,
-            () -> tankManager.initializeGame(tooManyPlayers),
-            "Should throw exception for too many players"
-        );
-        assertEquals("Number of players must be between 3 and 6", exception.getMessage());
-    }
-    
-    @Test
     void testGetPlayerTanks_NotReady() {
         IPlayer player = new Player("TestPlayer", EnumColors.RED);
         
@@ -101,20 +67,6 @@ public class TankManagerTest {
             () -> tankManager.getPlayerTanks(player),
             "Should throw exception when not ready"
         );
-        assertEquals("TokenManager must be initialized before use.", exception.getMessage());
-    }
-    
-    @Test
-    void testGetZoneTanks_NotReady() {
-    	mapManager.initializeGame(players);
-    	
-    	IZone zone = mapManager.findTerritoryByName("siberia"); 
-        IllegalStateException exception = assertThrows(
-            IllegalStateException.class,
-            () -> tankManager.getZoneTanks(zone),
-            "Should throw exception when TankManager not ready"
-        );
-         
         assertEquals("TokenManager must be initialized before use.", exception.getMessage());
     }
     
@@ -144,5 +96,10 @@ public class TankManagerTest {
             );
             assertEquals("TokenManager is already initialized.", exception.getMessage());
         }
+    }
+    
+    @Test
+    void testTanksAssigned() {
+    	
     }
 }

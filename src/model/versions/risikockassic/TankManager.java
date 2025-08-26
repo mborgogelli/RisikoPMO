@@ -57,7 +57,9 @@ public class TankManager extends TokenManager {
 	}
 		
 
-	public void removeTanksFromPlayer(IPlayer player, int tanks) {
+	public void removeTanksFromPlayer(IPlayer player, int amount) {
+		int currentTanks = this.getPlayerTanks(player);
+		this.availableTanks.put(player, currentTanks - amount);
 	}
 	
 	/**

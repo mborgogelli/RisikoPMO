@@ -3,7 +3,6 @@ package model.management;
 import java.util.Set;
 
 import model.management.interfaces.IManager;
-import model.players.IPlayer;
 import model.utils.EnumToken;
 
 /**
