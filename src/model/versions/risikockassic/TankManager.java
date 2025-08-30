@@ -149,6 +149,39 @@ public class TankManager extends TokenManager {
 		}
 	}
 	
+	/** Controlla se un giocatore può dispiegare un certo numero di tank
+	 * 
+	 * @param player il giocatore
+	 * @param amount il numero di tank da dispiegare
+	 * @return true se il giocatore può dispiegare i tank, false altrimenti
+	 */
+	private Boolean playerCanDeployTank(IPlayer player, int amount) {
+		checkReady();
+		return this.availableTanks.get(player) - amount >= 0;
+	}
+	
+	/** Controlla se un giocatore può spostare un certo numero di tank da una zona
+	 * 
+	 * @param player il giocatore
+	 * @param fromZone la zona di partenza
+	 * @param amount il numero di tank da spostare
+	 * @return true se il giocatore può spostare i tank, false altrimenti
+	 */
+	private Boolean playerCanMoveTanks(IPlayer player, IZone fromZone, int amount) {
+		checkReady();
+		int current = this.deployedTank.get(fromZone);
+		return amount >= 0 && 
+			   current - amount > 1;
+		
+	}
+	
+	/** Controlla se un giocatore può spostare tank tra due zone
+	 * 
+	 * @param player il giocatore
+	 * @param fromZone la zona di partenza
+	 * @param toZone la zona di arrivo
+	 * @return true se il giocatore può spostare i tank, false altrimenti
+	 */
 	private Boolean playerCanMoveBetween(IPlayer player, IZone fromZone, IZone toZone) {
 		checkReady();
 		MapManagerRisikoNew mapManager = getMapManager();
