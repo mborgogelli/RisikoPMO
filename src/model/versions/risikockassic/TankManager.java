@@ -56,14 +56,23 @@ public class TankManager extends TokenManager {
 		return this.isReady;
 	}
 		
-
+	/**
+	 * Rimuove un certo numero di tank da un giocatore.
+	 * Imposta a 0 il numero di tank posseduti se il numero da rimuovere è maggiore
+	 * del numero di tank posseduti.
+	 * 
+	 * @param player
+	 * @param amount
+	 */
 	public void removeTanksFromPlayer(IPlayer player, int amount) {
-		int currentTanks = this.getPlayerTanks(player);
-		this.availableTanks.put(player, currentTanks - amount);
+		checkReady();
+		int newAmount = this.getPlayerTanks(player) - amount;
+		this.availableTanks.put(player, (newAmount > 0)? newAmount: 0);
 	}
 	
 	/**
 	 * Ottiene il numero di tank di un giocatore
+	 * 
 	 * @param player il giocatore
 	 * @return numero di tank posseduti
 	 */
@@ -74,6 +83,7 @@ public class TankManager extends TokenManager {
 	
 	/**
 	 * Ottiene il numero di tank in una zona
+	 * 
 	 * @param zone la zona
 	 * @return numero di tank nella zona
 	 */
@@ -100,9 +110,12 @@ public class TankManager extends TokenManager {
 	 */
 	public void deployTanks(IPlayer player, IZone zone, int amount) {
 		checkReady();
-		if (!zone.getOwners().contains(player)) {
-			throw new IllegalStateException("Player " + player + " does not own zone " + zone.getName());
-		}
+		checkIfPlayerHasTank(player, amount);
+		checkIfPlayerOwnsZone(player, zone);
+		int zoneAmount = this.deployedTank.get(zone) - amount;
+		this.deployedTank.put(zone, zoneAmount);
+		int playerAmount = this.availableTanks.get(player) - amount;
+		this.availableTanks.put(player, playerAmount);
 	}
 	
 	public void moveTanks(IPlayer player, IZone fromZone, IZone toZone, int amount) {
@@ -115,7 +128,6 @@ public class TankManager extends TokenManager {
 		
 	}
 
-	// TO DO Valutare implementazione interfaccia IMapManager
 	@Override
 	protected MapManagerRisikoNew getMapManager() {
 		return MapManagerRisikoNew.getInstance();
@@ -129,11 +141,12 @@ public class TankManager extends TokenManager {
 	private void initTokensPerZone(List<IZone> territories) {
 		territories.stream().forEach(z -> this.deployedTank.put(z, 1));
 		for (IPlayer p : this.availableTanks.keySet()) {
-			int deployed = this.getMapManager().getTerritoriesOwnedBy(p).size(); 
-			this.removeTanksFromPlayer(p, deployed);
+			int deployed = this.getMapManager().getTerritoriesOwnedBy(p).size();
+			int newAmount = this.getPlayerTanks(p) - deployed;
+			this.availableTanks.put(p, newAmount);
 		}
 	}
-
+	
 	/**
 	 * Calcola il numero di tank per giocatore basandosi sul numero di giocatori
 	 * @param playerCount numero di giocatori
@@ -150,14 +163,15 @@ public class TankManager extends TokenManager {
 	}
 	
 	/** Controlla se un giocatore può dispiegare un certo numero di tank
-	 * 
+	 *
 	 * @param player il giocatore
 	 * @param amount il numero di tank da dispiegare
-	 * @return true se il giocatore può dispiegare i tank, false altrimenti
+	 * 
 	 */
-	private Boolean playerCanDeployTank(IPlayer player, int amount) {
-		checkReady();
-		return this.availableTanks.get(player) - amount >= 0;
+	private void checkIfPlayerHasTank(IPlayer player, int amount) {
+		 if (this.availableTanks.get(player) - amount < 0) {
+			 throw new IllegalStateException("Player " + player + " does not have enough tanks to deploy " + amount);
+		 }
 	}
 	
 	/** Controlla se un giocatore può spostare un certo numero di tank da una zona
@@ -167,12 +181,11 @@ public class TankManager extends TokenManager {
 	 * @param amount il numero di tank da spostare
 	 * @return true se il giocatore può spostare i tank, false altrimenti
 	 */
-	private Boolean playerCanMoveTanks(IPlayer player, IZone fromZone, int amount) {
-		checkReady();
+	private void checkDeployedTanksAfterMove(IPlayer player, IZone fromZone, int amount) {
 		int current = this.deployedTank.get(fromZone);
-		return amount >= 0 && 
-			   current - amount > 1;
-		
+		if(amount <= 0 || (current - amount < 1)) {
+			throw new IllegalArgumentException("Cannot move " + amount + "tanks. Amount must be greater than 0 and less than or equal to " + (current - 1));
+		}
 	}
 	
 	/** Controlla se un giocatore può spostare tank tra due zone
@@ -182,12 +195,21 @@ public class TankManager extends TokenManager {
 	 * @param toZone la zona di arrivo
 	 * @return true se il giocatore può spostare i tank, false altrimenti
 	 */
-	private Boolean playerCanMoveBetween(IPlayer player, IZone fromZone, IZone toZone) {
-		checkReady();
+	private void checkIfPlayerCanMoveBetween(IPlayer player, IZone fromZone, IZone toZone) {
 		MapManagerRisikoNew mapManager = getMapManager();
-		return mapManager.canMoveBetween(fromZone.getName(), toZone.getName()) && 
-			   mapManager.getTerritoriesOwnedBy(player).contains(fromZone) &&
-			   mapManager.getTerritoriesOwnedBy(player).contains(toZone);
+		if(!mapManager.canMoveBetween(fromZone.getName(), toZone.getName()) || 
+		   !mapManager.getTerritoriesOwnedBy(player).contains(fromZone) ||
+		   !mapManager.getTerritoriesOwnedBy(player).contains(toZone)) {
+			
+				throw new IllegalStateException("Player " + player + " cannot move tanks between " + fromZone.getName() + " and " + toZone.getName());
+		};
+	}
+	
+	private void checkIfPlayerOwnsZone(IPlayer player, IZone zone) {
+		MapManagerRisikoNew mapManager = getMapManager();
+		if (!mapManager.getTerritoriesOwnedBy(player).contains(zone)) {
+			throw new IllegalStateException("Player " + player + " does not own zone " + zone.getName());
+		}
 	}
 	
 	/**
