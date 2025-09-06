@@ -38,6 +38,7 @@ public class TankManager extends TokenManager {
 	public void resetInstance() {
 		instance = null;
 		this.isReady = false;
+		this.resetTokenData();
 	}
 	
 	@Override
@@ -64,10 +65,30 @@ public class TankManager extends TokenManager {
 	 * @param player
 	 * @param amount
 	 */
-	public void removeTanksFromPlayer(IPlayer player, int amount) {
+	private void removeTanksFromPlayer(IPlayer player, int amount) {
 		checkReady();
 		int newAmount = this.getPlayerTanks(player) - amount;
 		this.availableTanks.put(player, (newAmount > 0)? newAmount: 0);
+	}
+	
+	/**
+	 * Rimuove un certo numero di tank da una zona.
+	 * Imposta a 0 il numero di tank nella zona se il numero da rimuovere è maggiore
+	 * del numero di tank presenti nella zona.
+	 * 
+	 * @param zone
+	 * @param amount
+	 */
+	private void removeTanksFromZone(IZone zone, int amount) {
+		checkReady();
+		int newAmount = this.getZoneTanks(zone) - amount;
+		this.deployedTank.put(zone, (newAmount > 0)? newAmount: 0);
+	}
+	
+	private void addTanksToZone(IZone zone, int amount) {
+		checkReady();
+		int newAmount = this.getZoneTanks(zone) + amount;
+		this.deployedTank.put(zone, newAmount);
 	}
 	
 	/**
@@ -112,20 +133,23 @@ public class TankManager extends TokenManager {
 		checkReady();
 		checkIfPlayerHasTank(player, amount);
 		checkIfPlayerOwnsZone(player, zone);
-		int zoneAmount = this.deployedTank.get(zone) - amount;
-		this.deployedTank.put(zone, zoneAmount);
-		int playerAmount = this.availableTanks.get(player) - amount;
-		this.availableTanks.put(player, playerAmount);
+		addTanksToZone(zone, amount);
+		removeTanksFromPlayer(player, amount);
 	}
 	
 	public void moveTanks(IPlayer player, IZone fromZone, IZone toZone, int amount) {
 		checkReady();
+		checkIfPlayerCanMoveBetween(player, fromZone, toZone);
+		checkDeployedTanksAfterMove(player, fromZone, amount);
+		removeTanksFromZone(fromZone, amount);
+		addTanksToZone(toZone, amount);
 	}
 	
 	@Override
 	protected void resetTokenData() {
-		// TODO Auto-generated method stub
-		
+		checkInitialized();
+		this.availableTanks.clear();
+		this.deployedTank.clear();
 	}
 
 	@Override
@@ -134,11 +158,13 @@ public class TankManager extends TokenManager {
 	}
 	
 	private void initTokensPerPlayer(List<IPlayer> players) {
+		checkInitialized();
 		int tanksPerPlayer = this.calculateTanksPerPlayer(players.size());
 		players.stream().forEach(p -> this.availableTanks.put(p, tanksPerPlayer));
 	}
 
 	private void initTokensPerZone(List<IZone> territories) {
+		checkInitialized();
 		territories.stream().forEach(z -> this.deployedTank.put(z, 1));
 		for (IPlayer p : this.availableTanks.keySet()) {
 			int deployed = this.getMapManager().getTerritoriesOwnedBy(p).size();
@@ -175,6 +201,7 @@ public class TankManager extends TokenManager {
 	}
 	
 	/** Controlla se un giocatore può spostare un certo numero di tank da una zona
+	 * Verifica che il numero di tank da spostare sia maggiore di 0 e che nella zona di partenza rimanga almeno 1 tank
 	 * 
 	 * @param player il giocatore
 	 * @param fromZone la zona di partenza
@@ -189,6 +216,7 @@ public class TankManager extends TokenManager {
 	}
 	
 	/** Controlla se un giocatore può spostare tank tra due zone
+	 *  Verifica che le due zone siano collegate e che siano di proprietà dello stesso giocatore
 	 * 
 	 * @param player il giocatore
 	 * @param fromZone la zona di partenza
@@ -198,11 +226,9 @@ public class TankManager extends TokenManager {
 	private void checkIfPlayerCanMoveBetween(IPlayer player, IZone fromZone, IZone toZone) {
 		MapManagerRisikoNew mapManager = getMapManager();
 		if(!mapManager.canMoveBetween(fromZone.getName(), toZone.getName()) || 
-		   !mapManager.getTerritoriesOwnedBy(player).contains(fromZone) ||
-		   !mapManager.getTerritoriesOwnedBy(player).contains(toZone)) {
-			
+		   !mapManager.isSameOwner(fromZone, toZone)); {
 				throw new IllegalStateException("Player " + player + " cannot move tanks between " + fromZone.getName() + " and " + toZone.getName());
-		};
+		}
 	}
 	
 	private void checkIfPlayerOwnsZone(IPlayer player, IZone zone) {

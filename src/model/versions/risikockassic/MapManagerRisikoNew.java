@@ -100,6 +100,20 @@ public class MapManagerRisikoNew extends MapManager {
 	}
 	
 	/**
+	 * Controlla se due territori hanno lo stesso proprietario.
+	 * 
+	 * @param zone1 il primo territorio
+	 * @param zone2 il secondo territorio
+	 * @return true se hanno lo stesso proprietario, false altrimenti
+	 */
+	public Boolean isSameOwner(IZone zone1, IZone zone2) {
+		checkReady();
+		checkIfExists(zone1);
+		checkIfExists(zone2);
+		return zone1.getOwners().equals(zone2.getOwners());
+	}
+	
+	/**
 	 * Trova un territorio specifico per nome.
 	 * 
 	 * @param territoryName il nome del territorio da cercare
@@ -195,6 +209,12 @@ public class MapManagerRisikoNew extends MapManager {
 	private void checkReady() {
 		if (!this.isReady) {
 			throw new IllegalStateException("MapManager must be initialized first.");
+		}
+	}
+	
+	private void checkIfExists(IZone territory) {
+		if (territory == null || !this.getTerritories().contains(territory)) {
+			throw new IllegalArgumentException("Territory " + territory.toString() + " not found.");
 		}
 	}
 	
