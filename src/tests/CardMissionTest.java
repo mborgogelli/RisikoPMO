@@ -13,9 +13,9 @@ public class CardMissionTest {
     
     @Test
     public void testGetAllMissions() {
+    	
       List<String> missions = EnumMissionCard.getMissionCards();
-      
-
+     
       assertTrue(missions.stream().allMatch(mission -> mission != null), "Tutte le missioni dovrebbero essere non nulle");
       
       assert !missions.isEmpty() : "La lista delle missioni non dovrebbe essere vuota";

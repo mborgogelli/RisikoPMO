@@ -24,7 +24,6 @@ public abstract class CardManager implements IManager{
 			throw new IllegalArgumentException("Card already exists in the deck");
 		}
 		cards.add(card);
-		
 	}
 	
 	/**
