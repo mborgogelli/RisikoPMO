@@ -34,4 +34,28 @@ public class TerritoryCardsCreatorRisikoNew extends CardCreator{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	protected void configureCardDetails(ICard card) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void configureVariantRules() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected List<ICard> loadCardsFromJson(String filePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void saveCardsToJson(List<ICard> cards, String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
 }
