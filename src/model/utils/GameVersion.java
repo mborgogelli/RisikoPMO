@@ -2,7 +2,10 @@ package model.utils;
 
 public enum GameVersion {
 	
-	RISIKOCLASSIC("risikonew");
+	RISIKONEW("risikonew"),
+	RISIKOANTARTIDE("risikoantartide"),
+	SPQRISIKO("spqrisiko"),
+	RISIKOOCEANI("risikooceani");
 	
     private final String descrizione;
     

@@ -41,7 +41,7 @@ public class GameBoardTest {
     void testGetGameVersion() {
         GameVersion version = gameBoard.getGameVersion();
         assertNotNull(version);
-        assertEquals(GameVersion.RISIKOCLASSIC, version);
+        assertEquals(GameVersion.RISIKONEW, version);
     }
     
     @Test

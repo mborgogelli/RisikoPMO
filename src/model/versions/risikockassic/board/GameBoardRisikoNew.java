@@ -17,7 +17,7 @@ class GameBoardRisikoNew implements IGameBoard {
 	
 	GameBoardRisikoNew(List<IZone> continents) {
 		this.continents = continents;
-		this.gameVersion = GameVersion.RISIKOCLASSIC;
+		this.gameVersion = GameVersion.RISIKONEW;
 		this.neighbours = getNeighboursFromMap();
 	}
 	

@@ -25,7 +25,7 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 	 * Carica la mappa dal file JSON specificato nella versione del gioco.
 	 */
 	protected BoardCreatorRisikoNew() {
-		super(GameVersion.RISIKOCLASSIC);
+		super(GameVersion.RISIKONEW);
 		this.jsonMap = super.getLoadedMap();
 	}
 	
