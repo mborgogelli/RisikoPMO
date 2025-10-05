@@ -1,5 +1,6 @@
 package model.utils;
 
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public enum EnumToken {
 		return this.value;
 	}
 	
-	public static List<EnumToken> getRisikoNewTokens(){
-		return List.of(TANK, FLAG);
+	public static EnumSet<EnumToken> getRisikoNewTokens(){
+		return EnumSet.of(TANK, FLAG);
 	}
 }

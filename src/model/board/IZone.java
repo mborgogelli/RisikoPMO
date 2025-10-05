@@ -107,12 +107,4 @@ public interface IZone {
 	 */
     void setNeighbours(List<String> neighbours);
     
-    /**
-	 * Restituisce la mappa dei token presenti in questa zona.
-	 */
-    /*int getTokens(EnumToken token);
-    
-    void addTokens(EnumToken token, Integer amount);
-    
-    void removeTokens(EnumToken token, Integer amount);*/
-}
+ }
