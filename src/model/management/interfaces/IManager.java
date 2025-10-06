@@ -16,5 +16,10 @@ public interface IManager {
 	 * @return true se il manager è pronto, false altrimenti
 	 */
 	Boolean isReady();
+	
+	/**
+	 * Resetta l'istanza del manager
+	 */
+	void resetInstance();
 
 }

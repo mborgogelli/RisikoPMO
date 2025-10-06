@@ -1,11 +1,14 @@
 package model.utils;
 
+/** 
+ * Enumerazione delle versioni di gioco disponibili.
+ */
 public enum GameVersion {
 	
 	RISIKONEW("risikonew"),
 	RISIKOANTARTIDE("risikoantartide"),
 	SPQRISIKO("spqrisiko"),
-	RISIKOOCEANI("risikooceani");
+	RISIKOOCEANO("risikooceano");
 	
     private final String descrizione;
     

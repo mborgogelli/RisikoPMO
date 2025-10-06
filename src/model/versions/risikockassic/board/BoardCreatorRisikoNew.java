@@ -11,6 +11,12 @@ import model.board.IGameBoard;
 import model.board.IZone;
 import model.utils.GameVersion;
 
+/**
+ * Classe concreta che estende BoardCreator per creare la mappa del gioco RisikoNew.
+ * Implementa il pattern Singleton per garantire che esista una sola istanza della mappa.
+ * Utilizza un file JSON per caricare la configurazione della mappa, inclusi continenti,
+ * territori, valori di territorio per la modalità "TimeAttack" e adiacenze.
+ */
 public class BoardCreatorRisikoNew extends BoardCreator {
 	
 	private static BoardCreatorRisikoNew instance;
@@ -156,7 +162,7 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 	}
 
 	/**
-	 * Imposta i valori di armata per i territori di un continente specifico.
+	 * Imposta i valori per la modalità di gioco "TimeAttack" per i territori di un continente specifico.
 	 * 
 	 * @param allTerritories Lista di tutti i territori dal JSON
 	 * @param continentIndex Indice del continente da processare

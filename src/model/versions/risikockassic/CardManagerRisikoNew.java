@@ -63,6 +63,12 @@ public class CardManagerRisikoNew extends CardManager {
 		return MapManagerRisikoNew.getInstance().getAllTerritories();
 	}
 
+	@Override
+	public void resetInstance() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 //	@Test
 //	public void getTerritoriesList(){

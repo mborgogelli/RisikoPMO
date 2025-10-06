@@ -35,6 +35,7 @@ public class TankManager extends TokenManager {
 		return instance;
 	}
 	
+	@Override
 	public void resetInstance() {
 		instance = null;
 		this.isReady = false;

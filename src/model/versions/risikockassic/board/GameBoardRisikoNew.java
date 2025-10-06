@@ -68,7 +68,7 @@ class GameBoardRisikoNew implements IGameBoard {
 		return zone.getValue();
 	}
 	
-	public Integer getArmyBonus(String zoneName) {
+	public Integer getZoneBonus(String zoneName) {
 		return this.getValue(zoneName);
 	}
 	

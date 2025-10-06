@@ -35,6 +35,7 @@ public class MapManagerRisikoNew extends MapManager {
 		return instance;
 	}
 	
+	@Override
 	public void resetInstance() {
 		instance = null;
 		this.gameBoard = null;
