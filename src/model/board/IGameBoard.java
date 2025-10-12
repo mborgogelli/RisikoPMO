@@ -8,9 +8,9 @@ import model.utils.GameVersion;
 public interface IGameBoard {
 	
 	/**
-	 * Restituisce la lista dei continenti della mappa.
+	 * Restituisce la lista delle zone "radice" della mappa.
 	 * 
-	 * @return lista di IZone che rappresentano i continenti
+	 * @return lista di IZone che rappresentano i le zone "radice" della mappa
 	 */
 	public List<IZone> getZones();
 	

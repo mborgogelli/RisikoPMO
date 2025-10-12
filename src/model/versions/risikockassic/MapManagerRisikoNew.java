@@ -11,21 +11,20 @@ import model.board.IGameBoard;
 import model.board.IZone;
 import model.management.MapManager;
 import model.players.IPlayer;
+import model.players.Player;
 import model.versions.risikockassic.board.BoardCreatorRisikoNew;
 
 public class MapManagerRisikoNew extends MapManager {
 	
 	private static MapManagerRisikoNew instance;
 	
-	private IGameBoard gameBoard;
 	private Boolean isReady;
 	private final Map<IPlayer,List<IZone>> playerTerritories;
 	
 	private MapManagerRisikoNew() {
-		super();
+		super(BoardCreatorRisikoNew.getInstance());
 		this.isReady = false;
 		this.playerTerritories = new HashMap<>();
-	
 	}
 	
 	public static MapManagerRisikoNew getInstance() {
@@ -36,43 +35,37 @@ public class MapManagerRisikoNew extends MapManager {
 	}
 	
 	@Override
-	public void resetInstance() {
-		instance = null;
-		this.gameBoard = null;
-		this.isReady = false;
+	public Boolean isReady() {
+		return this.isReady;
 	}
 
 	@Override
-	protected IGameBoard requestGameMap() {
-        return BoardCreatorRisikoNew.getInstance().getMap();
-	}    
-	
-	@Override
 	public void initializeGame(List<IPlayer> players) {
-		this.gameBoard = super.getGameBoard();
-		if (this.gameBoard != null) {
+		if (super.isGameBoardReady()) {
 			this.initPlayerZones(players);
 			this.setPlayerTerritories(players);
 			this.isReady = true;
 		} else {
 			this.isReady = false;
-			throw new IllegalStateException("Game board is not initialized.");
+			throw new IllegalStateException("Game board has not been initialized.");
 		}
 	}
 	
 	@Override
+	public void resetInstance() {
+		instance = null;
+		super.resetInstance();
+		this.isReady = false;
+	}
+	
+	@Override
 	protected void initPlayerZones(List<IPlayer> players) {
-		List<IZone> territories = this.getTerritories();
+		List<IZone> territories = super.getAllZones();
 		Collections.shuffle(territories);
 		for (IZone territory : territories) {
 			IPlayer player = players.get(territories.indexOf(territory) % players.size());
 			territory.setOwner(player);
 		}
-	}
-
-	@Override
-	public Boolean isReady() {
-		return this.isReady;
 	}
 	
 	public Map<IPlayer, List<IZone>> getPlayerTerritories(){
@@ -80,26 +73,30 @@ public class MapManagerRisikoNew extends MapManager {
 		return this.playerTerritories;
 	}
 	
-	/**
-	 * Restituisce tutti i continenti del Risiko Classico.
-	 * 
-	 * @return lista dei continenti
-	 */
-	public List<IZone> getAllContinents() {
-		checkReady();
-		return this.gameBoard.getZones();
+
+	@Override
+	public boolean canMoveBetween(IPlayer player, String toTerritory, String fromTerritory) {
+		// TODO Auto-generated method stub
+		return false;
 	}
-	
-	/**
-	 * Restituisce tutti i territori del Risiko Classico.
-	 * 
-	 * @return lista dei continenti
-	 */
-	public List<IZone> getAllTerritories() {
-		checkReady();
-		return this.getTerritories();
+
+	@Override
+	public List<IZone> getZonesOwnedBy(IPlayer player) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
+
+	@Override
+	public void updateZoneOwnership(IPlayer newOwner, IZone territory) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<IZone> getNeighboursNotOwnedBy(String territoryName, IPlayer player) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	/**
 	 * Controlla se due territori hanno lo stesso proprietario.
 	 * 
@@ -114,73 +111,7 @@ public class MapManagerRisikoNew extends MapManager {
 		return zone1.getOwners().equals(zone2.getOwners());
 	}
 	
-	/**
-	 * Trova un territorio specifico per nome.
-	 * 
-	 * @param territoryName il nome del territorio da cercare
-	 * @return il territorio trovato o null se non esiste
-	 */
-	public IZone findTerritoryByName(String territoryName) {
-		checkReady();
-		return this.gameBoard.findZoneByName(territoryName);
-	}
-	
-	/**
-	 * Trova il continente che contiene il territorio specificato.
-	 * 
-	 * @param territoryName il nome del territorio
-	 * @return il continente che contiene il territorio
-	 */
-	public Optional<IZone> findContinentOfTerritory(String territoryName) {
-		checkReady();
-		return this.gameBoard.whereIsZone(territoryName);
-	}
-	
-	/**
-	 * Restituisce tutti i territori confinanti con quello specificato.
-	 * 
-	 * @param territoryName il nome del territorio
-	 * @return lista dei nomi dei territori confinanti
-	 */
-	public List<String> getAdjacentTerritories(String territoryName) {
-		checkReady();
-		return this.gameBoard.getNeighbours(territoryName);
-	}
-	
-	/**
-	 * Controlla se è possibile spostare armate tra due territori.
-	 * 
-	 * @param fromTerritory il territorio di partenza
-	 * @param toTerritory il territorio di destinazione
-	 * @return true se lo spostamento è possibile, false altrimenti
-	 */
-	public boolean canMoveBetween(String fromTerritory, String toTerritory) {
-		checkReady();
-		return this.gameBoard.canReach(toTerritory, fromTerritory);
-	}
-	
-	/**
-	 * Restituisce il bonus di armate fornito dal controllo di un continente.
-	 * 
-	 * @param continentName il nome del continente
-	 * @return il numero di armate bonus
-	 */
-	public Integer getContinentArmyBonus(String continentName) {
-		checkReady();
-		return this.gameBoard.getValue(continentName);
-	}
-	
-	/**
-	 * Restituisce il valore strategico di un territorio.
-	 * 
-	 * @param territoryName il nome del territorio
-	 * @return il valore del territorio
-	 */
-	public Integer getTerritoryValue(String territoryName) {
-		checkReady();
-		return this.gameBoard.getValue(territoryName);
-	}
-	
+
 	/**
 	 * Restituisce tutti i territori posseduti da un giocatore specifico.
 	 * 
@@ -188,20 +119,9 @@ public class MapManagerRisikoNew extends MapManager {
 	 * @return lista dei territori posseduti dal giocatore
 	 */
 	public List<IZone> getTerritoriesOwnedBy(IPlayer player) {
-		return this.getAllTerritories().stream()
+		return super.getAllZones().stream()
 				.filter(territory -> territory.getOwners().contains(player))
 				.toList();
-	}
-	
-	/**
-	 * Restituisce tutti i territori della mappa.
-	 * 
-	 * @return lista dei territori
-	 */
-	private List<IZone> getTerritories() {
-		return this.gameBoard.getZones().stream()
-				.flatMap(continent -> continent.getChildZones().stream())
-				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -214,17 +134,32 @@ public class MapManagerRisikoNew extends MapManager {
 	}
 	
 	private void checkIfExists(IZone territory) {
-		if (territory == null || !this.getTerritories().contains(territory)) {
+		if (territory == null || !super.getAllZones().contains(territory)) {
 			throw new IllegalArgumentException("Territory " + territory.toString() + " not found.");
 		}
 	}
 	
 	private void setPlayerTerritories(List<IPlayer> players) {
 	    for (IPlayer p : players) {
-	        List<IZone> territories = this.getTerritories().stream()
+	        List<IZone> territories = super.getAllZones().stream()
 	                .filter(territory -> territory.getOwners().contains(p))
 	                .toList();
 	        this.playerTerritories.put(p, territories);
 	    }
 	}
+
+
+	/**
+	 * Ottiene tutte le zone della mappa di gioco che appartengono ad un dato Player.
+	 * Se la mappa di gioco non è stata ancora inizializzata, lancia un'eccezione.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	/*protected List<IZone> getZonesByPlayer(IPlayer player) {
+		super.gameBoardCheck();
+		return this.gameBoard.getZones().stream()
+				.filter(zone -> zone.isControlledBy(player))
+				.toList();
+	}*/
 }

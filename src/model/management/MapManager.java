@@ -1,10 +1,12 @@
 package model.management;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import model.board.BoardCreator;
 import model.board.IGameBoard;
 import model.board.IZone;
-import model.management.interfaces.IManager;
+import model.management.interfaces.IMapManager;
 import model.players.IPlayer;
 import model.utils.GameVersion;
 
@@ -12,64 +14,87 @@ import model.utils.GameVersion;
  * Fornisce metodi per ottenere la mappa di gioco in base alla versione del gioco.
  * 
  */
-public abstract class MapManager implements IManager {
+public abstract class MapManager implements IMapManager {
 	
 	private IGameBoard gameBoard;
 	
 	/**
-	 * Richiede la mappa di gioco per la versione specificata.
+	 * Costruttore che accetta un BoardCreator per inizializzare la mappa di gioco.
+	 * 
+	 * @param boardCreator il creatore della mappa di gioco
 	 */
-	protected abstract IGameBoard requestGameMap();
+	public MapManager(BoardCreator boardCreator) {
+		this.gameBoard = boardCreator.getMap();
+	}
 	
 	/**
 	 * Inizializza l'assegnamento delle zone ai giocatori.
 	 */
 	protected abstract void initPlayerZones(List<IPlayer> players);
 	
+	@Override
+	public void resetInstance() {
+		this.resetGameBoard();
+	}
+	
 	/**
-	 * Ottiene la versione del gioco corrente.
-	 * Se la mappa di gioco non è stata ancora inizializzata, lancia un'eccezione.
+	 * Utility method per le sottoclassi
+	 * Restituisce tutti i territori della mappa.
 	 * 
-	 * @return la versione del gioco corrente
+	 * @return lista dei territori
+	 */
+	public List<IZone> getAllZones() {
+		return this.gameBoard.getZones().stream()
+				.flatMap(continent -> continent.getChildZones().stream())
+				.collect(Collectors.toList());
+	}
+	
+	protected IZone findZoneByName(String territoryName) {
+        this.gameBoardCheck();
+        return this.gameBoard.findZoneByName(territoryName);
+    }
+
+    protected List<String> getNeighbours(String territoryName) {
+        this.gameBoardCheck();
+        return this.gameBoard.getNeighbours(territoryName);
+    }
+
+    protected boolean canMoveBetween(String toTerritory, String fromTerritory) {
+        this.gameBoardCheck();
+        return this.gameBoard.canReach(toTerritory, fromTerritory);
+    }
+	    
+	/**
+	 * Utility method per le sottoclassi
+	 * Ottiene la mappa di gioco corrente. Se la mappa di gioco non è stata ancora
+	 * inizializzata, lancia un'eccezione.
+	 * 
+	 * @return la mappa di gioco corrente
 	 * @throws IllegalStateException se la mappa non è stata inizializzata
 	 */
-	public GameVersion getGameVersion() {
-		this.gameBoardCheck();
-		return this.gameBoard.getGameVersion();
-	}
-	
-	/**
-	 * Ottiene la mappa di gioco in base alla versione del gioco.
-	 * Se la mappa è già stata inizializzata per la versione richiesta, la restituisce.
-	 * Altrimenti, richiede una nuova mappa per la versione specificata.
-	 * 
-	 * @param gameversion la versione del gioco
-	 * @return la mappa di gioco per la versione specificata
-	 */
 	protected IGameBoard getGameBoard() {
-		this.gameBoard = this.requestGameMap();
+		this.gameBoardCheck();
 		return this.gameBoard;
-	}
+	} 
 	
 	/**
-	 * Ottiene tutte le zone della mappa di gioco che appartengono ad un dato Player.
-	 * Se la mappa di gioco non è stata ancora inizializzata, lancia un'eccezione.
-	 * 
-	 * @param player
-	 * @return
+	 * Utility method per le sottoclassi
+	 * Verifica se la mappa di gioco è stata inizializzata.
+	 * 	 * @return true se la mappa di gioco è pronta, false altrimenti
 	 */
-	protected List<IZone> getZonesByPlayer(IPlayer player) {
+	protected boolean isGameBoardReady() {
 		this.gameBoardCheck();
-		return this.gameBoard.getZones().stream()
-				.filter(zone -> zone.isControlledBy(player))
-				.toList();
+		return this.gameBoard != null;
 	}
+    
+    private void gameBoardCheck() {
+        if (this.gameBoard == null) {
+            throw new IllegalStateException("Game board has not been initialized.");
+        }
+    }
 	
-	private void gameBoardCheck() {
-		if (this.gameBoard == null) {
-			throw new IllegalStateException("Game board has not been initialized. Please request a game map first.");
-		}
+	private void resetGameBoard() {
+		this.gameBoard = null;
 	}
-
 	
 }

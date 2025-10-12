@@ -60,7 +60,7 @@ public class CardManagerRisikoNew extends CardManager {
 	}
 	
 	private List<IZone> getTerritoriesList(){
-		return MapManagerRisikoNew.getInstance().getAllTerritories();
+		return MapManagerRisikoNew.getInstance().getAllZones();
 	}
 
 	@Override
