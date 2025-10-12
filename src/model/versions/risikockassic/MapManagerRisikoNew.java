@@ -14,11 +14,12 @@ import model.players.IPlayer;
 import model.players.Player;
 import model.versions.risikockassic.board.BoardCreatorRisikoNew;
 
-public class MapManagerRisikoNew extends MapManager {
+public class MapManagerRisikoNew extends MapManager implements IMapManagerRisikoNew {
 	
 	private static MapManagerRisikoNew instance;
 	
 	private Boolean isReady;
+	private List<IPlayer> players;
 	private final Map<IPlayer,List<IZone>> playerTerritories;
 	
 	private MapManagerRisikoNew() {
@@ -42,8 +43,9 @@ public class MapManagerRisikoNew extends MapManager {
 	@Override
 	public void initializeGame(List<IPlayer> players) {
 		if (super.isGameBoardReady()) {
-			this.initPlayerZones(players);
-			this.setPlayerTerritories(players);
+			this.players = players;
+			this.initPlayerZones(this.players);
+			this.setPlayerTerritories(this.players);
 			this.isReady = true;
 		} else {
 			this.isReady = false;
@@ -54,6 +56,8 @@ public class MapManagerRisikoNew extends MapManager {
 	@Override
 	public void resetInstance() {
 		instance = null;
+		this.players.clear();
+		this.playerTerritories.clear();
 		super.resetInstance();
 		this.isReady = false;
 	}
@@ -67,33 +71,38 @@ public class MapManagerRisikoNew extends MapManager {
 			territory.setOwner(player);
 		}
 	}
-	
-	public Map<IPlayer, List<IZone>> getPlayerTerritories(){
+	@Override
+	public List<IZone> getAllZones() {
 		checkReady();
-		return this.playerTerritories;
+		return this.playerTerritories.values().stream()
+									 .flatMap(List::stream)
+									 .collect(Collectors.toList());
 	}
 	
-
 	@Override
-	public boolean canMoveBetween(IPlayer player, String toTerritory, String fromTerritory) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean canMoveBetween(IPlayer player, IZone toTerritory, IZone fromTerritory) {
+		checkReady();
+		checkIfExists(player);
+		checkIfExists(toTerritory);
+		return super.canMoveBetween(toTerritory.getName(), fromTerritory.getName()) && this.isSameOwner(toTerritory, fromTerritory);
 	}
 
 	@Override
 	public List<IZone> getZonesOwnedBy(IPlayer player) {
-		// TODO Auto-generated method stub
-		return null;
+		this.checkReady();
+		this.checkIfExists(player);
+		return this.playerTerritories.get(player);
 	}
 
 	@Override
-	public void updateZoneOwnership(IPlayer newOwner, IZone territory) {
-		// TODO Auto-generated method stub
-		
+	public void updateOwnership(IPlayer newOwner, IZone territory) {
+		checkReady();
+		checkIfExists(newOwner);
+		checkIfExists(territory);
 	}
 
 	@Override
-	public List<IZone> getNeighboursNotOwnedBy(String territoryName, IPlayer player) {
+	public List<IZone> getNeighboursOwnedBy(IZone territoryName, IPlayer player) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -104,26 +113,13 @@ public class MapManagerRisikoNew extends MapManager {
 	 * @param zone2 il secondo territorio
 	 * @return true se hanno lo stesso proprietario, false altrimenti
 	 */
-	public Boolean isSameOwner(IZone zone1, IZone zone2) {
+	private Boolean isSameOwner(IZone zone1, IZone zone2) {
 		checkReady();
 		checkIfExists(zone1);
 		checkIfExists(zone2);
 		return zone1.getOwners().equals(zone2.getOwners());
 	}
-	
 
-	/**
-	 * Restituisce tutti i territori posseduti da un giocatore specifico.
-	 * 
-	 * @param player il giocatore di cui si vogliono ottenere i territori
-	 * @return lista dei territori posseduti dal giocatore
-	 */
-	public List<IZone> getTerritoriesOwnedBy(IPlayer player) {
-		return super.getAllZones().stream()
-				.filter(territory -> territory.getOwners().contains(player))
-				.toList();
-	}
-	
 	/**
 	 * Controlla se il MapManager è pronto per l'uso.
 	 */
@@ -139,6 +135,12 @@ public class MapManagerRisikoNew extends MapManager {
 		}
 	}
 	
+	private void checkIfExists(IPlayer player) {
+		if (player == null || this.players.isEmpty() || !this.players.contains(player)) {
+			throw new IllegalArgumentException("Player " + player.toString() + " not found.");
+		}
+	}
+	
 	private void setPlayerTerritories(List<IPlayer> players) {
 	    for (IPlayer p : players) {
 	        List<IZone> territories = super.getAllZones().stream()
@@ -147,19 +149,4 @@ public class MapManagerRisikoNew extends MapManager {
 	        this.playerTerritories.put(p, territories);
 	    }
 	}
-
-
-	/**
-	 * Ottiene tutte le zone della mappa di gioco che appartengono ad un dato Player.
-	 * Se la mappa di gioco non è stata ancora inizializzata, lancia un'eccezione.
-	 * 
-	 * @param player
-	 * @return
-	 */
-	/*protected List<IZone> getZonesByPlayer(IPlayer player) {
-		super.gameBoardCheck();
-		return this.gameBoard.getZones().stream()
-				.filter(zone -> zone.isControlledBy(player))
-				.toList();
-	}*/
 }

@@ -22,7 +22,7 @@ public interface IMapManager extends IManager {
      * @param fromTerritory il territorio di partenza
      * @return true se lo spostamento è possibile
      */
-    boolean canMoveBetween(IPlayer player, String toTerritory, String fromTerritory);
+    boolean canMoveBetween(IPlayer player, IZone toZone, IZone fromZone);
     
     /**
      * Restituisce tutti i territori posseduti da un giocatore.
@@ -36,13 +36,19 @@ public interface IMapManager extends IManager {
      * @param newOwner il nuovo proprietario
      * @param territory il territorio
      */
-    void updateZoneOwnership(IPlayer newOwner, IZone territory);
+    void updateOwnership(IPlayer newOwner, IZone zone);
     
     /**
-     * Restituisce tutti i territori adiacenti a quello specificato che non appartengono al giocatore.
-     * @param territoryName il nome del territorio
-     * @return lista dei territori adiacenti non posseduti
+     * Restituisce tutti i territori adiacenti a quello specificato che appartengono al giocatore.
+     * @param territoryName il nome del territorio di riferimento
+     * @param player il giocatore
+     * @return lista dei territori adiacenti posseduti
      */
-    List<IZone> getNeighboursNotOwnedBy(String territoryName, IPlayer player);
+    List<IZone> getNeighboursOwnedBy(IZone zone, IPlayer player);
     
+    /**
+     * Restituisce tutte le zone di gioco.
+     * @return
+     */
+    List<IZone> getAllZones();
 }

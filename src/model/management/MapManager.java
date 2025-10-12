@@ -63,7 +63,7 @@ public abstract class MapManager implements IMapManager {
         this.gameBoardCheck();
         return this.gameBoard.canReach(toTerritory, fromTerritory);
     }
-	    
+    
 	/**
 	 * Utility method per le sottoclassi
 	 * Ottiene la mappa di gioco corrente. Se la mappa di gioco non è stata ancora

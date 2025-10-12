@@ -48,7 +48,7 @@ public class TankManager extends TokenManager {
 		if (players == null || players.size() < MIN_PLAYERS || players.size() > MAX_PLAYERS) {
 			throw new IllegalArgumentException("Number of players must be between 3 and 6");
 		}
-		this.initTokensPerZone(this.getMapManager().getAllZones());
+		this.initTokensPerZone(this.getMapManager().getAllTerritories());
 		this.initTokensPerPlayer(players);
 		this.isReady = true;
 	}
@@ -226,9 +226,7 @@ public class TankManager extends TokenManager {
 	 */
 	private void checkIfPlayerCanMoveBetween(IPlayer player, IZone fromZone, IZone toZone) {
 		MapManagerRisikoNew mapManager = getMapManager();
-		if(!mapManager.canMoveBetween(player, toZone.getName(), fromZone.getName())) {
-				throw new IllegalStateException("Player " + player + " cannot move tanks between " + fromZone.getName() + " and " + toZone.getName());
-		}
+		mapManager.canMoveBetween(player, fromZone, toZone);
 	}
 	
 	private void checkIfPlayerOwnsZone(IPlayer player, IZone zone) {
