@@ -1,4 +1,4 @@
-package model.versions.risikockassic;
+package model.versions.risikockassic.managers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,8 @@ import model.players.IPlayer;
 import model.versions.risikockassic.card.TerritoryCard;
 
 public class CardManagerRisikoNew extends CardManager {
+	
+	private static CardManagerRisikoNew instance;
 	
 	private final List<ICard> territoryCards;
 	private final List<ICard> missionCards;
@@ -28,7 +30,13 @@ public class CardManagerRisikoNew extends CardManager {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	public static CardManagerRisikoNew getInstance() {
+		if (instance == null) {
+			instance = new CardManagerRisikoNew();
+		}
+		return instance;
+	}
 	
 //	@Override
 	// io non lo devo inizializzare ma controllare che sia stato inizializzato dal mapmanager
@@ -64,7 +72,7 @@ public class CardManagerRisikoNew extends CardManager {
 	}
 
 	@Override
-	public void resetInstance() {
+	public void resetGame() {
 		// TODO Auto-generated method stub
 		
 	}

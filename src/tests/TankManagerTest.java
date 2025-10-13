@@ -12,8 +12,8 @@ import model.board.IZone;
 import model.players.IPlayer;
 import model.players.Player;
 import model.utils.EnumColors;
-import model.versions.risikockassic.MapManagerRisikoNew;
-import model.versions.risikockassic.TankManager;
+import model.versions.risikockassic.managers.MapManagerRisikoNew;
+import model.versions.risikockassic.managers.TankManager;
 
 public class TankManagerTest {
 
@@ -24,10 +24,10 @@ public class TankManagerTest {
     @BeforeEach
     void setUp() {
     	// Reset di entrambi i manager prima di ogni test
-    	MapManagerRisikoNew.getInstance().resetInstance();
+    	MapManagerRisikoNew.getInstance().resetGame();
     	mapManager = MapManagerRisikoNew.getInstance();
     	
-    	TankManager.getInstance().resetInstance();
+    	TankManager.getInstance().resetGame();
         tankManager = TankManager.getInstance();
         
         players = new ArrayList<>();
@@ -74,7 +74,7 @@ public class TankManagerTest {
     void testResetInstance() {
         TankManager firstInstance = TankManager.getInstance();
         
-        firstInstance.resetInstance();
+        firstInstance.resetGame();
         
         // After reset, the instance should be different and not ready
         TankManager secondInstance = TankManager.getInstance();

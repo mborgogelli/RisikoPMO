@@ -33,7 +33,7 @@ public abstract class MapManager implements IMapManager {
 	protected abstract void initPlayerZones(List<IPlayer> players);
 	
 	@Override
-	public void resetInstance() {
+	public void resetGame() {
 		this.resetGameBoard();
 	}
 	

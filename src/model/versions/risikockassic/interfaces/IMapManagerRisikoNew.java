@@ -1,4 +1,4 @@
-package model.versions.risikockassic;
+package model.versions.risikockassic.interfaces;
 
 import java.util.List;
 

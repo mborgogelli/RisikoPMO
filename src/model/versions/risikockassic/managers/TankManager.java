@@ -1,4 +1,4 @@
-package model.versions.risikockassic;
+package model.versions.risikockassic.managers;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +36,7 @@ public class TankManager extends TokenManager {
 	}
 	
 	@Override
-	public void resetInstance() {
+	public void resetGame() {
 		instance = null;
 		this.isReady = false;
 		this.resetTokenData();

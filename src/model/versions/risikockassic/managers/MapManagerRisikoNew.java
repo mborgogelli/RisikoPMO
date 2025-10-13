@@ -1,4 +1,4 @@
-package model.versions.risikockassic;
+package model.versions.risikockassic.managers;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,6 +13,7 @@ import model.management.MapManager;
 import model.players.IPlayer;
 import model.players.Player;
 import model.versions.risikockassic.board.BoardCreatorRisikoNew;
+import model.versions.risikockassic.interfaces.IMapManagerRisikoNew;
 
 public class MapManagerRisikoNew extends MapManager implements IMapManagerRisikoNew {
 	
@@ -54,11 +55,11 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	}
 	
 	@Override
-	public void resetInstance() {
+	public void resetGame() {
 		instance = null;
 		this.players.clear();
 		this.playerTerritories.clear();
-		super.resetInstance();
+		super.resetGame();
 		this.isReady = false;
 	}
 	

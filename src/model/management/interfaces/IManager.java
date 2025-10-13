@@ -18,8 +18,8 @@ public interface IManager {
 	Boolean isReady();
 	
 	/**
-	 * Resetta l'istanza del manager
+	 * Resetta il gioco al suo stato iniziale
 	 */
-	void resetInstance();
+	void resetGame();
 
 }
