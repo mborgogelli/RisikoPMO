@@ -21,7 +21,7 @@ import model.utils.MapLoader;
 * (ad esempio le adiacenze o altri dati particolari).
 * 
 */
-public abstract class BoardCreator{
+public abstract class BoardCreator implements IBoardCreator{
 	
 	private JsonObject jsonMap;
 	
@@ -44,7 +44,8 @@ public abstract class BoardCreator{
 	 * @return Un oggetto IGameBoard che rappresenta la mappa del gioco
 	 * @throws IllegalStateException se la mappa non è stata creata correttamente
 	 */
-    public IGameBoard getMap() {
+    @Override
+	public IGameBoard getMap() {
 		IGameBoard gameBoard = this.createMap();
 		if (gameBoard == null) {
 			throw new IllegalStateException("Game board cannot be null");

@@ -1,6 +1,6 @@
 package model.versions.risikockassic;
 
-import model.board.BoardCreator;
+import model.board.IBoardCreator;
 import model.management.CardManager;
 import model.management.MapManager;
 import model.management.PhaseManager;
@@ -15,7 +15,7 @@ import model.versions.risikockassic.managers.TankManager;
 public class GameFactoryRisikoNew implements IGameFactory {
 
 	@Override
-	public BoardCreator creteBoardCreator(GameVersion version) {
+	public IBoardCreator creteBoardCreator() {
 		return BoardCreatorRisikoNew.getInstance();
 	}
 

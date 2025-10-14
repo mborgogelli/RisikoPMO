@@ -57,7 +57,8 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	@Override
 	public void resetGame() {
 		instance = null;
-		this.players.clear();
+		// TODO verifica il metodo clear() per la lista di players
+		this.players = null;
 		this.playerTerritories.clear();
 		super.resetGame();
 		this.isReady = false;

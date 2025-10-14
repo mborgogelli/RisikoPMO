@@ -3,7 +3,7 @@ package model.management;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import model.board.BoardCreator;
+import model.board.IBoardCreator;
 import model.board.IGameBoard;
 import model.board.IZone;
 import model.management.interfaces.IMapManager;
@@ -23,7 +23,7 @@ public abstract class MapManager implements IMapManager {
 	 * 
 	 * @param boardCreator il creatore della mappa di gioco
 	 */
-	public MapManager(BoardCreator boardCreator) {
+	public MapManager(IBoardCreator boardCreator) {
 		this.gameBoard = boardCreator.getMap();
 	}
 	

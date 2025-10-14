@@ -50,20 +50,15 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 	
 	@Override
 	protected IGameBoard createMap() {
-		this.createContinents();
-		this.insertTerritories();
-		this.setNeighbours();
-		this.setArmyValues(TERRITORIES);
-		return new GameBoardRisikoNew(this.continents);
-	}
-	
-	@Override
-    public IGameBoard getMap() {
 		if (this.gameBoard == null) {
-			this.gameBoard = super.getMap();
-		} 		
+			this.createContinents();
+			this.insertTerritories();
+			this.setNeighbours();
+			this.setArmyValues(TERRITORIES);
+			this.gameBoard = new GameBoardRisikoNew(this.continents);
+		}
 		return this.gameBoard;
-    }
+	}
 	
 	/**
 	 * Crea le zone di tipo Continente e le inserisce nella lista continents.

@@ -11,8 +11,6 @@ import model.utils.GameVersion;
 
 public class Director implements IDirector{
 	
-	private static Director instance;
-	
 	private boolean isReady;
 	private boolean isGameStarted;
 
@@ -21,17 +19,15 @@ public class Director implements IDirector{
 	private CardManager cardManager;
 	private PhaseManager phaseManager;
 	
-	private Director() {
+	public Director() {
 		this.isReady = false;
 		this.isGameStarted = false;
 	}
 	
-	public Director getInstance() {
-		if (instance == null) {
-			instance = new Director();
-		}
-		return instance;
-		
+	
+	@Override
+	public Boolean isReady() {
+		return this.isReady;
 	}
 	
 	@Override
@@ -46,21 +42,19 @@ public class Director implements IDirector{
 	    mapManager.initializeGame(players);
 	    tokenManager.initializeGame(players);
 	    cardManager.initializeGame(players);
-	    //phaseManager.initializeGame(players, mapManager, tokenManager, cardManager);
+	    phaseManager.initializeGame(players);
 
 	    this.isReady = true;		
 	}
 
 	@Override
-	public Boolean isReady() {
-		return this.isReady();
-	}
-
-	@Override
 	public void resetGame() {
-		instance = null;
 		this.isReady = false;
 		this.isGameStarted = false;
+		this.mapManager = null;
+		this.tokenManager = null;
+		this.cardManager = null;
+		this.phaseManager = null;
 	}
 
 	@Override

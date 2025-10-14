@@ -1,6 +1,6 @@
 package model.management.interfaces;
 
-import model.board.BoardCreator;
+import model.board.IBoardCreator;
 import model.management.CardManager;
 import model.management.MapManager;
 import model.management.PhaseManager;
@@ -12,7 +12,7 @@ import model.utils.GameVersion;
  */
 public interface IGameFactory {
 	
-	BoardCreator creteBoardCreator(GameVersion version);
+	IBoardCreator creteBoardCreator();
 	MapManager createMapManager();
     TokenManager createTokenManager();
     CardManager createCardManager();
