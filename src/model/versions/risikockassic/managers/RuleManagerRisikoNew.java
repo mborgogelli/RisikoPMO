@@ -6,7 +6,7 @@ import model.management.RuleManager;
 import model.management.interfaces.IGameRuleManager;
 import model.players.IPlayer;
 
-public class RuleManagerRisikoNew extends RuleManager implements IGameRuleManager {
+public class RuleManagerRisikoNew extends RuleManager{
 
 	@Override
 	public Boolean isReady() {
