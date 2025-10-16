@@ -13,8 +13,9 @@ import model.utils.GameVersion;
 public interface IGameFactory {
 	
 	IBoardCreator creteBoardCreator();
-	MapManager createMapManager();
+	IMapManager createMapManager();
     TokenManager createTokenManager();
     CardManager createCardManager();
     PhaseManager createTurnManager();
+	IGameRuleManager createRuleManager();
 }

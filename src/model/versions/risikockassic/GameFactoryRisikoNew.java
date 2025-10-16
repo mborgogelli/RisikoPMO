@@ -2,11 +2,11 @@ package model.versions.risikockassic;
 
 import model.board.IBoardCreator;
 import model.management.CardManager;
-import model.management.MapManager;
 import model.management.PhaseManager;
 import model.management.TokenManager;
 import model.management.interfaces.IGameFactory;
-import model.utils.GameVersion;
+import model.management.interfaces.IGameRuleManager;
+import model.management.interfaces.IMapManager;
 import model.versions.risikockassic.board.BoardCreatorRisikoNew;
 import model.versions.risikockassic.managers.CardManagerRisikoNew;
 import model.versions.risikockassic.managers.MapManagerRisikoNew;
@@ -20,7 +20,7 @@ public class GameFactoryRisikoNew implements IGameFactory {
 	}
 
 	@Override
-	public MapManager createMapManager() {
+	public IMapManager createMapManager() {
 		return MapManagerRisikoNew.getInstance();
 	}
 
@@ -38,5 +38,8 @@ public class GameFactoryRisikoNew implements IGameFactory {
 	public PhaseManager createTurnManager() {
 		return null;
 	}
-
+	
+	public IGameRuleManager createRuleManager() {
+		return null;
+	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import model.management.interfaces.IDirector;
 import model.management.interfaces.IGameFactory;
+import model.management.interfaces.IMapManager;
 import model.players.IPlayer;
 import model.utils.EnumColors;
 import model.utils.GameFactoryProvider;
@@ -14,7 +15,7 @@ public class Director implements IDirector{
 	private boolean isReady;
 	private boolean isGameStarted;
 
-	private MapManager mapManager;
+	private IMapManager mapManager;
 	private TokenManager tokenManager;
 	private CardManager cardManager;
 	private PhaseManager phaseManager;

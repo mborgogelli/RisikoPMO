@@ -20,12 +20,8 @@ public abstract class TokenManager implements IManager{
 	
 	protected abstract void resetTokenData();
 	
-	/**
-	 * Restituisce il MapManager specifico per questa versione del gioco
-	 * @return il MapManager da utilizzare per le validazioni territoriali
-	 */
-	protected abstract MapManager getMapManager();
-		
+	
+	// TODO togliere il metodo?
 	/**
 	 * Verifica se un giocatore ha un numero sufficiente di token di un certo tipo.
 	 * 

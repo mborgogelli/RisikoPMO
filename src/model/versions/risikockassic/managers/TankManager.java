@@ -13,9 +13,6 @@ import model.utils.EnumToken;
 public class TankManager extends TokenManager {
 
 	private Boolean isReady;
-	//i valori MIN e MAX non dovrebbero essere qui
-	private final static int MIN_PLAYERS = 3; 
-	private final static int MAX_PLAYERS = 6;
 	
 	private static TankManager instance;
 	private final Map<IZone, Integer> deployedTank;
@@ -45,7 +42,7 @@ public class TankManager extends TokenManager {
 	@Override
 	public void initializeGame(List<IPlayer> players) {
 		checkInitialized();
-		if (players == null || players.size() < MIN_PLAYERS || players.size() > MAX_PLAYERS) {
+		if (players == null) {
 			throw new IllegalArgumentException("Number of players must be between 3 and 6");
 		}
 		this.initTokensPerZone(this.getMapManager().getAllTerritories());
@@ -153,7 +150,6 @@ public class TankManager extends TokenManager {
 		this.deployedTank.clear();
 	}
 
-	@Override
 	protected MapManagerRisikoNew getMapManager() {
 		return MapManagerRisikoNew.getInstance();
 	}
