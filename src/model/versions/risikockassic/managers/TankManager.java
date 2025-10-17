@@ -14,27 +14,23 @@ public class TankManager extends TokenManager {
 
 	private Boolean isReady;
 	
-	private static TankManager instance;
 	private final Map<IZone, Integer> deployedTank;
 	private final Map<IPlayer, Integer> availableTanks;
 	
-	private TankManager() {
+	public TankManager() {
 		super();
 		this.isReady = false;
 		this.availableTanks = new HashMap<>();
 		this.deployedTank = new HashMap<>();
 	}
 	
-	public static TankManager getInstance() {
-		if (instance == null) {
-			instance = new TankManager();
-		}
-		return instance;
+	@Override
+	public Boolean isReady() {
+		return this.isReady;
 	}
 	
 	@Override
 	public void resetGame() {
-		instance = null;
 		this.isReady = false;
 		this.resetTokenData();
 	}
@@ -50,11 +46,6 @@ public class TankManager extends TokenManager {
 		this.isReady = true;
 	}
 	
-	@Override
-	public Boolean isReady() {
-		return this.isReady;
-	}
-		
 	/**
 	 * Rimuove un certo numero di tank da un giocatore.
 	 * Imposta a 0 il numero di tank posseduti se il numero da rimuovere è maggiore

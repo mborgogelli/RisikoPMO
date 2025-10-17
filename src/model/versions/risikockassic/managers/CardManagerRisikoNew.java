@@ -19,7 +19,7 @@ public class CardManagerRisikoNew extends CardManager {
 	private final List<ICard> missionCards;
 	private final List<ICard> playedCards;
 	
-	private CardManagerRisikoNew() {
+	public CardManagerRisikoNew() {
 		this.territoryCards = new ArrayList<ICard>();
 		this.missionCards = new ArrayList<ICard>();
 		this.playedCards = new ArrayList<ICard>();
@@ -29,13 +29,6 @@ public class CardManagerRisikoNew extends CardManager {
 	public void initializeGame(List<IPlayer> players) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	public static CardManagerRisikoNew getInstance() {
-		if (instance == null) {
-			instance = new CardManagerRisikoNew();
-		}
-		return instance;
 	}
 	
 //	@Override

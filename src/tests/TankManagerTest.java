@@ -27,21 +27,12 @@ public class TankManagerTest {
     	MapManagerRisikoNew.getInstance().resetGame();
     	mapManager = MapManagerRisikoNew.getInstance();
     	
-    	TankManager.getInstance().resetGame();
-        tankManager = TankManager.getInstance();
+        tankManager = new  TankManager();
         
         players = new ArrayList<>();
         players.add(new Player("Player1", EnumColors.RED));
         players.add(new Player("Player2", EnumColors.BLUE));
         players.add(new Player("Player3", EnumColors.GREEN));
-    }
-    
-    @Test
-    void testGetInstance_ReturnsSameInstance() {
-        TankManager instance1 = TankManager.getInstance();
-        TankManager instance2 = TankManager.getInstance();
-        
-        assertSame(instance1, instance2, "getInstance should return the same instance");
     }
     
     @Test
@@ -68,18 +59,6 @@ public class TankManagerTest {
             "Should throw exception when not ready"
         );
         assertEquals("TokenManager must be initialized before use.", exception.getMessage());
-    }
-    
-    @Test
-    void testResetInstance() {
-        TankManager firstInstance = TankManager.getInstance();
-        
-        firstInstance.resetGame();
-        
-        // After reset, the instance should be different and not ready
-        TankManager secondInstance = TankManager.getInstance();
-        assertNotSame(firstInstance, secondInstance, "After reset, getInstance should return a new instance");
-        assertFalse(secondInstance.isReady(), "New instance should not be ready");
     }
     
     @Test
