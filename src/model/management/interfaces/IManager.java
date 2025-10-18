@@ -21,5 +21,5 @@ public interface IManager {
 	 * Resetta il gioco al suo stato iniziale
 	 */
 	void resetGame();
-
+	
 }

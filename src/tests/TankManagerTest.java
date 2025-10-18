@@ -24,10 +24,9 @@ public class TankManagerTest {
     @BeforeEach
     void setUp() {
     	// Reset di entrambi i manager prima di ogni test
-    	MapManagerRisikoNew.getInstance().resetGame();
-    	mapManager = MapManagerRisikoNew.getInstance();
+    	mapManager = new MapManagerRisikoNew();
     	
-        tankManager = new  TankManager();
+        tankManager = new TankManager();
         
         players = new ArrayList<>();
         players.add(new Player("Player1", EnumColors.RED));

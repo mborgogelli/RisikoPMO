@@ -5,24 +5,27 @@ import model.management.CardManager;
 import model.management.PhaseManager;
 import model.management.TokenManager;
 import model.management.interfaces.IGameFactory;
-import model.management.interfaces.IGameRuleManager;
+import model.management.interfaces.IRuleManager;
 import model.management.interfaces.IMapManager;
 import model.versions.risikockassic.board.BoardCreatorRisikoNew;
 import model.versions.risikockassic.interfaces.IMapManagerRisikoNew;
 import model.versions.risikockassic.managers.CardManagerRisikoNew;
 import model.versions.risikockassic.managers.MapManagerRisikoNew;
+import model.versions.risikockassic.managers.RuleManagerRisikoNew;
 import model.versions.risikockassic.managers.TankManager;
 
 public class GameFactoryRisikoNew implements IGameFactory {
-
+	
+	private final IRuleManager mediator = new RuleManagerRisikoNew();
+	
 	@Override
-	public IBoardCreator creteBoardCreator() {
-		return BoardCreatorRisikoNew.getInstance();
+	public IRuleManager createRuleManager() {
+	    return this.mediator;
 	}
-
+	
 	@Override
 	public IMapManagerRisikoNew createMapManager() {
-		return MapManagerRisikoNew.getInstance();
+		return new MapManagerRisikoNew();
 	}
 
 	@Override
@@ -32,7 +35,7 @@ public class GameFactoryRisikoNew implements IGameFactory {
 
 	@Override
 	public CardManager createCardManager() {
-		return new CardManagerRisikoNew();
+		return new CardManagerRisikoNew(this.mediator);
 	}
 
 	@Override
@@ -40,8 +43,6 @@ public class GameFactoryRisikoNew implements IGameFactory {
 		return null;
 	}
 	
-	public IGameRuleManager createRuleManager() {
-		return null;
-	}
+	
 	
 }

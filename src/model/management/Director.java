@@ -5,6 +5,7 @@ import java.util.List;
 import model.management.interfaces.IDirector;
 import model.management.interfaces.IGameFactory;
 import model.management.interfaces.IMapManager;
+import model.management.interfaces.IRuleManager;
 import model.players.IPlayer;
 import model.utils.EnumColors;
 import model.utils.GameFactoryProvider;
@@ -15,10 +16,7 @@ public class Director implements IDirector{
 	private boolean isReady;
 	private boolean isGameStarted;
 
-	private IMapManager mapManager;
-	private TokenManager tokenManager;
-	private CardManager cardManager;
-	private PhaseManager phaseManager;
+	private IRuleManager mediator;
 	
 	public Director() {
 		this.isReady = false;
@@ -35,16 +33,6 @@ public class Director implements IDirector{
 	public void initializeGame(List<IPlayer> players, GameVersion version) {
 		IGameFactory factory = GameFactoryProvider.getFactory(version);
 
-	    this.mapManager = factory.createMapManager();
-	    this.tokenManager = factory.createTokenManager();
-	    this.cardManager = factory.createCardManager();
-	    this.phaseManager = factory.createTurnManager();
-
-	    mapManager.initializeGame(players);
-	    tokenManager.initializeGame(players);
-	    cardManager.initializeGame(players);
-	    phaseManager.initializeGame(players);
-
 	    this.isReady = true;		
 	}
 
@@ -52,21 +40,11 @@ public class Director implements IDirector{
 	public void resetGame() {
 		this.isReady = false;
 		this.isGameStarted = false;
-		this.mapManager = null;
-		this.tokenManager = null;
-		this.cardManager = null;
-		this.phaseManager = null;
 	}
 
 	@Override
 	public boolean isGameStarted() {
 		return this.isGameStarted;
-	}
-
-	@Override
-	public EnumColors getColor(IPlayer player) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

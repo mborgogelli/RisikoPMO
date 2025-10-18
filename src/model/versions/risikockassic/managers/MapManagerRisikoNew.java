@@ -17,23 +17,14 @@ import model.versions.risikockassic.interfaces.IMapManagerRisikoNew;
 
 public class MapManagerRisikoNew extends MapManager implements IMapManagerRisikoNew {
 	
-	private static MapManagerRisikoNew instance;
-	
 	private Boolean isReady;
 	private List<IPlayer> players;
 	private final Map<IPlayer,List<IZone>> playerTerritories;
 	
-	private MapManagerRisikoNew() {
+	public MapManagerRisikoNew() {
 		super(BoardCreatorRisikoNew.getInstance());
 		this.isReady = false;
 		this.playerTerritories = new HashMap<>();
-	}
-	
-	public static MapManagerRisikoNew getInstance() {
-		if (instance == null) {
-			instance = new MapManagerRisikoNew();
-		}
-		return instance;
 	}
 	
 	@Override
@@ -56,7 +47,6 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	
 	@Override
 	public void resetGame() {
-		instance = null;
 		// TODO verifica il metodo clear() per la lista di players
 		this.players = null;
 		this.playerTerritories.clear();

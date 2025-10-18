@@ -1,8 +1,13 @@
 package model.management;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import model.board.IZone;
 import model.management.interfaces.IManager;
+import model.management.interfaces.IRuleManager;
+import model.players.IPlayer;
 import model.utils.EnumToken;
 
 /**
@@ -11,28 +16,27 @@ import model.utils.EnumToken;
  */
 public abstract class TokenManager implements IManager{
 	
+	private IRuleManager ruleManager;
+	
 	/**
 	 * Restituisce i tipi di token gestiti da questo manager
 	 * @return Set dei token gestiti
 	 */
 	protected abstract Set<EnumToken> getManagedTokens();
 	
-	
 	protected abstract void resetTokenData();
 	
+	protected List<IZone> getAllZones() {
+		return this.ruleManager.getAllZones();
+	}
+
+	public List<IZone> getZonesOwnedBy(IPlayer p) {
+		return this.ruleManager.getZonesOwnedBy(p);
+	}
+
+	public void canMoveBetween(IPlayer player, IZone fromZone, IZone toZone) {
+        this.ruleManager.canMoveBetween(player, fromZone, toZone);		
+	}
 	
-	// TODO togliere il metodo?
-	/**
-	 * Verifica se un giocatore ha un numero sufficiente di token di un certo tipo.
-	 * 
-	 * @param player il giocatore da verificare
-	 * @param tokenType il tipo di token da controllare
-	 * @param required il numero minimo di token richiesti
-	 * @return true se il giocatore ha almeno il numero richiesto di token, false altrimenti
-	 */
-	/*protected Boolean checkPlayerToken(IPlayer player, EnumToken tokenType, int required) {
-		int available = player.getToken(tokenType);
-		return available >= required;
-	}*/
 	
 }

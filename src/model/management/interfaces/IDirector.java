@@ -10,8 +10,6 @@ public interface IDirector extends IManager {
 	
 	boolean isGameStarted();
 
-	EnumColors getColor(IPlayer player);
-
 	boolean checkWin(IPlayer player);
 
 	boolean checkLoss(IPlayer player);

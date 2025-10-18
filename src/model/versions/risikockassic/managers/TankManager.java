@@ -7,6 +7,8 @@ import java.util.Set;
 
 import model.board.IZone;
 import model.management.TokenManager;
+import model.management.interfaces.IMapManager;
+import model.management.interfaces.IRuleManager;
 import model.players.IPlayer;
 import model.utils.EnumToken;
 
@@ -41,7 +43,7 @@ public class TankManager extends TokenManager {
 		if (players == null) {
 			throw new IllegalArgumentException("Number of players must be between 3 and 6");
 		}
-		this.initTokensPerZone(this.getMapManager().getAllTerritories());
+		this.initTokensPerZone(super.getAllZones());
 		this.initTokensPerPlayer(players);
 		this.isReady = true;
 	}
@@ -141,10 +143,6 @@ public class TankManager extends TokenManager {
 		this.deployedTank.clear();
 	}
 
-	protected MapManagerRisikoNew getMapManager() {
-		return MapManagerRisikoNew.getInstance();
-	}
-	
 	private void initTokensPerPlayer(List<IPlayer> players) {
 		checkInitialized();
 		int tanksPerPlayer = this.calculateTanksPerPlayer(players.size());
@@ -155,7 +153,7 @@ public class TankManager extends TokenManager {
 		checkInitialized();
 		territories.stream().forEach(z -> this.deployedTank.put(z, 1));
 		for (IPlayer p : this.availableTanks.keySet()) {
-			int deployed = this.getMapManager().getTerritoriesOwnedBy(p).size();
+			int deployed = super.getZonesOwnedBy(p).size();
 			int newAmount = this.getPlayerTanks(p) - deployed;
 			this.availableTanks.put(p, newAmount);
 		}
@@ -212,13 +210,11 @@ public class TankManager extends TokenManager {
 	 * @return true se il giocatore può spostare i tank, false altrimenti
 	 */
 	private void checkIfPlayerCanMoveBetween(IPlayer player, IZone fromZone, IZone toZone) {
-		MapManagerRisikoNew mapManager = getMapManager();
-		mapManager.canMoveBetween(player, fromZone, toZone);
+		super.canMoveBetween(player, fromZone, toZone);
 	}
 	
 	private void checkIfPlayerOwnsZone(IPlayer player, IZone zone) {
-		MapManagerRisikoNew mapManager = getMapManager();
-		if (!mapManager.getTerritoriesOwnedBy(player).contains(zone)) {
+		if (!super.getZonesOwnedBy(player).contains(zone)) {
 			throw new IllegalStateException("Player " + player + " does not own zone " + zone.getName());
 		}
 	}

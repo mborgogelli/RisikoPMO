@@ -3,8 +3,10 @@ package model.management;
 import java.util.Collections;
 import java.util.List;
 
+import model.board.IZone;
 import model.card.ICard;
 import model.management.interfaces.IManager;
+import model.management.interfaces.IRuleManager;
 
 
 /**
@@ -12,7 +14,13 @@ import model.management.interfaces.IManager;
  * Fornisce metodi per gestire i mazzi di carte
  */
 public abstract class CardManager implements IManager{
+	
+	private final IRuleManager mediator;
 
+	public CardManager(IRuleManager mediator) {
+		this.mediator = mediator;
+	}
+	
 	/**
 	 * Aggiunge una carta al mazzo specificato.
 	 * Se la carta è già presente nel mazzo, lancia un'eccezione.
@@ -59,6 +67,10 @@ public abstract class CardManager implements IManager{
 			throw new IllegalArgumentException("Cards or card is null");
 		}
 		return cards.contains(card);
+	}
+	
+	public List<IZone> getAllZones() {
+		return this.mediator.getAllZones();
 	}
 	 
 	
