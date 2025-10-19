@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import model.board.IZone;
 import model.card.ICard;
 import model.management.CardManager;
-import model.management.interfaces.IRuleManager;
+import model.management.interfaces.IMediator;
 import model.players.IPlayer;
 import model.versions.risikockassic.card.TerritoryCard;
 
@@ -18,8 +18,8 @@ public class CardManagerRisikoNew extends CardManager {
 	private final List<ICard> missionCards;
 	private final List<ICard> playedCards;
 	
-	public CardManagerRisikoNew(IRuleManager ruleManager) {
-		super(ruleManager);
+	public CardManagerRisikoNew() {
+		super();
 		this.territoryCards = new ArrayList<ICard>();
 		this.missionCards = new ArrayList<ICard>();
 		this.playedCards = new ArrayList<ICard>();
@@ -60,10 +60,6 @@ public class CardManagerRisikoNew extends CardManager {
 		
 	}
 	
-	private List<IZone> getTerritoriesList(){
-		return super.getAllZones();
-	}
-
 	@Override
 	public void resetGame() {
 		// TODO Auto-generated method stub

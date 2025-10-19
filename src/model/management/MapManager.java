@@ -7,6 +7,7 @@ import model.board.IBoardCreator;
 import model.board.IGameBoard;
 import model.board.IZone;
 import model.management.interfaces.IMapManager;
+import model.management.interfaces.IMediator;
 import model.players.IPlayer;
 import model.utils.GameVersion;
 
@@ -17,6 +18,7 @@ import model.utils.GameVersion;
 public abstract class MapManager implements IMapManager {
 	
 	private IGameBoard gameBoard;
+	private IMediator mediator;
 	
 	/**
 	 * Costruttore che accetta un BoardCreator per inizializzare la mappa di gioco.
@@ -31,6 +33,11 @@ public abstract class MapManager implements IMapManager {
 	 * Inizializza l'assegnamento delle zone ai giocatori.
 	 */
 	protected abstract void initPlayerZones(List<IPlayer> players);
+	
+	@Override
+	public void setMediator(Mediator mediator) {
+		this.mediator = mediator;
+	}
 	
 	@Override
 	public void resetGame() {

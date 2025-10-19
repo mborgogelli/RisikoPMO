@@ -2,6 +2,7 @@ package model.management.interfaces;
 
 import java.util.List;
 
+import model.management.Mediator;
 import model.players.IPlayer;
 
 public interface IManager {
@@ -21,5 +22,12 @@ public interface IManager {
 	 * Resetta il gioco al suo stato iniziale
 	 */
 	void resetGame();
+	
+	/**
+	 * Imposta il mediatore per il manager
+	 * 
+	 * @param mediator Il mediatore da impostare
+	 */
+	void setMediator(Mediator mediator);
 	
 }

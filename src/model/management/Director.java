@@ -4,8 +4,9 @@ import java.util.List;
 
 import model.management.interfaces.IDirector;
 import model.management.interfaces.IGameFactory;
+import model.management.interfaces.IManager;
 import model.management.interfaces.IMapManager;
-import model.management.interfaces.IRuleManager;
+import model.management.interfaces.IMediator;
 import model.players.IPlayer;
 import model.utils.EnumColors;
 import model.utils.GameFactoryProvider;
@@ -16,13 +17,13 @@ public class Director implements IDirector{
 	private boolean isReady;
 	private boolean isGameStarted;
 
-	private IRuleManager mediator;
+	private Mediator mediator;
+	private List<IManager> managers;
 	
 	public Director() {
 		this.isReady = false;
 		this.isGameStarted = false;
 	}
-	
 	
 	@Override
 	public Boolean isReady() {
@@ -32,10 +33,12 @@ public class Director implements IDirector{
 	@Override
 	public void initializeGame(List<IPlayer> players, GameVersion version) {
 		IGameFactory factory = GameFactoryProvider.getFactory(version);
-
+		this.setMediator(factory.getMediator());
+		this.managers = factory.getManagers();
+		this.initializeManagers(players);
 	    this.isReady = true;		
 	}
-
+	
 	@Override
 	public void resetGame() {
 		this.isReady = false;
@@ -75,5 +78,25 @@ public class Director implements IDirector{
 	public void initializeGame(List<IPlayer> players) {
 		throw new UnsupportedOperationException("Use initializeGame with GameVersion");
 	}
+
+
+	@Override
+	public void setMediator(Mediator mediator) {
+		if (mediator == null) {
+			this.mediator = mediator;
+		}
+	}
+	
+	private void initializeManagers(List<IPlayer> players) {
+		for (IManager manager : this.managers) {
+			manager.initializeGame(players);
+		}
+	}
+	
+    private void resetManagers() {
+		for (IManager manager : this.managers) {
+			manager.resetGame();
+		}
+    }
 
 }

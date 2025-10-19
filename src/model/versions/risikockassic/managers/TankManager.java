@@ -8,7 +8,7 @@ import java.util.Set;
 import model.board.IZone;
 import model.management.TokenManager;
 import model.management.interfaces.IMapManager;
-import model.management.interfaces.IRuleManager;
+import model.management.interfaces.IMediator;
 import model.players.IPlayer;
 import model.utils.EnumToken;
 
@@ -25,7 +25,6 @@ public class TankManager extends TokenManager {
 		this.availableTanks = new HashMap<>();
 		this.deployedTank = new HashMap<>();
 	}
-	
 	@Override
 	public Boolean isReady() {
 		return this.isReady;

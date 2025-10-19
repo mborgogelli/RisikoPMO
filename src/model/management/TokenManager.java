@@ -6,7 +6,7 @@ import java.util.Set;
 
 import model.board.IZone;
 import model.management.interfaces.IManager;
-import model.management.interfaces.IRuleManager;
+import model.management.interfaces.IMediator;
 import model.players.IPlayer;
 import model.utils.EnumToken;
 
@@ -16,7 +16,7 @@ import model.utils.EnumToken;
  */
 public abstract class TokenManager implements IManager{
 	
-	private IRuleManager ruleManager;
+	private Mediator mediator;
 	
 	/**
 	 * Restituisce i tipi di token gestiti da questo manager
@@ -26,17 +26,22 @@ public abstract class TokenManager implements IManager{
 	
 	protected abstract void resetTokenData();
 	
+	@Override
+	public void setMediator(Mediator mediator) {
+		this.mediator = mediator;
+	}
+	
 	protected List<IZone> getAllZones() {
-		return this.ruleManager.getAllZones();
+		return this.mediator.getAllZones();
 	}
 
 	public List<IZone> getZonesOwnedBy(IPlayer p) {
-		return this.ruleManager.getZonesOwnedBy(p);
+		return this.mediator.getZonesOwnedBy(p);
 	}
 
 	public void canMoveBetween(IPlayer player, IZone fromZone, IZone toZone) {
-        this.ruleManager.canMoveBetween(player, fromZone, toZone);		
+		// TODO Auto-generated method stub
+		
 	}
-	
-	
+
 }

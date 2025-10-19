@@ -4,22 +4,18 @@ import java.util.List;
 
 import model.board.IZone;
 import model.management.CardManager;
-import model.management.RuleManager;
+import model.management.Mediator;
 import model.management.TokenManager;
 import model.management.interfaces.IMapManager;
+import model.management.interfaces.IMediator;
 import model.players.IPlayer;
 
-public class RuleManagerRisikoNew extends RuleManager{
+public class MediatorRisikoNew extends Mediator{
 	
 	
 	private boolean isReady;
 	
-	private IMapManager mapManager;
-    private TokenManager tokenManager;
-    private CardManager cardManager;
-    
-    
-    public RuleManagerRisikoNew() {
+    public MediatorRisikoNew() {
     }
 
 	@Override
@@ -58,21 +54,14 @@ public class RuleManagerRisikoNew extends RuleManager{
 	}
 
 	@Override
-	public IMapManager getMapManager() {
+	public void registerManager() {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	@Override
-	public TokenManager getTokenManager() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public CardManager getCardManager() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setMediator(Mediator mediator) {
+		// 
 	}
 
 }

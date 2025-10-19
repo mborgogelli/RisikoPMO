@@ -6,7 +6,7 @@ import java.util.List;
 import model.board.IZone;
 import model.card.ICard;
 import model.management.interfaces.IManager;
-import model.management.interfaces.IRuleManager;
+import model.management.interfaces.IMediator;
 
 
 /**
@@ -15,9 +15,10 @@ import model.management.interfaces.IRuleManager;
  */
 public abstract class CardManager implements IManager{
 	
-	private final IRuleManager mediator;
-
-	public CardManager(IRuleManager mediator) {
+	private IMediator mediator;
+	
+	@Override
+	public void setMediator(Mediator mediator) {
 		this.mediator = mediator;
 	}
 	
@@ -69,9 +70,5 @@ public abstract class CardManager implements IManager{
 		return cards.contains(card);
 	}
 	
-	public List<IZone> getAllZones() {
-		return this.mediator.getAllZones();
-	}
-	 
 	
 }

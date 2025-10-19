@@ -1,17 +1,15 @@
 package model.management.interfaces;
 
-import model.management.CardManager;
-import model.management.PhaseManager;
-import model.management.TokenManager;
+import java.util.List;
+
+import model.management.Mediator;
 
 /**
  * Classe
  */
 public interface IGameFactory {
 	
-	IMapManager createMapManager();
-    TokenManager createTokenManager();
-    CardManager createCardManager();
-    PhaseManager createTurnManager();
-	IRuleManager createRuleManager();
+	Mediator getMediator();
+	
+	List<IManager> getManagers();
 }
