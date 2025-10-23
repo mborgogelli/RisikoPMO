@@ -3,7 +3,6 @@ package model.management.interfaces;
 import java.util.List;
 
 import model.players.IPlayer;
-import model.utils.EnumColors;
 import model.utils.GameVersion;
 
 public interface IDirector extends IManager {
@@ -16,7 +15,6 @@ public interface IDirector extends IManager {
 
 	void StartGame();
 
-	void exitGame(EnumColors color);
+	void exitGame(IPlayer player);
 	
-	void initializeGame(List<IPlayer> players, GameVersion version);
 }
