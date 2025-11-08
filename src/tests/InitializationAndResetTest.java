@@ -1,17 +1,21 @@
 package tests;
 
-import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import model.management.Director;
 import model.management.interfaces.IDirector;
-import model.management.interfaces.IGameFactory;
+import model.management.interfaces.IManager;
 import model.players.IPlayer;
 import model.players.Player;
 import model.utils.EnumColors;
 import model.utils.GameVersion;
-import model.versions.risikockassic.GameFactoryRisikoNew;
 
 public class InitializationAndResetTest {
 	
@@ -21,12 +25,14 @@ public class InitializationAndResetTest {
 	
 	private IDirector director = new Director(GameVersion.RISIKONEW);
 	
-	private IGameFactory gf = new GameFactoryRisikoNew();
+	@BeforeEach
+	public void setUp(){
+		this.director.initializeGame(players);
+	}
 	
 	@Test
-	public void setUp(){
-		
-		System.out.println(gf.getManagers().size());
-		
+	public void testManagerStatus() {
+		Map<IManager, Boolean> status = director.getManagerStatus();
+		assertTrue(status.values().stream().allMatch(active -> active));
 	}
 }

@@ -20,32 +20,34 @@ import model.versions.risikockassic.managers.PhaseManagerRisikoNew;
 import model.versions.risikockassic.managers.MediatorRisikoNew;
 import model.versions.risikockassic.managers.TankManager;
 
+/**
+ * Classe factory per la creazione dei manager e del mediatore
+ */
 public class GameFactoryRisikoNew implements IGameFactory {
 	
-	private Mediator mediator;
-	private List<IManager> managers;
+	private final Mediator mediator;
+	private final List<IManager> managers;
 	
 	public GameFactoryRisikoNew() {
 		this.managers = new ArrayList<>();
+		this.mediator = new MediatorRisikoNew();
+		this.createManagers();
+		this.setMediator();
 	}
 	
 	@Override
 	public Mediator getMediator() {
-		if (this.mediator == null) {
-			this.mediator = new MediatorRisikoNew();
-		}
 		return this.mediator;
 	}
 
 	@Override
 	public List<IManager> getManagers() {
-		if (this.managers.isEmpty()) {
-			this.createManagers();
-			this.setMediator();
-		}
 		return this.managers;
 	}
 	
+	/**
+	 * Crea i manager specifici per la versione RisikoNew
+	 */
 	private void createManagers() {
 		this.managers.add(new MapManagerRisikoNew());
 		this.managers.add(new TankManager());
@@ -53,9 +55,13 @@ public class GameFactoryRisikoNew implements IGameFactory {
 		this.managers.add(new PhaseManagerRisikoNew());
 	}
 	
+	/**
+	 * Imposta il mediatore per ogni manager e inizializza i manager nel mediatore
+	 */
 	private void setMediator() {
 		for (IManager manager : this.managers) {
-			manager.setMediator(this.getMediator());
+			manager.setMediator(this.mediator);
+			System.out.println(manager.getClass());
 		}
 		this.mediator.initManagers();
 	}

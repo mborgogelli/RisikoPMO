@@ -3,13 +3,8 @@ package model.versions.risikockassic.managers;
 import java.util.List;
 
 import model.board.IZone;
-import model.management.CardManager;
 import model.management.Mediator;
-import model.management.TokenManager;
 import model.management.interfaces.IDirector;
-import model.management.interfaces.IManager;
-import model.management.interfaces.IMapManager;
-import model.management.interfaces.IMediator;
 import model.players.IPlayer;
 
 public class MediatorRisikoNew extends Mediator{
@@ -42,8 +37,8 @@ public class MediatorRisikoNew extends Mediator{
 	@Override
 	public void initManagers() {
 		this.mapManager = super.getManager(MapManagerRisikoNew.class);
-		this.cardManager = super.getManager(CardManagerRisikoNew.class);
 		this.tokenManager = super.getManager(TankManager.class);
+		this.cardManager = super.getManager(CardManagerRisikoNew.class);
 		this.phaseManager = super.getManager(PhaseManagerRisikoNew.class);
 	}
 }

@@ -32,11 +32,12 @@ public abstract class Mediator implements IMediator {
         T myManager = null;
 		for (IManager manager : this.managers) {
             if (managerType.isInstance(manager)) {
-                myManager = managerType.cast(manager);
-            } else {
-            	throw new IllegalArgumentException("Manager of type " + managerType.getName() + " not found.");
+            	myManager = managerType.cast(manager);
             }
         }
+		if (myManager == null) {
+	     	throw new IllegalArgumentException("Manager of type " + managerType.getName() + " not found.");
+	    }
         return myManager;
     }
     
