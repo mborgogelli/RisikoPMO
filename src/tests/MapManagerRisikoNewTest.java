@@ -5,7 +5,6 @@ import model.players.Player;
 import model.utils.EnumColors;
 import model.versions.risikockassic.managers.MapManagerRisikoNew;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +19,7 @@ class MapManagerRisikoNewTest {
 											new Player("Player2", EnumColors.YELLOW),
 											new Player("Player3", EnumColors.BLUE));
 
-    @BeforeAll
+    @BeforeEach
     void initialize() {
         this.mapManager.initializeGame(players);
     }
