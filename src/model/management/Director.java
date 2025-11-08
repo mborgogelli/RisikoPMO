@@ -1,12 +1,12 @@
 package model.management;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.management.interfaces.IDirector;
 import model.management.interfaces.IGameFactory;
 import model.management.interfaces.IManager;
-import model.management.interfaces.IMapManager;
-import model.management.interfaces.IMediator;
 import model.players.IPlayer;
 import model.utils.GameFactoryProvider;
 import model.utils.GameVersion;
@@ -35,6 +35,7 @@ public class Director implements IDirector{
 	public void resetGame() {
 		this.isReady = false;
 		this.isGameStarted = false;
+		this.resetManagers();
 	}
 
 	@Override
@@ -76,6 +77,14 @@ public class Director implements IDirector{
 		if (this.mediator == null) {
 			this.mediator = mediator;
 		}
+	}
+	
+	@Override
+	public Map<IManager,Boolean> getManagerStatus(){
+		Map<IManager,Boolean> status = new HashMap<>();
+		this.managers.stream()
+					.forEach(m -> status.put(m, m.isReady()));
+		return status;
 	}
 	
 	private void initializeGame(List<IPlayer> players, GameVersion version) {

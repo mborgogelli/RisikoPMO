@@ -2,16 +2,42 @@
 package model.management;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import model.board.IZone;
+import model.management.interfaces.IManager;
 import model.management.interfaces.IMediator;
 import model.players.IPlayer;
 
 public abstract class Mediator implements IMediator {
-
+	
+	private List<IManager> managers;
+	
+	public Mediator() {
+		this.managers = new ArrayList<>();
+	}
+	
 	// Metodi per accedere ai dati del MapManager
     public abstract List<IZone> getAllZones();
     public abstract List<IZone> getZonesOwnedBy(IPlayer player);
     public abstract boolean canMoveBetween(IPlayer player, IZone fromZone, IZone toZone);
+    
+    @Override
+    public void registerManager(IManager manager) {
+        this.managers.add(manager);
+    }
+    
+	protected <T extends IManager> T getManager(Class<T> managerType) {
+        T myManager = null;
+		for (IManager manager : this.managers) {
+            if (managerType.isInstance(manager)) {
+                myManager = managerType.cast(manager);
+            } else {
+            	throw new IllegalArgumentException("Manager of type " + managerType.getName() + " not found.");
+            }
+        }
+        return myManager;
+    }
+    
 }

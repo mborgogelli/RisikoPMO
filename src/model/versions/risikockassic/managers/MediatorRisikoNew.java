@@ -6,35 +6,21 @@ import model.board.IZone;
 import model.management.CardManager;
 import model.management.Mediator;
 import model.management.TokenManager;
+import model.management.interfaces.IDirector;
+import model.management.interfaces.IManager;
 import model.management.interfaces.IMapManager;
 import model.management.interfaces.IMediator;
 import model.players.IPlayer;
 
 public class MediatorRisikoNew extends Mediator{
 	
+	private MapManagerRisikoNew mapManager;
+	private CardManagerRisikoNew cardManager;
+	private TankManager tokenManager;
+	private PhaseManagerRisikoNew phaseManager;
+	private IDirector director;
 	
-	private boolean isReady;
 	
-    public MediatorRisikoNew() {
-    }
-
-	@Override
-	public Boolean isReady() {
-		return this.isReady;
-	}
-
-	@Override
-	public void initializeGame(List<IPlayer> players) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resetGame() {
-		// TODO Auto-generated method stub
-
-	}
-
 	@Override
 	public List<IZone> getAllZones() {
 		// TODO Auto-generated method stub
@@ -52,16 +38,12 @@ public class MediatorRisikoNew extends Mediator{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
 	@Override
-	public void registerManager() {
-		// TODO Auto-generated method stub
-		
+	public void initManagers() {
+		this.mapManager = super.getManager(MapManagerRisikoNew.class);
+		this.cardManager = super.getManager(CardManagerRisikoNew.class);
+		this.tokenManager = super.getManager(TankManager.class);
+		this.phaseManager = super.getManager(PhaseManagerRisikoNew.class);
 	}
-
-	@Override
-	public void setMediator(Mediator mediator) {
-		// 
-	}
-
 }

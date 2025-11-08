@@ -29,6 +29,7 @@ public abstract class TokenManager implements IManager{
 	@Override
 	public void setMediator(Mediator mediator) {
 		this.mediator = mediator;
+		this.mediator.registerManager(this);
 	}
 	
 	protected List<IZone> getAllZones() {

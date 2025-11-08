@@ -5,7 +5,7 @@ import java.util.List;
 import model.management.Mediator;
 
 /**
- * Classe
+ * Classe factory per la creazione dei manager di gioco
  */
 public interface IGameFactory {
 	

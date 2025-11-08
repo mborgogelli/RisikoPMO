@@ -37,6 +37,7 @@ public abstract class MapManager implements IMapManager {
 	@Override
 	public void setMediator(Mediator mediator) {
 		this.mediator = mediator;
+		this.mediator.registerManager(this);
 	}
 	
 	@Override

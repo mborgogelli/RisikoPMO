@@ -1,9 +1,9 @@
 package model.management;
 
-import model.management.interfaces.IRoomManager;
+import model.management.interfaces.ILobbyManager;
 import model.utils.GameVersion;
 
-public class RoomManager implements IRoomManager {
+public class RoomManager implements ILobbyManager {
 	
 	
     @Override

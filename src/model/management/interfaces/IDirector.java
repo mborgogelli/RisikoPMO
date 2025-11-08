@@ -1,9 +1,9 @@
 package model.management.interfaces;
 
-import java.util.List;
+
+import java.util.Map;
 
 import model.players.IPlayer;
-import model.utils.GameVersion;
 
 public interface IDirector extends IManager {
 	
@@ -16,5 +16,7 @@ public interface IDirector extends IManager {
 	void StartGame();
 
 	void exitGame(IPlayer player);
+	
+	Map<IManager,Boolean> getManagerStatus();
 	
 }

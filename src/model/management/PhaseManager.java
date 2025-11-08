@@ -13,5 +13,6 @@ public abstract class PhaseManager implements IManager{
 	@Override
 	public void setMediator(Mediator mediator) {
 		this.mediator = mediator;
+		this.mediator.registerManager(this);
 	}
 }

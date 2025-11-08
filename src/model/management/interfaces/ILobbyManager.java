@@ -2,7 +2,7 @@ package model.management.interfaces;
 
 import model.utils.GameVersion;
 
-public interface IRoomManager {
+public interface ILobbyManager {
 	
 	/**
 	 * Verifica se la versione del gioco è valida.

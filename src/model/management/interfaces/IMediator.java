@@ -2,10 +2,19 @@ package model.management.interfaces;
 
 
 /**
- * Interfaccia che modella Un
+ * Interfaccia che modella un mediatore tra i manager di gioco
  */
-public interface IMediator extends IManager {
+public interface IMediator {
+
+	/**
+	 * Registra un manager con il mediatore
+	 */
 	
-	void registerManager();
+	void registerManager(IManager manager);
+	
+	/**
+	 * Inizializza tutti i manager registrati
+	 */
+	void initManagers();
     
 }
