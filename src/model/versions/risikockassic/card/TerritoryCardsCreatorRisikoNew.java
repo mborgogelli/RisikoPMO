@@ -2,9 +2,10 @@ package model.versions.risikockassic.card;
 
 import java.util.List;
 
+import model.board.IZone;
 import model.card.CardCreator;
 import model.card.ICard;
-import model.versions.risikockassic.board.*;
+import model.card.ISymbolCard;
 
 public class TerritoryCardsCreatorRisikoNew extends CardCreator{
 	
@@ -57,5 +58,17 @@ public class TerritoryCardsCreatorRisikoNew extends CardCreator{
 	protected void saveCardsToJson(List<ICard> cards, String filePath) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public IZone getZone() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ISymbolCard getSymbol() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
