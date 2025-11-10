@@ -61,8 +61,8 @@ public class TerritoryCardsCreatorRisikoNew extends CardCreator{
 	}
 
 	@Override
-	public IZone getZone() {
-		// TODO Auto-generated method stub
+	public String getName() {
+		
 		return null;
 	}
 

@@ -5,25 +5,27 @@ import model.card.ICard;
 import model.card.ISymbolCard;
 import model.versions.risikockassic.board.Territory;
 
-public class TerritoryCard  implements ICard {
+public class TerritoryCard  implements ICard{
 	
-	private final EnumTerritoryCard symbol;
+	private final EnumTerritoryTypeCard symbol;
     private final Territory territory;
     
-    TerritoryCard(EnumTerritoryCard symbol, Territory territory ) {
+    // Carta territorio con simbolo specifico
+    TerritoryCard(EnumTerritoryTypeCard symbol, Territory territory ) {
 		this.symbol = symbol;
 		this.territory = territory;
 	}
     
+   // Carta jolly 
     TerritoryCard() {
-		this.symbol = EnumTerritoryCard.JOLLY;
+		this.symbol = EnumTerritoryTypeCard.JOLLY;
 		this.territory = null;
 	}
     
 
 	@Override
-	public IZone getZone() {
-		return this.territory;
+	public String getName() {
+		return this.territory.getName();
 	}
 
 	@Override
