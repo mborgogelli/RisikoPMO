@@ -9,43 +9,47 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import model.board.IZone;
+import model.management.Mediator;
+import model.management.interfaces.IGameFactory;
 import model.players.IPlayer;
 import model.players.Player;
 import model.utils.EnumColors;
+import model.versions.risikockassic.GameFactoryRisikoNew;
 import model.versions.risikockassic.managers.MapManagerRisikoNew;
+import model.versions.risikockassic.managers.MediatorRisikoNew;
 import model.versions.risikockassic.managers.TankManager;
 
 public class TankManagerTest {
 
-    private TankManager tankManager;
-    private MapManagerRisikoNew mapManager;
-    private List<IPlayer> players;
+    private IGameFactory gf = new GameFactoryRisikoNew();
+	private List<IPlayer> players = List.of(new Player("Player1", EnumColors.RED),
+											new Player("Player2", EnumColors.YELLOW),
+											new Player("Player3", EnumColors.BLUE));
+	private TankManager tankManager;
+	private MapManagerRisikoNew mapManager;
+	private Mediator mediator;
     
     @BeforeEach
     void setUp() {
-    	// Reset di entrambi i manager prima di ogni test
-    	mapManager = new MapManagerRisikoNew();
+    	this.mediator = gf.getMediator();
     	
-        tankManager = new TankManager();
+    	mapManager = ((MediatorRisikoNew) mediator).getMapManager();
+        tankManager = ((MediatorRisikoNew) mediator).getTankManager();
         
-        players = new ArrayList<>();
-        players.add(new Player("Player1", EnumColors.RED));
-        players.add(new Player("Player2", EnumColors.BLUE));
-        players.add(new Player("Player3", EnumColors.GREEN));
     }
     
     @Test
     void testInitializeGame_TooFewPlayers() {
-        List<IPlayer> tooFewPlayers = new ArrayList<>();
-        tooFewPlayers.add(new Player("Player1", EnumColors.RED));
-        tooFewPlayers.add(new Player("Player2", EnumColors.BLUE));
+        List<IPlayer> tooFewPlayers = new ArrayList<>(this.players);
+        tooFewPlayers.removeLast();
+        
         
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class,
             () -> tankManager.initializeGame(tooFewPlayers),
             "Should throw exception for too few players"
         );
-        assertEquals("Number of players must be between 3 and 6", exception.getMessage());
+        assertEquals("Invalid number of players: 2", exception.getMessage());
     }
     
     @Test
@@ -62,6 +66,8 @@ public class TankManagerTest {
     
     @Test
     void testInitializeGame_AlreadyInitialized() {
+    	
+    	
     	mapManager.initializeGame(players);
         tankManager.initializeGame(players);
         
@@ -78,6 +84,9 @@ public class TankManagerTest {
     
     @Test
     void testTanksAssigned() {
-    	
+    	mapManager.initializeGame(players);
+        tankManager.initializeGame(players);
+        
+        this.players.stream().forEach(p -> System.out.println(tankManager.getPlayerTanks(p)));
     }
 }

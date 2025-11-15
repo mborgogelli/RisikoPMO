@@ -65,7 +65,7 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	}
 	@Override
 	public List<IZone> getAllZones() {
-		checkReady();
+		//checkReady();
 		return this.playerTerritories.values().stream()
 									 .flatMap(List::stream)
 									 .collect(Collectors.toList());

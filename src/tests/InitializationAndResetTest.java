@@ -35,4 +35,5 @@ public class InitializationAndResetTest {
 		Map<IManager, Boolean> status = director.getManagerStatus();
 		assertTrue(status.values().stream().allMatch(active -> active));
 	}
+	
 }

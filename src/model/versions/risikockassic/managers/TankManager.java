@@ -25,6 +25,7 @@ public class TankManager extends TokenManager {
 		this.availableTanks = new HashMap<>();
 		this.deployedTank = new HashMap<>();
 	}
+	
 	@Override
 	public Boolean isReady() {
 		return this.isReady;
@@ -39,9 +40,6 @@ public class TankManager extends TokenManager {
 	@Override
 	public void initializeGame(List<IPlayer> players) {
 		checkInitialized();
-		if (players == null) {
-			throw new IllegalArgumentException("Number of players must be between 3 and 6");
-		}
 		this.initTokensPerZone(super.getAllZones());
 		this.initTokensPerPlayer(players);
 		this.isReady = true;
@@ -233,6 +231,5 @@ public class TankManager extends TokenManager {
 			throw new IllegalStateException("TokenManager is already initialized.");
 		}
 	}
-
 
 }

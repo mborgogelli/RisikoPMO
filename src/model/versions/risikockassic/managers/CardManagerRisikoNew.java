@@ -17,9 +17,11 @@ public class CardManagerRisikoNew extends CardManager {
 	private final List<ICard> territoryCards;
 	private final List<ICard> missionCards;
 	private final List<ICard> playedCards;
+	private boolean isReady;
 	
 	public CardManagerRisikoNew() {
 		super();
+		this.isReady = false;
 		this.territoryCards = new ArrayList<ICard>();
 		this.missionCards = new ArrayList<ICard>();
 		this.playedCards = new ArrayList<ICard>();
@@ -28,7 +30,7 @@ public class CardManagerRisikoNew extends CardManager {
 	@Override
 	public void initializeGame(List<IPlayer> players) {
 		// TODO Auto-generated method stub
-		
+		this.isReady = true;
 	}
 	
 //	@Override
@@ -44,8 +46,7 @@ public class CardManagerRisikoNew extends CardManager {
 
 	@Override
 	public Boolean isReady() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.isReady;
 	}
 	
 	@Override
