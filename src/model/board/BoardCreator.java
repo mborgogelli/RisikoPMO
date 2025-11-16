@@ -48,7 +48,7 @@ public abstract class BoardCreator implements IBoardCreator{
 	public IGameBoard getMap() {
 		IGameBoard gameBoard = this.createMap();
 		if (gameBoard == null) {
-			throw new IllegalStateException("Game board cannot be null");
+			throw new IllegalStateException("Failed to create game board: createMap() returned null");
 		}
 		return gameBoard;
     }

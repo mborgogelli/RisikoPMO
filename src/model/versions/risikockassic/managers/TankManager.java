@@ -101,12 +101,6 @@ public class TankManager extends TokenManager {
 		return this.deployedTank.getOrDefault(zone, 0);
 	}
 	
-	@Override
-	public Set<EnumToken> getManagedTokens() {
-		checkReady();
-		return Set.of(EnumToken.TANK);
-	}
-	
 	/**
 	 * Esegue il dispiegamento di tank in una zona per un giocatore.
 	 * 
@@ -125,9 +119,9 @@ public class TankManager extends TokenManager {
 		removeTanksFromPlayer(player, amount);
 	}
 	
-	public void moveTanks(IPlayer player, IZone fromZone, IZone toZone, int amount) {
+	public void moveTanks(IPlayer player, IZone toZone, IZone fromZone, int amount) {
 		checkReady();
-		checkIfPlayerCanMoveBetween(player, fromZone, toZone);
+		checkIfPlayerCanMoveBetween(player, toZone, fromZone);
 		checkDeployedTanksAfterMove(player, fromZone, amount);
 		removeTanksFromZone(fromZone, amount);
 		addTanksToZone(toZone, amount);
@@ -206,8 +200,8 @@ public class TankManager extends TokenManager {
 	 * @param toZone la zona di arrivo
 	 * @return true se il giocatore può spostare i tank, false altrimenti
 	 */
-	private void checkIfPlayerCanMoveBetween(IPlayer player, IZone fromZone, IZone toZone) {
-		super.canMoveBetween(player, fromZone, toZone);
+	private void checkIfPlayerCanMoveBetween(IPlayer player, IZone toZone, IZone fromZone) {
+		super.canMoveBetween(player, toZone, fromZone);
 	}
 	
 	private void checkIfPlayerOwnsZone(IPlayer player, IZone zone) {

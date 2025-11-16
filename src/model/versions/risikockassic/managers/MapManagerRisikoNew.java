@@ -34,23 +34,17 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 
 	@Override
 	public void initializeGame(List<IPlayer> players) {
-		if (super.isGameBoardReady()) {
-			this.players = players;
-			this.initPlayerZones(this.players);
-			this.setPlayerTerritories(this.players);
-			this.isReady = true;
-		} else {
-			this.isReady = false;
-			throw new IllegalStateException("Game board has not been initialized.");
-		}
-	}
+		this.players = players;
+		this.initPlayerZones(this.players);
+		this.setPlayerTerritories(this.players);
+		this.isReady = true;
+}
 	
 	@Override
 	public void resetGame() {
 		// TODO verifica il metodo clear() per la lista di players
 		this.players = null;
 		this.playerTerritories.clear();
-		super.resetGame();
 		this.isReady = false;
 	}
 	
@@ -65,7 +59,6 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	}
 	@Override
 	public List<IZone> getAllZones() {
-		//checkReady();
 		return this.playerTerritories.values().stream()
 									 .flatMap(List::stream)
 									 .collect(Collectors.toList());
@@ -76,6 +69,7 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 		checkReady();
 		checkIfExists(player);
 		checkIfExists(toTerritory);
+		checkIfExists(fromTerritory);
 		return super.canMoveBetween(toTerritory.getName(), fromTerritory.getName()) && this.isSameOwner(toTerritory, fromTerritory);
 	}
 

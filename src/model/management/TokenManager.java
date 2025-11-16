@@ -18,12 +18,6 @@ public abstract class TokenManager implements IManager{
 	
 	private Mediator mediator;
 	
-	/**
-	 * Restituisce i tipi di token gestiti da questo manager
-	 * @return Set dei token gestiti
-	 */
-	protected abstract Set<EnumToken> getManagedTokens();
-	
 	protected abstract void resetTokenData();
 	
 	@Override
@@ -36,13 +30,12 @@ public abstract class TokenManager implements IManager{
 		return this.mediator.getAllZones();
 	}
 
-	public List<IZone> getZonesOwnedBy(IPlayer p) {
+	protected List<IZone> getZonesOwnedBy(IPlayer p) {
 		return this.mediator.getZonesOwnedBy(p);
 	}
 
-	public void canMoveBetween(IPlayer player, IZone fromZone, IZone toZone) {
-		// TODO Auto-generated method stub
-		
+	protected void canMoveBetween(IPlayer player, IZone toZone, IZone fromZone) {
+		this.mediator.canMoveBetween(player, toZone, fromZone);
 	}
 
 }
