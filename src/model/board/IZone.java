@@ -58,40 +58,6 @@ public interface IZone {
     void setChildZones(List<IZone> zone);
     
     /**
-     * Restituisce tutti i giocatori che possiedono parti di questa zona.
-     * Per territori semplici, conterrà al massimo un giocatore.
-     * Per continenti, può contenere più giocatori se parzialmente occupati.
-     * 
-     * @return Lista dei possessori
-     */
-    List<IPlayer> getOwners();
-    
-    /**
-	 * Imposta il proprietario di questa zona.
-	 * Utilizzato per assegnare il controllo iniziale o dopo un attacco.
-	 * 
-	 * @param players il giocatore che possiede la zona, può essere null se la zona è libera
-	 */
-    void setOwner(IPlayer player);
-    
-    
-    /**
-	 * Rimuove un giocatore dalla lista dei proprietari di questa zona.
-	 * Utilizzato quando un giocatore perde il controllo della zona.
-	 * 
-	 * @param player il giocatore da rimuovere, se non presente non fa nulla
-	 */
-    void removeOwner(IPlayer player);
-    
-    /**
-     * Verifica se un giocatore ha il controllo completo di questa zona.
-     * 
-     * @param giocatore l'ID del giocatore da verificare
-     * @return true se il giocatore controlla completamente la zona
-     */     
-    Boolean isControlledBy(IPlayer p);
-    
-    /**
      * Restituisce le zone confinanti o collegate con questa zona
      * Utilizzato per determinare possibili attacchi o movimenti.
      * 

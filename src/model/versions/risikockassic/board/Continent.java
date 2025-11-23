@@ -2,13 +2,10 @@ package model.versions.risikockassic.board;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 import model.board.IZone;
-import model.players.IPlayer;
-import model.utils.EnumToken;
 
 public class Continent implements IZone {
 	
@@ -19,22 +16,6 @@ public class Continent implements IZone {
 	public Continent(String name) {
 		this.name = name;
 		this.territories = new ArrayList<>();
-	}
-	
-	@Override
-	public List<IPlayer> getOwners() {
-		return this.territories.stream()
-				.flatMap(zone -> zone.getOwners().stream())
-				.distinct()
-				.toList();
-	}
-
-	@Override
-	public void setOwner(IPlayer player) {
-	}
-
-	@Override
-	public void removeOwner(IPlayer player) {
 	}
 	
 	@Override
@@ -50,12 +31,6 @@ public class Continent implements IZone {
 	@Override
 	public List<IZone> getChildZones() {
 		return this.territories;
-	}
-
-	@Override
-	public Boolean isControlledBy(IPlayer p) {
-		return this.territories.stream()
-				.allMatch(zone -> zone.getOwners().contains(p));
 	}
 
 	@Override

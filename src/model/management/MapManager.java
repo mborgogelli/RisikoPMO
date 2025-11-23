@@ -1,11 +1,13 @@
 package model.management;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import model.board.IBoardCreator;
 import model.board.IGameBoard;
 import model.board.IZone;
+import model.management.interfaces.IManager;
 import model.management.interfaces.IMapManager;
 import model.management.interfaces.IMediator;
 import model.players.IPlayer;
@@ -48,6 +50,15 @@ public abstract class MapManager implements IMapManager {
 						.map(zone -> zone.getName())
 						.collect(Collectors.toList());
 	}
+	
+	protected <T extends IZone> List<IZone> findZoneByType(Class<T> zoneType) {
+		List<IZone> myZones = new ArrayList<>();
+		
+		if (myZones.isEmpty()) {
+	     	throw new IllegalArgumentException("Manager of type " + zoneType + " not found.");
+	    }
+        return myZones;
+    }
 	
 	protected IZone findZoneByName(String territoryName) {
         return this.gameBoard.findZoneByName(territoryName);

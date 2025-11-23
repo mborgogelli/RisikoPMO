@@ -73,6 +73,11 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 		return null;
 	}
 	
+	@Override
+	public Map<IPlayer, List<String>> getTerritoriesAssignment() {
+		return Collections.unmodifiableMap(this.playerTerritories);
+	}
+	
 	private void initPlayerZones(List<IPlayer> players) {
 		this.initializeMap(players);
 		List<String> territories = super.getAllZones();
@@ -122,11 +127,6 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 		if (player == null || this.players.isEmpty() || !this.players.contains(player)) {
 			throw new IllegalArgumentException("Player " + player.toString() + " not found.");
 		}
-	}
-
-	@Override
-	public Map<IPlayer, List<String>> getTerritoriesAssignment() {
-		return Collections.unmodifiableMap(this.playerTerritories);
 	}
 	
 }

@@ -15,36 +15,13 @@ import model.utils.EnumToken;
 public class Territory implements IZone {
 
 	private final String name;
-	private final List<IPlayer> players;
 	private final List<String> neighbours;
-	private final Map<EnumToken,Integer> tokens;
 	private IZone parentZone;
 	private Integer armyBonus;
 	
 	public Territory(String name) {
 		this.name = name;
-		this.players = new ArrayList<>();
 		this.neighbours = new ArrayList<>();
-		this.tokens = new HashMap<>();
-	}
-	
-	@Override
-	public List<IPlayer> getOwners() {
-		return this.players;
-	}
-
-	@Override
-	public void setOwner(IPlayer player) {
-		this.players.clear();
-		this.players.add(player);
-		
-	}
-
-	@Override
-	public void removeOwner(IPlayer player) {
-		if (this.players.contains(player)) {
-			this.players.remove(player);
-		}		
 	}
 	
 	@Override
@@ -60,15 +37,6 @@ public class Territory implements IZone {
 	@Override
 	public List<IZone> getChildZones() {
 		return Collections.emptyList();
-	}
-
-	@Override
-	public Boolean isControlledBy(IPlayer p) {
-		Boolean isIn = false;
-		if ((this.players.size() == 1) & (this.players.contains(p))) {
-			isIn = true;
-		}
-		return isIn;
 	}
 
 	@Override
@@ -120,12 +88,6 @@ public class Territory implements IZone {
 			return false;
 		Territory other = (Territory) obj;
 		return Objects.equals(name, other.name);
-	}
-	
-	private void checkAmount(int amount) {
-		if(amount <= 0) {
-			throw new IllegalArgumentException("Cannot use negative values.");
-		}
 	}
 	
 }

@@ -43,7 +43,6 @@ public class TankManagerTest {
         List<IPlayer> tooFewPlayers = new ArrayList<>(this.players);
         tooFewPlayers.removeLast();
         
-        
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class,
             () -> tankManager.initializeGame(tooFewPlayers),
