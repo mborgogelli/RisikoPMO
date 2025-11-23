@@ -1,17 +1,14 @@
 package model.versions.risikockassic.managers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import model.board.IGameBoard;
 import model.board.IZone;
 import model.management.MapManager;
 import model.players.IPlayer;
-import model.players.Player;
 import model.versions.risikockassic.board.BoardCreatorRisikoNew;
 import model.versions.risikockassic.interfaces.IMapManagerRisikoNew;
 
@@ -19,7 +16,7 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	
 	private Boolean isReady;
 	private List<IPlayer> players;
-	private final Map<IPlayer,List<IZone>> playerTerritories;
+	private final Map<IPlayer,List<String>> playerTerritories;
 	
 	public MapManagerRisikoNew() {
 		super(BoardCreatorRisikoNew.getInstance());
@@ -36,7 +33,6 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	public void initializeGame(List<IPlayer> players) {
 		this.players = players;
 		this.initPlayerZones(this.players);
-		this.setPlayerTerritories(this.players);
 		this.isReady = true;
 }
 	
@@ -49,49 +45,50 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	}
 	
 	@Override
-	protected void initPlayerZones(List<IPlayer> players) {
-		List<IZone> territories = super.getAllZones();
-		Collections.shuffle(territories);
-		for (IZone territory : territories) {
-			IPlayer player = players.get(territories.indexOf(territory) % players.size());
-			territory.setOwner(player);
-		}
-	}
-	@Override
-	public List<IZone> getAllZones() {
-		return this.playerTerritories.values().stream()
-									 .flatMap(List::stream)
-									 .collect(Collectors.toList());
-	}
-	
-	@Override
-	public boolean canMoveBetween(IPlayer player, IZone toTerritory, IZone fromTerritory) {
+	public boolean canMoveBetween(IPlayer player, String toTerritory, String fromTerritory) {
 		checkReady();
 		checkIfExists(player);
 		checkIfExists(toTerritory);
 		checkIfExists(fromTerritory);
-		return super.canMoveBetween(toTerritory.getName(), fromTerritory.getName()) && this.isSameOwner(toTerritory, fromTerritory);
+		return super.canMoveBetween(toTerritory, fromTerritory) && this.isSameOwner(player, toTerritory, fromTerritory);
 	}
 
 	@Override
-	public List<IZone> getZonesOwnedBy(IPlayer player) {
+	public List<String> getZonesOwnedBy(IPlayer player) {
 		this.checkReady();
 		this.checkIfExists(player);
 		return this.playerTerritories.get(player);
 	}
 
 	@Override
-	public void updateOwnership(IPlayer newOwner, IZone territory) {
+	public void updateOwnership(IPlayer newOwner, String territory) {
 		checkReady();
 		checkIfExists(newOwner);
 		checkIfExists(territory);
 	}
 
 	@Override
-	public List<IZone> getNeighboursOwnedBy(IZone territoryName, IPlayer player) {
+	public List<IZone> getNeighboursOwnedBy(String territoryName, IPlayer player) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	private void initPlayerZones(List<IPlayer> players) {
+		this.initializeMap(players);
+		List<String> territories = super.getAllZones();
+		Collections.shuffle(territories);
+		for (String territory : territories) {
+			IPlayer player = players.get(territories.indexOf(territory) % players.size());
+			this.playerTerritories.get(player).add(territory);
+		}
+	}
+	
+	private void initializeMap(List<IPlayer> players) {
+		for (IPlayer player : players) {
+			this.playerTerritories.put(player, new ArrayList<String>());
+		}
+	}
+	
 	/**
 	 * Controlla se due territori hanno lo stesso proprietario.
 	 * 
@@ -99,11 +96,11 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	 * @param zone2 il secondo territorio
 	 * @return true se hanno lo stesso proprietario, false altrimenti
 	 */
-	private Boolean isSameOwner(IZone zone1, IZone zone2) {
+	private Boolean isSameOwner(IPlayer player, String zone1, String zone2) {
 		checkReady();
 		checkIfExists(zone1);
 		checkIfExists(zone2);
-		return zone1.getOwners().equals(zone2.getOwners());
+		return this.playerTerritories.get(player).containsAll(List.of(zone1, zone2));
 	}
 
 	/**
@@ -115,7 +112,7 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 		}
 	}
 	
-	private void checkIfExists(IZone territory) {
+	private void checkIfExists(String territory) {
 		if (territory == null || !super.getAllZones().contains(territory)) {
 			throw new IllegalArgumentException("Territory " + territory.toString() + " not found.");
 		}
@@ -126,13 +123,10 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 			throw new IllegalArgumentException("Player " + player.toString() + " not found.");
 		}
 	}
-	
-	private void setPlayerTerritories(List<IPlayer> players) {
-	    for (IPlayer p : players) {
-	        List<IZone> territories = super.getAllZones().stream()
-	                .filter(territory -> territory.getOwners().contains(p))
-	                .toList();
-	        this.playerTerritories.put(p, territories);
-	    }
+
+	@Override
+	public Map<IPlayer, List<String>> getTerritoriesAssignment() {
+		return Collections.unmodifiableMap(this.playerTerritories);
 	}
+	
 }

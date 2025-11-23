@@ -2,7 +2,6 @@ package model.versions.risikockassic.managers;
 
 import java.util.List;
 
-import model.board.IZone;
 import model.management.Mediator;
 import model.management.interfaces.IDirector;
 import model.players.IPlayer;
@@ -17,17 +16,17 @@ public class MediatorRisikoNew extends Mediator{
 	
 	
 	@Override
-	public List<IZone> getAllZones() {
+	public List<String> getAllZones() {
 		return mapManager.getAllZones();
 	}
 
 	@Override
-	public List<IZone> getZonesOwnedBy(IPlayer player) {
+	public List<String> getZonesOwnedBy(IPlayer player) {
 		return mapManager.getZonesOwnedBy(player);
 	}
 
 	@Override
-	public boolean canMoveBetween(IPlayer player, IZone toZone, IZone fromZone) {
+	public boolean canMoveBetween(IPlayer player, String toZone, String fromZone) {
 		return mapManager.canMoveBetween(player, toZone, fromZone);
 	}
 	

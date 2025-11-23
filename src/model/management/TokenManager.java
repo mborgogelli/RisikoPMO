@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import model.board.IZone;
 import model.management.interfaces.IManager;
 import model.management.interfaces.IMediator;
 import model.players.IPlayer;
@@ -26,15 +25,15 @@ public abstract class TokenManager implements IManager{
 		this.mediator.registerManager(this);
 	}
 	
-	protected List<IZone> getAllZones() {
+	protected List<String> getAllZones() {
 		return this.mediator.getAllZones();
 	}
 
-	protected List<IZone> getZonesOwnedBy(IPlayer p) {
+	protected List<String> getZonesOwnedBy(IPlayer p) {
 		return this.mediator.getZonesOwnedBy(p);
 	}
 
-	protected void canMoveBetween(IPlayer player, IZone toZone, IZone fromZone) {
+	protected void canMoveBetween(IPlayer player, String toZone, String fromZone) {
 		this.mediator.canMoveBetween(player, toZone, fromZone);
 	}
 

@@ -5,7 +5,6 @@ package model.management;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.board.IZone;
 import model.management.interfaces.IManager;
 import model.management.interfaces.IMediator;
 import model.players.IPlayer;
@@ -19,9 +18,9 @@ public abstract class Mediator implements IMediator {
 	}
 	
 	// Metodi per accedere ai dati del MapManager
-    public abstract List<IZone> getAllZones();
-    public abstract List<IZone> getZonesOwnedBy(IPlayer player);
-    public abstract boolean canMoveBetween(IPlayer player, IZone fromZone, IZone toZone);
+    public abstract List<String> getAllZones();
+    public abstract List<String> getZonesOwnedBy(IPlayer player);
+    public abstract boolean canMoveBetween(IPlayer player, String toZone, String fromZone);
     
     @Override
     public void registerManager(IManager manager) {

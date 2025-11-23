@@ -9,7 +9,6 @@ public interface IMediator {
 	/**
 	 * Registra un manager con il mediatore
 	 */
-	
 	void registerManager(IManager manager);
 	
 	/**

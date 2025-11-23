@@ -2,6 +2,7 @@ package model.management.interfaces;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import model.board.IGameBoard;
@@ -22,21 +23,21 @@ public interface IMapManager extends IManager {
      * @param fromTerritory il territorio di partenza
      * @return true se lo spostamento è possibile
      */
-    boolean canMoveBetween(IPlayer player, IZone toZone, IZone fromZone);
+    boolean canMoveBetween(IPlayer player, String toZone, String fromZone);
     
     /**
      * Restituisce tutti i territori posseduti da un giocatore.
      * @param player il giocatore
      * @return lista dei territori posseduti
      */
-    List<IZone> getZonesOwnedBy(IPlayer player);
+    List<String> getZonesOwnedBy(IPlayer player);
     
     /**
      * Aggiorna la proprietà di un territorio.
      * @param newOwner il nuovo proprietario
      * @param territory il territorio
      */
-    void updateOwnership(IPlayer newOwner, IZone zone);
+    void updateOwnership(IPlayer newOwner, String zone);
     
     /**
      * Restituisce tutti i territori adiacenti a quello specificato che appartengono al giocatore.
@@ -44,11 +45,19 @@ public interface IMapManager extends IManager {
      * @param player il giocatore
      * @return lista dei territori adiacenti posseduti
      */
-    List<IZone> getNeighboursOwnedBy(IZone zone, IPlayer player);
+    List<IZone> getNeighboursOwnedBy(String zone, IPlayer player);
     
     /**
      * Restituisce tutte le zone di gioco.
      * @return
      */
-    List<IZone> getAllZones();
+    List<String> getAllZones();
+    
+	/**
+	 * Restituisce la mappa delle assegnazioni dei territori ai giocatori.
+	 * 
+	 * @return mappa delle assegnazioni
+	 */
+    Map<IPlayer, List<String>> getTerritoriesAssignment();
+    
 }

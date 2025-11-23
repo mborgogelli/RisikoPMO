@@ -29,11 +29,6 @@ public abstract class MapManager implements IMapManager {
 		this.gameBoard = boardCreator.getMap();
 	}
 	
-	/**
-	 * Inizializza l'assegnamento delle zone ai giocatori.
-	 */
-	protected abstract void initPlayerZones(List<IPlayer> players);
-	
 	@Override
 	public void setMediator(Mediator mediator) {
 		this.mediator = mediator;
@@ -46,9 +41,11 @@ public abstract class MapManager implements IMapManager {
 	 * 
 	 * @return lista dei territori
 	 */
-	public List<IZone> getAllZones() {
+	@Override
+	public List<String> getAllZones() {
 		return this.gameBoard.getZones().stream()
 						.flatMap(continent -> continent.getChildZones().stream())
+						.map(zone -> zone.getName())
 						.collect(Collectors.toList());
 	}
 	
@@ -63,5 +60,7 @@ public abstract class MapManager implements IMapManager {
     protected boolean canMoveBetween(String toTerritory, String fromTerritory) {
         return this.gameBoard.canReach(toTerritory, fromTerritory);
     }
+    
+    
     
 }

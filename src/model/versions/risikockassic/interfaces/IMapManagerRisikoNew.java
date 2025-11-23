@@ -8,11 +8,11 @@ import model.players.IPlayer;
 
 public interface IMapManagerRisikoNew extends IMapManager {
 	
-	public default List<IZone> getTerritoriesOwnedBy(IPlayer player){
+	public default List<String> getTerritoriesOwnedBy(IPlayer player){
 		return getZonesOwnedBy(player);
 	}
 	
-	public default List<IZone> getAllTerritories(){
+	public default List<String> getAllTerritories(){
         return getAllZones();
     }
 }

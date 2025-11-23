@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import model.board.IZone;
 import model.management.TokenManager;
 import model.management.interfaces.IMapManager;
 import model.management.interfaces.IMediator;
@@ -16,7 +15,7 @@ public class TankManager extends TokenManager {
 
 	private Boolean isReady;
 	
-	private final Map<IZone, Integer> deployedTank;
+	private final Map<String, Integer> deployedTank;
 	private final Map<IPlayer, Integer> availableTanks;
 	
 	public TankManager() {
@@ -67,13 +66,13 @@ public class TankManager extends TokenManager {
 	 * @param zone
 	 * @param amount
 	 */
-	private void removeTanksFromZone(IZone zone, int amount) {
+	private void removeTanksFromZone(String zone, int amount) {
 		checkReady();
 		int newAmount = this.getZoneTanks(zone) - amount;
 		this.deployedTank.put(zone, (newAmount > 0)? newAmount: 0);
 	}
 	
-	private void addTanksToZone(IZone zone, int amount) {
+	private void addTanksToZone(String zone, int amount) {
 		checkReady();
 		int newAmount = this.getZoneTanks(zone) + amount;
 		this.deployedTank.put(zone, newAmount);
@@ -96,7 +95,7 @@ public class TankManager extends TokenManager {
 	 * @param zone la zona
 	 * @return numero di tank nella zona
 	 */
-	public int getZoneTanks(IZone zone) {
+	public int getZoneTanks(String zone) {
 		checkReady();
 		return this.deployedTank.getOrDefault(zone, 0);
 	}
@@ -111,7 +110,7 @@ public class TankManager extends TokenManager {
 	 * @throws IllegalArgumentException se la zona non è di proprietà del giocatore
 	 * 
 	 */
-	public void deployTanks(IPlayer player, IZone zone, int amount) {
+	public void deployTanks(IPlayer player, String zone, int amount) {
 		checkReady();
 		checkIfPlayerHasTank(player, amount);
 		checkIfPlayerOwnsZone(player, zone);
@@ -119,7 +118,7 @@ public class TankManager extends TokenManager {
 		removeTanksFromPlayer(player, amount);
 	}
 	
-	public void moveTanks(IPlayer player, IZone toZone, IZone fromZone, int amount) {
+	public void moveTanks(IPlayer player, String toZone, String fromZone, int amount) {
 		checkReady();
 		checkIfPlayerCanMoveBetween(player, toZone, fromZone);
 		checkDeployedTanksAfterMove(player, fromZone, amount);
@@ -140,7 +139,7 @@ public class TankManager extends TokenManager {
 		players.stream().forEach(p -> this.availableTanks.put(p, tanksPerPlayer));
 	}
 
-	private void initTokensPerZone(List<IZone> territories) {
+	private void initTokensPerZone(List<String> territories) {
 		checkInitialized();
 		territories.stream().forEach(z -> this.deployedTank.put(z, 1));
 		for (IPlayer p : this.availableTanks.keySet()) {
@@ -185,7 +184,7 @@ public class TankManager extends TokenManager {
 	 * @param amount il numero di tank da spostare
 	 * @return true se il giocatore può spostare i tank, false altrimenti
 	 */
-	private void checkDeployedTanksAfterMove(IPlayer player, IZone fromZone, int amount) {
+	private void checkDeployedTanksAfterMove(IPlayer player, String fromZone, int amount) {
 		int current = this.deployedTank.get(fromZone);
 		if(amount <= 0 || (current - amount < 1)) {
 			throw new IllegalArgumentException("Cannot move " + amount + "tanks. Amount must be greater than 0 and less than or equal to " + (current - 1));
@@ -200,13 +199,13 @@ public class TankManager extends TokenManager {
 	 * @param toZone la zona di arrivo
 	 * @return true se il giocatore può spostare i tank, false altrimenti
 	 */
-	private void checkIfPlayerCanMoveBetween(IPlayer player, IZone toZone, IZone fromZone) {
+	private void checkIfPlayerCanMoveBetween(IPlayer player, String toZone, String fromZone) {
 		super.canMoveBetween(player, toZone, fromZone);
 	}
 	
-	private void checkIfPlayerOwnsZone(IPlayer player, IZone zone) {
+	private void checkIfPlayerOwnsZone(IPlayer player, String zone) {
 		if (!super.getZonesOwnedBy(player).contains(zone)) {
-			throw new IllegalStateException("Player " + player + " does not own zone " + zone.getName());
+			throw new IllegalStateException("Player " + player + " does not own zone " + zone);
 		}
 	}
 	

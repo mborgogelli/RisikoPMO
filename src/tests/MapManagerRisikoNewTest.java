@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,6 +41,27 @@ class MapManagerRisikoNewTest {
 					"Each player should own an equal number of territories.");
 		}
 	}
-
+    
+    @Test
+    void testGetAllTerritories() {
+        var allTerritories = mapManager.getAllTerritories();
+        var allTerritoriesFromMap = mapManager.getTerritoriesAssignment().values().stream()
+        													.flatMap(List::stream)
+        													.collect(Collectors.toList());
+        assertNotNull(allTerritories);
+        assertFalse(allTerritories.isEmpty());
+        assertEquals(allTerritoriesFromMap.size(), allTerritories.size());
+    }
+    
+    @Test
+    void testGetTerritoriesOwnedByPlayer() {
+        var player = players.get(0);
+        var ownedTerritories = mapManager.getTerritoriesOwnedBy(player);
+        assertNotNull(ownedTerritories);
+        assertFalse(ownedTerritories.isEmpty());
+        assertTrue(ownedTerritories.size() > 0);
+        
+    }
+    
 
 }
