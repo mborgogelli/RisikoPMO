@@ -15,7 +15,8 @@ public class TerritoryCardsCreatorRisikoNew extends CardCreator{
 	protected TerritoryCardsCreatorRisikoNew() {
 		super();
 	}
-
+	
+	// Singleton Pattern
 	public static TerritoryCardsCreatorRisikoNew getInstance() {
 		if (instance == null) {
 			instance = new TerritoryCardsCreatorRisikoNew();
