@@ -2,7 +2,7 @@ package model.versions.risikockassic.card;
 
 import model.card.ISymbolCard;
 
-public enum EnumTerritoryTypeCard implements ISymbolCard {
+public enum EnumTerritoryCard implements ISymbolCard {
 	
 	INFANTRY,
 	ARTILLERY,

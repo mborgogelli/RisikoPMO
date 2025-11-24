@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import model.versions.risikockassic.card.EnumMissionTypeCard;
+import model.versions.risikockassic.card.EnumMissionCard;
 
 public class CardMissionTest {
 

@@ -1,32 +1,25 @@
 package model.versions.risikockassic.card;
 import model.card.ISymbolCard;
-import model.utils.EnumColors;
-import java.util.ArrayList;
-import java.util.List;
 
-public enum EnumMissionTypeCard implements ISymbolCard {
-		CONQUER,
-	    DESTROY;
+public enum EnumMissionCard implements ISymbolCard {
+    CONQUER("Conquista territori: "),
+    DESTROY("Distruggi l'armata: ");
+
+    private final String description;
+
+    EnumMissionCard(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public ISymbolCard getSymbol() {
+        return this;
+    }
 	    
-	@Override
-	public ISymbolCard getSymbol() {
-		return this;
-	}
-	    
-//	private final String description;
-//
-//    EnumMissionTypeCard(String description) {
-//        this.description = description;
-//    }
-//
-//    /**
-//     * Restituisce la descrizione della carta Obiettivo.
-//     * 
-//     * @return Descrizione della carta Obiettivo
-//     */
-//    public String  getDescription() {
-//        return description;
-//    }
 //	    
 //	/**
 //	 * Restituisce la lista delle carte Obiettivo disponibili.

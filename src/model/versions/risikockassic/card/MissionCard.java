@@ -1,25 +1,25 @@
 package model.versions.risikockassic.card;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import model.card.ISymbolCard;
 import model.players.Player;
-import model.utils.EnumColors;
-import model.versions.risikockassic.board.Territory;
 
 public abstract class MissionCard {
 	
-	private final EnumMissionTypeCard symbol;
+	private final ISymbolCard symbol;
 	private final String description;
 	
     // Carta territorio con simbolo specifico
-    MissionCard(EnumMissionTypeCard symbol, String description ) {
+    MissionCard(EnumMissionCard symbol, String description ) {
 		this.symbol = symbol;
 		this.description = description;
 	}
     
 	public String getName() {
 		return description;
+	}
+	
+	public ISymbolCard getSymbol() {
+		return this.symbol;
 	}
 	
 	public abstract boolean isAchievementReached(Player player);
