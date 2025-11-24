@@ -1,13 +1,13 @@
 package model.versions.risikockassic.card;
 import model.card.ISymbolCard;
 
-public enum EnumMissionCard implements ISymbolCard {
+public enum EnumMissionSymbol implements ISymbolCard {
     CONQUER("Conquista: "),
     DESTROY("Distruggi l'armata: ");
 
     private final String description;
 
-    EnumMissionCard(String description) {
+    EnumMissionSymbol(String description) {
         this.description = description;
     }
 

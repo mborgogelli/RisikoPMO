@@ -17,7 +17,7 @@ public class TerritoryCard  implements ICard{
     
    // Carta jolly 
     TerritoryCard() {
-		this.symbol = EnumTerritoryCard.JOLLY;
+		this.symbol = EnumTerritorySymbol.JOLLY;
 		this.territory = null;
 	}
 

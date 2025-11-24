@@ -7,7 +7,7 @@ public class ConquerTerritoryMissionCard extends MissionCard {
 	private final int territoriesToConquer;
 	
 	public ConquerTerritoryMissionCard(int territoriesToConquer) {
-		super(EnumMissionCard.CONQUER, "Conquer " + territoriesToConquer + " territories");
+		super(EnumMissionSymbol.CONQUER, "Conquer " + territoriesToConquer + " territories");
 		this.territoriesToConquer = territoriesToConquer;
 	}
 	
