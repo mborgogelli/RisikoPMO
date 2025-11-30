@@ -66,7 +66,7 @@ public abstract class CardManager implements IManager{
 	 */
 	private boolean checkCard(List<ICard> cards, ICard card) {
 		if (cards == null || card == null) {
-			throw new IllegalArgumentException("Cards or card is null");
+			throw new IllegalArgumentException("Deck or card is null");
 		}
 		return cards.contains(card);
 	}

@@ -6,9 +6,10 @@ import java.util.List;
 * Classe astratta che offre il comportamento di base per costruire le carte del gioco
 * Questa classe serve come “scheletro” per tutte le varianti di giochi: fornisce metodi utili per creare e gestire
 * la struttura delle carte , lasciando alle sottoclassi il compito di definire come popolare i dettagli specifici
-* (ad esempio le adiacenze o altri dati particolari).
+* delle carte in base alle regole della variante di Risiko implementata.
 */
-public abstract class CardCreator {
+
+public abstract class CardCreator implements ICard {
 
     /**
      * Crea e restituisce una lista di carte.
