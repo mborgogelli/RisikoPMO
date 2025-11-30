@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MapManagerRisikoNewTest {
+class MapManagerRisikoNewTest extends MapManagerRisikoNew {
 
     private MapManagerRisikoNew mapManager = new MapManagerRisikoNew();
     private List<IPlayer> players = List.of(new Player("Player1", EnumColors.RED),
@@ -27,15 +27,13 @@ class MapManagerRisikoNewTest {
 
     @Test
 	void testMapInitialization() {
-		var allZones = mapManager.getAllZones();
-		assertNotNull(allZones);
-		assertFalse(allZones.isEmpty(), "The map should contain zones after initialization.");
-
+		var allZones = mapManager.getAllTerritories();
 		var totalTerritories = allZones.size();
 		var territoriesPerPlayer = totalTerritories / players.size();
 
 		for (IPlayer player : players) {
 			var ownedZones = mapManager.getZonesOwnedBy(player);
+			
 			assertNotNull(ownedZones, "Owned zones should not be null.");
 			assertEquals(territoriesPerPlayer, ownedZones.size(),
 					"Each player should own an equal number of territories.");
@@ -48,20 +46,57 @@ class MapManagerRisikoNewTest {
         var allTerritoriesFromMap = mapManager.getTerritoriesAssignment().values().stream()
         													.flatMap(List::stream)
         													.collect(Collectors.toList());
-        assertNotNull(allTerritories);
-        assertFalse(allTerritories.isEmpty());
+        
         assertEquals(allTerritoriesFromMap.size(), allTerritories.size());
     }
     
     @Test
-    void testGetTerritoriesOwnedByPlayer() {
-        var player = players.get(0);
-        var ownedTerritories = mapManager.getTerritoriesOwnedBy(player);
-        assertNotNull(ownedTerritories);
-        assertFalse(ownedTerritories.isEmpty());
-        assertTrue(ownedTerritories.size() > 0);
+    void testGetOwner() {
+    	
+        var allTerritories = mapManager.getAllTerritories();
+        assertFalse(allTerritories.isEmpty(), "Should have territories after initialization");
+
+        var territory = allTerritories.get(0);
+        var owner = mapManager.getOwner(territory);
+        var ownedTerritories = mapManager.getTerritoriesOwnedBy(owner);
         
+        assertTrue(ownedTerritories.contains(territory), 
+                   "Territory should be in the owner's territory list");
     }
     
+    @Test
+    void testGetOwnerForAllTerritories() {
+        var allTerritories = mapManager.getAllTerritories();
 
+        for (String territory : allTerritories) {
+            var owner = mapManager.getOwner(territory);
+            var ownedByPlayer = mapManager.getTerritoriesOwnedBy(owner);
+            
+            assertTrue(ownedByPlayer.contains(territory), 
+                       "Territory should be in owner's list");
+        }
+    }
+    
+    @Test
+    void testCheckZoneCompletion() {
+        var player = players.get(0);
+
+        // Ottieni tutti i continenti disponibili
+        var allParentZones = super.getParentZones();
+        if (!allParentZones.isEmpty()) {
+            var continent = allParentZones.get(0);
+            var continentTerritories = super.getChildZones(continent);
+
+            // Assegna manualmente tutti i territori di un continente al giocatore
+            for (String territory : continentTerritories) {
+                    mapManager.updateOwnership(player, territory);
+            }
+
+            var completedContinents = mapManager.checkZoneCompletion(player);
+
+            assertNotNull(completedContinents);
+            assertFalse(completedContinents.isEmpty());
+            assertTrue(completedContinents.contains(continent));
+        }
+    }
 }

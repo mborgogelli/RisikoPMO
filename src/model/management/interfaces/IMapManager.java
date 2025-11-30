@@ -39,13 +39,21 @@ public interface IMapManager extends IManager {
      */
     void updateOwnership(IPlayer newOwner, String zone);
     
+	/**
+	 * Restituisce il proprietario di un territorio.
+	 * 
+	 * @param territory il territorio
+	 * @return il proprietario del territorio
+	 */
+    IPlayer getOwner(String zone);
+    
     /**
      * Restituisce tutti i territori adiacenti a quello specificato che appartengono al giocatore.
      * @param territoryName il nome del territorio di riferimento
      * @param player il giocatore
      * @return lista dei territori adiacenti posseduti
      */
-    List<IZone> getNeighboursOwnedBy(String zone, IPlayer player);
+    List<String> getNeighboursOwnedBy(String zone, IPlayer player);
     
     /**
      * Restituisce tutte le zone di gioco.
@@ -59,5 +67,12 @@ public interface IMapManager extends IManager {
 	 * @return mappa delle assegnazioni
 	 */
     Map<IPlayer, List<String>> getTerritoriesAssignment();
+    
+	/**
+	 * Verifica il completamento delle zone da parte di un giocatore.
+	 * @param player
+	 * @return
+	 */
+    List<String> checkZoneCompletion(IPlayer player);
     
 }

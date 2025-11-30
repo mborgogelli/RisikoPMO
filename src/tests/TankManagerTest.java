@@ -66,7 +66,6 @@ public class TankManagerTest {
     @Test
     void testInitializeGame_AlreadyInitialized() {
     	
-    	
     	mapManager.initializeGame(players);
         tankManager.initializeGame(players);
         
@@ -82,10 +81,14 @@ public class TankManagerTest {
     }
     
     @Test
+    //TODO completare il test
     void testTanksAssigned() {
-    	mapManager.initializeGame(players);
-        tankManager.initializeGame(players);
+    	List<IPlayer> morePlayers = new ArrayList<>(this.players);
+    	morePlayers.add(new Player("Player4", EnumColors.GREEN));
+    	morePlayers.add(new Player("Player5", EnumColors.BLACK));
+    	
+    	mapManager.initializeGame(morePlayers);
+        tankManager.initializeGame(morePlayers);
         
-        this.players.stream().forEach(p -> System.out.println(tankManager.getPlayerTanks(p)));
     }
 }

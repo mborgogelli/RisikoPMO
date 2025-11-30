@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import model.board.IZone;
 import model.management.MapManager;
@@ -14,14 +15,18 @@ import model.versions.risikockassic.interfaces.IMapManagerRisikoNew;
 
 public class MapManagerRisikoNew extends MapManager implements IMapManagerRisikoNew {
 	
+	//TODO centralizzare il check di esistenza del territorio nella fase di init r toglierlo dai metodi
+	
 	private Boolean isReady;
 	private List<IPlayer> players;
 	private final Map<IPlayer,List<String>> playerTerritories;
+	private final Map<String, List<String>> continents;
 	
 	public MapManagerRisikoNew() {
 		super(BoardCreatorRisikoNew.getInstance());
 		this.isReady = false;
 		this.playerTerritories = new HashMap<>();
+		this.continents = new HashMap<>();
 	}
 	
 	@Override
@@ -33,12 +38,12 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	public void initializeGame(List<IPlayer> players) {
 		this.players = players;
 		this.initPlayerZones(this.players);
+		this.initContinentsMap();
 		this.isReady = true;
 }
 	
 	@Override
 	public void resetGame() {
-		// TODO verifica il metodo clear() per la lista di players
 		this.players = null;
 		this.playerTerritories.clear();
 		this.isReady = false;
@@ -59,23 +64,52 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 		this.checkIfExists(player);
 		return this.playerTerritories.get(player);
 	}
-
+	
+	@Override
+	public IPlayer getOwner(String zone) {
+		checkIfExists(zone);
+		return this.playerTerritories.entrySet().stream()
+								.filter(playerZones -> playerZones.getValue().contains(zone))
+								.findFirst()
+								.get()
+								.getKey();
+	}
+	
 	@Override
 	public void updateOwnership(IPlayer newOwner, String territory) {
 		checkReady();
 		checkIfExists(newOwner);
 		checkIfExists(territory);
+		this.playerTerritories.get(this.getOwner(territory)).remove(territory);
+		this.playerTerritories.get(newOwner).add(territory);
 	}
 
 	@Override
-	public List<IZone> getNeighboursOwnedBy(String territoryName, IPlayer player) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getNeighboursOwnedBy(String territoryName, IPlayer player) {
+		return super.getNeighbours(territoryName).stream()
+						.filter(zone -> this.playerTerritories.get(player).contains(zone))
+						.toList();
 	}
 	
 	@Override
 	public Map<IPlayer, List<String>> getTerritoriesAssignment() {
 		return Collections.unmodifiableMap(this.playerTerritories);
+	}
+
+	@Override
+	public List<String> checkZoneCompletion(IPlayer player) {
+		boolean isContinentComplete = false;
+		List<String> myContinents = new ArrayList<>();
+		List<String> playerTerritories = this.playerTerritories.get(player);
+		for(String continent : this.continents.keySet()) {
+			isContinentComplete = this.continents.get(continent).stream()
+											.allMatch(territory -> playerTerritories.contains(territory));
+			if(isContinentComplete) {
+				myContinents.add(continent);
+				isContinentComplete = false;
+			}
+		}
+		return myContinents;
 	}
 	
 	private void initPlayerZones(List<IPlayer> players) {
@@ -91,6 +125,13 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	private void initializeMap(List<IPlayer> players) {
 		for (IPlayer player : players) {
 			this.playerTerritories.put(player, new ArrayList<String>());
+		}
+	}
+	
+	private void initContinentsMap() {
+		List<String> continents = super.getParentZones();
+		for(String continent : continents) {
+			this.continents.put(continent, super.getChildZones(continent));
 		}
 	}
 	
@@ -118,8 +159,8 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	}
 	
 	private void checkIfExists(String territory) {
-		if (territory == null || !super.getAllZones().contains(territory)) {
-			throw new IllegalArgumentException("Territory " + territory.toString() + " not found.");
+		if (territory == null || territory == "" || !super.getAllZones().contains(territory)) {
+			throw new IllegalArgumentException("Territory " + territory + " not found.");
 		}
 	}
 	
@@ -128,5 +169,6 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 			throw new IllegalArgumentException("Player " + player.toString() + " not found.");
 		}
 	}
+
 	
 }
