@@ -48,14 +48,6 @@ public interface IMapManager extends IManager {
     IPlayer getOwner(String zone);
     
     /**
-     * Restituisce tutti i territori adiacenti a quello specificato che appartengono al giocatore.
-     * @param territoryName il nome del territorio di riferimento
-     * @param player il giocatore
-     * @return lista dei territori adiacenti posseduti
-     */
-    List<String> getNeighboursOwnedBy(String zone, IPlayer player);
-    
-    /**
      * Restituisce tutte le zone di gioco.
      * @return
      */

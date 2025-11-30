@@ -85,13 +85,6 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	}
 
 	@Override
-	public List<String> getNeighboursOwnedBy(String territoryName, IPlayer player) {
-		return super.getNeighbours(territoryName).stream()
-						.filter(zone -> this.playerTerritories.get(player).contains(zone))
-						.toList();
-	}
-	
-	@Override
 	public Map<IPlayer, List<String>> getTerritoriesAssignment() {
 		return Collections.unmodifiableMap(this.playerTerritories);
 	}
