@@ -57,13 +57,13 @@ public class TankManagerTest {
         
         IllegalStateException exception = assertThrows(
             IllegalStateException.class,
-            () -> tankManager.getPlayerTanks(player),
+            () -> tankManager.getPlayerToken(player),
             "Should throw exception when not ready"
         );
         assertEquals("TokenManager must be initialized before use.", exception.getMessage());
     }
     
-    @Test
+   @Test
     void testInitializeGame_AlreadyInitialized() {
     	
     	mapManager.initializeGame(players);
@@ -81,14 +81,22 @@ public class TankManagerTest {
     }
     
     @Test
-    //TODO completare il test
-    void testTanksAssigned() {
-    	List<IPlayer> morePlayers = new ArrayList<>(this.players);
-    	morePlayers.add(new Player("Player4", EnumColors.GREEN));
-    	morePlayers.add(new Player("Player5", EnumColors.BLACK));
+    void testTanksAssignment() {
     	
-    	mapManager.initializeGame(morePlayers);
-        tankManager.initializeGame(morePlayers);
+    	mapManager.initializeGame(players);
+        tankManager.initializeGame(players);
+        
+        var myAvailableTanks = tankManager.getPlayerToken(players.get(0));
+        var myTerritoriesCount = mapManager.getTerritoriesOwnedBy(players.get(0)).size();
+        var myTerritories = mapManager.getTerritoriesOwnedBy(players.get(0));
+        var totalDeployed = tankManager.getTotalDeployed(players.get(0));
+        var deployedPerZone = tankManager.getDeployedPerZone(players.get(0));
+        
+        
+        assertEquals(myAvailableTanks + myTerritoriesCount, 35);
+        assertEquals(myTerritoriesCount, totalDeployed);
+        assertTrue(deployedPerZone.keySet().stream()
+        							.allMatch(zone -> myTerritories.contains(zone)));
         
     }
 }

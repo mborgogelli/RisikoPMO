@@ -1,8 +1,6 @@
 package model.management;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import model.board.IBoardCreator;

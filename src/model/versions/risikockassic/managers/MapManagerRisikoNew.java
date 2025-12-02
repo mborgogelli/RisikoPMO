@@ -5,9 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import model.board.IZone;
 import model.management.MapManager;
 import model.players.IPlayer;
 import model.versions.risikockassic.board.BoardCreatorRisikoNew;

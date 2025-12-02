@@ -10,7 +10,7 @@ public class MediatorRisikoNew extends Mediator{
 	
 	private MapManagerRisikoNew mapManager;
 	private CardManagerRisikoNew cardManager;
-	private TankManager tokenManager;
+	private TankManager tankManager;
 	private PhaseManagerRisikoNew phaseManager;
 	private IDirector director;
 	
@@ -33,16 +33,17 @@ public class MediatorRisikoNew extends Mediator{
 	@Override
 	public void initManagers() {
 		this.mapManager = super.getManager(MapManagerRisikoNew.class);
-		this.tokenManager = super.getManager(TankManager.class);
+		this.tankManager = super.getManager(TankManager.class);
 		this.cardManager = super.getManager(CardManagerRisikoNew.class);
 		this.phaseManager = super.getManager(PhaseManagerRisikoNew.class);
 	}
 	
+	//TODO Rimuovere i getter
 	public MapManagerRisikoNew getMapManager() {
 		return this.mapManager;
 	}
 	
 	public TankManager getTankManager() {
-		return this.tokenManager;
+		return this.tankManager;
 	}
 }

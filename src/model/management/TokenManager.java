@@ -6,6 +6,7 @@ import java.util.Set;
 
 import model.management.interfaces.IManager;
 import model.management.interfaces.IMediator;
+import model.management.interfaces.ITokenManager;
 import model.players.IPlayer;
 import model.utils.EnumToken;
 
@@ -13,7 +14,7 @@ import model.utils.EnumToken;
  * TokenManager gestisce i token nel gioco, sia quelli distribuiti nelle zone che quelli posseduti dai giocatori.
  * Fornisce metodi per assegnare, aggiungere e rimuovere token.
  */
-public abstract class TokenManager implements IManager{
+public abstract class TokenManager implements ITokenManager{
 	
 	private Mediator mediator;
 	

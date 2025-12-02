@@ -3,7 +3,6 @@ package model.management;
 import java.util.Collections;
 import java.util.List;
 
-import model.board.IZone;
 import model.card.ICard;
 import model.management.interfaces.IManager;
 import model.management.interfaces.IMediator;
