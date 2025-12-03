@@ -7,8 +7,9 @@ import java.util.stream.Collectors;
 
 import model.management.TokenManager;
 import model.players.IPlayer;
+import model.versions.risikockassic.interfaces.ITankManager;
 
-public class TankManager extends TokenManager {
+public class TankManager extends TokenManager implements ITankManager{
 
 	private Boolean isReady;
 	

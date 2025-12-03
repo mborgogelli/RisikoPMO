@@ -11,10 +11,13 @@ import org.junit.jupiter.api.Test;
 import model.board.IZone;
 import model.management.Mediator;
 import model.management.interfaces.IGameFactory;
+import model.management.interfaces.IMediator;
 import model.players.IPlayer;
 import model.players.Player;
 import model.utils.EnumColors;
 import model.versions.risikockassic.GameFactoryRisikoNew;
+import model.versions.risikockassic.interfaces.IMapManagerRisikoNew;
+import model.versions.risikockassic.interfaces.ITankManager;
 import model.versions.risikockassic.managers.MapManagerRisikoNew;
 import model.versions.risikockassic.managers.MediatorRisikoNew;
 import model.versions.risikockassic.managers.TankManager;
@@ -25,9 +28,9 @@ public class TankManagerTest {
 	private List<IPlayer> players = List.of(new Player("Player1", EnumColors.RED),
 											new Player("Player2", EnumColors.YELLOW),
 											new Player("Player3", EnumColors.BLUE));
-	private TankManager tankManager;
-	private MapManagerRisikoNew mapManager;
-	private Mediator mediator;
+	private ITankManager tankManager;
+	private IMapManagerRisikoNew mapManager;
+	private IMediator mediator;
     
     @BeforeEach
     void setUp() {
@@ -86,7 +89,7 @@ public class TankManagerTest {
     	mapManager.initializeGame(players);
         tankManager.initializeGame(players);
         
-        var myAvailableTanks = tankManager.getPlayerToken(players.get(0));
+        var myAvailableTanks = tankManager.getPlayerTank(players.get(0));
         var myTerritoriesCount = mapManager.getTerritoriesOwnedBy(players.get(0)).size();
         var myTerritories = mapManager.getTerritoriesOwnedBy(players.get(0));
         var totalDeployed = tankManager.getTotalDeployed(players.get(0));
