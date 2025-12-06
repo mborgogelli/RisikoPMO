@@ -58,4 +58,12 @@ public interface ITokenManager extends IManager {
 	 * @param amount   il numero di token da muovere
 	 */
 	void moveToken(IPlayer player, String toZone, String fromZone, int amount);
+	
+	/**
+	 * Aggiunge token al giocatore
+	 * @param player
+	 * @param token
+	 */
+	void addToken(IPlayer player, int token);
+	
 }

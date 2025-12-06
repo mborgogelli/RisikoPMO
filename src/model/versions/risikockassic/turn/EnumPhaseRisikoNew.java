@@ -1,8 +1,6 @@
-package model.versions.risikockassic;
+package model.versions.risikockassic.turn;
 
-import model.utils.EnumPhase;
-
-public enum EnumPhaseRisikoNew implements EnumPhase{
+public enum EnumPhaseRisikoNew {
 	
 	ASSIGNMENT(1),
 	PLACEMENT(2),
@@ -15,7 +13,6 @@ public enum EnumPhaseRisikoNew implements EnumPhase{
         this.phaseId = id;
     }
     
-    @Override
     public int getPhaseId() {
         return this.phaseId;
     }

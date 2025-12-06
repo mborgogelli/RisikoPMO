@@ -16,11 +16,11 @@ import model.players.IPlayer;
 import model.players.Player;
 import model.utils.EnumColors;
 import model.versions.risikockassic.GameFactoryRisikoNew;
-import model.versions.risikockassic.interfaces.IMapManagerRisikoNew;
-import model.versions.risikockassic.interfaces.ITankManager;
-import model.versions.risikockassic.managers.MapManagerRisikoNew;
-import model.versions.risikockassic.managers.MediatorRisikoNew;
-import model.versions.risikockassic.managers.TankManager;
+import model.versions.risikockassic.management.MapManagerRisikoNew;
+import model.versions.risikockassic.management.MediatorRisikoNew;
+import model.versions.risikockassic.management.TankManager;
+import model.versions.risikockassic.management.interfaces.IMapManagerRisikoNew;
+import model.versions.risikockassic.management.interfaces.ITankManager;
 
 public class TankManagerTest {
 

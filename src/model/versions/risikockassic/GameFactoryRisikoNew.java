@@ -7,11 +7,11 @@ import java.util.List;
 import model.management.Mediator;
 import model.management.interfaces.IGameFactory;
 import model.management.interfaces.IManager;
-import model.versions.risikockassic.managers.CardManagerRisikoNew;
-import model.versions.risikockassic.managers.MapManagerRisikoNew;
-import model.versions.risikockassic.managers.PhaseManagerRisikoNew;
-import model.versions.risikockassic.managers.MediatorRisikoNew;
-import model.versions.risikockassic.managers.TankManager;
+import model.versions.risikockassic.management.CardManagerRisikoNew;
+import model.versions.risikockassic.management.MapManagerRisikoNew;
+import model.versions.risikockassic.management.MediatorRisikoNew;
+import model.versions.risikockassic.management.PhaseManagerRisikoNew;
+import model.versions.risikockassic.management.TankManager;
 
 /**
  * Classe factory per la creazione dei manager e del mediatore

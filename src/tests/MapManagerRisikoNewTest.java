@@ -3,7 +3,7 @@ package tests;
 import model.players.IPlayer;
 import model.players.Player;
 import model.utils.EnumColors;
-import model.versions.risikockassic.managers.MapManagerRisikoNew;
+import model.versions.risikockassic.management.MapManagerRisikoNew;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

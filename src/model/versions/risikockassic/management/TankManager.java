@@ -1,4 +1,4 @@
-package model.versions.risikockassic.managers;
+package model.versions.risikockassic.management;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import model.management.TokenManager;
 import model.players.IPlayer;
-import model.versions.risikockassic.interfaces.ITankManager;
+import model.versions.risikockassic.management.interfaces.ITankManager;
 
 public class TankManager extends TokenManager implements ITankManager{
 
@@ -106,6 +106,12 @@ public class TankManager extends TokenManager implements ITankManager{
 		checkDeployedTanksAfterMove(player, fromZone, amount);
 		removeTanksFromZone(fromZone, amount);
 		addTanksToZone(toZone, amount);
+	}
+	
+
+	@Override
+	public void addToken(IPlayer player, int token) {
+		this.availableTanks.put(player, this.getPlayerToken(player) + token);
 	}
 	
 	@Override

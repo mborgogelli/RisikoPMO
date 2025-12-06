@@ -1,4 +1,4 @@
-package model.versions.risikockassic.managers;
+package model.versions.risikockassic.management;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +9,7 @@ import java.util.Map;
 import model.management.MapManager;
 import model.players.IPlayer;
 import model.versions.risikockassic.board.BoardCreatorRisikoNew;
-import model.versions.risikockassic.interfaces.IMapManagerRisikoNew;
+import model.versions.risikockassic.management.interfaces.IMapManagerRisikoNew;
 
 public class MapManagerRisikoNew extends MapManager implements IMapManagerRisikoNew {
 	

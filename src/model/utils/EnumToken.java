@@ -21,7 +21,4 @@ public enum EnumToken {
 		return this.value;
 	}
 	
-	public static EnumSet<EnumToken> getRisikoNewTokens(){
-		return EnumSet.of(TANK, FLAG);
-	}
 }

@@ -1,4 +1,4 @@
-package model.versions.risikockassic.interfaces;
+package model.versions.risikockassic.management.interfaces;
 
 import model.management.interfaces.ITokenManager;
 import model.players.IPlayer;

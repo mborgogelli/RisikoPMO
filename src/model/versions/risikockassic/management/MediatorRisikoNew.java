@@ -1,4 +1,4 @@
-package model.versions.risikockassic.managers;
+package model.versions.risikockassic.management;
 
 import java.util.List;
 
