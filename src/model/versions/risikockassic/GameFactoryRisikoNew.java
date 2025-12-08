@@ -10,7 +10,7 @@ import model.management.interfaces.IManager;
 import model.versions.risikockassic.management.CardManagerRisikoNew;
 import model.versions.risikockassic.management.MapManagerRisikoNew;
 import model.versions.risikockassic.management.MediatorRisikoNew;
-import model.versions.risikockassic.management.PhaseManagerRisikoNew;
+import model.versions.risikockassic.management.TurnManagerRisikoNew;
 import model.versions.risikockassic.management.TankManager;
 
 /**
@@ -45,7 +45,7 @@ public class GameFactoryRisikoNew implements IGameFactory {
 		this.managers.add(new MapManagerRisikoNew());
 		this.managers.add(new TankManager());
 		this.managers.add(new CardManagerRisikoNew());
-		this.managers.add(new PhaseManagerRisikoNew());
+		this.managers.add(new TurnManagerRisikoNew());
 	}
 	
 	/**

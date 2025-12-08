@@ -17,7 +17,9 @@ public class TankAssignmentPhase implements IPhase {
 
 	@Override
 	public int nextPhase() {
-		return EnumPhaseRisikoNew.ASSIGNMENT.getPhaseId() + 1;
+		int currentPhaseId = getPhaseId();
+		int phaseCount = EnumPhaseRisikoNew.values().length;
+		return (currentPhaseId + 1) % phaseCount;
 	}
 
 	@Override

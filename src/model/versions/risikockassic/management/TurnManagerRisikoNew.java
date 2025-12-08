@@ -1,15 +1,20 @@
 package model.versions.risikockassic.management;
 
 import java.util.List;
+import java.util.Map;
 
-import model.management.PhaseManager;
+import model.management.TurnManager;
 import model.players.IPlayer;
+import model.utils.EnumColors;
 
-public class PhaseManagerRisikoNew extends PhaseManager {
+public class TurnManagerRisikoNew extends TurnManager {
 	
 	private boolean isReady;
+	private Map<IPlayer,Integer> myTurn;
+	private List<EnumColors> playOrder;
 	
-	public PhaseManagerRisikoNew() {
+	
+	public TurnManagerRisikoNew() {
 		this.isReady = false;
 	}
 	

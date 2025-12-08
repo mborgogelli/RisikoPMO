@@ -3,7 +3,7 @@ package model.management;
 import model.management.interfaces.IManager;
 import model.management.interfaces.IMediator;
 
-public abstract class PhaseManager implements IManager{
+public abstract class TurnManager implements IManager{
 	
 	private IMediator mediator;
 	
