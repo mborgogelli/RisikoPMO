@@ -2,8 +2,8 @@ package model.versions.risikockassic.turn;
 
 public enum EnumPhaseRisikoNew {
 	
-	ASSIGNMENT(0),
-	PLACEMENT(1),
+	INITIALSETUP(0),
+	REINFORCE(1),
 	ATTACK(2),
 	MOVEMENT(3);
 	
