@@ -8,6 +8,14 @@ import model.versions.risikockassic.turn.interfaces.IReinforcePhase;
 
 public class ReinforcePhase implements IReinforcePhase {
 	
+	private final static int BONUS_AFRICA = 3;
+	private final static int BONUS_ASIA = 3;
+	private final static int BONUS_AUSTRALIA = 3;
+	private final static int BONUS_SOUTHAMERICA = 3;
+	private final static int BONUS_EUROPE = 3;
+	private final static int BONUS_NORTHAMERICA = 3;
+	private final static int BONUS_DEFAULT = 0;
+	
 	
 	@Override
 	public void playPhase() {
@@ -36,13 +44,13 @@ public class ReinforcePhase implements IReinforcePhase {
 	public int reinforceByContinentBonus(String continent) {
 		int tanks;
 		switch (continent) {
-			case "africa" -> tanks = 3;
-			case "asia" -> tanks = 7;
-			case "australia" -> tanks = 2;
-			case "south_america" -> tanks = 2;
-			case "europe" -> tanks = 5;
-			case "north_america" ->	tanks = 5;
-			default -> tanks = 0;
+			case "africa" -> tanks = BONUS_AFRICA;
+			case "asia" -> tanks = BONUS_ASIA;
+			case "australia" -> tanks = BONUS_AUSTRALIA;
+			case "south_america" -> tanks = BONUS_SOUTHAMERICA;
+			case "europe" -> tanks = BONUS_EUROPE;
+			case "north_america" ->	tanks = BONUS_NORTHAMERICA;
+			default -> tanks = BONUS_DEFAULT;
 		}
 		return tanks;
 	}
