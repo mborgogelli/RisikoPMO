@@ -16,7 +16,7 @@ public interface IReinforcePhase extends IPhase {
 	int reinforceByContinentBonus(String continent);
 	
 	/* Calcola il numero di rinforzi basati sulle carte scambiate dal giocatore */
-	int reinforceByCards(IPlayer player, List<ICard> tris);
+	int reinforceByCards(List<ICard> tris);
 	
 	/* Restituisce l'id della fase di rinforzo */
 	default int getPhaseId() {

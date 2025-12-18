@@ -1,10 +1,12 @@
 package model.turn;
 
+import model.players.IPlayer;
+
 public interface IPhase {
 	
 	int getPhaseId();
 	
-	void playPhase();
+	void playPhase(IPlayer player);
 	
 	int nextPhase();
 	

@@ -16,10 +16,16 @@ public class ReinforcePhase implements IReinforcePhase {
 	private final static int BONUS_NORTHAMERICA = 3;
 	private final static int BONUS_DEFAULT = 0;
 	
+	private IPlayer player;
+	private List<String> playerTerritories;
+	private List<ICard> tris;
+	private boolean started = false;
 	
 	@Override
-	public void playPhase() {
-		// TODO Auto-generated method stub
+	public void playPhase(IPlayer player) {
+		if (!started) {
+			this.player = player;
+		}
 	}
 
 	@Override
@@ -31,13 +37,13 @@ public class ReinforcePhase implements IReinforcePhase {
 
 	@Override
 	public void endPhase() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public int reinforceByTerritories(List<String> playerTerritories) {
-		return playerTerritories.size();
+		this.playerTerritories = playerTerritories;
+		return this.playerTerritories.size();
 	}
 
 	@Override
@@ -56,7 +62,7 @@ public class ReinforcePhase implements IReinforcePhase {
 	}
 
 	@Override
-	public int reinforceByCards(IPlayer player, List<ICard> tris) {
+	public int reinforceByCards(List<ICard> tris) {
 		return 0;
 	}
 	
