@@ -63,11 +63,23 @@ public class ReinforcePhase implements IReinforcePhase {
 
 	@Override
 	public int reinforceByCards(List<ICard> tris) {
-		return 0;
+		this.tris = tris;
+		int bonus = getTerritoryCardBonusForOwnership(tris);
+		return bonus;
 	}
 	
-	private int getTerritoryCardBonusForOwnership() {
-		return 0;
+	/**
+	 * Calcola il bonus ottenuto dal possesso dei territori indicati nelle carte
+	 * 
+	 * @param cards
+	 * @return
+	 */
+	private int getTerritoryCardBonusForOwnership(List <ICard> cards) {
+		int bonus = (int) cards.stream()
+							.map(c -> c.getName())
+							.filter(t -> this.playerTerritories.contains(t))
+							.count();
+		return bonus;
 	}
-	
+
 }

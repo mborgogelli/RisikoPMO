@@ -1,6 +1,5 @@
 package model.utils;
 
-import java.util.EnumSet;
 
 /**
  * EnumToken contiene i token utilizzati nel gioco Risiko e dalle sue varianti
