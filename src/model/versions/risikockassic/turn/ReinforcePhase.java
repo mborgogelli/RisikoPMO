@@ -19,13 +19,12 @@ public class ReinforcePhase implements IReinforcePhase {
 	private IPlayer player;
 	private List<String> playerTerritories;
 	private List<ICard> tris;
-	private boolean started = false;
+	private boolean isStarted = false;
 	
 	@Override
 	public void playPhase(IPlayer player) {
-		if (!started) {
-			this.player = player;
-		}
+		this.player = player;
+		this.isStarted = false;
 	}
 
 	@Override

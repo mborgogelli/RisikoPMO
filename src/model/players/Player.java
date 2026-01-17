@@ -10,10 +10,14 @@ public class Player implements IPlayer {
 	private Boolean isReady;
 	private EnumColors color;
 	
-	// TODO color set runtime, not in constructor
+	public Player(String name) {
+		this.name = name;
+		this.isReady = false;
+	}
+	
+	
 	public Player(String name, EnumColors color) {
 		this.name = name;
-		this.color = color;
 		this.isReady = false;
 	}
 	
@@ -35,6 +39,11 @@ public class Player implements IPlayer {
 	@Override
 	public EnumColors getColor() {
 		return this.color;
+	}
+
+	@Override
+	public void setColor(EnumColors color) {
+        this.color = color;		
 	}
 	
 	@Override
