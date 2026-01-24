@@ -1,5 +1,6 @@
 package model.lobby;
 
+import model.players.Player;
 import model.utils.EnumColors;
 import model.utils.GameVersion;
 
@@ -9,7 +10,7 @@ public interface IRoom {
 	
 	void exitRoom(String playerName);
 	
-	void assignColor(String playerName, String color);
+	void assignColor(Player player, String color);
 	
 	EnumColors getAssignedColor(String playerName);
 	
@@ -19,10 +20,9 @@ public interface IRoom {
 	
 	int getMaxPlayers();
 	
-	int getRoomId();
-	
 	void kickPlayer(String playerName);
 	
 	GameVersion getRisikoVersion();
 
+	boolean hasPlayer(String playerName);
 }

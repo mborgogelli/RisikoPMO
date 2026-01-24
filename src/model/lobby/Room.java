@@ -11,15 +11,19 @@ import model.utils.GameVersion;
 
 public class Room implements IRoom {
 	
+	private boolean isFull;
+	private final int maxPlayers;
+	private final GameVersion gameVersion;
 	private final Map<Player, EnumColors> players;
-	private final int roomId;
-	private final List<EnumColors> colors;
+	private List<EnumColors> colors;
 	
 	
-	public Room(int roomId) {
-		this.roomId = roomId;
+	public Room(int maxPlayers, GameVersion gameVersion) {
+		this.maxPlayers = maxPlayers;
+		this.gameVersion = gameVersion;
 		this.players = new HashMap<>();
-		this.colors = EnumColors.getAvailableColors();
+		this.colors = new ArrayList<>(EnumColors.getAvailableColors());
+		this.isFull = false;
 	}
 	
 	@Override
@@ -32,51 +36,42 @@ public class Room implements IRoom {
 	}
 
 	@Override
-	public void assignColor(String playerName, String color) {
-		// TODO Auto-generated method stub
-
+	public void assignColor(Player player, String color) {
+		this.players.putIfAbsent(player, this.pickRandomColor());
 	}
 
 	@Override
 	public boolean isRoomFull() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.isFull;
 	}
 
 	@Override
 	public int getNumberOfPlayers() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.players.size();
 	}
 
 	@Override
 	public int getMaxPlayers() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getRoomId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.maxPlayers;
 	}
 
 	@Override
 	public void kickPlayer(String playerName) {
-		// TODO Auto-generated method stub
-
+        this.players.entrySet()
+        			.removeIf(entry -> entry.getKey().getName().equals(playerName));
 	}
 
 	@Override
 	public GameVersion getRisikoVersion() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.gameVersion;
 	}
 
 	@Override
 	public EnumColors getAssignedColor(String playerName) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.players.entrySet().stream()
+							.filter(entry -> entry.getKey().getName().equals(playerName))
+							.map(Map.Entry::getValue)
+							.findFirst().orElse(null);
 	}
 	
 	private EnumColors pickRandomColor() {
@@ -84,6 +79,12 @@ public class Room implements IRoom {
 		EnumColors color = this.colors.get(index);
 		this.colors.remove(index);
 		return color;
+	}
+	
+    @Override
+	public boolean hasPlayer(String playerName) {
+		return this.players.keySet().stream()
+							.anyMatch(player -> player.getName().equals(playerName));
 	}
 
 }

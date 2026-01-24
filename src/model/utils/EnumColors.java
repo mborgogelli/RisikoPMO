@@ -11,6 +11,6 @@ public enum EnumColors {
 	BLACK, BLUE, GREEN, PURPLE, RED, YELLOW;
 	
 	public static List<EnumColors> getAvailableColors(){
-		return List.copyOf(EnumSet.allOf(EnumColors.class));
+		return EnumSet.allOf(EnumColors.class).stream().toList();
 	}
 }
