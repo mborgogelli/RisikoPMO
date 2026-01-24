@@ -1,0 +1,74 @@
+package it.uniurb.pmo.model.versions.risikockassic.card;
+
+import java.util.List;
+
+import it.uniurb.pmo.model.card.CardCreator;
+import it.uniurb.pmo.model.card.ICard;
+import it.uniurb.pmo.model.card.ISymbolCard;
+
+public class TerritoryCardsCreatorRisikoNew extends CardCreator{
+	
+	private static TerritoryCardsCreatorRisikoNew instance;
+	
+	
+	protected TerritoryCardsCreatorRisikoNew() {
+		super();
+	}
+	
+	// Singleton Pattern
+	public static TerritoryCardsCreatorRisikoNew getInstance() {
+		if (instance == null) {
+			instance = new TerritoryCardsCreatorRisikoNew();
+		}
+		return instance;
+	}
+
+	@Override
+	protected List<ICard> createCards() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	protected void resetCards(List<ICard> cards) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void configureCardDetails(ICard card) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void configureVariantRules() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected List<ICard> loadCardsFromJson(String filePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void saveCardsToJson(List<ICard> cards, String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getName() {
+		
+		return null;
+	}
+
+	@Override
+	public ISymbolCard getSymbol() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RISIKO Online — Lobby</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!-- Contenitore principale -->
+  <div class="container" role="main">
+	
+	<!-- Form di login -->
+    <aside class="left" aria-label ="Login">
+      <div class="brand">
+        <div>
+          <h1>RISIKO Online</h1>
+          <p>Entra nella stanza o crea una nuova partita</p>
+        </div>
+      </div>
+
+      <form id="joinForm" onsubmit="return false;">
+        <div class="field">
+          <label for="playerName">Nome giocatore</label>
+          <input id="playerName" type="text" placeholder="Inserisci il tuo nome" value="Marco" />
+        </div>
+
+        <div class="field">
+          <label for="playerPass">Password (opzionale)</label>
+          <input id="playerPass" type="password" placeholder="Password stanza" />
+        </div>
+		
+		<div class="settings">
+        	<div class="setting-row">
+          		<div>Mappa</div>
+          			<select id="mapSelect" style="background:transparent;border:none;color:inherit;font-weight:700;">
+			            <option>Classica</option>
+			            <option>Antartide</option>
+			            <option>Oceano</option>
+          			</select>
+				<div>Numero di giocatori</div>
+					<select id="maxPlayer" style="background:transparent;border:none;color:inherit;font-weight:700;">
+			            <option>3</option>
+			            <option>4</option>
+			            <option>5</option>
+						<option>6</option>
+	      			</select>
+    		</div>
+      	</div>
+		
+        <div class="controls">
+	          <button id="enterBtn" class="primary">Entra nella stanza</button>
+	          <button id="createBtn" class="ghost">Crea stanza</button>
+        </div>
+		
+      </form>
+    </aside>
+	<!-- Fine form di login -->
+	
+	<!-- Elenco stanze -->
+	<section class="right" aria-label="Stanze disponibili">
+	  <div class="room-list-header">
+	    <h2>Stanze disponibili</h2>
+	  </div>
+
+	  <div class="rooms-container" id="roomsContainer">
+	    <div class="room-card"></div>
+	  </div>
+
+	  <div class="empty-state" id="emptyRooms" style="display:none;">
+	    <p>Nessuna stanza disponibile</p>
+	    <small>Crea una nuova stanza per iniziare</small>
+	  </div>
+	</section>
+	<!-- Fine Elenco stanze-->
+	
+	<!-- Lobby di gioco -->
+    <section class="right" aria-label="Lobby" style="display:none;" id="lobbySection">
+      <div class="map-bg" aria-hidden="true"></div>
+
+      <div class="room-header">
+        <div class="room-title">
+          <h2>Stanza: <span id="roomName">Partita pubblica</span></h2>
+          <div class="player-count" id="playerCount">1/6</div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center;">
+          <div style="font-size:13px;color:var(--muted)">Modalità: Classica</div>
+        </div>
+      </div>
+
+      <div class="room-body">
+        <div class="players" id="playersList" aria-live="polite">
+          <!-- Player cards inserted by JS -->
+        </div>
+
+        <div class="center-controls" aria-hidden="false">
+          <button id="readyBtn" class="big-ready not-ready">Sono pronto</button>
+
+          
+        </div>
+      </div>
+
+      <div class="footer-note">Nota: quando tutti i giocatori sono pronti la partita può cominciare.</div>
+    </section>
+	<!-- Fine lobby di gioco -->
+  </div>
+  <!-- Fine contenitore principale -->
+  
+  <script src="index.js"></script>
+</body>
+</html>
