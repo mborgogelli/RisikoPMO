@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 		
-		if (version != "Classica") {
+		if (version !== "Classica") {
 			alert("Versione non ancora implementata!");
 			return;
 		}
