@@ -1,9 +1,11 @@
 package it.uniurb.pmo.model.lobby;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.utils.GameVersion;
 
 public class RoomManager implements IRoomManager {
@@ -24,56 +26,60 @@ public class RoomManager implements IRoomManager {
 	}
 	
     @Override
-	public boolean gameVersionIsValid(GameVersion gameVersion) {
-		Boolean isValid = false;
-		for (GameVersion version : GameVersion.values()) {
-			if (version == gameVersion) {
-				isValid = true;
-				break;
-			}
-		}
-		return isValid;
-	}
-    
-	@Override
-	public String getRoomIdByPlayerName(String playerName) {
+	public List<String> filterRoomsByGameVersion(GameVersion gameVersion) {
 		return this.activeRooms.entrySet().stream()
-							.filter(entry -> entry.getValue().hasPlayer(playerName))
+							.filter(e -> gameVersion.equals(this.activeRooms.get(e).getRisikoVersion()))
 							.map(Map.Entry::getKey)
-							.findFirst().orElse(null);
+							.toList();
 	}
-	
+
 	@Override
-	public Room getRoom(String roomId) {
-		return this.activeRooms.get(roomId);
+	public int getPlayersNumber(String roomId) {
+		return this.getRoom(roomId).getNumberOfPlayers();
 	}
-	
+
+	@Override
+	public EnumColors getPlayerColor(String roomId, String playerName) {
+		return this.getRoom(roomId).getAssignedColor(playerName);
+	}
+
+	@Override
+	public GameVersion getGameVersion(String roomId) {
+		return this.getRoom(roomId).getRisikoVersion();
+	}
+
 	@Override
 	public void enterRoom(String roomId, String nomeGiocatore) {
-		if (roomExists(roomId)) {
-			Room room = this.activeRooms.get(roomId);
-			room.enterRoom(nomeGiocatore);
-		} else {
+		this.getRoom(roomId).enterRoom(nomeGiocatore);
+	}
+
+	@Override
+	public String createRoom(String nomeGiocatore, int maxPlayers, GameVersion gameVersion) {
+        String idStanza = UUID.randomUUID().toString().substring(0, 5);
+        this.activeRooms.put(idStanza, new Room(maxPlayers, gameVersion));
+        this.activeRooms.get(idStanza).enterRoom(nomeGiocatore);
+        return idStanza;
+    }
+
+	@Override
+	public void exitRoom(String roomId, String nomeGiocatore) {
+		//TO DO Check if last player
+		this.getRoom(roomId).exitRoom(nomeGiocatore);
+	}
+
+	@Override
+	public int getMaxPlayers(String roomId) {
+		return this.getRoom(roomId).getMaxPlayers();
+	}
+
+	private void checkRoom(String roomId) {
+		if (!this.activeRooms.containsKey(roomId)) {
 			throw new IllegalArgumentException("Room with ID " + roomId + " does not exist.");
 		}
 	}
 
-	@Override
-	public Room createRoom(String nomeGiocatore, int maxPlayers, GameVersion gameVersion) {
-        String idStanza = UUID.randomUUID().toString().substring(0, 5);
-        this.activeRooms.put(idStanza, new Room(maxPlayers, gameVersion));
-        this.activeRooms.get(idStanza).enterRoom(nomeGiocatore);
-        return this.activeRooms.get(idStanza);
+	private IRoom getRoom(String roomId) {
+		this.checkRoom(roomId);
+		return this.activeRooms.get(roomId);
 	}
-
-	@Override
-	public void exitRoom(String roomId, String nomeGiocatore) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	private boolean roomExists(String roomId) {
-		return this.activeRooms.containsKey(roomId);
-	}
-
 }

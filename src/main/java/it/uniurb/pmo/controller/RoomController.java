@@ -2,14 +2,14 @@ package it.uniurb.pmo.controller;
 
 import java.util.Map;
 
+import it.uniurb.pmo.controller.dto.RoomResponseDTO;
+import it.uniurb.pmo.model.utils.EnumColors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.uniurb.pmo.game.RisikoPmoApplication;
-import it.uniurb.pmo.model.lobby.Room;
 import it.uniurb.pmo.model.lobby.RoomManager;
 import it.uniurb.pmo.model.utils.GameVersion;
 
@@ -18,9 +18,9 @@ import it.uniurb.pmo.model.utils.GameVersion;
 public class RoomController {
 
     @PostMapping("/crea-stanza")
-    public ResponseEntity<Room> creaPartita(@RequestBody Map<String, String> payload) {
-        
-        // 1. Recupera il nome dal JSON inviato dal frontend
+    public ResponseEntity<RoomResponseDTO> creaPartita(@RequestBody Map<String, String> payload) {
+
+        // Recupera il nome dal JSON inviato dal frontend
         String nomeGiocatore = payload.get("playerName");
         GameVersion gameVersion = this.getGameVersionFromString(payload.get("gameVersion"));
         int maxPlayer = Integer.parseInt(payload.get("maxPlayers"));
@@ -30,14 +30,17 @@ public class RoomController {
             return ResponseEntity.badRequest().build();
         }
 
-        // 2. Crea la Stanza e aggiungi il giocatore
+        // Crea la Stanza e aggiungi il giocatore
         RoomManager roomManager = RoomManager.getInstance();
-        Room room = roomManager.createRoom(nomeGiocatore,
+        String roomId = roomManager.createRoom(nomeGiocatore,
         								   maxPlayer,
         								   gameVersion);
         
-        // 3. Restituisci l'oggetto Room completo al frontend
-        return ResponseEntity.ok(room);
+        // Crea il DTO con le informazioni da esporre al frontend
+        RoomResponseDTO response = this.createRoomResponse(roomId, nomeGiocatore);
+
+        // Restituisci il DTO al frontend
+        return ResponseEntity.ok(response);
     }
     
 	private GameVersion getGameVersionFromString(String version) {
@@ -49,5 +52,20 @@ public class RoomController {
 			default -> throw new IllegalArgumentException("Invalid game version: " + version);
 		}
 		return gameVersion;
+    }
+
+    /**
+     * Crea un DTO con le informazioni della stanza da esporre al frontend
+     */
+    private RoomResponseDTO createRoomResponse(String roomId, String playerName) {
+        RoomManager roomManager = RoomManager.getInstance();
+        EnumColors assignedColor = roomManager.getPlayerColor(roomId,playerName);
+
+        return RoomResponseDTO.builder()
+            .playerName(playerName)
+            .assignedColor(assignedColor)
+            .currentPlayers(roomManager.getPlayersNumber(roomId))
+            .maxPlayers(roomManager.getMaxPlayers(roomId))
+            .build();
     }
 }

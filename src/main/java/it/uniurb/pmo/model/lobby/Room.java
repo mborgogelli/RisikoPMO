@@ -36,11 +36,6 @@ public class Room implements IRoom {
 	}
 
 	@Override
-	public void assignColor(Player player, String color) {
-		this.players.putIfAbsent(player, this.pickRandomColor());
-	}
-
-	@Override
 	public boolean isRoomFull() {
 		return this.isFull;
 	}
@@ -74,17 +69,16 @@ public class Room implements IRoom {
 							.findFirst().orElse(null);
 	}
 	
-	private EnumColors pickRandomColor() {
-		int index = (int) (Math.random() * this.colors.size());
-		EnumColors color = this.colors.get(index);
-		this.colors.remove(index);
-		return color;
-	}
-	
     @Override
 	public boolean hasPlayer(String playerName) {
 		return this.players.keySet().stream()
 							.anyMatch(player -> player.getName().equals(playerName));
 	}
 
+	private EnumColors pickRandomColor() {
+		int index = (int) (Math.random() * this.colors.size());
+		EnumColors color = this.colors.get(index);
+		this.colors.remove(index);
+		return color;
+	}
 }
