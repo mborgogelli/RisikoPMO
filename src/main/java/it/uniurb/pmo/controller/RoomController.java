@@ -25,8 +25,10 @@ public class RoomController {
         GameVersion gameVersion = this.getGameVersionFromString(payload.get("gameVersion"));
         int maxPlayer = Integer.parseInt(payload.get("maxPlayers"));
         
-        
-        if (nomeGiocatore == null || nomeGiocatore.isEmpty()) {
+        // Valida i dati recuperati
+        if (nomeGiocatore == null ||
+            nomeGiocatore.isEmpty()) {
+            //TO DO impostare min player in base alla versione
             return ResponseEntity.badRequest().build();
         }
 

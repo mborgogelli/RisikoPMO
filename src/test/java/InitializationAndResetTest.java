@@ -18,11 +18,11 @@ import it.uniurb.pmo.model.utils.GameVersion;
 
 public class InitializationAndResetTest {
 	
-	private List<IPlayer> players = List.of(new Player("Player1", EnumColors.RED),
+	private final List<IPlayer> players = List.of(new Player("Player1", EnumColors.RED),
 											new Player("Player2", EnumColors.YELLOW),
 											new Player("Player3", EnumColors.BLUE));
 	
-	private IDirector director = new Director(GameVersion.RISIKONEW);
+	private final IDirector director = new Director(GameVersion.RISIKONEW);
 	
 	@BeforeEach
 	public void setUp(){
