@@ -1,9 +1,7 @@
 package it.uniurb.pmo.model.lobby;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.utils.GameVersion;
@@ -28,7 +26,7 @@ public class RoomManager implements IRoomManager {
     @Override
 	public List<String> filterRoomsByGameVersion(GameVersion gameVersion) {
 		return this.activeRooms.entrySet().stream()
-							.filter(e -> gameVersion.equals(this.activeRooms.get(e).getRisikoVersion()))
+							.filter(e -> gameVersion.equals(e.getValue().getRisikoVersion()))
 							.map(Map.Entry::getKey)
 							.toList();
 	}
@@ -70,6 +68,20 @@ public class RoomManager implements IRoomManager {
 	@Override
 	public int getMaxPlayers(String roomId) {
 		return this.getRoom(roomId).getMaxPlayers();
+	}
+
+	@Override
+	public Map<String, EnumColors> getPlayers(String roomId) {
+		return this.getRoom(roomId).getPlayers().entrySet().stream()
+				.collect(Collectors.toMap(
+						e -> e.getKey().getName(),
+						Map.Entry::getValue
+				));
+	}
+
+	@Override
+	public Boolean isFull(String roomId) {
+		return this.getRoom(roomId).isRoomFull();
 	}
 
 	private void checkRoom(String roomId) {

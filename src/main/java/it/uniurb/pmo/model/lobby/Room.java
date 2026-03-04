@@ -75,6 +75,11 @@ public class Room implements IRoom {
 							.anyMatch(player -> player.getName().equals(playerName));
 	}
 
+	@Override
+	public Map<Player, EnumColors> getPlayers() {
+		return this.players;
+	}
+
 	private EnumColors pickRandomColor() {
 		int index = (int) (Math.random() * this.colors.size());
 		EnumColors color = this.colors.get(index);

@@ -3,7 +3,6 @@ package it.uniurb.pmo.controller;
 import java.util.Map;
 
 import it.uniurb.pmo.controller.dto.RoomResponseDTO;
-import it.uniurb.pmo.model.utils.EnumColors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +19,7 @@ public class RoomController {
     @PostMapping("/crea-stanza")
     public ResponseEntity<RoomResponseDTO> creaPartita(@RequestBody Map<String, String> payload) {
 
-        // Recupera il nome dal JSON inviato dal frontend
+        // Recupera informazioni dal JSON inviato dal frontend
         String nomeGiocatore = payload.get("playerName");
         GameVersion gameVersion = this.getGameVersionFromString(payload.get("gameVersion"));
         int maxPlayer = Integer.parseInt(payload.get("maxPlayers"));
@@ -41,7 +40,7 @@ public class RoomController {
         // Crea il DTO con le informazioni da esporre al frontend
         RoomResponseDTO response = this.createRoomResponse(roomId, nomeGiocatore);
 
-        // Restituisci il DTO al frontend
+        // Restituisce il DTO al frontend
         return ResponseEntity.ok(response);
     }
     
@@ -61,13 +60,14 @@ public class RoomController {
      */
     private RoomResponseDTO createRoomResponse(String roomId, String playerName) {
         RoomManager roomManager = RoomManager.getInstance();
-        EnumColors assignedColor = roomManager.getPlayerColor(roomId,playerName);
 
         return RoomResponseDTO.builder()
-            .playerName(playerName)
-            .assignedColor(assignedColor)
+            .roomId(roomId)
+            .players(roomManager.getPlayers(roomId))
             .currentPlayers(roomManager.getPlayersNumber(roomId))
+            .gameVersion(roomManager.getGameVersion(roomId).toString())
             .maxPlayers(roomManager.getMaxPlayers(roomId))
+            .isFull(roomManager.isFull(roomId))
             .build();
     }
 }

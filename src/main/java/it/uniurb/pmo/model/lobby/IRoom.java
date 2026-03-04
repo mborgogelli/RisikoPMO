@@ -1,7 +1,10 @@
 package it.uniurb.pmo.model.lobby;
 
+import it.uniurb.pmo.model.players.Player;
 import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.utils.GameVersion;
+
+import java.util.Map;
 
 public interface IRoom {
 	
@@ -22,4 +25,6 @@ public interface IRoom {
 	GameVersion getRisikoVersion();
 
 	boolean hasPlayer(String playerName);
+
+	Map<Player, EnumColors> getPlayers();
 }

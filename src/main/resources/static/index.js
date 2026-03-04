@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sezioneLobby.style.display = 'block';
 
         // Aggiorna titolo stanza
-        lobbyTitle.innerText = "Stanza: " + stanza.roomId; // 
+        lobbyTitle.innerText = stanza.roomId;
 
         // Pulisci lista giocatori vecchia
         playersContainer.innerHTML = '';
@@ -75,11 +75,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const players = stanza.players || {}; 
         
         Object.entries(players).forEach(([playerName, color]) => {
-            // Crea l'HTML per ogni giocatore
+            // Crea HTML per ogni giocatore
             const htmlGiocatore = `
                 <div class="player-card">
                     <div class="avatar" style="background-color: ${mappaColori(color)}">
-                        ${playername.charAt(0).toUpperCase()}
+                        ${playerName.charAt(0).toUpperCase()}
                     </div>
                     <div class="player-meta">
                         <div class="player-name">${playerName}</div>

@@ -4,6 +4,7 @@ import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.utils.GameVersion;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IRoomManager {
 	
@@ -41,4 +42,8 @@ public interface IRoomManager {
 	void exitRoom(String roomId, String nomeGiocatore);
 
 	int getMaxPlayers(String roomId);
+
+	Map<String,EnumColors> getPlayers(String roomId);
+
+	Boolean isFull(String roomId);
 }

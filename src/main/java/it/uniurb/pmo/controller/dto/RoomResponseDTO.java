@@ -3,6 +3,8 @@ package it.uniurb.pmo.controller.dto;
 
 import it.uniurb.pmo.model.utils.EnumColors;
 
+import java.util.Map;
+
 /**
  * DTO per la risposta della creazione/accesso a una stanza.
  * Contiene solo le informazioni necessarie alla View.
@@ -10,64 +12,44 @@ import it.uniurb.pmo.model.utils.EnumColors;
  */
 public class RoomResponseDTO {
 
-    private String playerName;
-    private EnumColors assignedColor;
-    private String gameVersion;
-    private int currentPlayers;
-    private int maxPlayers;
-    private boolean isFull;
+    private final String roomId;
+    private final Map<String, EnumColors> players;
+    private final String gameVersion;
+    private final int currentPlayers;
+    private final int maxPlayers;
+    private final boolean isFull;
 
     private RoomResponseDTO(Builder builder) {
-        this.playerName = builder.playerName;
-        this.assignedColor = builder.assignedColor;
+        this.players = builder.players;
         this.gameVersion = builder.gameVersion;
         this.currentPlayers = builder.currentPlayers;
         this.maxPlayers = builder.maxPlayers;
         this.isFull = builder.isFull;
+        this.roomId = builder.roomId;
     }
 
     public static Builder builder() {
         return new Builder();
     }
 
-    public String getPlayerName() {
-        return playerName;
+    public String getRoomId() {
+        return roomId;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
-
-    public EnumColors getAssignedColor() {
-        return assignedColor;
-    }
-
-    public void setAssignedColor(EnumColors assignedColor) {
-        this.assignedColor = assignedColor;
+    public Map<String,EnumColors> getPlayers() {
+        return this.players;
     }
 
     public String getGameVersion() {
         return gameVersion;
     }
 
-    public void setGameVersion(String gameVersion) {
-        this.gameVersion = gameVersion;
-    }
-
     public int getCurrentPlayers() {
         return currentPlayers;
     }
 
-    public void setCurrentPlayers(int currentPlayers) {
-        this.currentPlayers = currentPlayers;
-    }
-
     public int getMaxPlayers() {
         return maxPlayers;
-    }
-
-    public void setMaxPlayers(int maxPlayers) {
-        this.maxPlayers = maxPlayers;
     }
 
     public boolean isFull() {
@@ -79,20 +61,20 @@ public class RoomResponseDTO {
      * Permette una costruzione flessibile e leggibile dell'oggetto.
      */
     public static class Builder {
-        private String playerName;
-        private EnumColors assignedColor;
+        private String roomId;
+        private Map<String,EnumColors> players;
         private String gameVersion;
         private int currentPlayers;
         private int maxPlayers;
         private boolean isFull;
 
-        public Builder playerName(String playerName) {
-            this.playerName = playerName;
+        public Builder roomId(String roomId){
+            this.roomId = roomId;
             return this;
         }
 
-        public Builder assignedColor(EnumColors assignedColor) {
-            this.assignedColor = assignedColor;
+        public Builder players(Map<String,EnumColors> players) {
+            this.players = players;
             return this;
         }
 
