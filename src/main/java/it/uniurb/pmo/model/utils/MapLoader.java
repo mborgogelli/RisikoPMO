@@ -22,7 +22,10 @@ public final class MapLoader {
 	private static final String PATH = "src/main/resources/asset/";
 	private static final String MAP_SUFFIX= "_map.json";
 	private static final Gson GSON = new Gson();
-	
+
+	private MapLoader() {
+	}
+
 	/**
 	 * Carica e restituisce il contenuto di una mappa di gioco in formato JSON per una specifica versione di gioco.
 	 * 
@@ -38,9 +41,6 @@ public final class MapLoader {
 	 * @throws IOException se si verificano errori di I/O durante la lettura del file
 	 * @throws JsonSyntaxException se il file è vuoto, contiene null oppure il JSON è malformato
 	 */
-	private MapLoader() {
-	}
-	
 	public static JsonObject loadMapFile(String gameVersion) throws IOException {
 		
         if (gameVersion == null || gameVersion.trim().isEmpty()) {

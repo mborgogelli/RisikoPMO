@@ -4,7 +4,7 @@ import java.util.List;
 
 import it.uniurb.pmo.model.card.ICard;
 import it.uniurb.pmo.model.turn.IPhase;
-import it.uniurb.pmo.model.versions.risikockassic.turn.EnumPhaseRisikoNew;
+import it.uniurb.pmo.model.utils.EnumPhase;
 
 public interface IReinforcePhase extends IPhase {
 	
@@ -18,8 +18,12 @@ public interface IReinforcePhase extends IPhase {
 	int reinforceByCards(List<ICard> tris);
 	
 	/* Restituisce l'id della fase di rinforzo */
-	default int getPhaseId() {
-		return EnumPhaseRisikoNew.REINFORCE.getPhaseId();
+	default int getId() {
+		return EnumPhase.REINFORCE.getId();
+	};
+
+	default int next() {
+		return EnumPhase.REINFORCE.next();
 	};
 	
 }

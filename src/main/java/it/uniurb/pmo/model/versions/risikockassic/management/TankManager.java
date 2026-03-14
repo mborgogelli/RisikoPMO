@@ -50,7 +50,6 @@ public class TankManager extends TokenManager implements ITankManager{
 	 */
 	@Override
 	public int getPlayerToken(IPlayer player) {
-		checkReady();
 		return this.availableTanks.getOrDefault(player, 0);
 	}
 	
@@ -107,10 +106,10 @@ public class TankManager extends TokenManager implements ITankManager{
 		removeTanksFromZone(fromZone, amount);
 		addTanksToZone(toZone, amount);
 	}
-	
+
 
 	@Override
-	public void addToken(IPlayer player, int token) {
+	public void assignToken(IPlayer player, int token) {
 		this.availableTanks.put(player, this.getPlayerToken(player) + token);
 	}
 	
@@ -124,19 +123,17 @@ public class TankManager extends TokenManager implements ITankManager{
 	private void initTokensPerPlayer(List<IPlayer> players) {
 		checkInitialized();
 		int tanksPerPlayer = this.calculateTanksPerPlayer(players.size());
-		players.stream().forEach(p -> this.availableTanks.put(p, tanksPerPlayer));
+		players.stream().forEach(p -> this.assignToken(p, tanksPerPlayer));
 	}
 
 	private void initTokensPerZone(List<String> territories) {
 		checkInitialized();
 		territories.stream().forEach(z -> this.deployedTank.put(z, 1));
 		for (IPlayer p : this.availableTanks.keySet()) {
-			int deployed = super.getZonesOwnedBy(p).size();
-			int newAmount = this.availableTanks.get(p) - deployed;
-			this.availableTanks.put(p, newAmount);
+			this.removeTanksFromPlayer(p, super.getZonesOwnedBy(p).size());
 		}
 	}
-	
+
 	/**
 	 * Calcola il numero di tank per giocatore basandosi sul numero di giocatori
 	 * @param playerCount numero di giocatori
@@ -151,7 +148,7 @@ public class TankManager extends TokenManager implements ITankManager{
 			default: throw new IllegalArgumentException("Invalid number of players: " + playerCount);
 		}
 	}
-	
+
 
 	/**
 	 * Rimuove un certo numero di tank da un giocatore.

@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.uniurb.pmo.model.card.ICard;
 import it.uniurb.pmo.model.players.IPlayer;
+import it.uniurb.pmo.model.utils.EnumPhase;
 import it.uniurb.pmo.model.versions.risikockassic.turn.interfaces.IReinforcePhase;
 
 public class ReinforcePhase implements IReinforcePhase {
@@ -21,22 +22,9 @@ public class ReinforcePhase implements IReinforcePhase {
 	private List<ICard> tris;
 	private boolean isStarted = false;
 	
-	@Override
 	public void playPhase(IPlayer player) {
 		this.player = player;
 		this.isStarted = false;
-	}
-
-	@Override
-	public int nextPhase() {
-		int currentPhaseId = getPhaseId();
-		int phaseCount = EnumPhaseRisikoNew.values().length;
-		return (currentPhaseId + 1) % phaseCount;
-	}
-
-	@Override
-	public void endPhase() {
-		
 	}
 
 	@Override
