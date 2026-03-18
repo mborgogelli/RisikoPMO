@@ -15,5 +15,8 @@ public interface IMediator {
 	 * Inizializza tutti i manager registrati
 	 */
 	void initManagers();
+
+
+	void startGame();
     
 }

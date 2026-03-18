@@ -1,13 +1,13 @@
 package it.uniurb.pmo.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import it.uniurb.pmo.controller.dto.RoomResponseDTO;
+import it.uniurb.pmo.model.management.Director;
+import it.uniurb.pmo.model.players.IPlayer;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import it.uniurb.pmo.model.lobby.RoomManager;
 import it.uniurb.pmo.model.utils.GameVersion;
@@ -43,7 +43,50 @@ public class RoomController {
         // Restituisce il DTO al frontend
         return ResponseEntity.ok(response);
     }
-    
+
+    /**
+     * Endpoint per iniziare il gioco quando la stanza è piena
+     */
+    @PostMapping("/stanza/{roomId}/avvia-gioco")
+    public ResponseEntity<?> avviaGioco(@PathVariable String roomId) {
+
+        RoomManager roomManager = RoomManager.getInstance();
+
+        // 1. Verifica che la stanza sia piena e che tutti siano pronti
+        if (!roomManager.isFull(roomId)) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "La stanza non è ancora piena"));
+        }
+
+        // 2. Ottieni la versione del gioco dalla stanza
+        GameVersion gameVersion = roomManager.getGameVersion(roomId);
+
+        // 3. Crea il Director con la versione del gioco
+        Director director = new Director(gameVersion);
+
+        // 4. Estrai i giocatori dalla stanza e convertili in List<IPlayer>
+        List<IPlayer> players = roomManager.getPlayers(roomId).keySet()
+                .stream()
+                .map(player -> (IPlayer) player)
+                .toList();
+
+        // 5. Inizializza il gioco nel Director
+        director.initializeGame(players);
+
+        // 6. Avvia il gioco
+        director.StartGame();
+
+        // 7. (OPZIONALE) Rimuovi la stanza dal RoomManager
+        // roomManager.removeRoom(roomId);  // Se hai questo metodo
+
+        // 8. Restituisci la risposta al frontend
+        return ResponseEntity.ok(Map.of(
+                "message", "Gioco avviato con successo",
+                "roomId", roomId,
+                "playersCount", players.size()
+        ));
+    }
+
 	private GameVersion getGameVersionFromString(String version) {
 		GameVersion gameVersion;
 		switch (version.toLowerCase()) {

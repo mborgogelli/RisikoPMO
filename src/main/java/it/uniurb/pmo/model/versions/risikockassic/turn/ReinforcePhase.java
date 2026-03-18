@@ -30,7 +30,7 @@ public class ReinforcePhase implements IReinforcePhase {
 	@Override
 	public int reinforceByTerritories(List<String> playerTerritories) {
 		this.playerTerritories = playerTerritories;
-		return this.playerTerritories.size();
+		return this.playerTerritories.size() / 3;
 	}
 
 	@Override
@@ -52,9 +52,10 @@ public class ReinforcePhase implements IReinforcePhase {
 	public int reinforceByCards(List<ICard> tris) {
 		this.tris = tris;
 		int bonus = getTerritoryCardBonusForOwnership(tris);
+		this.tris.clear();
 		return bonus;
 	}
-	
+
 	/**
 	 * Calcola il bonus ottenuto dal possesso dei territori indicati nelle carte
 	 * 

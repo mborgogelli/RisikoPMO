@@ -13,5 +13,7 @@ public interface IPlayer {
 
 	void setColor(EnumColors color);
 
+	void removeColor();
+
 	void setReady(Boolean ready);
 }

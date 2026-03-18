@@ -45,7 +45,12 @@ public class Player implements IPlayer {
 	public void setColor(EnumColors color) {
         this.color = color;		
 	}
-	
+
+	@Override
+	public void removeColor() {
+		this.color = null;
+	}
+
 	@Override
 	public String toString() {
 		return "Player [name=" + name + ", color=" + color + "]";

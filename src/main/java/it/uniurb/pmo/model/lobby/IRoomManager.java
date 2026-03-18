@@ -1,5 +1,6 @@
 package it.uniurb.pmo.model.lobby;
 
+import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.utils.GameVersion;
 
@@ -43,7 +44,7 @@ public interface IRoomManager {
 
 	int getMaxPlayers(String roomId);
 
-	Map<String,EnumColors> getPlayers(String roomId);
+	List<IPlayer> getPlayers(String roomId);
 
 	Boolean isFull(String roomId);
 }

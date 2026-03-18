@@ -1,10 +1,10 @@
 package it.uniurb.pmo.model.lobby;
 
-import it.uniurb.pmo.model.players.Player;
+import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.utils.GameVersion;
 
-import java.util.Map;
+import java.util.List;
 
 public interface IRoom {
 	
@@ -15,6 +15,12 @@ public interface IRoom {
 	EnumColors getAssignedColor(String playerName);
 	
 	boolean isRoomFull();
+
+	boolean areAllPlayersReady();
+
+	List<IPlayer> getPlayersReady(String roomId);
+
+	public void setPlayerReady(String playerName, boolean isReady);
 	
 	int getNumberOfPlayers();
 	
@@ -26,5 +32,5 @@ public interface IRoom {
 
 	boolean hasPlayer(String playerName);
 
-	Map<Player, EnumColors> getPlayers();
+	List<IPlayer> getPlayers();
 }
