@@ -8,7 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 public interface IRoomManager {
-	
+
+	/**
+	 * Crea una nuova stanza di gioco.
+	 *
+	 * @param nomeGiocatore il nome del giocatore che crea la stanza
+	 * @param maxPlayers il numero massimo di giocatori nella stanza
+	 * @param gemeVersion la versione del gioco per la stanza
+	 * @return l'Id della stanza appena creata
+	 */
+	String createRoom(String nomeGiocatore, int maxPlayers, GameVersion gemeVersion);
+
 	List<String> filterRoomsByGameVersion(GameVersion gameVersion);
 	
 	int getPlayersNumber(String roomId);
@@ -24,16 +34,7 @@ public interface IRoomManager {
 	 */
 	void enterRoom(String roomId, String nomeGiocatore);
 	
-	/**
-	 * Crea una nuova stanza di gioco.
-	 * 
-	 * @param nomeGiocatore il nome del giocatore che crea la stanza
-	 * @param maxPlayers il numero massimo di giocatori nella stanza
-	 * @param gemeVersion la versione del gioco per la stanza
-	 * @return l'Id della stanza appena creata
-	 */
-	String createRoom(String nomeGiocatore, int maxPlayers, GameVersion gemeVersion);
-	
+
 	/**
 	 * Permette a un giocatore di uscire da una stanza.
 	 * 

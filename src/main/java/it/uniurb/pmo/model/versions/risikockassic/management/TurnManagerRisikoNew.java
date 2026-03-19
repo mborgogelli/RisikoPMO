@@ -2,10 +2,13 @@ package it.uniurb.pmo.model.versions.risikockassic.management;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import it.uniurb.pmo.model.management.TurnManager;
 import it.uniurb.pmo.model.players.IPlayer;
+import it.uniurb.pmo.model.turn.IPhase;
 import it.uniurb.pmo.model.utils.EnumColors;
+import it.uniurb.pmo.model.utils.EnumPhase;
 
 public class TurnManagerRisikoNew extends TurnManager {
 	
@@ -36,4 +39,48 @@ public class TurnManagerRisikoNew extends TurnManager {
 		
 	}
 
+	@Override
+	protected List<EnumPhase> getOrderedPhase() {
+		return List.of();
+	}
+
+	@Override
+	public void playTurn(IPlayer p) {
+
+	}
+
+	@Override
+	public void endTurn(IPlayer p) {
+
+	}
+
+	@Override
+	public void playPhase(IPhase phase) {
+
+	}
+
+	@Override
+	public int nextPhase() {
+		return 0;
+	}
+
+	@Override
+	public IPlayer getCurrentPlayer() {
+		return null;
+	}
+
+	@Override
+	public IPlayer getNextPlayer() {
+		return null;
+	}
+
+	@Override
+	public int getCount() {
+		return 0;
+	}
+
+	@Override
+	public Optional<IPlayer> checkVictory() {
+		return Optional.empty();
+	}
 }

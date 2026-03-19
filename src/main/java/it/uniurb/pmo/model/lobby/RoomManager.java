@@ -3,6 +3,7 @@ package it.uniurb.pmo.model.lobby;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.utils.GameVersion;
 
@@ -71,12 +72,8 @@ public class RoomManager implements IRoomManager {
 	}
 
 	@Override
-	public Map<String, EnumColors> getPlayers(String roomId) {
-		return this.getRoom(roomId).getPlayers().entrySet().stream()
-				.collect(Collectors.toMap(
-						e -> e.getKey().getName(),
-						Map.Entry::getValue
-				));
+	public List<IPlayer> getPlayers(String roomId) {
+		return this.getRoom(roomId).getPlayers();
 	}
 
 	@Override

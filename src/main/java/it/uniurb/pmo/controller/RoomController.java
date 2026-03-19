@@ -65,10 +65,7 @@ public class RoomController {
         Director director = new Director(gameVersion);
 
         // 4. Estrai i giocatori dalla stanza e convertili in List<IPlayer>
-        List<IPlayer> players = roomManager.getPlayers(roomId).keySet()
-                .stream()
-                .map(player -> (IPlayer) player)
-                .toList();
+        List<IPlayer> players = roomManager.getPlayers(roomId);
 
         // 5. Inizializza il gioco nel Director
         director.initializeGame(players);
@@ -103,10 +100,13 @@ public class RoomController {
      */
     private RoomResponseDTO createRoomResponse(String roomId, String playerName) {
         RoomManager roomManager = RoomManager.getInstance();
+        List<String> players = roomManager.getPlayers(roomId).stream()
+                .map(IPlayer::getName)
+                .toList();
 
         return RoomResponseDTO.builder()
             .roomId(roomId)
-            .players(roomManager.getPlayers(roomId))
+            .players(players)
             .currentPlayers(roomManager.getPlayersNumber(roomId))
             .gameVersion(roomManager.getGameVersion(roomId).toString())
             .maxPlayers(roomManager.getMaxPlayers(roomId))

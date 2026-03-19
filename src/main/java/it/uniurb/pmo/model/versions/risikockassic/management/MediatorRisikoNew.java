@@ -37,7 +37,12 @@ public class MediatorRisikoNew extends Mediator{
 		this.cardManager = super.getManager(CardManagerRisikoNew.class);
 		this.phaseManager = super.getManager(TurnManagerRisikoNew.class);
 	}
-	
+
+	@Override
+	public void startGame() {
+		//TODO
+	}
+
 	//TODO Rimuovere i getter
 	public MapManagerRisikoNew getMapManager() {
 		return this.mapManager;
