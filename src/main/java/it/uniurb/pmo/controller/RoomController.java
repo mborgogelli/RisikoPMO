@@ -6,6 +6,7 @@ import java.util.Map;
 import it.uniurb.pmo.controller.dto.RoomResponseDTO;
 import it.uniurb.pmo.model.management.Director;
 import it.uniurb.pmo.model.players.IPlayer;
+import it.uniurb.pmo.model.utils.EnumColors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -101,13 +102,13 @@ public class RoomController {
      */
     private RoomResponseDTO createRoomResponse(String roomId, String playerName) {
         RoomManager roomManager = RoomManager.getInstance();
-        List<String> players = roomManager.getPlayers(roomId).stream()
-                .map(IPlayer::getName)
-                .toList();
+        String player = roomManager.getPlayers(roomId).getFirst().getName();
+        EnumColors color = roomManager.getPlayerColor(roomId, playerName);
 
         return RoomResponseDTO.builder()
             .roomId(roomId)
-            .players(players)
+            .players(player)
+            .color(color)
             .currentPlayers(roomManager.getPlayersNumber(roomId))
             .gameVersion(roomManager.getGameVersion(roomId).toString())
             .maxPlayers(roomManager.getMaxPlayers(roomId))

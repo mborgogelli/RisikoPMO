@@ -63,6 +63,11 @@ public class TurnManagerRisikoNew extends TurnManager {
     }
 
     @Override
+    public void startTurn() {
+
+    }
+
+    @Override
     public Boolean isReady() {
         return null;
     }

@@ -14,14 +14,16 @@ import java.util.Map;
 public class RoomResponseDTO {
 
     private final String roomId;
-    private final List<String> players;
+    private final String playerName;
+    private final EnumColors color;
     private final String gameVersion;
     private final int currentPlayers;
     private final int maxPlayers;
     private final boolean isFull;
 
     private RoomResponseDTO(Builder builder) {
-        this.players = builder.players;
+        this.playerName = builder.playerName;
+        this.color = builder.color;
         this.gameVersion = builder.gameVersion;
         this.currentPlayers = builder.currentPlayers;
         this.maxPlayers = builder.maxPlayers;
@@ -37,8 +39,12 @@ public class RoomResponseDTO {
         return roomId;
     }
 
-    public List<String> getPlayers() {
-        return this.players;
+    public String getPlayers() {
+        return this.playerName;
+    }
+
+    public EnumColors getColor() {
+        return this.color;
     }
 
     public String getGameVersion() {
@@ -63,7 +69,8 @@ public class RoomResponseDTO {
      */
     public static class Builder {
         private String roomId;
-        private List<String> players;
+        private String playerName;
+        private EnumColors color;
         private String gameVersion;
         private int currentPlayers;
         private int maxPlayers;
@@ -74,8 +81,13 @@ public class RoomResponseDTO {
             return this;
         }
 
-        public Builder players(List<String> players) {
-            this.players = players;
+        public Builder players(String playerName) {
+            this.playerName = playerName;
+            return this;
+        }
+
+        public Builder color(EnumColors color) {
+            this.color = color;
             return this;
         }
 
