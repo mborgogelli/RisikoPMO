@@ -48,4 +48,6 @@ public interface IRoomManager {
 	List<IPlayer> getPlayers(String roomId);
 
 	Boolean isFull(String roomId);
+
+	void closeRoom(String roomId);
 }

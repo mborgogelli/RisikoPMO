@@ -83,4 +83,9 @@ public class TurnManagerRisikoNew extends TurnManager {
 	public Optional<IPlayer> checkVictory() {
 		return Optional.empty();
 	}
+
+	@Override
+	public void startTurn() {
+
+	}
 }

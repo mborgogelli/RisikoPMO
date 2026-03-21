@@ -24,6 +24,5 @@ public interface ITurnManager extends IManager{
 	Optional<IPlayer> checkVictory();
 
 
-	
-	
+	void startTurn();
 }

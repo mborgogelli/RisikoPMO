@@ -1,17 +1,17 @@
 package it.uniurb.pmo.model.versions.risikockassic.management;
 
-import java.util.List;
-
 import it.uniurb.pmo.model.management.Mediator;
 import it.uniurb.pmo.model.management.interfaces.IDirector;
 import it.uniurb.pmo.model.players.IPlayer;
+
+import java.util.List;
 
 public class MediatorRisikoNew extends Mediator{
 	
 	private MapManagerRisikoNew mapManager;
 	private CardManagerRisikoNew cardManager;
 	private TankManager tankManager;
-	private TurnManagerRisikoNew phaseManager;
+	private TurnManagerRisikoNew turnManager;
 	private IDirector director;
 	
 	
@@ -35,12 +35,12 @@ public class MediatorRisikoNew extends Mediator{
 		this.mapManager = super.getManager(MapManagerRisikoNew.class);
 		this.tankManager = super.getManager(TankManager.class);
 		this.cardManager = super.getManager(CardManagerRisikoNew.class);
-		this.phaseManager = super.getManager(TurnManagerRisikoNew.class);
+		this.turnManager = super.getManager(TurnManagerRisikoNew.class);
 	}
 
 	@Override
 	public void startGame() {
-		//TODO
+		this.turnManager.startTurn();
 	}
 
 	//TODO Rimuovere i getter

@@ -57,14 +57,14 @@ public class Director implements IDirector{
 
 	@Override
 	public void StartGame() {
-		// TODO Auto-generated method stub
-		
+		this.mediator.startGame();
+		this.isGameStarted = true;
 	}
 
 	@Override
 	public void exitGame(IPlayer player) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

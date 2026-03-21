@@ -81,6 +81,11 @@ public class RoomManager implements IRoomManager {
 		return this.getRoom(roomId).isRoomFull();
 	}
 
+	@Override
+	public void closeRoom(String roomId) {
+		this.activeRooms.remove(roomId, this.getRoom(roomId));
+	}
+
 	private void checkRoom(String roomId) {
 		if (!this.activeRooms.containsKey(roomId)) {
 			throw new IllegalArgumentException("Room with ID " + roomId + " does not exist.");

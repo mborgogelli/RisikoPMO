@@ -4,28 +4,38 @@ import it.uniurb.pmo.model.utils.GameVersion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RoomManagerTest {
 
-    IRoomManager roomManager = RoomManager.getInstance();
+    private final IRoomManager roomManager = RoomManager.getInstance();
+    private String roomId;
 
     @BeforeEach
     public void setUp() {
-        String roomId = roomManager.createRoom("Maronno",4, GameVersion.RISIKONEW);
+        roomId = roomManager.createRoom("Maronno", 4, GameVersion.RISIKONEW);
 
-        roomManager.enterRoom(roomId,"Gianni");
-        roomManager.enterRoom(roomId,"Pinotto");
-        roomManager.enterRoom(roomId,"Santana");
+        roomManager.enterRoom(roomId, "Gianni");
+        roomManager.enterRoom(roomId, "Pinotto");
+        roomManager.enterRoom(roomId, "Santana");
     }
 
     @Test
-    public void checkPeopleInTheRoom(){
-
-        String roomId = roomManager.filterRoomsByGameVersion(GameVersion.RISIKONEW).getFirst();
-
+    public void checkPeopleInTheRoom() {
         assertEquals(4, roomManager.getPlayersNumber(roomId));
+        assertEquals(4, roomManager.getMaxPlayers(roomId));
+        assertTrue(roomManager.isFull(roomId));
+    }
+
+    @Test
+    public void ingressToRoom() {
+        RuntimeException ex = assertThrows(
+                RuntimeException.class,
+                () -> roomManager.enterRoom(roomId, "NuovoPlayer")
+        );
+
+        assertEquals("The Room is full.", ex.getMessage());
+        assertEquals(4, roomManager.getPlayersNumber(roomId));
+
     }
 }

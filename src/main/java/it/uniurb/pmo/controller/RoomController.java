@@ -64,8 +64,9 @@ public class RoomController {
         // 3. Crea il Director con la versione del gioco
         Director director = new Director(gameVersion);
 
-        // 4. Estrai i giocatori dalla stanza e convertili in List<IPlayer>
+        // 4. Estrai i giocatori dalla stanza
         List<IPlayer> players = roomManager.getPlayers(roomId);
+        roomManager.closeRoom(roomId);
 
         // 5. Inizializza il gioco nel Director
         director.initializeGame(players);
