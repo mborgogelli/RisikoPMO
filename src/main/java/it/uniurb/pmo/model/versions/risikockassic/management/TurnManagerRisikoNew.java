@@ -1,5 +1,6 @@
 package it.uniurb.pmo.model.versions.risikockassic.management;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,8 +14,9 @@ import it.uniurb.pmo.model.utils.EnumPhase;
 public class TurnManagerRisikoNew extends TurnManager {
 	
 	private boolean isReady;
-	private Map<IPlayer,Integer> myTurn;
-	private List<EnumColors> playOrder;
+	private int currentTurn;
+	private Map<IPlayer,Integer> turns;
+	private List<IPlayer> players;
 	
 	
 	public TurnManagerRisikoNew() {
@@ -23,7 +25,9 @@ public class TurnManagerRisikoNew extends TurnManager {
 	
 	@Override
 	public void initializeGame(List<IPlayer> players) {
-		// TODO Auto-generated method stub
+		this.currentTurn = 0;
+		this.turns = this.initTurns(players);
+
 		this.isReady = true;
 		
 	}
@@ -87,5 +91,13 @@ public class TurnManagerRisikoNew extends TurnManager {
 	@Override
 	public void startTurn() {
 
+	}
+
+	private Map<IPlayer,Integer> initTurns(List<IPlayer> players){
+		Map<IPlayer,Integer> turns = new HashMap<>();
+		for (IPlayer p : players ) {
+			turns.putIfAbsent(p,this.currentTurn);
+		}
+		return turns;
 	}
 }

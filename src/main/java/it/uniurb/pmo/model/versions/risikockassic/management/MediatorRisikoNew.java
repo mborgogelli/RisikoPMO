@@ -51,4 +51,8 @@ public class MediatorRisikoNew extends Mediator{
 	public TankManager getTankManager() {
 		return this.tankManager;
 	}
+
+	public TurnManagerRisikoNew getTurnManager(){
+		return this.turnManager;
+	}
 }

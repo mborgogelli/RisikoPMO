@@ -22,8 +22,4 @@ public interface IReinforcePhase extends IPhase {
 		return EnumPhase.REINFORCE.getId();
 	};
 
-	default int next() {
-		return EnumPhase.REINFORCE.next();
-	};
-	
 }

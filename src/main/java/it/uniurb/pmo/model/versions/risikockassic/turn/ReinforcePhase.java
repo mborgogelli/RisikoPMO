@@ -21,10 +21,11 @@ public class ReinforcePhase implements IReinforcePhase {
 	private List<String> playerTerritories;
 	private List<ICard> tris;
 	private boolean isStarted = false;
-	
+
+	@Override
 	public void playPhase(IPlayer player) {
 		this.player = player;
-		this.isStarted = false;
+		this.isStarted = true;
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class TurnManager implements ITurnManager {
 	
 	private IMediator mediator;
-	
+
 	@Override
 	public void setMediator(Mediator mediator) {
 		this.mediator = mediator;
