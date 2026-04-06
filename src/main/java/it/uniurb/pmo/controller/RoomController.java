@@ -13,11 +13,19 @@ import org.springframework.web.bind.annotation.*;
 import it.uniurb.pmo.model.lobby.RoomManager;
 import it.uniurb.pmo.model.utils.GameVersion;
 
-@RestController
+/**
+ * Controller per la gestione delle stanze di gioco. Espone endpoint REST per
+ * creare stanze, entrare in stanze esistenti e avviare il gioco. Utilizza
+ * RoomManager per gestire la logica delle stanze e Director per inizializzare e
+ * avviare il gioco.
+ */
+@RestController 
+// Tutti gli endpoint di questo controller saranno prefissati da "/api"
 @RequestMapping("/api")
 public class RoomController {
-
-    @PostMapping("/crea-stanza")
+	
+	// Endpoint per creare una nuova stanza di gioco
+	@PostMapping("/crea-stanza")
     public ResponseEntity<RoomResponseDTO> creaPartita(@RequestBody Map<String, String> payload) {
 
         // Recupera informazioni dal JSON inviato dal frontend
