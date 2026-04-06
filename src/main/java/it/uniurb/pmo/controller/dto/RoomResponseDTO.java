@@ -21,6 +21,7 @@ public class RoomResponseDTO {
     private final int maxPlayers;
     private final boolean isFull;
 
+    //
     private RoomResponseDTO(Builder builder) {
         this.playerName = builder.playerName;
         this.color = builder.color;
