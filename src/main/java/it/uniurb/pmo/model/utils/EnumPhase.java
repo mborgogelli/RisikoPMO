@@ -1,5 +1,6 @@
 package it.uniurb.pmo.model.utils;
 
+import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.turn.IPhase;
 
 public enum EnumPhase implements IPhase {
@@ -21,9 +22,8 @@ public enum EnumPhase implements IPhase {
     }
 
     @Override
-    public int next() {
-        EnumPhase[] phases = EnumPhase.values();
-        int nextIndex = (this.ordinal() + 1) % phases.length;
-        return phases[nextIndex].getId();
+    public void playPhase(IPlayer player) {
+
     }
+
 }
