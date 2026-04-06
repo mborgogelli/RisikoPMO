@@ -62,5 +62,7 @@ public interface IMapManager extends IManager {
 	 * @return
 	 */
     List<String> checkZoneCompletion(IPlayer player);
+
+	Map<String,Integer> getZoneCountByRootZone();
     
 }

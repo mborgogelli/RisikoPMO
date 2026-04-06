@@ -1,6 +1,7 @@
 package it.uniurb.pmo.model.management;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import it.uniurb.pmo.model.board.IBoardCreator;
@@ -45,7 +46,16 @@ public abstract class MapManager implements IMapManager {
 						.map(zone -> zone.getName())
 						.collect(Collectors.toList());
 	}
-	
+
+	@Override
+	public Map<String,Integer> getZoneCountByRootZone(){
+		return this.gameBoard.getZones().stream()
+						.collect(Collectors.toMap(
+								zone -> zone.getName(),
+								zone -> zone.getChildZones().size()
+						));
+	}
+
 	protected List<String> getParentZones(){
 		return this.gameBoard.getZones().stream()
 										.map(zone -> zone.getName())

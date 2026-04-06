@@ -62,18 +62,18 @@ public class RoomController {
         // 2. Ottieni la versione del gioco dalla stanza
         GameVersion gameVersion = roomManager.getGameVersion(roomId);
 
-        // 3. Crea il Director con la versione del gioco
-        Director director = new Director(gameVersion);
-
-        // 4. Estrai i giocatori dalla stanza
+        // 3. Estrai i giocatori dalla stanza
         List<IPlayer> players = roomManager.getPlayers(roomId);
         roomManager.closeRoom(roomId);
 
+        // 4. Crea il Director con la versione del gioco
+        Director director = new Director(gameVersion, players);
+/*
         // 5. Inizializza il gioco nel Director
         director.initializeGame(players);
 
         // 6. Avvia il gioco
-        director.StartGame();
+        director.StartGame();*/
 
         // 7. (OPZIONALE) Rimuovi la stanza dal RoomManager
         // roomManager.removeRoom(roomId);  // Se hai questo metodo

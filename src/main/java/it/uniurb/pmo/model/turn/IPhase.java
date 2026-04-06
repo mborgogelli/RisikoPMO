@@ -8,4 +8,6 @@ public interface IPhase {
 	
 	void playPhase(IPlayer player);
 
+	void clearPhase();
+
 }

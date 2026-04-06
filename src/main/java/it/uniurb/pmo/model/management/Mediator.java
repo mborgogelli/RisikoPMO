@@ -4,6 +4,7 @@ package it.uniurb.pmo.model.management;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import it.uniurb.pmo.model.management.interfaces.IManager;
 import it.uniurb.pmo.model.management.interfaces.IMediator;
@@ -20,6 +21,7 @@ public abstract class Mediator implements IMediator {
 	// Metodi per accedere ai dati del MapManager
     public abstract List<String> getAllZones();
     public abstract List<String> getZonesOwnedBy(IPlayer player);
+    public abstract Map<String,Integer> getZoneCount();
     public abstract boolean canMoveBetween(IPlayer player, String toZone, String fromZone);
     
     @Override

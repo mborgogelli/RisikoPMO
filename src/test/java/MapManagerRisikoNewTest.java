@@ -101,4 +101,15 @@ class MapManagerRisikoNewTest extends MapManagerRisikoNew {
             assertTrue(completedContinents.contains(continent));
         }
     }
+
+    @Test
+    void testZoneCounter() {
+        var zoneCount = mapManager.getZoneCountByRootZone();
+        var allParentZones = super.getParentZones();
+
+        assertNotNull(zoneCount);
+        assertFalse(zoneCount.isEmpty());
+        assertEquals(allParentZones.size(), zoneCount.size(),
+                     "Should have a count for each parent zone");
+    }
 }

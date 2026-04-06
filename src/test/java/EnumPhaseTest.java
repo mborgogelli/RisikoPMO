@@ -14,11 +14,11 @@ public class EnumPhaseTest {
         assertEquals(1, EnumPhase.MOVEMENT.next());
     }*/
 
-    @Test
+     @Test
     public void getIdShouldMatchExpectedValues() {
-        assertEquals(1, EnumPhase.ASSIGNMENT.getId());
-        assertEquals(2, EnumPhase.REINFORCE.getId());
-        assertEquals(3, EnumPhase.ATTACK.getId());
-        assertEquals(4, EnumPhase.MOVEMENT.getId());
+        assertEquals(0, EnumPhase.ASSIGNMENT.getId());
+        assertEquals(1, EnumPhase.REINFORCE.getId());
+        assertEquals(2, EnumPhase.ATTACK.getId());
+        assertEquals(3, EnumPhase.MOVEMENT.getId());
     }
 }

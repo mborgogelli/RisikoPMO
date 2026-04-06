@@ -19,11 +19,15 @@ public class Director implements IDirector{
 	private Mediator mediator;
 	private List<IManager> managers;
 	private GameVersion version;
+	private List<IPlayer> players;
 	
-	public Director(GameVersion version) {
+	public Director(GameVersion version, List<IPlayer> players) {
 		this.version = version;
+		this.players = players;
 		this.isReady = false;
 		this.isGameStarted = false;
+		this.initializeGame(players, version);
+		this.StartGame();
 	}
 	
 	@Override
@@ -100,7 +104,11 @@ public class Director implements IDirector{
 			manager.initializeGame(players);
 		}
 	}
-	
+
+	private boolean checkManagersReady() {
+		return this.managers.stream().allMatch(IManager::isReady);
+	}
+
     private void resetManagers() {
 		for (IManager manager : this.managers) {
 			manager.resetGame();

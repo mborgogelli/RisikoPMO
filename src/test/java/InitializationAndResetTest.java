@@ -22,7 +22,7 @@ public class InitializationAndResetTest {
 											new Player("Player2", EnumColors.YELLOW),
 											new Player("Player3", EnumColors.BLUE));
 	
-	private final IDirector director = new Director(GameVersion.RISIKONEW);
+	private final IDirector director = new Director(GameVersion.RISIKONEW, players);
 	
 	@BeforeEach
 	public void setUp(){

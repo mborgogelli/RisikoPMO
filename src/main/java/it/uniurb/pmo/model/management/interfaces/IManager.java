@@ -30,11 +30,4 @@ public interface IManager {
 	 */
 	void setMediator(Mediator mediator);
 	
-    /*default void setMediatorAndRegister(IMediator mediator) {
-        setMediator(mediator);
-        if (mediator != null) {
-            mediator.registerManager(this);
-        }
-    }*/
-	
 }

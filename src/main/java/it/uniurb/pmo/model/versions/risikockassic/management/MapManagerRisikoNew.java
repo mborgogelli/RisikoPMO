@@ -145,7 +145,7 @@ public class MapManagerRisikoNew extends MapManager implements IMapManagerRisiko
 	 */
 	private void checkReady() {
 		if (!this.isReady) {
-			throw new IllegalStateException("MapManager must be initialized first.");
+			throw new IllegalStateException(this.getClass().getSimpleName() + " must be initialized first.");
 		}
 	}
 	

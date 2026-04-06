@@ -232,13 +232,13 @@ public class TankManager extends TokenManager implements ITankManager{
 	 */
 	private void checkReady() {
 		if (!isReady) {
-			throw new IllegalStateException("TokenManager must be initialized before use.");
+			throw new IllegalStateException(this.getClass().getSimpleName() + " must be initialized before use.");
 		}
 	}
 	
 	private void checkInitialized() {
 		if (this.isReady) {
-			throw new IllegalStateException("TokenManager is already initialized.");
+			throw new IllegalStateException(this.getClass().getSimpleName() + " is already initialized.");
 		}
 	}
 

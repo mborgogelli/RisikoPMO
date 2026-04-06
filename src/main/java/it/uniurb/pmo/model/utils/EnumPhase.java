@@ -5,10 +5,10 @@ import it.uniurb.pmo.model.turn.IPhase;
 
 public enum EnumPhase implements IPhase {
 	
-	ASSIGNMENT(1),
-	REINFORCE(2),
-	ATTACK(3),
-	MOVEMENT(4);
+	ASSIGNMENT(0),
+	REINFORCE(1),
+	ATTACK(2),
+	MOVEMENT(3);
 	
 	private final int phaseId;
 
@@ -23,6 +23,11 @@ public enum EnumPhase implements IPhase {
 
     @Override
     public void playPhase(IPlayer player) {
+
+    }
+
+    @Override
+    public void clearPhase() {
 
     }
 

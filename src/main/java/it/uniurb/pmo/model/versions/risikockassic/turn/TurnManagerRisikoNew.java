@@ -5,16 +5,17 @@ import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.turn.IPhase;
 import it.uniurb.pmo.model.utils.EnumPhase;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class TurnManagerRisikoNew extends TurnManager {
 
-    private final List<EnumPhase> phases;
+    private final List<IPhase> phases;
 
     public TurnManagerRisikoNew() {
-        this.phases = this.getOrderedPhase();
+        this.phases = new ArrayList<>();
     }
 
     @Override
@@ -74,11 +75,17 @@ public class TurnManagerRisikoNew extends TurnManager {
 
     @Override
     public void initializeGame(List<IPlayer> players) {
-
+        this.initialiazePhases();
     }
 
     @Override
     public void resetGame() {
 
+    }
+
+    private void initialiazePhases() {
+        this.phases.add(new ReinforcePhase());
+        this.phases.add(new CombatPhase());
+        this.phases.add(new StrategicPhase());
     }
 }

@@ -1,4 +1,6 @@
 package it.uniurb.pmo.model.versions.risikockassic.turn.interfaces;
 
-public interface IStrategicPhase {
+import it.uniurb.pmo.model.turn.IPhase;
+
+public interface IStrategicPhase extends IPhase {
 }

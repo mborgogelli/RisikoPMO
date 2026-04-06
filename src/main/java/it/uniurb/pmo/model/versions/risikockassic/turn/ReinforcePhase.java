@@ -21,11 +21,17 @@ public class ReinforcePhase implements IReinforcePhase {
 	private List<String> playerTerritories;
 	private List<ICard> tris;
 	private boolean isStarted = false;
+	private boolean cardsUsed = false;
 
 	@Override
 	public void playPhase(IPlayer player) {
 		this.player = player;
 		this.isStarted = true;
+	}
+
+	@Override
+	public void clearPhase() {
+
 	}
 
 	@Override
@@ -54,7 +60,7 @@ public class ReinforcePhase implements IReinforcePhase {
 		this.tris = tris;
 		int bonus = getTerritoryCardBonusForOwnership(tris);
 		this.tris.clear();
-		return bonus;
+		return bonus * 2;
 	}
 
 	/**
