@@ -24,7 +24,7 @@ import it.uniurb.pmo.model.utils.MapLoader;
 */
 public abstract class BoardCreator implements IBoardCreator{
 	
-	private JsonObject jsonMap;
+	private final JsonObject jsonMap;
 	
 	/**
 	 * Costruttore protetto che carica la mappa dal file JSON in base alla versione del gioco.
@@ -73,16 +73,15 @@ public abstract class BoardCreator implements IBoardCreator{
 	 * Metodo astratto: deve essere implementato per creare una lista di zone a partire da una chiave JSON.
 	 * Utilizza la interfaccia Factory per garantire la creazione del tipo corretto di IZone.
 	 *
-	 * @param key La chiave JSON da cui estrarre le zone
+	 * @param rootKey La chiave JSON da cui estrarre le zone
 	 * @param jsonMap L'oggetto JSON contenente le informazioni sulle zone
 	 * @param factory La factory per creare le istanze di IZone
 	 * @return Una lista di IZone create dalla chiave JSON
 	 */
-    protected List<IZone> createZones(String rootey, List<JsonElement> jsonMap, ZoneFactory factory) {
+    protected List<IZone> createZones(String rootKey, List<JsonElement> jsonMap, ZoneFactory factory) {
     	this.checkInputList(jsonMap);
-    	List<String> list = this.getValues(rootey, jsonMap, String.class);
-    	List<IZone> elements = this.insertZoneByKey(list, factory);
-		return elements;
+    	List<String> list = this.getValues(rootKey, jsonMap, String.class);
+        return this.insertZoneByKey(list, factory);
 	}
 	
 	/**
@@ -108,8 +107,8 @@ public abstract class BoardCreator implements IBoardCreator{
 	 **/
 	protected List<JsonElement> getValues(String rootKey, List<JsonElement> jsonMap){
 		this.checkInputList(jsonMap);
-		List<JsonElement> list = new ArrayList<>();
-		if (jsonMap.get(0).isJsonArray() || jsonMap.get(0).isJsonObject()) {
+		List<JsonElement> list;
+		if (jsonMap.getFirst().isJsonArray() || jsonMap.getFirst().isJsonObject()) {
 			list = this.getValueFromList(rootKey, jsonMap);
 		} else {
 			throw new IllegalArgumentException("Parameter must contain JsonObject or JsonArray");
@@ -128,8 +127,8 @@ public abstract class BoardCreator implements IBoardCreator{
 	 **/
 	protected <T> List<T> getValues(String rootKey, List<JsonElement> jsonMap, Class<T> myClass) {
 		List<JsonElement> elements = this.getValues(rootKey, jsonMap);
-		List<T> result = new ArrayList<>();
-		if (elements.get(0).isJsonPrimitive()) {
+		List<T> result;
+		if (elements.getFirst().isJsonPrimitive()) {
 				result = convertJsonPrimitiveList(elements, myClass);
 		} else {
 			throw new IllegalArgumentException("Cannot convert elements to " + myClass.getSimpleName());
@@ -151,8 +150,8 @@ public abstract class BoardCreator implements IBoardCreator{
 	 * @throws IllegalArgumentException se gli elementi non possono essere convertiti al tipo specificato
 	 */
     protected <T> List<T> convertJsonPrimitiveList(List<JsonElement> list, Class<T> myClass) {
-    	List<T> result = new ArrayList<>();
-    	JsonPrimitive elem = list.get(0).getAsJsonPrimitive();
+    	List<T> result;
+    	JsonPrimitive elem = list.getFirst().getAsJsonPrimitive();
     	if (myClass == String.class && elem.isString()) {
 			result = list.stream().map(e -> myClass.cast(e.getAsString())).collect(Collectors.toList());
 		} else if (myClass == Integer.class && elem.isNumber()) {
@@ -174,8 +173,7 @@ public abstract class BoardCreator implements IBoardCreator{
 	 * 
 	 * @param gameVersion La versione del gioco per cui caricare la mappa.
 	 * @return Un oggetto JsonObject che rappresenta la mappa del gioco.
-	 * @throws IOException 
-	 */
+     */
 	private JsonObject loadMap(GameVersion gameVersion) {
 		JsonObject jsonObject = null;
 		try {
@@ -197,9 +195,8 @@ public abstract class BoardCreator implements IBoardCreator{
 	 * @throws IllegalArgumentException se la chiave non è valida
 	 */
 	private boolean isValidKey(String key, JsonObject json) {
-		Boolean isValid = true;
+		boolean isValid = true;
 		if (!json.has(key) || json.get(key).isJsonNull()) {
-			isValid = false;
 			throw new IllegalArgumentException(key + " is not a valid key in the JSON object, or its value is null.");
 		}
 		return isValid;
@@ -215,7 +212,7 @@ public abstract class BoardCreator implements IBoardCreator{
 	 */
 	private void checkInputList(List<JsonElement> list) {
 		this.checkOutputList(list);
-		if (list.get(0).isJsonPrimitive()) {
+		if (list.getFirst().isJsonPrimitive()) {
 			throw new IllegalArgumentException("Elements of List " + list + " are JsonPrimitive. Cannot use provided key.");
 		}
 	}
@@ -235,7 +232,7 @@ public abstract class BoardCreator implements IBoardCreator{
 			throw new IllegalArgumentException("List is empty.");
 		} else if (!checkSameType(list)){
 			throw new IllegalArgumentException("Elements of List are not of the same type.");
-		} else if (list.get(0).isJsonNull()) {
+		} else if (list.getFirst().isJsonNull()) {
 			throw new IllegalArgumentException("Elements of List are JsonNull.");
 		}
 	}
@@ -247,7 +244,7 @@ public abstract class BoardCreator implements IBoardCreator{
 	 * @return true se tutti gli elementi sono dello stesso tipo, false altrimenti
 	 */
 	private boolean checkSameType(List<JsonElement> jsonElements) {
-		Class<?> firstType = jsonElements.get(0).getClass();
+		Class<?> firstType = jsonElements.getFirst().getClass();
 		return jsonElements.stream().allMatch(e -> e.getClass().equals(firstType));
 	}
 

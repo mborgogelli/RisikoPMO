@@ -22,10 +22,10 @@ class GameBoardRisikoNew implements IGameBoard {
 	}
 	
 	@Override
-	public List<IZone> getZones() {
+	public List<IZone> getRootZones() {
 		return this.continents;
 	}
-	
+
 	@Override
 	public GameVersion getGameVersion() {
 		return this.gameVersion;

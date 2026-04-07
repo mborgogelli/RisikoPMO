@@ -17,11 +17,11 @@ import it.uniurb.pmo.model.utils.GameVersion;
  * Utilizza un file JSON per caricare la configurazione della mappa, inclusi continenti,
  * territori, valori di territorio per la modalità "TimeAttack" e adiacenze.
  */
-public class BoardCreatorRisikoNew extends BoardCreator {
+public final class BoardCreatorRisikoNew extends BoardCreator {
 	
 	private static BoardCreatorRisikoNew instance;
 	
-	private JsonObject jsonMap;
+	private final JsonObject jsonMap;
 	private List<IZone> continents;
 	private IGameBoard gameBoard;
 	
@@ -30,7 +30,7 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 	 * NOTA: Protected solo per la classe di test TestBoardCreator.
 	 * Carica la mappa dal file JSON specificato nella versione del gioco.
 	 */
-	protected BoardCreatorRisikoNew() {
+	private BoardCreatorRisikoNew() {
 		super(GameVersion.RISIKONEW);
 		this.jsonMap = super.getLoadedMap();
 	}
@@ -54,7 +54,7 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 			this.createContinents();
 			this.insertTerritories();
 			this.setNeighbours();
-			this.setArmyValues(TERRITORIES);
+			this.setZoneValue(TERRITORIES);
 			this.gameBoard = new GameBoardRisikoNew(this.continents);
 		}
 		return this.gameBoard;
@@ -69,7 +69,7 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 	private void createContinents() {
 		List<JsonElement> continents = this.getContinentsAsList();
 		this.continents = super.createZones("name", continents, Continent::new);
-		this.setArmyValues(CONTINENTS);
+		this.setZoneValue(CONTINENTS);
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 	 */
 	private List<JsonElement> getContinentsAsList() {
 		return super.splitJsonArray(super.getValues(CONTINENTS.getDescrizione(), this.jsonMap)
-				.get(0).getAsJsonArray());
+				.getFirst().getAsJsonArray());
 	}
 	
 	/**
@@ -116,8 +116,7 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 	 * @return Lista di IZone che rappresentano i territori creati
 	 */
 	private List<IZone> createTerritories(List<JsonElement> continentTerritories) {
-		List<IZone> zones = (super.createZones("name", continentTerritories, Territory::new));
-		return zones;
+        return (super.createZones("name", continentTerritories, Territory::new));
 	}
 	
 	/**
@@ -125,34 +124,35 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 	 * 
 	 * @param zoneType Tipo di zona (CONTINENTS o TERRITORIES)
 	 */
-	private void setArmyValues(EnumMap zoneType) {
+	private void setZoneValue(EnumMap zoneType) {
 	    if (zoneType == CONTINENTS) {
-	        setArmyValuesForContinents();
+	        setArmyBonusForContinents();
 	    } else if (zoneType == TERRITORIES) {
-	        setArmyValuesForTerritories();
+	        setPointsForTerritories();
 	    }
 	}
 
 	/**
 	 * Imposta i valori di armata per tutti i continenti.
 	 */
-	private void setArmyValuesForContinents() {
+	private void setArmyBonusForContinents() {
 	    List<JsonElement> continents = this.getContinentsAsList();
-	    List<Integer> armyValues = super.getValues("army", continents, Integer.class);
-	    
+	    List<Integer> armyValues = super.getValues("armybonus", continents, Integer.class);
+
+		// Al continente i-esimo corrisponde il bonus i-esimo
 	    for (int i = 0; i < this.continents.size(); i++) {
 	        this.continents.get(i).setValue(armyValues.get(i));
 	    }
 	}
 
 	/**
-	 * Imposta i valori di armata per tutti i territori di ogni continente.
+	 * Imposta i punti per la modalità Time Attack per tutti i territori di ogni continente.
 	 */
-	private void setArmyValuesForTerritories() {
+	private void setPointsForTerritories() {
 	    List<JsonElement> allTerritories = this.getTerritoriesFromJson();
 	    
 	    for (int continentIndex = 0; continentIndex < this.continents.size(); continentIndex++) {
-	        setArmyValuesForContinentTerritories(allTerritories, continentIndex);
+	        setPointsForContinentTerritories(allTerritories, continentIndex);
 	    }
 	}
 
@@ -162,11 +162,16 @@ public class BoardCreatorRisikoNew extends BoardCreator {
 	 * @param allTerritories Lista di tutti i territori dal JSON
 	 * @param continentIndex Indice del continente da processare
 	 */
-	private void setArmyValuesForContinentTerritories(List<JsonElement> allTerritories, int continentIndex) {
+	private void setPointsForContinentTerritories(List<JsonElement> allTerritories, int continentIndex) {
 	    List<IZone> territories = this.continents.get(continentIndex).getChildZones();
+
+		// Estrae i territori del continente i-esimo dal JSON
 	    List<JsonElement> continentTerritories = List.of(allTerritories.get(continentIndex));
-	    List<Integer> armyValues = super.getValues("army", continentTerritories, Integer.class);
-	    
+
+		// Estrae il valore per la modalità "TimeAttack" per ogni territorio del continente
+	    List<Integer> armyValues = super.getValues("points", continentTerritories, Integer.class);
+
+		// Assegna all' i-esimo territorio l' i-esimo valore per la modalità "TimeAttack"
 	    for (int territoryIndex = 0; territoryIndex < territories.size(); territoryIndex++) {
 	        territories.get(territoryIndex).setValue(armyValues.get(territoryIndex));
 	    }

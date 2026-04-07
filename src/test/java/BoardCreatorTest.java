@@ -1,5 +1,3 @@
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -15,26 +13,44 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import it.uniurb.pmo.model.board.BoardCreatorTestSupport;
 import it.uniurb.pmo.model.board.IGameBoard;
 import it.uniurb.pmo.model.board.IZone;
 import it.uniurb.pmo.model.versions.risikockassic.board.BoardCreatorRisikoNew;
 import it.uniurb.pmo.model.versions.risikockassic.board.Continent;
 import it.uniurb.pmo.model.versions.risikockassic.board.Territory;
 
-public class BoardCreatorTest extends BoardCreatorRisikoNew {
-	
+class BoardCreatorTest {
+
 	private JsonObject jsonMap;
-	
+	private final BoardCreatorTestSupport creator = new BoardCreatorTestSupport();
+
 	@BeforeEach
 	public void setUp() {
-		this.jsonMap = super.getLoadedMap();
-	}	
+		this.jsonMap = getLoadedMap();
+	}
+
+	private JsonObject getLoadedMap() {
+		return creator.getLoadedMap();
+	}
+
+	private List<JsonElement> getValues(String key, JsonElement element) {
+		return creator.getValues(key, element);
+	}
+
+	private List<JsonElement> getValues(String key, List<JsonElement> elements) {
+		return creator.getValues(key, elements);
+	}
+
+	private <T> List<T> getValues(String key, List<JsonElement> elements, Class<T> type) {
+		return creator.getValues(key, elements, type);
+	}
 
 	@Test
 	public void getContinentsNameFromJson(){
-		List<JsonElement> continents = super.getValues("continents", this.jsonMap);
-		List<String> list = super.getValues("name", continents, String.class);
-		
+		List<JsonElement> continents = getValues("continents", this.jsonMap);
+		List<String> list = getValues("name", continents, String.class);
+
 		assertTrue(list.contains("europa"));
 	    assertTrue(list.contains("america_settentrionale"));
 	    assertTrue(list.contains("africa"));
@@ -42,29 +58,29 @@ public class BoardCreatorTest extends BoardCreatorRisikoNew {
 	    assertTrue(list.contains("oceania"));
 	    assertTrue(list.contains("asia"));
 	    assertEquals(6, list.size());
-	    
+
 	}
-	
+
 	@Test
 	public void createContinents() {
-		List<IZone> continents = super.getMap().getZones();
-		
+		List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
+
 		assertEquals(6, continents.size());
 		assertTrue(continents.stream().allMatch(zone -> zone instanceof Continent));
 	}
-	
+
 	@Test
 	public void createTerritories() {
-		List<IZone> continents = super.getMap().getZones();
-		
-		assertEquals(7, continents.get(0).getChildZones().size());
-		assertTrue(continents.get(0).getChildZones().stream().allMatch(zone -> zone instanceof Territory));
+		List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
+
+		assertEquals(7, continents.getFirst().getChildZones().size());
+		assertTrue(continents.getFirst().getChildZones().stream().allMatch(zone -> zone instanceof Territory));
 	}
-	
+
 	@Test
 	public void getArmyFromContinent() {
-		List<IZone> continents = super.getMap().getZones();
-		
+		List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
+
 		assertEquals(5, continents.get(0).getValue());
 		assertEquals(3, continents.get(1).getValue());
 		assertEquals(7, continents.get(2).getValue());
@@ -72,22 +88,22 @@ public class BoardCreatorTest extends BoardCreatorRisikoNew {
 		assertEquals(5, continents.get(4).getValue());
 		assertEquals(2, continents.get(5).getValue());
 	}
-	
+
 	@Test
 	public void getContinentsArmyFromJson(){
-		List<JsonElement> continents = super.getValues("continents", this.jsonMap);
-		List<Integer> list = super.getValues("army", continents, Integer.class);
-		
+		List<JsonElement> continents = getValues("continents", this.jsonMap);
+		List<Integer> list = getValues("armybonus", continents, Integer.class);
+
 		List<Integer> expected = List.of(
 				2, 2, 3, 5, 5, 7);
-			
+
 		assertEquals(expected.size(), list.size());
 		assertTrue(list.containsAll(expected));
 	}
-	
+
 	@Test
 	public void testEuropaTerritoriesArmyValues() {
-	    List<IZone> continents = super.getMap().getZones();
+	    List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
 	    IZone europa = continents.stream()
 						        .filter(zone -> zone instanceof Continent && zone.getName().equals("europa"))
 						        .findFirst()
@@ -103,19 +119,19 @@ public class BoardCreatorTest extends BoardCreatorRisikoNew {
 
 	    assertEquals(expectedArmyValues, actualArmyValues);
 	}
-	
+
 	@Test
 	public void getEuropaTerritoriesFromJson(){
-		List<JsonElement> continents = super.getValues("continents", this.jsonMap);
-		JsonArray continentsArray = continents.get(0).getAsJsonArray();
-		
+		List<JsonElement> continents = getValues("continents", this.jsonMap);
+		JsonArray continentsArray = continents.getFirst().getAsJsonArray();
+
 		JsonElement europa = StreamSupport.stream(continentsArray.spliterator(),false)
 			.filter(c -> c.getAsJsonObject().get("name").getAsString().equals("europa"))
 			.findFirst().orElseThrow(() -> new IllegalArgumentException("Europa continent not found"));
-		
-		List<JsonElement> territories = super.getValues("territories", europa);
-		List<String> europaTerritories = super.getValues("name", territories, String.class);
-		
+
+		List<JsonElement> territories = getValues("territories", europa);
+		List<String> europaTerritories = getValues("name", territories, String.class);
+
 		List<String> expected = List.of(
 			"islanda",
 			"gran_bretagna",
@@ -125,35 +141,34 @@ public class BoardCreatorTest extends BoardCreatorRisikoNew {
 			"europa_occidentale",
 			"europa_meridionale"
 		);
-		
+
 		assertEquals(expected.size(), europaTerritories.size());
 		assertTrue(europaTerritories.containsAll(expected));
 	}
-	
+
 	@Test
 	public void cannotReturnEmptyList() {
-	    List<JsonElement> continents = super.getValues("continents", this.jsonMap);
-	    List<JsonElement> territories = super.getValues("territories", continents);
-	    List<JsonElement> islandaNeighbours = super.getValues("neighbours", territories.get(0));
+	    List<JsonElement> continents = getValues("continents", this.jsonMap);
+	    List<JsonElement> territories = getValues("territories", continents);
+	    List<JsonElement> islandaNeighbours = getValues("neighbours", territories.getFirst());
 
-	    assertThrows(IllegalArgumentException.class, () -> {
-	        super.getValues("neighbours", islandaNeighbours);
-	    }, "List is empty.");
+	    assertThrows(IllegalArgumentException.class,
+	        () -> getValues("neighbours", islandaNeighbours));
 	}
-	
+
 	@Test
 	public void testSetNeighbours() {
-	    IGameBoard gameBoard = super.getMap();
-	    
+	    IGameBoard gameBoard = BoardCreatorRisikoNew.getInstance().getMap();
+
 	    List<String> islandaNeighbours = gameBoard.getNeighbours("islanda");
-	    
+
 	    /*gameBoard.getZones().stream().forEach(c -> c.getChildZones().stream().map(IZone::getNeighbours)
 	    		 .forEach(System.out::println));*/
 	    assertNotNull(islandaNeighbours);
 	    assertTrue(islandaNeighbours.contains("gran_bretagna"));
 	    assertTrue(islandaNeighbours.contains("scandinavia"));
 	    assertEquals(3, islandaNeighbours.size());
-	    
+
 	    List<String> ucrainaNeighbours = gameBoard.getNeighbours("ucraina");
 	    assertNotNull(ucrainaNeighbours);
 	    assertTrue(ucrainaNeighbours.contains("scandinavia"));

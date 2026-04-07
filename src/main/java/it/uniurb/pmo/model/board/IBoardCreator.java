@@ -7,7 +7,6 @@ public interface IBoardCreator {
 	 * Se la mappa non è stata creata correttamente, lancia un'eccezione.
 	 *
 	 * @return Un oggetto IGameBoard che rappresenta la mappa del gioco
-	 * @throws IllegalStateException se la mappa non è stata creata correttamente
 	 */
 	IGameBoard getMap();
 

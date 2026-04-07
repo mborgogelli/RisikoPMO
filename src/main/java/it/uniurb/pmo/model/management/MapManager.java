@@ -41,7 +41,7 @@ public abstract class MapManager implements IMapManager {
 	 */
 	@Override
 	public List<String> getAllZones() {
-		return this.gameBoard.getZones().stream()
+		return this.gameBoard.getRootZones().stream()
 						.flatMap(root -> root.getChildZones().stream())
 						.map(zone -> zone.getName())
 						.collect(Collectors.toList());
@@ -49,7 +49,7 @@ public abstract class MapManager implements IMapManager {
 
 	@Override
 	public Map<String,Integer> getZoneCountByRootZone(){
-		return this.gameBoard.getZones().stream()
+		return this.gameBoard.getRootZones().stream()
 						.collect(Collectors.toMap(
 								zone -> zone.getName(),
 								zone -> zone.getChildZones().size()
@@ -57,7 +57,7 @@ public abstract class MapManager implements IMapManager {
 	}
 
 	protected List<String> getParentZones(){
-		return this.gameBoard.getZones().stream()
+		return this.gameBoard.getRootZones().stream()
 										.map(zone -> zone.getName())
 										.toList();
 	}

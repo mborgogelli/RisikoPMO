@@ -12,30 +12,30 @@ public interface IGameBoard {
 	 * 
 	 * @return lista di IZone che rappresentano i le zone "radice" della mappa
 	 */
-	public List<IZone> getZones();
-	
+    List<IZone> getRootZones();
+
 	/**
 	 * Restituisce la versione del gioco.
 	 * 
 	 * @return versione del gioco
 	 */
-	public GameVersion getGameVersion();
+	GameVersion getGameVersion();
 	
 	/**
 	 * Trova una zona specifica per nome.
 	 * 
 	 * @param zoneName il nome della zona da cercare
-	 * @return l'istanza di IZone corrispondente al nome, o null se non trovata
+	 * @return l'istanza di IZone corrispondente al nome
 	 */
-	public IZone findZoneByName(String zoneName);
+	IZone findZoneByName(String zoneName);
 	
 	/**
 	 * Trova la zona che contiene quella passata come parametro.
 	 * 
-	 * @param zoneName il nome della zona di cui vogliamo sapere il contenitore
-	 * @return l'istanza di IZone corrispondente al conteniture, o null se non trovata
+	 * @param zoneName il nome della zona di cui vogliamo sapere la zona radice
+	 * @return l'istanza di IZone corrispondente alla zona radice
 	 */
-	public Optional<IZone> whereIsZone(String zoneName);
+	Optional<IZone> whereIsZone(String zoneName);
 	
 	/**
 	 * Restituisce le zone adiacenti a quella specificata.
@@ -43,7 +43,7 @@ public interface IGameBoard {
 	 * @param zoneName il nome della zona di cui si vogliono conoscere i vicini
 	 * @return lista di nomi delle zone adiacenti
 	 */
-	public List<String> getNeighbours(String zoneName);
+	List<String> getNeighbours(String zoneName);
 	
 	/**	
 	 * Controlla se è possibile raggiungere una zona da un'altra.
@@ -52,15 +52,15 @@ public interface IGameBoard {
 	 * @param zoneFrom il nome della zona di partenza
 	 * @return true se la zona di destinazione è raggiungibile dalla zona di partenza, false altrimenti
 	 */
-	public boolean canReach(String zoneTo, String zoneFrom);
+	boolean canReach(String zoneTo, String zoneFrom);
 	
 	/**
 	 * Restituisce il valore di una zona specifica.
 	 * 
 	 * @param zoneName il nome della zona di cui si vuole conoscere il valore
-	 * @return il valore della zona, o null se non trovata
+	 * @return il valore della zona
 	 */
-	public Integer getValue(String zoneName);
+	Integer getValue(String zoneName);
 
 	
 }

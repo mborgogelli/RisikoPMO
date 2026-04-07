@@ -12,7 +12,6 @@ import com.google.gson.JsonSyntaxException;
 
 /**
  * Classe MapLoader per il caricamento delle mappe di gioco in formato JSON.
- * 
  * Questa classe fornisce un metodo statico per caricare una mappa di gioco specificata da una versione del gioco.
  * Utilizza la libreria Gson per il parsing del file JSON e gestisce le eccezioni relative a file mancanti,
  * JSON malformati o versioni di gioco invalide.
@@ -28,7 +27,6 @@ public final class MapLoader {
 
 	/**
 	 * Carica e restituisce il contenuto di una mappa di gioco in formato JSON per una specifica versione di gioco.
-	 * 
 	 * Il metodo costruisce il percorso del file JSON associato alla variante specificata di gioco,
 	 * valida l'input, apre e legge il file utilizzando un approccio try-with-resources per garantire
 	 * la corretta chiusura delle risorse. Viene poi eseguito il parsing del contenuto JSON tramite la libreria Gson.

@@ -27,14 +27,14 @@ public class GameBoardTest {
     
     @Test
     void testGetContinents() {
-        List<IZone> continents = gameBoard.getZones();
+        List<IZone> continents = gameBoard.getRootZones();
         assertNotNull(continents);
         assertFalse(continents.isEmpty());
     }
     
     @Test
     void testGetTerritories() {
-        List<IZone> territories = gameBoard.getZones().stream()
+        List<IZone> territories = gameBoard.getRootZones().stream()
 				.flatMap(continent -> continent.getChildZones().stream())
 				.toList();
         assertNotNull(territories);
@@ -51,7 +51,7 @@ public class GameBoardTest {
     @Test
     void testFindZoneByName() {
         // Get first territory name for testing
-        String territoryName = gameBoard.getZones().stream()
+        String territoryName = gameBoard.getRootZones().stream()
                 .flatMap(continent -> continent.getChildZones().stream())
                 .findFirst()
                 .map(IZone::getName)
@@ -76,7 +76,7 @@ public class GameBoardTest {
     @Test
     void testGetNeighbours() {
         // Get first territory name for testing
-        String territoryName = gameBoard.getZones().stream()
+        String territoryName = gameBoard.getRootZones().stream()
                 .flatMap(continent -> continent.getChildZones().stream())
                 .findFirst()
                 .map(IZone::getName)
@@ -97,7 +97,7 @@ public class GameBoardTest {
     @Test
     void testWhereIsZone() {
         // Get first territory name for testing
-        String territoryName = gameBoard.getZones().stream()
+        String territoryName = gameBoard.getRootZones().stream()
                 .flatMap(continent -> continent.getChildZones().stream())
                 .filter(zone -> zone.getName().equals("kamchatka"))
                 .map(IZone::getName)
@@ -118,7 +118,7 @@ public class GameBoardTest {
     @Test
     void testCanReach() {
         // Get first territory and its neighbors for testing
-        String territoryName = gameBoard.getZones().stream()
+        String territoryName = gameBoard.getRootZones().stream()
                 .flatMap(continent -> continent.getChildZones().stream())
                 .findFirst()
                 .map(IZone::getName)
@@ -143,7 +143,7 @@ public class GameBoardTest {
     @Test
     void testGetValue() {
         // Get first territory name for testing
-        String territoryName = gameBoard.getZones().stream()
+        String territoryName = gameBoard.getRootZones().stream()
                 .flatMap(continent -> continent.getChildZones().stream())
                 .findFirst()
                 .map(IZone::getName)
@@ -159,7 +159,7 @@ public class GameBoardTest {
     @Test
     void testGetArmyBonus() {
         // Get first territory name for testing
-        String territoryName = gameBoard.getZones().stream()
+        String territoryName = gameBoard.getRootZones().stream()
                 .flatMap(continent -> continent.getChildZones().stream())
                 .findFirst()
                 .map(IZone::getName)

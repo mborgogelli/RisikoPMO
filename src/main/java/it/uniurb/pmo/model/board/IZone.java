@@ -6,10 +6,14 @@ import java.util.Optional;
 /**
  * Interfaccia che rappresenta una generica zona della mappa di gioco, modellata come un contenitore che,
  * possibilmente, contiene o è contenuto a sua volta, in altre zone.
- * 
  */
 public interface IZone {
-	 
+
+	/**
+	 * Restituisce il nome della zona.
+	 *
+	 * @return il nome della zona, non può essere null
+	 */
 	String getName();
 	
 	/**
@@ -19,7 +23,12 @@ public interface IZone {
 	 * @return il valore della zona, non può essere null
 	 */
 	Integer getValue();
-	
+
+	/**
+	 * Imposta il valore numerico associato alla zona.
+	 *
+	 * @param value Valore per la modalità "TIME ATTACK"
+	 */
 	void setValue(Integer value);
 	
       /**
@@ -60,7 +69,7 @@ public interface IZone {
      * @return set delle zone confinanti
      */
     List<String> getNeighbours();
-    
+
     /**
 	 * Imposta le zone confinanti o raggiungibili da questa zona.
 	 * Utilizzato per costruire la mappa delle connessioni tra le zone.

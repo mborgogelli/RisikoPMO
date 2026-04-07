@@ -20,7 +20,6 @@ import it.uniurb.pmo.model.utils.GameVersion;
  * avviare il gioco.
  */
 @RestController 
-// Tutti gli endpoint di questo controller saranno prefissati da "/api"
 @RequestMapping("/api")
 public class RoomController {
 	
@@ -76,17 +75,8 @@ public class RoomController {
 
         // 4. Crea il Director con la versione del gioco
         Director director = new Director(gameVersion, players);
-/*
-        // 5. Inizializza il gioco nel Director
-        director.initializeGame(players);
 
-        // 6. Avvia il gioco
-        director.StartGame();*/
-
-        // 7. (OPZIONALE) Rimuovi la stanza dal RoomManager
-        // roomManager.removeRoom(roomId);  // Se hai questo metodo
-
-        // 8. Restituisci la risposta al frontend
+        // 5. Restituisci la risposta al frontend
         return ResponseEntity.ok(Map.of(
                 "message", "Gioco avviato con successo",
                 "roomId", roomId,
