@@ -5,7 +5,6 @@ import it.uniurb.pmo.model.management.interfaces.IDirector;
 import it.uniurb.pmo.model.players.IPlayer;
 
 import java.util.List;
-import java.util.Map;
 
 public class MediatorRisikoNew extends Mediator{
 	
@@ -24,11 +23,6 @@ public class MediatorRisikoNew extends Mediator{
 	@Override
 	public List<String> getZonesOwnedBy(IPlayer player) {
 		return mapManager.getZonesOwnedBy(player);
-	}
-
-	@Override
-	public Map<String, Integer> getZoneCount() {
-		return Map.of();
 	}
 
 	@Override

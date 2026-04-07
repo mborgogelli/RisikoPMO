@@ -16,7 +16,9 @@ public interface IMediator {
 	 */
 	void initManagers();
 
-
+	/**
+	 * Inizia il gioco
+	 */
 	void startGame();
     
 }

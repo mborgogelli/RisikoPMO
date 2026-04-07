@@ -68,10 +68,6 @@ class GameBoardRisikoNew implements IGameBoard {
 		return zone.getValue();
 	}
 	
-	public Integer getZoneBonus(String zoneName) {
-		return this.getValue(zoneName);
-	}
-	
 	/**
 	 * Crea una mappa dei territori e dei loro territori confinanti.
 	 * 
@@ -93,8 +89,8 @@ class GameBoardRisikoNew implements IGameBoard {
 	/**
 	 * Estrae i nomi dei territori confinanti da un territorio.
 	 * 
-	 * @param zone
-	 * @return
+	 * @param zone Il territorio da cui estrarre i nomi dei territori confinanti.
+	 * @return la lista dei territori confinanti
 	 */
 	private List<String> extractNeighboursName(IZone zone) {
 		return zone.getNeighbours().stream()

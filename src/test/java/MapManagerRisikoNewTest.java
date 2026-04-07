@@ -17,8 +17,8 @@ import it.uniurb.pmo.model.versions.risikockassic.management.MapManagerRisikoNew
 
 class MapManagerRisikoNewTest extends MapManagerRisikoNew {
 
-    private MapManagerRisikoNew mapManager = new MapManagerRisikoNew();
-    private List<IPlayer> players = List.of(new Player("Player1", EnumColors.RED),
+    private final MapManagerRisikoNew mapManager = new MapManagerRisikoNew();
+    private final List<IPlayer> players = List.of(new Player("Player1", EnumColors.RED),
 											new Player("Player2", EnumColors.YELLOW),
 											new Player("Player3", EnumColors.BLUE));
 
@@ -47,7 +47,7 @@ class MapManagerRisikoNewTest extends MapManagerRisikoNew {
         var allTerritories = mapManager.getAllTerritories();
         var allTerritoriesFromMap = mapManager.getTerritoriesAssignment().values().stream()
         													.flatMap(List::stream)
-        													.collect(Collectors.toList());
+        													.toList();
         
         assertEquals(allTerritoriesFromMap.size(), allTerritories.size());
     }
@@ -58,7 +58,7 @@ class MapManagerRisikoNewTest extends MapManagerRisikoNew {
         var allTerritories = mapManager.getAllTerritories();
         assertFalse(allTerritories.isEmpty(), "Should have territories after initialization");
 
-        var territory = allTerritories.get(0);
+        var territory = allTerritories.getFirst();
         var owner = mapManager.getOwner(territory);
         var ownedTerritories = mapManager.getTerritoriesOwnedBy(owner);
         
@@ -81,12 +81,12 @@ class MapManagerRisikoNewTest extends MapManagerRisikoNew {
     
     @Test
     void testCheckZoneCompletion() {
-        var player = players.get(0);
+        var player = players.getFirst();
 
         // Ottieni tutti i continenti disponibili
         var allParentZones = super.getParentZones();
         if (!allParentZones.isEmpty()) {
-            var continent = allParentZones.get(0);
+            var continent = allParentZones.getFirst();
             var continentTerritories = super.getChildZones(continent);
 
             // Assegna manualmente tutti i territori di un continente al giocatore
@@ -100,16 +100,5 @@ class MapManagerRisikoNewTest extends MapManagerRisikoNew {
             assertFalse(completedContinents.isEmpty());
             assertTrue(completedContinents.contains(continent));
         }
-    }
-
-    @Test
-    void testZoneCounter() {
-        var zoneCount = mapManager.getZoneCountByRootZone();
-        var allParentZones = super.getParentZones();
-
-        assertNotNull(zoneCount);
-        assertFalse(zoneCount.isEmpty());
-        assertEquals(allParentZones.size(), zoneCount.size(),
-                     "Should have a count for each parent zone");
     }
 }

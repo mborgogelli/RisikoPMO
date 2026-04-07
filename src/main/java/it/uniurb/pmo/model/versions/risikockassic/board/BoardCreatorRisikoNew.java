@@ -51,8 +51,8 @@ public final class BoardCreatorRisikoNew extends BoardCreator {
 	@Override
 	protected IGameBoard createMap() {
 		if (this.gameBoard == null) {
-			this.createContinents();
-			this.insertTerritories();
+			this.initContinents();
+			this.initTerritories();
 			this.setNeighbours();
 			this.setZoneValue(TERRITORIES);
 			this.gameBoard = new GameBoardRisikoNew(this.continents);
@@ -66,7 +66,7 @@ public final class BoardCreatorRisikoNew extends BoardCreator {
 	 * Imposta anche i valori di armata per ogni continente.
 	 * 
 	 */
-	private void createContinents() {
+	private void initContinents() {
 		List<JsonElement> continents = this.getContinentsAsList();
 		this.continents = super.createZones("name", continents, Continent::new);
 		this.setZoneValue(CONTINENTS);
@@ -77,15 +77,24 @@ public final class BoardCreatorRisikoNew extends BoardCreator {
 	 * I territori sono ottenuti dal file JSON caricato e associati ai continenti.
 	 * 
 	 */
-	private void insertTerritories() {
+	private void initTerritories() {
 		List<JsonElement> allTerritories = this.getTerritoriesFromJson();
 		for(int i = 0; i < this.continents.size(); i++) {
 			List<JsonElement> continentTerritories = List.of(allTerritories.get(i));
 			List<IZone> zones = this.createTerritories(continentTerritories);
-			this.continents.get(i).setChildZones(zones);
+			IZone continent = this.continents.get(i);
+			continent.setChildZones(zones);
+			this.setContinentinTerritories(zones, continent);
+
 		}
 	}
-	
+
+	private void setContinentinTerritories(List<IZone> territories, IZone continent){
+		for(IZone territory : territories) {
+			territory.setParentZone(continent);
+		}
+	}
+
 	/**
 	 * Restituisce la lista di continenti come JsonElement.
 	 * I continenti sono ottenuti dal file JSON caricato.

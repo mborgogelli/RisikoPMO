@@ -1,7 +1,6 @@
 package it.uniurb.pmo.model.board;
 
 import java.util.List;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 

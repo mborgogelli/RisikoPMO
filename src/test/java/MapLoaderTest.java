@@ -36,7 +36,7 @@ public class MapLoaderTest {
 	}
 	
 	@Test
-	void testingFileNotFound()throws FileNotFoundException {
+	void testingFileNotFound() {
 		FileNotFoundException exception = assertThrows(FileNotFoundException.class,
 														() -> MapLoader.loadMapFile("risikoantartide"));
 		assertTrue(exception.getMessage().contains("File src/main/resources/asset/risikoantartide_map.json not found"));

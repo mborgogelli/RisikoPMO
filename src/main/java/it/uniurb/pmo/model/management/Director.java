@@ -14,19 +14,16 @@ import it.uniurb.pmo.model.utils.GameVersion;
 public class Director implements IDirector{
 	
 	private boolean isReady;
-	private boolean isGameStarted;
-
 	private Mediator mediator;
 	private List<IManager> managers;
-	private GameVersion version;
-	private List<IPlayer> players;
+	private final GameVersion version;
+	private final List<IPlayer> players;
 	
 	public Director(GameVersion version, List<IPlayer> players) {
 		this.version = version;
 		this.players = players;
 		this.isReady = false;
-		this.isGameStarted = false;
-		this.initializeGame(players, version);
+		this.initializeGame(this.players, version);
 		this.StartGame();
 	}
 	
@@ -38,37 +35,25 @@ public class Director implements IDirector{
 	@Override
 	public void resetGame() {
 		this.isReady = false;
-		this.isGameStarted = false;
 		this.resetManagers();
 	}
 
 	@Override
-	public boolean isGameStarted() {
-		return this.isGameStarted;
-	}
-
-	@Override
-	public boolean checkWin(IPlayer player) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean checkLoss(IPlayer player) {
-		// TODO Auto-generated method stub
-		return false;
+	public void declareWinner(IPlayer player) {
+		this.stopGame();
 	}
 
 	@Override
 	public void StartGame() {
-		this.mediator.startGame();
-		this.isGameStarted = true;
+		if(this.checkManagersReady()) {
+			this.isReady = true;
+			this.mediator.startGame();
+		}
 	}
 
 	@Override
 	public void exitGame(IPlayer player) {
-		// TODO Auto-generated method stub
-
+		player.removeColor();
 	}
 
 	@Override
@@ -84,13 +69,17 @@ public class Director implements IDirector{
 	}
 	
 	@Override
-	public Map<IManager,Boolean> getManagerStatus(){
-		Map<IManager,Boolean> status = new HashMap<>();
-		this.managers.stream()
-					.forEach(m -> status.put(m, m.isReady()));
-		return status;
+	public void stopGame() {
+		this.isReady = false;
+		for (IPlayer player : players) {
+			exitGame(player);
+		}
+		this.players.clear();
+		for (IManager manager : this.managers) {
+			manager.resetGame();
+		}
 	}
-	
+
 	private void initializeGame(List<IPlayer> players, GameVersion version) {
 		IGameFactory factory = GameFactoryProvider.getFactory(version);
 		this.setMediator(factory.getMediator());

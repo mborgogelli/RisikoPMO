@@ -45,7 +45,7 @@ public interface IMapManager extends IManager {
     
     /**
      * Restituisce tutte le zone di gioco.
-     * @return
+     * @return la lista di tutte le zone di gioco
      */
     List<String> getAllZones();
     
@@ -58,11 +58,16 @@ public interface IMapManager extends IManager {
     
 	/**
 	 * Verifica il completamento delle zone da parte di un giocatore.
-	 * @param player
-	 * @return
+	 * @param player il giocatore da verificare
+	 * @return la lista delle zone completate dal giocatore, o vuota se nessuna zona è completata
 	 */
     List<String> checkZoneCompletion(IPlayer player);
 
-	Map<String,Integer> getZoneCountByRootZone();
-    
+	/**
+	 * Restituisce le zone figlie di una zona radice specificata.
+	 * @param rootZone la zona radice di cui si vogliono conoscere le zone figlie
+	 * @return la lista delle zone figlie della zona radice specificata, o vuota se la zona radice non esiste o non ha zone figlie
+	 */
+	List<String> getChildZones(String rootZone);
+
 }
