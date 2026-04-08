@@ -35,7 +35,7 @@ public class Director implements IDirector{
 	@Override
 	public void resetGame() {
 		this.isReady = false;
-		this.resetManagers();
+		this.managers.forEach(IManager::resetGame);
 	}
 
 	@Override
@@ -45,8 +45,7 @@ public class Director implements IDirector{
 
 	@Override
 	public void StartGame() {
-		if(this.checkManagersReady()) {
-			this.isReady = true;
+		if(this.isReady){
 			this.mediator.startGame();
 		}
 	}
@@ -54,6 +53,7 @@ public class Director implements IDirector{
 	@Override
 	public void exitGame(IPlayer player) {
 		player.removeColor();
+		this.players.remove(player);
 	}
 
 	@Override
@@ -71,37 +71,21 @@ public class Director implements IDirector{
 	@Override
 	public void stopGame() {
 		this.isReady = false;
-		for (IPlayer player : players) {
-			exitGame(player);
-		}
+		this.players.forEach(this::exitGame);
 		this.players.clear();
-		for (IManager manager : this.managers) {
-			manager.resetGame();
-		}
+		this.managers.forEach(IManager::resetGame);
 	}
 
 	private void initializeGame(List<IPlayer> players, GameVersion version) {
 		IGameFactory factory = GameFactoryProvider.getFactory(version);
-		this.setMediator(factory.getMediator());
+		this.mediator = factory.getMediator();
 		this.managers = factory.getManagers();
-		this.initializeManagers(players);
-	    this.isReady = true;		
+		this.managers.forEach(managers -> managers.initializeGame(players));
+	    this.isReady = this.checkManagersReady();
 	}
 	
-	private void initializeManagers(List<IPlayer> players) {
-		for (IManager manager : this.managers) {
-			manager.initializeGame(players);
-		}
-	}
-
 	private boolean checkManagersReady() {
 		return this.managers.stream().allMatch(IManager::isReady);
 	}
-
-    private void resetManagers() {
-		for (IManager manager : this.managers) {
-			manager.resetGame();
-		}
-    }
 
 }

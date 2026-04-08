@@ -1,6 +1,10 @@
 package it.uniurb.pmo.model.management.interfaces;
 
 
+import it.uniurb.pmo.model.players.IPlayer;
+
+import java.util.Optional;
+
 /**
  * Interfaccia che modella un mediatore tra i manager di gioco
  */
@@ -20,5 +24,5 @@ public interface IMediator {
 	 * Inizia il gioco
 	 */
 	void startGame();
-    
+
 }

@@ -51,9 +51,7 @@ public class GameFactoryRisikoNew implements IGameFactory {
 	 * Imposta il mediatore per ogni manager e inizializza i manager nel mediatore
 	 */
 	private void setMediator() {
-		for (IManager manager : this.managers) {
-			manager.setMediator(this.mediator);
-		}
+		this.managers.forEach(manager -> manager.setMediator(this.mediator));
 		this.mediator.initManagers();
 	}
 }
