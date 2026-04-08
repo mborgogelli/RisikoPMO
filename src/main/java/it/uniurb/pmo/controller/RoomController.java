@@ -1,16 +1,15 @@
 package it.uniurb.pmo.controller;
 
-import java.util.List;
 import java.util.Map;
 
-import it.uniurb.pmo.controller.dto.RoomResponseDTO;
-import it.uniurb.pmo.model.management.Director;
-import it.uniurb.pmo.model.players.IPlayer;
-import it.uniurb.pmo.model.utils.EnumColors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import it.uniurb.pmo.controller.dto.RoomResponseDTO;
+import it.uniurb.pmo.game.GameStartCoordinator;
+import it.uniurb.pmo.game.GameStartResult;
 import it.uniurb.pmo.model.lobby.RoomManager;
+import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.utils.GameVersion;
 
 /**
@@ -22,7 +21,12 @@ import it.uniurb.pmo.model.utils.GameVersion;
 @RestController 
 @RequestMapping("/api")
 public class RoomController {
-	
+  private final GameStartCoordinator gameStartCoordinator;
+
+  public RoomController(GameStartCoordinator gameStartCoordinator) {
+    this.gameStartCoordinator = gameStartCoordinator;
+  }
+
 	// Endpoint per creare una nuova stanza di gioco
 	@PostMapping("/crea-stanza")
     public ResponseEntity<RoomResponseDTO> creaPartita(@RequestBody Map<String, String> payload) {
@@ -58,29 +62,18 @@ public class RoomController {
     @PostMapping("/stanza/{roomId}/avvia-gioco")
     public ResponseEntity<?> avviaGioco(@PathVariable String roomId) {
 
-        RoomManager roomManager = RoomManager.getInstance();
+        GameStartResult result;
 
-        // 1. Verifica che la stanza sia piena e che tutti siano pronti
-        if (!roomManager.isFull(roomId)) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "La stanza non è ancora piena"));
+        try {
+            result = this.gameStartCoordinator.startGame(roomId);
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
         }
 
-        // 2. Ottieni la versione del gioco dalla stanza
-        GameVersion gameVersion = roomManager.getGameVersion(roomId);
-
-        // 3. Estrai i giocatori dalla stanza
-        List<IPlayer> players = roomManager.getPlayers(roomId);
-        roomManager.closeRoom(roomId);
-
-        // 4. Crea il Director con la versione del gioco
-        Director director = new Director(gameVersion, players);
-
-        // 5. Restituisci la risposta al frontend
         return ResponseEntity.ok(Map.of(
                 "message", "Gioco avviato con successo",
-                "roomId", roomId,
-                "playersCount", players.size()
+                "roomId", result.roomId(),
+                "playersCount", result.playersCount()
         ));
     }
 
