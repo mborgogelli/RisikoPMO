@@ -3,15 +3,19 @@ package it.uniurb.pmo.model.versions.risikockassic.management;
 import it.uniurb.pmo.model.management.Mediator;
 import it.uniurb.pmo.model.management.interfaces.IDirector;
 import it.uniurb.pmo.model.players.IPlayer;
+import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ICardManagerRisikoNew;
+import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.IMapManagerRisikoNew;
+import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ITankManager;
+import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ITurnManagerRisikoNew;
 
 import java.util.List;
 
-public class MediatorRisikoNew extends Mediator{
+public class MediatorRisikoNew extends Mediator {
 	
-	private MapManagerRisikoNew mapManager;
-	private CardManagerRisikoNew cardManager;
-	private TankManager tankManager;
-	private TurnManagerRisikoNew turnManager;
+	private IMapManagerRisikoNew mapManager;
+	private ICardManagerRisikoNew cardManager;
+	private ITankManager tankManager;
+	private ITurnManagerRisikoNew turnManager;
 	private IDirector director;
 	
 	
@@ -44,15 +48,15 @@ public class MediatorRisikoNew extends Mediator{
 	}
 
 	//TODO Rimuovere i getter
-	public MapManagerRisikoNew getMapManager() {
+	public IMapManagerRisikoNew getMapManager() {
 		return this.mapManager;
 	}
 	
-	public TankManager getTankManager() {
+	public ITankManager getTankManager() {
 		return this.tankManager;
 	}
 
-	public TurnManagerRisikoNew getTurnManager(){
+	public ITurnManagerRisikoNew getTurnManager(){
 		return this.turnManager;
 	}
 }

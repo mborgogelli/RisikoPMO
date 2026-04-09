@@ -10,8 +10,9 @@ import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.turn.IPhase;
 import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.utils.EnumPhase;
+import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ITurnManagerRisikoNew;
 
-public class TurnManagerRisikoNew extends TurnManager {
+public class TurnManagerRisikoNew extends TurnManager implements ITurnManagerRisikoNew {
 	
 	private boolean isReady;
 	private int currentTurn;

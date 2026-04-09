@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import it.uniurb.pmo.model.card.ICard;
+import it.uniurb.pmo.model.management.interfaces.ICardManager;
 import it.uniurb.pmo.model.management.interfaces.IManager;
 import it.uniurb.pmo.model.management.interfaces.IMediator;
 
@@ -12,7 +13,7 @@ import it.uniurb.pmo.model.management.interfaces.IMediator;
  * Classe astratta che gestire un mazzo di carte
  * Fornisce metodi per gestire i mazzi di carte
  */
-public abstract class CardManager implements IManager{
+public abstract class CardManager implements ICardManager {
 	
 	private IMediator mediator;
 	
