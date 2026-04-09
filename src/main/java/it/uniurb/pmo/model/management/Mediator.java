@@ -27,7 +27,7 @@ public abstract class Mediator implements IMediator {
         this.managers.add(manager);
     }
     
-	protected <T extends IManager> T getManager(Class<T> managerType) {
+      protected <T extends IManager> T resolveManager(Class<T> managerType) {
         T myManager = null;
 		for (IManager manager : this.managers) {
             if (managerType.isInstance(manager)) {
@@ -39,5 +39,6 @@ public abstract class Mediator implements IMediator {
 	    }
         return myManager;
     }
-    
+
+
 }

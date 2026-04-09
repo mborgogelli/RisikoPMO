@@ -1,13 +1,10 @@
 import it.uniurb.pmo.model.management.interfaces.IGameFactory;
-import it.uniurb.pmo.model.management.interfaces.IMediator;
+import it.uniurb.pmo.model.management.interfaces.IManager;
 import it.uniurb.pmo.model.management.interfaces.ITurnManager;
 import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.players.Player;
 import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.versions.risikockassic.GameFactoryRisikoNew;
-import it.uniurb.pmo.model.versions.risikockassic.management.MediatorRisikoNew;
-import it.uniurb.pmo.model.versions.risikockassic.turn.TurnManagerRisikoNew;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.List;
@@ -19,12 +16,17 @@ public class TurnManagerTest {
                                             new Player("Player2", EnumColors.YELLOW),
                                             new Player("Player3", EnumColors.BLUE));
     private ITurnManager turnManager;
-    private IMediator mediator;
 
     @BeforeEach
     void setUp(){
-        this.mediator = gf.getMediator();
-
-        this.turnManager = ((MediatorRisikoNew) this.mediator).getTurnManager();
+        this.turnManager = this.resolveManager(ITurnManager.class);
     }
+
+	private <T extends IManager> T resolveManager(Class<T> managerType) {
+		return gf.getManagers().stream()
+				.filter(managerType::isInstance)
+				.map(managerType::cast)
+				.findFirst()
+				.orElseThrow(() -> new IllegalStateException("Manager of type " + managerType.getName() + " not found"));
+	}
 }

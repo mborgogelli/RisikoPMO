@@ -36,27 +36,14 @@ public class MediatorRisikoNew extends Mediator {
 	
 	@Override
 	public void initManagers() {
-		this.mapManager = super.getManager(MapManagerRisikoNew.class);
-		this.tankManager = super.getManager(TankManager.class);
-		this.cardManager = super.getManager(CardManagerRisikoNew.class);
-		this.turnManager = super.getManager(TurnManagerRisikoNew.class);
+		this.mapManager = super.resolveManager(MapManagerRisikoNew.class);
+		this.tankManager = super.resolveManager(TankManager.class);
+		this.cardManager = super.resolveManager(CardManagerRisikoNew.class);
+		this.turnManager = super.resolveManager(TurnManagerRisikoNew.class);
 	}
 
 	@Override
 	public void startGame() {
 		this.turnManager.startTurn();
-	}
-
-	//TODO Rimuovere i getter
-	public IMapManagerRisikoNew getMapManager() {
-		return this.mapManager;
-	}
-	
-	public ITankManager getTankManager() {
-		return this.tankManager;
-	}
-
-	public ITurnManagerRisikoNew getTurnManager(){
-		return this.turnManager;
 	}
 }

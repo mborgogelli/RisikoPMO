@@ -10,14 +10,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.uniurb.pmo.model.management.interfaces.IGameFactory;
-import it.uniurb.pmo.model.management.interfaces.IMediator;
+import it.uniurb.pmo.model.management.interfaces.IManager;
+import it.uniurb.pmo.model.management.interfaces.IMapManager;
+import it.uniurb.pmo.model.management.interfaces.ITokenManager;
 import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.players.Player;
 import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.versions.risikockassic.GameFactoryRisikoNew;
-import it.uniurb.pmo.model.versions.risikockassic.management.MediatorRisikoNew;
-import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.IMapManagerRisikoNew;
-import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ITankManager;
 
 public class TankManagerTest {
 
@@ -25,19 +24,24 @@ public class TankManagerTest {
 	private List<IPlayer> players = List.of(new Player("Player1", EnumColors.RED),
 											new Player("Player2", EnumColors.YELLOW),
 											new Player("Player3", EnumColors.BLUE));
-	private ITankManager tankManager;
-	private IMapManagerRisikoNew mapManager;
-	private IMediator mediator;
-    
+  private ITokenManager tankManager;
+  private IMapManager mapManager;
+
     @BeforeEach
     void setUp() {
-    	this.mediator = gf.getMediator();
-    	
-    	mapManager = ((MediatorRisikoNew) mediator).getMapManager();
-        tankManager = ((MediatorRisikoNew) mediator).getTankManager();
-        
+        mapManager = this.resolveManager(IMapManager.class);
+        tankManager = this.resolveManager(ITokenManager.class);
+
     }
-    
+
+      private <T extends IManager> T resolveManager(Class<T> managerType) {
+        return gf.getManagers().stream()
+            .filter(managerType::isInstance)
+            .map(managerType::cast)
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("Manager of type " + managerType.getName() + " not found"));
+      }
+
     @Test
     void testInitializeGame_TooFewPlayers() {
         List<IPlayer> tooFewPlayers = new ArrayList<>(this.players);
@@ -87,9 +91,9 @@ public class TankManagerTest {
     	mapManager.initializeGame(players);
         tankManager.initializeGame(players);
         
-        var myAvailableTanks = tankManager.getPlayerTank(players.get(0));
-        var myTerritoriesCount = mapManager.getTerritoriesOwnedBy(players.get(0)).size();
-        var myTerritories = mapManager.getTerritoriesOwnedBy(players.get(0));
+            var myAvailableTanks = tankManager.getPlayerToken(players.get(0));
+            var myTerritoriesCount = mapManager.getZonesOwnedBy(players.get(0)).size();
+            var myTerritories = mapManager.getZonesOwnedBy(players.get(0));
         var totalDeployed = tankManager.getTotalDeployed(players.get(0));
         var deployedPerZone = tankManager.getDeployedPerZone(players.get(0));
         
