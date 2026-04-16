@@ -1,5 +1,9 @@
 package it.uniurb.pmo.model.management.interfaces;
 
+import java.util.List;
+
+import it.uniurb.pmo.model.players.IPlayer;
+
 /**
  * Interfaccia che modella un mediatore tra i manager di gioco
  */
@@ -19,6 +23,21 @@ public interface IMediator {
 	 * Inizia il gioco
 	 */
 	void startGame();
+
+	/**
+	 * Restituisce tutte le zone di gioco.
+	 */
+	List<String> getAllZones();
+
+	/**
+	 * Restituisce le zone possedute da un giocatore.
+	 */
+	List<String> getZonesOwnedBy(IPlayer player);
+
+	/**
+	 * Verifica se il giocatore puo' muovere un token tra due zone.
+	 */
+	boolean canMoveBetween(IPlayer player, String toZone, String fromZone);
 
 
 }

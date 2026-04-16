@@ -5,7 +5,6 @@ import java.util.List;
 
 import it.uniurb.pmo.model.card.ICard;
 import it.uniurb.pmo.model.management.interfaces.ICardManager;
-import it.uniurb.pmo.model.management.interfaces.IManager;
 import it.uniurb.pmo.model.management.interfaces.IMediator;
 
 
@@ -18,7 +17,7 @@ public abstract class CardManager implements ICardManager {
 	private IMediator mediator;
 	
 	@Override
-	public void setMediator(Mediator mediator) {
+	public void setMediator(IMediator mediator) {
 		this.mediator = mediator;
 		this.mediator.registerManager(this);
 	}

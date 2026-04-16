@@ -1,12 +1,11 @@
 package it.uniurb.pmo.model.management;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import it.uniurb.pmo.model.management.interfaces.IDirector;
 import it.uniurb.pmo.model.management.interfaces.IGameFactory;
 import it.uniurb.pmo.model.management.interfaces.IManager;
+import it.uniurb.pmo.model.management.interfaces.IMediator;
 import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.utils.GameFactoryProvider;
 import it.uniurb.pmo.model.utils.GameVersion;
@@ -14,7 +13,7 @@ import it.uniurb.pmo.model.utils.GameVersion;
 public class Director implements IDirector{
 	
 	private boolean isReady;
-	private Mediator mediator;
+	private IMediator mediator;
 	private List<IManager> managers;
 	private final GameVersion version;
 	private final List<IPlayer> players;
@@ -62,7 +61,7 @@ public class Director implements IDirector{
 	}
 
 	@Override
-	public void setMediator(Mediator mediator) {
+	public void setMediator(IMediator mediator) {
 		if (this.mediator == null) {
 			this.mediator = mediator;
 		}

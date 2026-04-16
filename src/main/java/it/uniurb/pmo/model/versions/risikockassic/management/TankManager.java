@@ -217,7 +217,9 @@ public class TankManager extends TokenManager implements ITankManager{
 	 * @return true se il giocatore può spostare i tank, false altrimenti
 	 */
 	private void checkIfPlayerCanMoveBetween(IPlayer player, String toZone, String fromZone) {
-		super.canMoveBetween(player, toZone, fromZone);
+		if (!super.canMoveBetween(player, toZone, fromZone)) {
+			throw new IllegalStateException("Cannot move tanks from " + fromZone + " to " + toZone + " for player " + player);
+		}
 	}
 	
 	private void checkIfPlayerOwnsZone(IPlayer player, String zone) {

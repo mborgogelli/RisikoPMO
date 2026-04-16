@@ -2,6 +2,7 @@ package it.uniurb.pmo.model.management;
 
 import java.util.List;
 
+import it.uniurb.pmo.model.management.interfaces.IMediator;
 import it.uniurb.pmo.model.management.interfaces.ITokenManager;
 import it.uniurb.pmo.model.players.IPlayer;
 
@@ -11,12 +12,12 @@ import it.uniurb.pmo.model.players.IPlayer;
  */
 public abstract class TokenManager implements ITokenManager{
 	
-	private Mediator mediator;
+	private IMediator mediator;
 	
 	protected abstract void resetTokenData();
 	
 	@Override
-	public void setMediator(Mediator mediator) {
+	public void setMediator(IMediator mediator) {
 		this.mediator = mediator;
 		this.mediator.registerManager(this);
 	}
@@ -29,8 +30,8 @@ public abstract class TokenManager implements ITokenManager{
 		return this.mediator.getZonesOwnedBy(p);
 	}
 
-	protected void canMoveBetween(IPlayer player, String toZone, String fromZone) {
-		this.mediator.canMoveBetween(player, toZone, fromZone);
+	protected boolean canMoveBetween(IPlayer player, String toZone, String fromZone) {
+		return this.mediator.canMoveBetween(player, toZone, fromZone);
 	}
 
 }

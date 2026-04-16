@@ -2,7 +2,6 @@ package it.uniurb.pmo.model.management.interfaces;
 
 import java.util.List;
 
-import it.uniurb.pmo.model.management.Mediator;
 import it.uniurb.pmo.model.players.IPlayer;
 
 public interface IManager {
@@ -28,6 +27,6 @@ public interface IManager {
 	 * 
 	 * @param mediator Il mediatore da impostare
 	 */
-	void setMediator(Mediator mediator);
+	void setMediator(IMediator mediator);
 	
 }
