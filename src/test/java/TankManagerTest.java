@@ -65,7 +65,7 @@ public class TankManagerTest {
             () -> tankManager.getPlayerToken(player),
             "Should throw exception when not ready"
         );
-        assertEquals("TokenManager must be initialized before use.", exception.getMessage());
+        assertEquals("AbstractTokenManager must be initialized before use.", exception.getMessage());
     }*/
     
    @Test

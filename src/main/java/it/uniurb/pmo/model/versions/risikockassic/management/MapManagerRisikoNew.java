@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import it.uniurb.pmo.model.management.MapManager;
+import it.uniurb.pmo.model.management.AbstractMapManager;
 import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.versions.risikockassic.board.BoardCreatorRisikoNew;
 import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.IMapManagerRisikoNew;
 
-public class MapManagerRisikoNew extends MapManager implements IMapManagerRisikoNew {
+public class MapManagerRisikoNew extends AbstractMapManager implements IMapManagerRisikoNew {
 	
 	//TODO centralizzare il check di esistenza del territorio nella fase di init r toglierlo dai metodi
 	

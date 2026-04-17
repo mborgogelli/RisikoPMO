@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import it.uniurb.pmo.model.management.TokenManager;
+import it.uniurb.pmo.model.management.AbstractTokenManager;
 import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ITankManager;
 
-public class TankManager extends TokenManager implements ITankManager{
+public class TankManager extends AbstractTokenManager implements ITankManager{
 
 	private Boolean isReady;
 	

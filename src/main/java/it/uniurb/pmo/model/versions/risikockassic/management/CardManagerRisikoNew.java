@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.uniurb.pmo.model.card.ICard;
-import it.uniurb.pmo.model.management.CardManager;
+import it.uniurb.pmo.model.management.AbstractCardManager;
 import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ICardManagerRisikoNew;
 
-public class CardManagerRisikoNew extends CardManager implements ICardManagerRisikoNew {
+public class CardManagerRisikoNew extends AbstractCardManager implements ICardManagerRisikoNew {
 	
 	private final List<ICard> territoryCards;
 	private final List<ICard> missionCards;

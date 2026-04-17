@@ -1,6 +1,6 @@
 package it.uniurb.pmo.model.versions.risikockassic.turn;
 
-import it.uniurb.pmo.model.management.TurnManager;
+import it.uniurb.pmo.model.management.AbstractTurnManager;
 import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.turn.IPhase;
 import it.uniurb.pmo.model.utils.EnumPhase;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class TurnManagerRisikoNew extends TurnManager {
+public class TurnManagerRisikoNew extends AbstractTurnManager {
 
     private final List<IPhase> phases;
 

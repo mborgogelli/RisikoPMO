@@ -1,6 +1,6 @@
 package it.uniurb.pmo.model.versions.risikockassic.management;
 
-import it.uniurb.pmo.model.management.Mediator;
+import it.uniurb.pmo.model.management.AbstractMediator;
 import it.uniurb.pmo.model.management.interfaces.IDirector;
 import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ICardManagerRisikoNew;
@@ -10,7 +10,7 @@ import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ITurnMan
 
 import java.util.List;
 
-public class MediatorRisikoNew extends Mediator {
+public class MediatorRisikoNew extends AbstractMediator {
 	
 	private IMapManagerRisikoNew mapManager;
 	private ICardManagerRisikoNew cardManager;

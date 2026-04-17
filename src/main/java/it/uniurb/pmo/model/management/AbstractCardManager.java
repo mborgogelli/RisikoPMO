@@ -12,7 +12,7 @@ import it.uniurb.pmo.model.management.interfaces.IMediator;
  * Classe astratta che gestire un mazzo di carte
  * Fornisce metodi per gestire i mazzi di carte
  */
-public abstract class CardManager implements ICardManager {
+public abstract class AbstractCardManager implements ICardManager {
 	
 	private IMediator mediator;
 	

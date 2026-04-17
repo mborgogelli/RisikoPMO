@@ -6,7 +6,7 @@ import it.uniurb.pmo.model.utils.EnumPhase;
 
 import java.util.List;
 
-public abstract class TurnManager implements ITurnManager {
+public abstract class AbstractTurnManager implements ITurnManager {
 	
 	private IMediator mediator;
 

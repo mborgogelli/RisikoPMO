@@ -5,14 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import it.uniurb.pmo.model.management.TurnManager;
+import it.uniurb.pmo.model.management.AbstractTurnManager;
 import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.turn.IPhase;
-import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.utils.EnumPhase;
 import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ITurnManagerRisikoNew;
 
-public class TurnManagerRisikoNew extends TurnManager implements ITurnManagerRisikoNew {
+public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnManagerRisikoNew {
 	
 	private boolean isReady;
 	private int currentTurn;

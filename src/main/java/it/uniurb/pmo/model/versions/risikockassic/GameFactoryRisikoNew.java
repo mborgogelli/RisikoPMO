@@ -3,7 +3,7 @@ package it.uniurb.pmo.model.versions.risikockassic;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.uniurb.pmo.model.management.Mediator;
+import it.uniurb.pmo.model.management.AbstractMediator;
 import it.uniurb.pmo.model.management.interfaces.IGameFactory;
 import it.uniurb.pmo.model.management.interfaces.IManager;
 import it.uniurb.pmo.model.versions.risikockassic.management.CardManagerRisikoNew;
@@ -17,7 +17,7 @@ import it.uniurb.pmo.model.versions.risikockassic.management.TurnManagerRisikoNe
  */
 public class GameFactoryRisikoNew implements IGameFactory {
 	
-	private final Mediator mediator;
+	private final AbstractMediator mediator;
 	private final List<IManager> managers;
 	
 	public GameFactoryRisikoNew() {
@@ -28,7 +28,7 @@ public class GameFactoryRisikoNew implements IGameFactory {
 	}
 	
 	@Override
-	public Mediator getMediator() {
+	public AbstractMediator getMediator() {
 		return this.mediator;
 	}
 

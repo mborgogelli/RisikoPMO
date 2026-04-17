@@ -7,10 +7,10 @@ import it.uniurb.pmo.model.management.interfaces.ITokenManager;
 import it.uniurb.pmo.model.players.IPlayer;
 
 /**
- * TokenManager gestisce i token nel gioco, sia quelli distribuiti nelle zone che quelli posseduti dai giocatori.
+ * AbstractTokenManager gestisce i token nel gioco, sia quelli distribuiti nelle zone che quelli posseduti dai giocatori.
  * Fornisce metodi per assegnare, aggiungere e rimuovere token.
  */
-public abstract class TokenManager implements ITokenManager{
+public abstract class AbstractTokenManager implements ITokenManager{
 	
 	private IMediator mediator;
 	

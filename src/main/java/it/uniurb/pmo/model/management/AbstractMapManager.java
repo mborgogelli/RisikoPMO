@@ -13,7 +13,7 @@ import it.uniurb.pmo.model.management.interfaces.IMediator;
  * Fornisce metodi per ottenere la mappa di gioco in base alla versione del gioco.
  * 
  */
-public abstract class MapManager implements IMapManager {
+public abstract class AbstractMapManager implements IMapManager {
 	
 	private final IGameBoard gameBoard;
 	private IMediator mediator;
@@ -23,7 +23,7 @@ public abstract class MapManager implements IMapManager {
 	 * 
 	 * @param boardCreator il creatore della mappa di gioco
 	 */
-	public MapManager(IBoardCreator boardCreator) {
+	public AbstractMapManager(IBoardCreator boardCreator) {
 		this.gameBoard = boardCreator.getMap();
 	}
 	

@@ -9,11 +9,11 @@ import it.uniurb.pmo.model.management.interfaces.IManager;
 import it.uniurb.pmo.model.management.interfaces.IMediator;
 import it.uniurb.pmo.model.players.IPlayer;
 
-public abstract class Mediator implements IMediator {
+public abstract class AbstractMediator implements IMediator {
 	
 	private final List<IManager> managers;
 	
-	public Mediator() {
+	public AbstractMediator() {
 		this.managers = new ArrayList<>();
 	}
 	
