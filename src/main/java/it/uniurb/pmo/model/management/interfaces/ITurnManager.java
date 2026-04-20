@@ -21,7 +21,6 @@ public interface ITurnManager extends IManager{
 
 	int getCount();
 
-	Optional<IPlayer> checkVictory();
+	Optional<IPlayer> checkWinner();
 	
-	void startTurn();
 }

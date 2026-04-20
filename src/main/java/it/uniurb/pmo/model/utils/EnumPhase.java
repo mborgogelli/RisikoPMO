@@ -5,7 +5,6 @@ import it.uniurb.pmo.model.turn.IPhase;
 
 public enum EnumPhase implements IPhase {
 	
-	ASSIGNMENT(0),
 	REINFORCE(1),
 	ATTACK(2),
 	MOVEMENT(3);

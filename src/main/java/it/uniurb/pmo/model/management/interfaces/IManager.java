@@ -16,7 +16,12 @@ public interface IManager {
 	 * Inizializza il gioco
 	 */
 	void initializeGame(List<IPlayer> players);
-	
+
+	/**
+	 * Inizia il gioco
+	 */
+	void startGame();
+
 	/**
 	 * Resetta il gioco al suo stato iniziale
 	 */

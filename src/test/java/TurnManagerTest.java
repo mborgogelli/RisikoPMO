@@ -4,9 +4,12 @@ import it.uniurb.pmo.model.management.interfaces.ITurnManager;
 import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.players.Player;
 import it.uniurb.pmo.model.utils.EnumColors;
+import it.uniurb.pmo.model.utils.EnumPhase;
 import it.uniurb.pmo.model.versions.risikockassic.GameFactoryRisikoNew;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class TurnManagerTest {
@@ -29,4 +32,9 @@ public class TurnManagerTest {
 				.findFirst()
 				.orElseThrow(() -> new IllegalStateException("Manager of type " + managerType.getName() + " not found"));
 	}
+
+    @Test
+    public void printPhases(){
+        System.out.println(Arrays.stream(EnumPhase.values()).sorted().toList());
+    }
 }

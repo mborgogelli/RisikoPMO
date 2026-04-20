@@ -40,4 +40,5 @@ public interface IMediator {
 	boolean canMoveBetween(IPlayer player, String toZone, String fromZone);
 
 
+	void notifyWinner(IPlayer iPlayer);
 }

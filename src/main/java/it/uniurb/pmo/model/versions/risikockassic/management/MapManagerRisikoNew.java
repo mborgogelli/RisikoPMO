@@ -39,7 +39,12 @@ public class MapManagerRisikoNew extends AbstractMapManager implements IMapManag
 		this.initContinentsMap();
 		this.isReady = true;
 }
-	
+
+	@Override
+	public void startGame() {
+
+	}
+
 	@Override
 	public void resetGame() {
 		this.players = null;

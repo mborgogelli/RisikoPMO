@@ -33,7 +33,12 @@ public class MediatorRisikoNew extends AbstractMediator {
 	public boolean canMoveBetween(IPlayer player, String toZone, String fromZone) {
 		return mapManager.canMoveBetween(player, toZone, fromZone);
 	}
-	
+
+	@Override
+	public void notifyWinner(IPlayer player) {
+		this.director.declareWinner(player);
+	}
+
 	@Override
 	public void initManagers() {
 		this.mapManager = super.resolveManager(MapManagerRisikoNew.class);
@@ -44,6 +49,6 @@ public class MediatorRisikoNew extends AbstractMediator {
 
 	@Override
 	public void startGame() {
-		this.turnManager.startTurn();
+		this.turnManager.startGame();
 	}
 }

@@ -1,15 +1,14 @@
 package it.uniurb.pmo.model.versions.risikockassic.management;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import it.uniurb.pmo.model.management.AbstractTurnManager;
 import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.turn.IPhase;
-import it.uniurb.pmo.model.utils.EnumPhase;
 import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ITurnManagerRisikoNew;
+import it.uniurb.pmo.model.versions.risikockassic.turn.CombatPhase;
+import it.uniurb.pmo.model.versions.risikockassic.turn.ReinforcePhase;
+import it.uniurb.pmo.model.versions.risikockassic.turn.StrategicPhase;
 
 public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnManagerRisikoNew {
 	
@@ -17,19 +16,25 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	private int currentTurn;
 	private Map<IPlayer,Integer> turns;
 	private List<IPlayer> players;
-	
-	
+
 	public TurnManagerRisikoNew() {
 		this.isReady = false;
 	}
 	
 	@Override
 	public void initializeGame(List<IPlayer> players) {
+		this.players = players;
 		this.currentTurn = 0;
 		this.turns = this.initTurns(players);
-
+		this.initPhases(this.initialiazePhases()); // Inizializza le fasi sulla classe padre
 		this.isReady = true;
-		
+	}
+
+	@Override
+	public void startGame() {
+		if (this.isReady && !this.players.isEmpty()) {
+			this.playTurn(this.players.getFirst());
+		}
 	}
 
 	@Override
@@ -44,38 +49,14 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	}
 
 	@Override
-	protected List<EnumPhase> getOrderedPhase() {
-		return List.of();
-	}
-
-	@Override
-	public void playTurn(IPlayer p) {
-
-	}
-
-	@Override
-	public void endTurn(IPlayer p) {
-
-	}
-
-	@Override
-	public void playPhase(IPhase phase) {
-
-	}
-
-	@Override
-	public int nextPhase() {
-		return 0;
-	}
-
-	@Override
-	public IPlayer getCurrentPlayer() {
-		return null;
-	}
-
-	@Override
 	public IPlayer getNextPlayer() {
-		return null;
+		if (this.getCurrentPlayer() == null) return this.players.getFirst();
+		int currentIndex = this.players.indexOf(this.getCurrentPlayer());
+		int nextIndex = (currentIndex + 1) % this.players.size();
+		if (nextIndex == 0) {
+			this.currentTurn++;
+		}
+		return this.players.get(nextIndex);
 	}
 
 	@Override
@@ -84,13 +65,8 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	}
 
 	@Override
-	public Optional<IPlayer> checkVictory() {
+	public Optional<IPlayer> checkWinner() {
 		return Optional.empty();
-	}
-
-	@Override
-	public void startTurn() {
-
 	}
 
 	private Map<IPlayer,Integer> initTurns(List<IPlayer> players){
@@ -99,5 +75,11 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 			turns.putIfAbsent(p,this.currentTurn);
 		}
 		return turns;
+	}
+
+	private List<IPhase> initialiazePhases() {
+		// Risiko Classico: prima rinforzo, poi attacco, poi spostamento (strategica)
+		// Restituiamo direttamente le istanze di IPhase specifiche
+		return List.of(new ReinforcePhase(), new CombatPhase(), new StrategicPhase());
 	}
 }

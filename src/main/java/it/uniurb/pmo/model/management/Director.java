@@ -23,7 +23,7 @@ public class Director implements IDirector{
 		this.players = players;
 		this.isReady = false;
 		this.initializeGame(this.players, version);
-		this.StartGame();
+		this.startGame();
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class Director implements IDirector{
 	}
 
 	@Override
-	public void StartGame() {
+	public void startGame() {
 		if(this.isReady){
 			this.mediator.startGame();
 		}

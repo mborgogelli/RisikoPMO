@@ -28,7 +28,12 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 		// TODO Auto-generated method stub
 		this.isReady = true;
 	}
-	
+
+	@Override
+	public void startGame() {
+
+	}
+
 //	@Override
 	// io non lo devo inizializzare ma controllare che sia stato inizializzato dal mapmanager
 //	public void initializeGame() {

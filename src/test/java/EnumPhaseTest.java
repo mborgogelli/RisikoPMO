@@ -16,7 +16,6 @@ public class EnumPhaseTest {
 
      @Test
     public void getIdShouldMatchExpectedValues() {
-        assertEquals(0, EnumPhase.ASSIGNMENT.getId());
         assertEquals(1, EnumPhase.REINFORCE.getId());
         assertEquals(2, EnumPhase.ATTACK.getId());
         assertEquals(3, EnumPhase.MOVEMENT.getId());

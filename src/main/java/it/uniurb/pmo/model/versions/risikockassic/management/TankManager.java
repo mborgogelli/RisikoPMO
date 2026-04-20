@@ -41,7 +41,12 @@ public class TankManager extends AbstractTokenManager implements ITankManager{
 		this.initTokensPerZone(super.getAllZones());
 		this.isReady = true;
 	}
-	
+
+	@Override
+	public void startGame() {
+
+	}
+
 	/**
 	 * Ottiene il numero di tank di un giocatore
 	 * 
