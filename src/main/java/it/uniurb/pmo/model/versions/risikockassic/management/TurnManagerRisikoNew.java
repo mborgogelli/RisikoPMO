@@ -14,7 +14,6 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	
 	private boolean isReady;
 	private int currentTurn;
-	private Map<IPlayer,Integer> turns;
 	private List<IPlayer> players;
 
 	public TurnManagerRisikoNew() {
@@ -25,7 +24,6 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	public void initializeGame(List<IPlayer> players) {
 		this.players = players;
 		this.currentTurn = 0;
-		this.turns = this.initTurns(players);
 		this.initPhases(this.initialiazePhases()); // Inizializza le fasi sulla classe padre
 		this.isReady = true;
 	}
@@ -61,7 +59,7 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 
 	@Override
 	public int getCount() {
-		return 0;
+		return this.currentTurn;
 	}
 
 	@Override
@@ -69,17 +67,8 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 		return Optional.empty();
 	}
 
-	private Map<IPlayer,Integer> initTurns(List<IPlayer> players){
-		Map<IPlayer,Integer> turns = new HashMap<>();
-		for (IPlayer p : players ) {
-			turns.putIfAbsent(p,this.currentTurn);
-		}
-		return turns;
-	}
-
 	private List<IPhase> initialiazePhases() {
 		// Risiko Classico: prima rinforzo, poi attacco, poi spostamento (strategica)
-		// Restituiamo direttamente le istanze di IPhase specifiche
 		return List.of(new ReinforcePhase(), new CombatPhase(), new StrategicPhase());
 	}
 }
