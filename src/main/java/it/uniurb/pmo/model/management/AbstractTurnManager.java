@@ -61,7 +61,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	public int nextPhase() {
 		this.currentPhaseIndex++;
 
-		if (this.currentPhaseIndex >= this.phases.size()) {
+		if (this.currentPhaseIndex > this.phases.size()) {
 			this.endTurn(this.currentPlayer);
 		} else {
 			this.playPhase(this.phases.get(this.currentPhaseIndex));

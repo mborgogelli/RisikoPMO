@@ -33,7 +33,7 @@ public interface IZone {
 	
       /**
      * Restituisce la zona contenitore di questa zona.
-     * Ad esempio, un territorio apparterrà a un continente.
+     * Ad esempio, un territorio apparterrà ad un continente.
      * 
      * @return la zona contenitore, null se questa è una zona di livello radice
      */

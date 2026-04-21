@@ -6,6 +6,7 @@ import it.uniurb.pmo.model.players.Player;
 import it.uniurb.pmo.model.utils.EnumColors;
 import it.uniurb.pmo.model.utils.EnumPhase;
 import it.uniurb.pmo.model.versions.risikockassic.GameFactoryRisikoNew;
+import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.IMediatorRisikoNew;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,6 +27,10 @@ public class TurnManagerTest {
     }
 
 	private <T extends IManager> T resolveManager(Class<T> managerType) {
+        IMediatorRisikoNew mediator = (IMediatorRisikoNew) gf.getMediator();
+        System.out.println(mediator.getAllTerritories());
+        System.out.println(mediator.getAllZones());
+
 		return gf.getManagers().stream()
 				.filter(managerType::isInstance)
 				.map(managerType::cast)
