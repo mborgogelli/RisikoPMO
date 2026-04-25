@@ -9,6 +9,7 @@ import it.uniurb.pmo.model.card.ISymbolCard;
 public class TerritoryCardsCreatorRisikoNew extends CardCreator{
 	
 	private static TerritoryCardsCreatorRisikoNew instance;
+	private List<ICard> deck;
 	
 	
 	protected TerritoryCardsCreatorRisikoNew() {
@@ -24,51 +25,16 @@ public class TerritoryCardsCreatorRisikoNew extends CardCreator{
 	}
 
 	@Override
-	protected List<ICard> createCards() {
+	protected List<ICard> createDeck() {
 		// TODO Auto-generated method stub
-		return null;
+		if (deck == null) {
+			// TODO -- Assegnazione 
+		    //List<IZone> territories = MapManagerRisikoNew.getInstance().getAllTerritories();
+		    //for (IZone territory : territories) {
+		    //    deck.add(new TerritoryCard(territory)); // Assicurati che TerritoryCard implementi ICard
+		    //}
+		}
+		return this.deck;
 	}
 
-
-	@Override
-	protected void resetCards(List<ICard> cards) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void configureCardDetails(ICard card) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void configureVariantRules() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected List<ICard> loadCardsFromJson(String filePath) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected void saveCardsToJson(List<ICard> cards, String filePath) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getName() {
-		
-		return null;
-	}
-
-	@Override
-	public ISymbolCard getSymbol() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
