@@ -4,5 +4,4 @@ public enum EnumMissionType {
 	CONQUER, 
 	ELIMINATION,
 	CONTROL
-
 }
