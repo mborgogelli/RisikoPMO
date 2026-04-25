@@ -5,6 +5,7 @@ import java.util.List;
 
 import it.uniurb.pmo.model.card.ICard;
 import it.uniurb.pmo.model.management.AbstractCardManager;
+import it.uniurb.pmo.model.management.interfaces.IMission;
 import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ICardManagerRisikoNew;
 
@@ -62,6 +63,30 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 	public void resetGame() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void shuffleDeck() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<ICard> playCards(IPlayer player) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IMission getMission(IPlayer player) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ICard pickCard(IPlayer player) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
