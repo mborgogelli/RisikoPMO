@@ -7,7 +7,7 @@ import it.uniurb.pmo.model.players.IPlayer;
 /**
  * Interfaccia che modella un mediatore tra i manager di gioco
  */
-public interface IMediator {
+public interface IMediator extends IGameConductor {
 
 	/**
 	 * Registra un manager con il mediatore
@@ -18,12 +18,6 @@ public interface IMediator {
 	 * Inizializza tutti i manager registrati
 	 */
 	void initManagers();
-
-	/**
-	 * Inizia il gioco
-	 */
-	void startGame();
-
 	/**
 	 * Restituisce tutte le zone di gioco.
 	 */

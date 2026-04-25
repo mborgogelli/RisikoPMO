@@ -10,7 +10,7 @@ import it.uniurb.pmo.model.players.IPlayer;
 import it.uniurb.pmo.model.utils.GameFactoryProvider;
 import it.uniurb.pmo.model.utils.GameVersion;
 
-public class Director implements IDirector{
+public class Director implements IDirector {
 	
 	private boolean isReady;
 	private IMediator mediator;

@@ -5,7 +5,7 @@ import it.uniurb.pmo.model.turn.IPhase;
 
 import java.util.Optional;
 
-public interface ITurnManager extends IManager{
+public interface ITurnManager extends IManager, IGameConductor {
 
 	void playTurn(IPlayer p);
 

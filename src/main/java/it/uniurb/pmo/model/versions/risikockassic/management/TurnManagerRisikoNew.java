@@ -71,4 +71,10 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 		// Risiko Classico: prima rinforzo, poi attacco, poi spostamento (strategica)
 		return List.of(new ReinforcePhase(), new CombatPhase(), new StrategicPhase());
 	}
+
+	@Override
+	public void stopGame() {
+		// TODO Auto-generated method stub
+		
+	}
 }

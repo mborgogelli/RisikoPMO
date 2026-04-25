@@ -41,11 +41,6 @@ public class MapManagerRisikoNew extends AbstractMapManager implements IMapManag
 }
 
 	@Override
-	public void startGame() {
-
-	}
-
-	@Override
 	public void resetGame() {
 		this.players = null;
 		this.playerTerritories.clear();

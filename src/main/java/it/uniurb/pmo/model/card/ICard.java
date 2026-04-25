@@ -17,7 +17,7 @@ public interface ICard {
 	
 	/**
 	 * Restituisce il simbolo associato alla carta se presente
-	 * Ad esempio, una carta territorio avrà un simbolo che rappresente Infantry, Artillery, Cavalry o Jolly.
+	 * Ad esempio, una carta territorio avrà un simbolo che rappresente Infantry, Artillery, Cavalry
 	 * Ad esempio, una carta obiettivo avrà un simbolo che rappresenta il tipo di obiettivo: conquista territori, Elimina giocatore, ecc.
 	 * @return il simbolo della carta, non può essere null
 	 */

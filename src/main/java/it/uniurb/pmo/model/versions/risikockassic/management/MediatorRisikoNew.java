@@ -1,11 +1,15 @@
 package it.uniurb.pmo.model.versions.risikockassic.management;
 
+import java.util.List;
+
 import it.uniurb.pmo.model.management.AbstractMediator;
 import it.uniurb.pmo.model.management.interfaces.IDirector;
 import it.uniurb.pmo.model.players.IPlayer;
-import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.*;
-
-import java.util.List;
+import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ICardManagerRisikoNew;
+import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.IMapManagerRisikoNew;
+import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.IMediatorRisikoNew;
+import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ITankManager;
+import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.ITurnManagerRisikoNew;
 
 public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisikoNew {
 	
@@ -47,5 +51,11 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	@Override
 	public void startGame() {
 		this.turnManager.startGame();
+	}
+
+	@Override
+	public void stopGame() {
+		// TODO Auto-generated method stub
+		
 	}
 }

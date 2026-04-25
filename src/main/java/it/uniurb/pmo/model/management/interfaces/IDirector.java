@@ -3,11 +3,12 @@ package it.uniurb.pmo.model.management.interfaces;
 
 import it.uniurb.pmo.model.players.IPlayer;
 
-public interface IDirector extends IManager {
+public interface IDirector extends IManager, IGameConductor {
 	
 	void declareWinner(IPlayer player);
 
 	void exitGame(IPlayer player);
 	
 	void stopGame();
+	
 }

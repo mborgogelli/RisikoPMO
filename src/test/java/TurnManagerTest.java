@@ -28,8 +28,6 @@ public class TurnManagerTest {
 
 	private <T extends IManager> T resolveManager(Class<T> managerType) {
         IMediatorRisikoNew mediator = (IMediatorRisikoNew) gf.getMediator();
-        System.out.println(mediator.getAllTerritories());
-        System.out.println(mediator.getAllZones());
 
 		return gf.getManagers().stream()
 				.filter(managerType::isInstance)
@@ -38,8 +36,4 @@ public class TurnManagerTest {
 				.orElseThrow(() -> new IllegalStateException("Manager of type " + managerType.getName() + " not found"));
 	}
 
-    @Test
-    public void printPhases(){
-        System.out.println(Arrays.stream(EnumPhase.values()).sorted().toList());
-    }
 }
