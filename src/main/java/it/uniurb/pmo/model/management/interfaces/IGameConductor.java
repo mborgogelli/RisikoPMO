@@ -5,5 +5,7 @@ public interface IGameConductor {
     void startGame();
 
     void stopGame();
+   
+    void resetGame();
 
 }

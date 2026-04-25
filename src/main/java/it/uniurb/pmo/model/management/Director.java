@@ -27,11 +27,6 @@ public class Director implements IDirector {
 	}
 	
 	@Override
-	public Boolean isReady() {
-		return this.isReady;
-	}
-	
-	@Override
 	public void resetGame() {
 		this.isReady = false;
 		this.managers.forEach(IManager::resetGame);
@@ -55,18 +50,6 @@ public class Director implements IDirector {
 		this.players.remove(player);
 	}
 
-	@Override
-	public void initializeGame(List<IPlayer> players) {
-		this.initializeGame(players, this.version);
-	}
-
-	@Override
-	public void setMediator(IMediator mediator) {
-		if (this.mediator == null) {
-			this.mediator = mediator;
-		}
-	}
-	
 	@Override
 	public void stopGame() {
 		this.isReady = false;

@@ -17,9 +17,4 @@ public class InitializationAndResetTest {
 	
 	private final IDirector director = new Director(GameVersion.RISIKONEW, players);
 	
-	@BeforeEach
-	public void setUp(){
-		this.director.initializeGame(players);
-	}
-	
 }

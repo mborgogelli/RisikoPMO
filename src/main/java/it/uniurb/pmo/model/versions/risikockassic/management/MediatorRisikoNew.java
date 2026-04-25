@@ -58,4 +58,10 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void resetGame() {
+		// TODO Auto-generated method stub
+		
+	}
 }
