@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import it.uniurb.pmo.model.utils.GameVersion;
 import it.uniurb.pmo.model.utils.RiskJsonLoader;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ public class RiskJsonLoaderTest {
 	
 	@Test
 	void testingMapLoader() throws JsonSyntaxException, IOException {
-		this.map = RiskJsonLoader.loadJsonFile("risikonew");
+		this.map = RiskJsonLoader.loadJsonFile(GameVersion.RISIKONEW.getDescrizione());
 		assertNotNull(map);
 	}
 	
@@ -44,7 +45,7 @@ public class RiskJsonLoaderTest {
 	
 	@Test
 	void testingJsonKeys() throws JsonSyntaxException, IOException {
-		this.map = RiskJsonLoader.loadJsonFile("risikonew");
+		this.map = RiskJsonLoader.loadJsonFile(GameVersion.RISIKONEW.getDescrizione());
 		assertTrue(map.has("continents"));
 	}
 

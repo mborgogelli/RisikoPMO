@@ -16,6 +16,7 @@ import com.google.gson.JsonObject;
 import it.uniurb.pmo.model.board.BoardCreatorTestSupport;
 import it.uniurb.pmo.model.board.IGameBoard;
 import it.uniurb.pmo.model.board.IZone;
+import it.uniurb.pmo.model.utils.RiskJsonParser;
 import it.uniurb.pmo.model.versions.risikockassic.board.BoardCreatorRisikoNew;
 import it.uniurb.pmo.model.versions.risikockassic.board.Continent;
 import it.uniurb.pmo.model.versions.risikockassic.board.Territory;
@@ -35,15 +36,15 @@ class BoardCreatorTest {
 	}
 
 	private List<JsonElement> getValues(String key, JsonElement element) {
-		return creator.getValues(key, element);
+		return RiskJsonParser.getValues(key, element);
 	}
 
 	private List<JsonElement> getValues(String key, List<JsonElement> elements) {
-		return creator.getValues(key, elements);
+		return RiskJsonParser.getValues(key, elements);
 	}
 
 	private <T> List<T> getValues(String key, List<JsonElement> elements, Class<T> type) {
-		return creator.getValues(key, elements, type);
+		return RiskJsonParser.getValues(key, elements, type);
 	}
 
 	@Test

@@ -5,7 +5,7 @@ package it.uniurb.pmo.model.utils;
  */
 public enum GameVersion {
 	
-	RISIKONEW("risikonew"),
+	RISIKONEW("risikonew_map"),
 	RISIKOANTARTIDE("risikoantartide"),
 	SPQRISIKO("spqrisiko"),
 	RISIKOOCEANO("risikooceano");

@@ -1,13 +1,9 @@
 package it.uniurb.pmo.model.board;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -54,10 +50,6 @@ public abstract class BoardCreator implements IBoardCreator{
 		return gameBoard;
     }
 
-	protected <T> List<T> convertJsonPrimitiveList(List<JsonElement> neighbours, Class<T> typeClass) {
-		return RiskJsonParser.convertJsonPrimitiveList(neighbours,typeClass);
-	}
-
 	// Interfaccia factory da passare per la creazione delle istanze di IZone
 	@FunctionalInterface
 	public interface ZoneFactory {
@@ -83,66 +75,8 @@ public abstract class BoardCreator implements IBoardCreator{
 	 * @return Una lista di IZone create dalla chiave JSON
 	 */
     protected List<IZone> createZones(String rootKey, List<JsonElement> jsonMap, ZoneFactory factory) {
-    	this.checkInputList(jsonMap);
-    	List<String> list = this.getValues(rootKey, jsonMap, String.class);
+	    	List<String> list = RiskJsonParser.getValues(rootKey, jsonMap, String.class);
         return this.insertZoneByKey(list, factory);
-	}
-	
-	/**
-	 * Ritorna una lista di JsonElement a partire da una chiave dell'oggetto json.
-	 * Gestisce sia JsonObject che JsonArray.
-	 *
-	 * @return Una lista contenente JsonElement
-	 **/
-	protected List<JsonElement> getValues(String rootKey, JsonElement jsonMap){
-		if (jsonMap == null || jsonMap.isJsonNull() || jsonMap.isJsonPrimitive()) {
-			throw new IllegalArgumentException("Parameter is null or JsonNull or JsonPrimitive");
-		}
-		List<JsonElement> list = extractValuesFromElement(rootKey, jsonMap).collect(Collectors.toList());
-		this.checkOutputList(list);
-		return list;
-	}
-	
-	/**
-	 * Ritorna una lista di JsonElement a partire da una chiave e da una lista di JsonElement.
-	 * Gestisce sia liste di JsonObject che di JsonArray.
-	 *
-	 * @return Una lista contenente JsonElement
-	 **/
-	protected List<JsonElement> getValues(String rootKey, List<JsonElement> jsonMap){
-		this.checkInputList(jsonMap);
-		List<JsonElement> list;
-		if (jsonMap.getFirst().isJsonArray() || jsonMap.getFirst().isJsonObject()) {
-			list = this.getValueFromList(rootKey, jsonMap);
-		} else {
-			throw new IllegalArgumentException("Parameter must contain JsonObject or JsonArray");
-		}
-		this.checkOutputList(list);
-		return list;
-	}
-	
-	/**
-	 * Ritorna una lista di valori di tipo T a partire da una chiave dell'oggetto json.
-	 * Gestisce sia JsonObject che JsonArray.
-	 *
-	 * @param rootKey La chiave da verificare
-	 * @param jsonMap La lista in cui cercare la chiave (gestisce sia JsonObject che JsonArray)
-	 * @return Una lista contenente valori di tipo T
-	 **/
-	protected <T> List<T> getValues(String rootKey, List<JsonElement> jsonMap, Class<T> myClass) {
-		List<JsonElement> elements = this.getValues(rootKey, jsonMap);
-		List<T> result;
-		if (elements.getFirst().isJsonPrimitive()) {
-				result = RiskJsonParser.convertJsonPrimitiveList(elements, myClass);
-		} else {
-			throw new IllegalArgumentException("Cannot convert elements to " + myClass.getSimpleName());
-		}
-		return result;
-	}
-	
-	protected List<JsonElement> splitJsonArray(JsonArray jsonArray){
-		return StreamSupport.stream(jsonArray.spliterator(),false)
-	             .collect(Collectors.toList());
 	}
 	
 	/** Caricare la mappa da un file JSON in base alla versione di gioco richiesta.
@@ -159,131 +93,6 @@ public abstract class BoardCreator implements IBoardCreator{
 			System.err.println("Cannot Load Map: " + e.getMessage());
 		}
 		return jsonObject;
-	}
-	
-	/**
-	 * Verifica se una chiave è valida in un oggetto JSON.
-	 * Una chiave è considerata valida se esiste nell'oggetto e il suo valore non è null.
-	 * Se la chiave non è valida o il suo valore è null, viene lanciata un'eccezione.
-	 *
-	 * @param key La chiave da verificare
-	 * @param json L'oggetto JSON in cui cercare la chiave
-	 * @return true se la chiave è valida
-	 * @throws IllegalArgumentException se la chiave non è valida
-	 */
-	private boolean isValidKey(String key, JsonObject json) {
-		boolean isValid = true;
-		if (!json.has(key) || json.get(key).isJsonNull()) {
-			throw new IllegalArgumentException(key + " is not a valid key in the JSON object, or its value is null.");
-		}
-		return isValid;
-	}
-	
-	/**
-	 * Controlla la validità di una lista di JsonElement.
-	 * Lancia un'eccezione se la lista è null, vuota, contiene elementi di tipi diversi,
-	 * o se gli elementi sono JsonPrimitive o JsonNull.
-	 *
-	 * @param list La lista di JsonElement da controllare
-	 * @throws IllegalArgumentException se la lista non è valida
-	 */
-	private void checkInputList(List<JsonElement> list) {
-		this.checkOutputList(list);
-		if (list.getFirst().isJsonPrimitive()) {
-			throw new IllegalArgumentException("Elements of List " + list + " are JsonPrimitive. Cannot use provided key.");
-		}
-	}
-	
-	/**
-	 * Controlla la validità di una lista di JsonElement.
-	 * Lancia un'eccezione se la lista è null, vuota, contiene elementi di tipi diversi,
-	 * o se gli elementi sono JsonNull.
-	 *
-	 * @param list La lista di JsonElement da controllare
-	 * @throws IllegalArgumentException se la lista non è valida
-	 */
-	private void checkOutputList(List<JsonElement> list) {
-		if (list == null) {
-			throw new IllegalArgumentException("List is null.");
-		} else if (list.isEmpty()){
-			throw new IllegalArgumentException("List is empty.");
-		} else if (!checkSameType(list)){
-			throw new IllegalArgumentException("Elements of List are not of the same type.");
-		} else if (list.getFirst().isJsonNull()) {
-			throw new IllegalArgumentException("Elements of List are JsonNull.");
-		}
-	}
-	
-	/**
-	 * Controlla se tutti gli elementi della lista sono dello stesso tipo.
-	 * 
-	 * @param jsonElements La lista di JsonElement da controllare
-	 * @return true se tutti gli elementi sono dello stesso tipo, false altrimenti
-	 */
-	private boolean checkSameType(List<JsonElement> jsonElements) {
-		Class<?> firstType = jsonElements.getFirst().getClass();
-		return jsonElements.stream().allMatch(e -> e.getClass().equals(firstType));
-	}
-
-	
-	/**
-	 * Ritorna una lista di JsonElement a partire da una chiave dell'oggetto json
-	 * in un data Lista di JsonElement.
-	 *
-	 * @return Una lista contenente JsonElement
-	 **/
-	private List<JsonElement> getValueFromList(String rootKey, List<JsonElement> jsonMap) {
-	    return jsonMap.stream()
-	            .flatMap(element -> extractValuesFromElement(rootKey, element))
-	            .collect(Collectors.toList());
-	}
-	
-	/**
-	 * Estrae i valori da un JsonElement in base alla chiave specificata.
-	 * Gestisce sia JsonObject che JsonArray.
-	 *
-	 * @param rootKey La chiave da cercare
-	 * @param element L'elemento JSON da cui estrarre i valori
-	 * @return Uno stream di JsonElement corrispondenti alla chiave
-	 */
-	private Stream<JsonElement> extractValuesFromElement(String rootKey, JsonElement element) {
-		Stream<JsonElement> stream;
-		if (element.isJsonObject()) {
-	        stream = getValueByKey(rootKey, element.getAsJsonObject()).stream();
-	    } else if (element.isJsonArray()) {
-	        stream = getValueByKey(rootKey, element.getAsJsonArray()).stream();
-	    } else {
-	        stream = Stream.empty();
-	    }
-		return stream;
-	}
-	
-	/**
-	 * Ritorna una lista di JsonElement a partire da una chiave dell'oggetto json
-	 * in un dato Array di json.
-	 *
-	 * @return Una lista contenente JsonElement
-	 **/
-	private List<JsonElement> getValueByKey(String key, JsonArray jsonArray) {
-		return StreamSupport.stream(jsonArray.spliterator(),false)
-        		             .filter(JsonElement::isJsonObject)
-        		             .map(JsonElement::getAsJsonObject)
-        		             .filter(obj -> isValidKey(key, obj))
-        		             .map(obj -> obj.get(key))
-        		             .collect(Collectors.toList());
-    }
-	
-	/**
-	 * Ritorna una lista di JsonElement a partire da una chiave dell'oggetto json
-	 * in un dato oggetto json.
-	 *
-	 * @return Una lista contenente JsonElement
-	 **/
-	private List<JsonElement> getValueByKey(String rootKey, JsonObject jsonObject){
-	    return Stream.ofNullable(rootKey)
-	            .filter(key -> isValidKey(key, jsonObject))
-	            .map(jsonObject::get)
-	            .collect(Collectors.toCollection(ArrayList::new));
 	}
 	
 	/**

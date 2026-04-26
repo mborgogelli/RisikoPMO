@@ -6,9 +6,7 @@ package it.uniurb.pmo.model.versions.risikockassic.board;
  */
 public enum EnumMap {
 	
-	RISIKOCLASSIC("risikonew"),
-	
-    /** Territorio - l'unità fondamentale del gioco classico */
+	/** Territorio - l'unità fondamentale del gioco classico */
     TERRITORIES("territories"),
     
     /** Continente - raggruppa più territori */

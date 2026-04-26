@@ -103,7 +103,7 @@ public final class BoardCreatorRisikoNew extends BoardCreator {
 	 * @return Lista di JsonElement che rappresentano i continenti
 	 */
 	private List<JsonElement> getContinentsAsList() {
-		return super.splitJsonArray(super.getValues(CONTINENTS.getDescrizione(), this.jsonMap)
+		return RiskJsonParser.splitJsonArray(RiskJsonParser.getValues(CONTINENTS.getDescrizione(), this.jsonMap)
 				.getFirst().getAsJsonArray());
 	}
 	
@@ -115,7 +115,7 @@ public final class BoardCreatorRisikoNew extends BoardCreator {
 	 */
 	private List<JsonElement> getTerritoriesFromJson() {
 		List<JsonElement> continents = this.getContinentsAsList();
-		return super.getValues("territories", continents);
+		return RiskJsonParser.getValues("territories", continents);
 	}
 	
 	/**
@@ -147,7 +147,7 @@ public final class BoardCreatorRisikoNew extends BoardCreator {
 	 */
 	private void setArmyBonusForContinents() {
 	    List<JsonElement> continents = this.getContinentsAsList();
-	    List<Integer> armyValues = super.getValues("armybonus", continents, Integer.class);
+	    List<Integer> armyValues = RiskJsonParser.getValues("armybonus", continents, Integer.class);
 
 		// Al continente i-esimo corrisponde il bonus i-esimo
 	    for (int i = 0; i < this.continents.size(); i++) {
@@ -179,7 +179,7 @@ public final class BoardCreatorRisikoNew extends BoardCreator {
 	    List<JsonElement> continentTerritories = List.of(allTerritories.get(continentIndex));
 
 		// Estrae il valore per la modalità "TimeAttack" per ogni territorio del continente
-	    List<Integer> armyValues = super.getValues("points", continentTerritories, Integer.class);
+	    List<Integer> armyValues = RiskJsonParser.getValues("points", continentTerritories, Integer.class);
 
 		// Assegna all' i-esimo territorio l' i-esimo valore per la modalità "TimeAttack"
 	    for (int territoryIndex = 0; territoryIndex < territories.size(); territoryIndex++) {
@@ -222,10 +222,11 @@ public final class BoardCreatorRisikoNew extends BoardCreator {
 	 * @return Lista di liste contenenti i nomi dei territori vicini
 	 */
 	private List<List<String>> getNeighboursListForContinent(List<JsonElement> continentTerritories) {
-	    return super.getValues("neighbours", continentTerritories).stream()
+	    return RiskJsonParser.getValues("neighbours", continentTerritories).stream()
 	        .map(JsonElement::getAsJsonArray)
-	        .map(super::splitJsonArray)
-	        .map(neighbours -> super.convertJsonPrimitiveList(neighbours, String.class))
+	        .map(RiskJsonParser::splitJsonArray)
+	        .map(neighbours -> RiskJsonParser.convertJsonPrimitiveList(neighbours, String.class))
 	        .toList();
 	}
 }
+
