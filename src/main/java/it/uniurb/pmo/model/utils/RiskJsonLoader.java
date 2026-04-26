@@ -11,18 +11,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 /**
- * Classe JsonLoader per il caricamento delle mappe di gioco in formato JSON.
+ * Classe RiskJsonLoader per il caricamento delle mappe di gioco in formato JSON.
  * Questa classe fornisce un metodo statico per caricare una mappa di gioco specificata da una versione del gioco.
  * Utilizza la libreria Gson per il parsing del file JSON e gestisce le eccezioni relative a file mancanti,
  * JSON malformati o versioni di gioco invalide.
  */
-public final class JsonLoader {
+public final class RiskJsonLoader {
 	
 	private static final String PATH = "src/main/resources/asset/";
 	private static final String FILE_SUFFIX = ".json";
 	private static final Gson GSON = new Gson();
 
-	private JsonLoader() {
+	private RiskJsonLoader() {
 	}
 
 	/**

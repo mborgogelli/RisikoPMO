@@ -10,6 +10,7 @@ import it.uniurb.pmo.model.board.BoardCreator;
 import it.uniurb.pmo.model.board.IGameBoard;
 import it.uniurb.pmo.model.board.IZone;
 import it.uniurb.pmo.model.utils.GameVersion;
+import it.uniurb.pmo.model.utils.RiskJsonParser;
 
 /**
  * Classe concreta che estende BoardCreator per creare la mappa del gioco RisikoNew.

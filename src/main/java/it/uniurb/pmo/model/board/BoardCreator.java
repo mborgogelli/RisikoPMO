@@ -10,10 +10,10 @@ import java.util.stream.StreamSupport;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 import it.uniurb.pmo.model.utils.GameVersion;
-import it.uniurb.pmo.model.utils.JsonLoader;
+import it.uniurb.pmo.model.utils.RiskJsonLoader;
+import it.uniurb.pmo.model.utils.RiskJsonParser;
 
 /**
 * Classe astratta che offre il comportamento di base per costruire una mappa di gioco a partire da un file JSON.
@@ -53,7 +53,11 @@ public abstract class BoardCreator implements IBoardCreator{
 		}
 		return gameBoard;
     }
-    
+
+	protected <T> List<T> convertJsonPrimitiveList(List<JsonElement> neighbours, Class<T> typeClass) {
+		return RiskJsonParser.convertJsonPrimitiveList(neighbours,typeClass);
+	}
+
 	// Interfaccia factory da passare per la creazione delle istanze di IZone
 	@FunctionalInterface
 	public interface ZoneFactory {
@@ -129,7 +133,7 @@ public abstract class BoardCreator implements IBoardCreator{
 		List<JsonElement> elements = this.getValues(rootKey, jsonMap);
 		List<T> result;
 		if (elements.getFirst().isJsonPrimitive()) {
-				result = convertJsonPrimitiveList(elements, myClass);
+				result = RiskJsonParser.convertJsonPrimitiveList(elements, myClass);
 		} else {
 			throw new IllegalArgumentException("Cannot convert elements to " + myClass.getSimpleName());
 		}
@@ -141,33 +145,6 @@ public abstract class BoardCreator implements IBoardCreator{
 	             .collect(Collectors.toList());
 	}
 	
-	/**
-	 * Converte una lista di JsonElement in una lista di tipo T.
-	 *
-	 * @param list La lista di JsonElement da convertire
-	 * @param myClass La classe di tipo T in cui convertire gli elementi
-	 * @return Una lista di tipo T
-	 * @throws IllegalArgumentException se gli elementi non possono essere convertiti al tipo specificato
-	 */
-    protected <T> List<T> convertJsonPrimitiveList(List<JsonElement> list, Class<T> myClass) {
-    	List<T> result;
-    	JsonPrimitive elem = list.getFirst().getAsJsonPrimitive();
-    	if (myClass == String.class && elem.isString()) {
-			result = list.stream().map(e -> myClass.cast(e.getAsString())).collect(Collectors.toList());
-		} else if (myClass == Integer.class && elem.isNumber()) {
-			result = list.stream().map(e -> myClass.cast(e.getAsInt())).collect(Collectors.toList());
-		} else if (myClass == Double.class && elem.isNumber()) {
-			result = list.stream().map(e -> myClass.cast(e.getAsDouble())).collect(Collectors.toList());
-		} else if (myClass == Boolean.class) {
-			result = list.stream().map(e -> myClass.cast(e.getAsBoolean())).collect(Collectors.toList());
-		} else if (myClass == JsonPrimitive.class) {
-			result = list.stream().map(e -> myClass.cast(e.getAsJsonPrimitive())).collect(Collectors.toList());
-		} else {
-			throw new IllegalArgumentException("Elements cannot be cast to " + myClass.getSimpleName());
-		}
-		return result;
-	}
-    
 	/** Caricare la mappa da un file JSON in base alla versione di gioco richiesta.
 	 *  Restituisce un oggetto JsonObject che rappresenta la mappa.
 	 * 
@@ -177,7 +154,7 @@ public abstract class BoardCreator implements IBoardCreator{
 	private JsonObject loadMap(GameVersion gameVersion) {
 		JsonObject jsonObject = null;
 		try {
-			jsonObject = JsonLoader.loadJsonFile(gameVersion.getDescrizione());
+			jsonObject = RiskJsonLoader.loadJsonFile(gameVersion.getDescrizione());
 		} catch (IOException e) {
 			System.err.println("Cannot Load Map: " + e.getMessage());
 		}
