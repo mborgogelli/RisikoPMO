@@ -11,18 +11,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 /**
- * Classe MapLoader per il caricamento delle mappe di gioco in formato JSON.
+ * Classe JsonLoader per il caricamento delle mappe di gioco in formato JSON.
  * Questa classe fornisce un metodo statico per caricare una mappa di gioco specificata da una versione del gioco.
  * Utilizza la libreria Gson per il parsing del file JSON e gestisce le eccezioni relative a file mancanti,
  * JSON malformati o versioni di gioco invalide.
  */
-public final class MapLoader {
+public final class JsonLoader {
 	
 	private static final String PATH = "src/main/resources/asset/";
-	private static final String MAP_SUFFIX= "_map.json";
+	private static final String FILE_SUFFIX = ".json";
 	private static final Gson GSON = new Gson();
 
-	private MapLoader() {
+	private JsonLoader() {
 	}
 
 	/**
@@ -39,13 +39,13 @@ public final class MapLoader {
 	 * @throws IOException se si verificano errori di I/O durante la lettura del file
 	 * @throws JsonSyntaxException se il file è vuoto, contiene null oppure il JSON è malformato
 	 */
-	public static JsonObject loadMapFile(String gameVersion) throws IOException {
+	public static JsonObject loadJsonFile(String gameVersion) throws IOException {
 		
         if (gameVersion == null || gameVersion.trim().isEmpty()) {
             throw new IllegalArgumentException("Game version is required");
         }
 		
-		String path = buildMapPath(gameVersion);
+		String path = buildPath(gameVersion);
 		
 		try (FileReader fileReader = new FileReader(path)){
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -67,7 +67,7 @@ public final class MapLoader {
 	 * 
 	* @return il percorso del file Json che rappresenta la mappa
 	**/
-	private static String buildMapPath(String gameVersion) {
-		return PATH + gameVersion.toLowerCase() + MAP_SUFFIX;
+	private static String buildPath(String gameVersion) {
+		return PATH + gameVersion.toLowerCase() + FILE_SUFFIX;
 	}
 }

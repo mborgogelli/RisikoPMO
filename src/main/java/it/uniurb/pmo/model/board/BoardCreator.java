@@ -13,7 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import it.uniurb.pmo.model.utils.GameVersion;
-import it.uniurb.pmo.model.utils.MapLoader;
+import it.uniurb.pmo.model.utils.JsonLoader;
 
 /**
 * Classe astratta che offre il comportamento di base per costruire una mappa di gioco a partire da un file JSON.
@@ -143,7 +143,7 @@ public abstract class BoardCreator implements IBoardCreator{
 	
 	/**
 	 * Converte una lista di JsonElement in una lista di tipo T.
-	 * 
+	 *
 	 * @param list La lista di JsonElement da convertire
 	 * @param myClass La classe di tipo T in cui convertire gli elementi
 	 * @return Una lista di tipo T
@@ -157,7 +157,7 @@ public abstract class BoardCreator implements IBoardCreator{
 		} else if (myClass == Integer.class && elem.isNumber()) {
 			result = list.stream().map(e -> myClass.cast(e.getAsInt())).collect(Collectors.toList());
 		} else if (myClass == Double.class && elem.isNumber()) {
-			result = list.stream().map(e -> myClass.cast(e.getAsDouble())).collect(Collectors.toList());	
+			result = list.stream().map(e -> myClass.cast(e.getAsDouble())).collect(Collectors.toList());
 		} else if (myClass == Boolean.class) {
 			result = list.stream().map(e -> myClass.cast(e.getAsBoolean())).collect(Collectors.toList());
 		} else if (myClass == JsonPrimitive.class) {
@@ -177,7 +177,7 @@ public abstract class BoardCreator implements IBoardCreator{
 	private JsonObject loadMap(GameVersion gameVersion) {
 		JsonObject jsonObject = null;
 		try {
-			jsonObject = MapLoader.loadMapFile(gameVersion.getDescrizione());
+			jsonObject = JsonLoader.loadJsonFile(gameVersion.getDescrizione());
 		} catch (IOException e) {
 			System.err.println("Cannot Load Map: " + e.getMessage());
 		}
