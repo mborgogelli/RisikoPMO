@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import it.uniurb.pmo.model.lobby.RoomManager;
-import it.uniurb.pmo.game.GameStartCoordinator;
-import it.uniurb.pmo.game.GameStartResult;
-import it.uniurb.pmo.model.utils.GameVersion;
+import it.uniurb.pmo.framework.lobby.RoomManager;
+import it.uniurb.pmo.framework.lobby.GameStartCoordinator;
+import it.uniurb.pmo.framework.lobby.GameStartResult;
+import it.uniurb.pmo.framework.utils.GameVersion;
 
 class GameStartCoordinatorTest {
 

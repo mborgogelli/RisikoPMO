@@ -1,16 +1,13 @@
-import it.uniurb.pmo.model.management.interfaces.IGameFactory;
-import it.uniurb.pmo.model.management.interfaces.IManager;
-import it.uniurb.pmo.model.management.interfaces.ITurnManager;
-import it.uniurb.pmo.model.players.IPlayer;
-import it.uniurb.pmo.model.players.Player;
-import it.uniurb.pmo.model.utils.EnumColors;
-import it.uniurb.pmo.model.utils.EnumPhase;
-import it.uniurb.pmo.model.versions.risikockassic.GameFactoryRisikoNew;
-import it.uniurb.pmo.model.versions.risikockassic.management.interfaces.IMediatorRisikoNew;
+import it.uniurb.pmo.framework.management.interfaces.IGameFactory;
+import it.uniurb.pmo.framework.management.interfaces.IManager;
+import it.uniurb.pmo.framework.management.interfaces.ITurnManager;
+import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.Player;
+import it.uniurb.pmo.framework.utils.EnumColors;
+import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class TurnManagerTest {

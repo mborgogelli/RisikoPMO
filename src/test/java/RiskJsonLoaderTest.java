@@ -1,24 +1,22 @@
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.RiskJsonLoader;
+import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import it.uniurb.pmo.model.utils.GameVersion;
-import it.uniurb.pmo.model.utils.RiskJsonLoader;
-import org.junit.jupiter.api.Test;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RiskJsonLoaderTest {
-	
+
+	private final static String JSON_MAP = GameVersion.RISIKONEW.getDescrizione() + "_map";
 	private JsonObject map;
 	
 	@Test
 	void testingMapLoader() throws JsonSyntaxException, IOException {
-		this.map = RiskJsonLoader.loadJsonFile(GameVersion.RISIKONEW.getDescrizione());
+		this.map = RiskJsonLoader.loadJsonFile(JSON_MAP);
 		assertNotNull(map);
 	}
 	
@@ -45,7 +43,7 @@ public class RiskJsonLoaderTest {
 	
 	@Test
 	void testingJsonKeys() throws JsonSyntaxException, IOException {
-		this.map = RiskJsonLoader.loadJsonFile(GameVersion.RISIKONEW.getDescrizione());
+		this.map = RiskJsonLoader.loadJsonFile(JSON_MAP);
 		assertTrue(map.has("continents"));
 	}
 

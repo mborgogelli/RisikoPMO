@@ -9,14 +9,14 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.uniurb.pmo.model.management.interfaces.IGameFactory;
-import it.uniurb.pmo.model.management.interfaces.IManager;
-import it.uniurb.pmo.model.management.interfaces.IMapManager;
-import it.uniurb.pmo.model.management.interfaces.ITokenManager;
-import it.uniurb.pmo.model.players.IPlayer;
-import it.uniurb.pmo.model.players.Player;
-import it.uniurb.pmo.model.utils.EnumColors;
-import it.uniurb.pmo.model.versions.risikockassic.GameFactoryRisikoNew;
+import it.uniurb.pmo.framework.management.interfaces.IGameFactory;
+import it.uniurb.pmo.framework.management.interfaces.IManager;
+import it.uniurb.pmo.framework.management.interfaces.IMapManager;
+import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
+import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.Player;
+import it.uniurb.pmo.framework.utils.EnumColors;
+import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
 
 public class TankManagerTest {
 

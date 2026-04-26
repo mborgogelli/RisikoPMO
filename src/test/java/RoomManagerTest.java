@@ -1,6 +1,6 @@
-import it.uniurb.pmo.model.lobby.IRoomManager;
-import it.uniurb.pmo.model.lobby.RoomManager;
-import it.uniurb.pmo.model.utils.GameVersion;
+import it.uniurb.pmo.framework.lobby.IRoomManager;
+import it.uniurb.pmo.framework.lobby.RoomManager;
+import it.uniurb.pmo.framework.utils.GameVersion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -13,13 +13,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import it.uniurb.pmo.model.board.BoardCreatorTestSupport;
-import it.uniurb.pmo.model.board.IGameBoard;
-import it.uniurb.pmo.model.board.IZone;
-import it.uniurb.pmo.model.utils.RiskJsonParser;
-import it.uniurb.pmo.model.versions.risikockassic.board.BoardCreatorRisikoNew;
-import it.uniurb.pmo.model.versions.risikockassic.board.Continent;
-import it.uniurb.pmo.model.versions.risikockassic.board.Territory;
+import it.uniurb.pmo.framework.board.BoardCreatorTestSupport;
+import it.uniurb.pmo.framework.board.IGameBoard;
+import it.uniurb.pmo.framework.board.IZone;
+import it.uniurb.pmo.framework.utils.RiskJsonParser;
+import it.uniurb.pmo.variants.risikonew.board.BoardCreatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.board.Continent;
+import it.uniurb.pmo.variants.risikonew.board.Territory;
 
 class BoardCreatorTest {
 

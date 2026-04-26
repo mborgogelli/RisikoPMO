@@ -5,15 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.uniurb.pmo.model.players.IPlayer;
-import it.uniurb.pmo.model.players.Player;
-import it.uniurb.pmo.model.utils.EnumColors;
-import it.uniurb.pmo.model.versions.risikockassic.management.MapManagerRisikoNew;
+import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.Player;
+import it.uniurb.pmo.framework.utils.EnumColors;
+import it.uniurb.pmo.variants.risikonew.management.MapManagerRisikoNew;
 
 class MapManagerRisikoNewTest extends MapManagerRisikoNew {
 

@@ -11,10 +11,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.uniurb.pmo.model.board.IGameBoard;
-import it.uniurb.pmo.model.board.IZone;
-import it.uniurb.pmo.model.utils.GameVersion;
-import it.uniurb.pmo.model.versions.risikockassic.board.BoardCreatorRisikoNew;
+import it.uniurb.pmo.framework.board.IGameBoard;
+import it.uniurb.pmo.framework.board.IZone;
+import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.variants.risikonew.board.BoardCreatorRisikoNew;
 
 public class GameBoardTest {
     
@@ -130,7 +130,7 @@ public class GameBoardTest {
         assertNotNull(neighbours);
         assertFalse(neighbours.isEmpty());
         
-        String neighborName = neighbours.get(0);
+        String neighborName = neighbours.getFirst();
         
         // Test valid connection
         assertTrue(gameBoard.canReach(neighborName, territoryName));

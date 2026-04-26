@@ -1,13 +1,13 @@
 
 
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import it.uniurb.pmo.model.management.Director;
-import it.uniurb.pmo.model.management.interfaces.IDirector;
-import it.uniurb.pmo.model.players.IPlayer;
-import it.uniurb.pmo.model.players.Player;
-import it.uniurb.pmo.model.utils.EnumColors;
-import it.uniurb.pmo.model.utils.GameVersion;
+
+import it.uniurb.pmo.framework.management.Director;
+import it.uniurb.pmo.framework.management.interfaces.IDirector;
+import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.Player;
+import it.uniurb.pmo.framework.utils.EnumColors;
+import it.uniurb.pmo.framework.utils.GameVersion;
 
 public class InitializationAndResetTest {
 	

@@ -1,10 +1,7 @@
 package it.uniurb.pmo.controller.dto;
 
 
-import it.uniurb.pmo.model.utils.EnumColors;
-
-import java.util.List;
-import java.util.Map;
+import it.uniurb.pmo.framework.utils.EnumColors;
 
 /**
  * DTO per la risposta della creazione/accesso a una stanza.
