@@ -6,6 +6,9 @@ import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Optional;
 
 /**
  * Classe astratta che modella una macchina a stati finiti per la gestione dei turni di gioco.
@@ -19,12 +22,72 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	private int currentPhaseIndex = 0;
 	private List<IPhase> phases;
 
+	protected List<IPlayer> players;
+	protected int currentTurn;
+	protected boolean isReady;
+
 	/**
 	 * Inizializza la lista di fasi che compongono un turno di gioco.
 	 * Le classi figlie devono chiamare questo metodo durante il loro processo di startup/init.
 	 */
 	protected void initPhases(List<IPhase> phases) {
 		this.phases = phases;
+	}
+
+	/**
+	 * Metodo astratto che deve restituire la lista delle fasi del gioco per la specializzazione concreta.
+	 */
+	protected abstract List<IPhase> createPhases();
+
+	@Override
+	public void initializeGame(List<IPlayer> players) {
+		this.players = this.shufflePlayers(players);
+		this.currentTurn = 0;
+		this.initPhases(this.createPhases());
+		this.isReady = true;
+	}
+
+	@Override
+	public void startGame() {
+		if (this.isReady && this.players != null && !this.players.isEmpty()) {
+			this.playTurn(this.players.getFirst());
+		}
+	}
+
+	@Override
+	public Boolean isReady() {
+		return this.isReady;
+	}
+
+	protected List<IPlayer> shufflePlayers(List<IPlayer> players){
+		List<IPlayer> shuffledPlayers = new ArrayList<>(players);
+		Collections.shuffle(shuffledPlayers);
+		return shuffledPlayers;
+	}
+
+	@Override
+	public int getCount() {
+		return this.currentTurn;
+	}
+
+	@Override
+	public Optional<IPlayer> checkWinner() {
+		Optional<IPlayer> winner = Optional.empty();
+		if (this.getMediator() != null && this.getMediator().checkVictory(this.getCurrentPlayer())) {
+			winner = Optional.of(this.getCurrentPlayer());
+		}
+		return winner;
+	}
+
+	@Override
+	public IPlayer getNextPlayer() {
+		if (this.getCurrentPlayer() == null) return this.players.getFirst();
+		int currentIndex = this.players.indexOf(this.getCurrentPlayer());
+		int nextIndex = (currentIndex + 1) % this.players.size();
+		if (nextIndex == 0) {
+			this.currentTurn++;
+		}
+		return this.players.get(nextIndex);
 	}
 
 	@Override
@@ -54,7 +117,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	@Override
 	public void playPhase(IPhase currentPhase){
-		currentPhase.playPhase(this.currentPlayer);
+		currentPhase.playPhase(this.currentPlayer, this.mediator);
 	}
 
 	@Override
@@ -72,5 +135,9 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	@Override
 	public IPlayer getCurrentPlayer() {
 		return this.currentPlayer;
+	}
+
+	protected IMediator getMediator() {
+		return this.mediator;
 	}
 }

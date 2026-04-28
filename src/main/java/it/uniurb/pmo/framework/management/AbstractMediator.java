@@ -1,4 +1,3 @@
-
 package it.uniurb.pmo.framework.management;
 
 
@@ -40,5 +39,13 @@ public abstract class AbstractMediator implements IMediator {
         return myManager;
     }
 
+	public void notifyWinner(IPlayer iPlayer) {
+		//To do implement notification properly
+	}
+
+	@Override
+	public boolean checkVictory(IPlayer player) {
+		return false;   // To do delegate to MissionManager or CardManager
+	}
 
 }

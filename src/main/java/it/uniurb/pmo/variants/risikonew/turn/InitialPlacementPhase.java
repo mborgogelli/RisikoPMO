@@ -4,14 +4,13 @@ import java.util.Optional;
 
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.variants.risikonew.turn.interfaces.ICombatPhase;
+import it.uniurb.pmo.framework.turn.IPhase;
 
-public class CombatPhase implements ICombatPhase {
+public class InitialPlacementPhase implements IPhase {
 
 	private IPlayer player;
-	private IMediator mediator;
 
-	public CombatPhase() {
+	public InitialPlacementPhase() {
 	}
 
 	@Override
@@ -22,7 +21,6 @@ public class CombatPhase implements ICombatPhase {
 	@Override
 	public void playPhase(IPlayer player, IMediator mediator) {
 		this.player = player;
-		this.mediator = mediator;
 
 	}
 

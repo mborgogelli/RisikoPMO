@@ -8,7 +8,5 @@ public interface IDirector extends IGameConductor {
 	void declareWinner(IPlayer player);
 
 	void exitGame(IPlayer player);
-	
-	void stopGame();
-	
+
 }

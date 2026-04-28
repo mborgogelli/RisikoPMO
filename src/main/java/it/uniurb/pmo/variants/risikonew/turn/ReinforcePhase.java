@@ -3,6 +3,7 @@ package it.uniurb.pmo.variants.risikonew.turn;
 import java.util.List;
 
 import it.uniurb.pmo.framework.card.ICard;
+import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.turn.interfaces.IReinforcePhase;
 
@@ -17,14 +18,16 @@ public class ReinforcePhase implements IReinforcePhase {
 	private final static int BONUS_DEFAULT = 0;
 	
 	private IPlayer player;
+	private IMediator mediator;
 	private List<String> playerTerritories;
 	private List<ICard> tris;
 	private boolean isStarted = false;
 	private boolean cardsUsed = false;
 
 	@Override
-	public void playPhase(IPlayer player) {
+	public void playPhase(IPlayer player, IMediator mediator) {
 		this.player = player;
+		this.mediator = mediator;
 		this.isStarted = true;
 	}
 

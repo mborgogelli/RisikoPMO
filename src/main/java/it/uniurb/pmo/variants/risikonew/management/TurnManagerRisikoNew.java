@@ -11,33 +11,9 @@ import it.uniurb.pmo.variants.risikonew.turn.ReinforcePhase;
 import it.uniurb.pmo.variants.risikonew.turn.StrategicPhase;
 
 public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnManagerRisikoNew {
-	
-	private boolean isReady;
-	private int currentTurn;
-	private List<IPlayer> players;
 
 	public TurnManagerRisikoNew() {
 		this.isReady = false;
-	}
-	
-	@Override
-	public void initializeGame(List<IPlayer> players) {
-		this.players = players;
-		this.currentTurn = 0;
-		this.initPhases(this.initialiazePhases()); // Inizializza le fasi sulla classe padre
-		this.isReady = true;
-	}
-
-	@Override
-	public void startGame() {
-		if (this.isReady && !this.players.isEmpty()) {
-			this.playTurn(this.players.getFirst());
-		}
-	}
-
-	@Override
-	public Boolean isReady() {
-		return this.isReady;
 	}
 
 	@Override
@@ -47,34 +23,19 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	}
 
 	@Override
-	public IPlayer getNextPlayer() {
-		if (this.getCurrentPlayer() == null) return this.players.getFirst();
-		int currentIndex = this.players.indexOf(this.getCurrentPlayer());
-		int nextIndex = (currentIndex + 1) % this.players.size();
-		if (nextIndex == 0) {
-			this.currentTurn++;
-		}
-		return this.players.get(nextIndex);
+	public void stopGame() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void turnZero(IPlayer player){
+		//TO DO
 	}
 
 	@Override
-	public int getCount() {
-		return this.currentTurn;
-	}
-
-	@Override
-	public Optional<IPlayer> checkWinner() {
-		return Optional.empty();
-	}
-
-	private List<IPhase> initialiazePhases() {
+	protected List<IPhase> createPhases() {
 		// Risiko Classico: prima rinforzo, poi attacco, poi spostamento (strategica)
 		return List.of(new ReinforcePhase(), new CombatPhase(), new StrategicPhase());
 	}
 
-	@Override
-	public void stopGame() {
-		// TODO Auto-generated method stub
-		
-	}
 }
