@@ -49,4 +49,19 @@ public interface IRoomManager {
 	Boolean isFull(String roomId);
 
 	void closeRoom(String roomId);
+
+	/**
+	 * Restituisce una lista degli ID di tutte le stanze attive.
+	 */
+	List<String> getActiveRooms();
+
+	/**
+	 * Imposta lo stato di pronto di un giocatore.
+	 */
+	void setPlayerReady(String roomId, String playerName, boolean isReady);
+
+	/**
+	 * Verifica se tutti i giocatori in stanza sono pronti.
+	 */
+	boolean areAllPlayersReady(String roomId);
 }

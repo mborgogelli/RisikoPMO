@@ -3,6 +3,8 @@ package it.uniurb.pmo.controller.dto;
 
 import it.uniurb.pmo.framework.utils.EnumColors;
 
+import java.util.Map;
+
 /**
  * DTO per la risposta della creazione/accesso a una stanza.
  * Contiene solo le informazioni necessarie alla View.
@@ -11,8 +13,8 @@ import it.uniurb.pmo.framework.utils.EnumColors;
 public class RoomResponseDTO {
 
     private final String roomId;
-    private final String playerName;
-    private final EnumColors color;
+    private final Map<String, EnumColors> players;
+    private final Map<String, Boolean> readyStates;
     private final String gameVersion;
     private final int currentPlayers;
     private final int maxPlayers;
@@ -20,8 +22,8 @@ public class RoomResponseDTO {
 
     //
     private RoomResponseDTO(Builder builder) {
-        this.playerName = builder.playerName;
-        this.color = builder.color;
+        this.players = builder.players;
+        this.readyStates = builder.readyStates;
         this.gameVersion = builder.gameVersion;
         this.currentPlayers = builder.currentPlayers;
         this.maxPlayers = builder.maxPlayers;
@@ -37,12 +39,12 @@ public class RoomResponseDTO {
         return roomId;
     }
 
-    public String getPlayers() {
-        return this.playerName;
+    public Map<String, EnumColors> getPlayers() {
+        return this.players;
     }
 
-    public EnumColors getColor() {
-        return this.color;
+    public Map<String, Boolean> getReadyStates() {
+        return this.readyStates;
     }
 
     public String getGameVersion() {
@@ -67,8 +69,8 @@ public class RoomResponseDTO {
      */
     public static class Builder {
         private String roomId;
-        private String playerName;
-        private EnumColors color;
+        private Map<String, EnumColors> players;
+        private Map<String, Boolean> readyStates;
         private String gameVersion;
         private int currentPlayers;
         private int maxPlayers;
@@ -79,13 +81,13 @@ public class RoomResponseDTO {
             return this;
         }
 
-        public Builder players(String playerName) {
-            this.playerName = playerName;
+        public Builder players(Map<String, EnumColors> players) {
+            this.players = players;
             return this;
         }
 
-        public Builder color(EnumColors color) {
-            this.color = color;
+        public Builder readyStates(Map<String, Boolean> readyStates) {
+            this.readyStates = readyStates;
             return this;
         }
 

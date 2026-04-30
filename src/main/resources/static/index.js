@@ -11,10 +11,78 @@ document.addEventListener('DOMContentLoaded', function() {
     const sezioneLogin = document.querySelector('aside.left');
     const sezioneListaStanze = document.querySelector('section.right[aria-label="Stanze disponibili"]');
     const sezioneLobby = document.getElementById('lobbySection');
-    
+    const roomsContainer = document.getElementById('roomsContainer');
+    const emptyRooms = document.getElementById('emptyRooms');
+
     // Elementi dentro la Lobby da aggiornare
     const lobbyTitle = document.getElementById('roomName');
     const playersContainer = document.getElementById('playersList');
+    const playerCount = document.getElementById('playerCount');
+    let currentRoomId = null;
+    let gameStarted = false;
+
+    // --- CARICAMENTO INIZIALE STANZE ---
+    caricaStanze();
+
+    function caricaStanze() {
+        fetch('/api/stanze')
+            .then(response => response.json())
+            .then(stanze => {
+                if (stanze.length === 0) {
+                    emptyRooms.style.display = 'block';
+                    roomsContainer.style.display = 'none';
+                } else {
+                    emptyRooms.style.display = 'none';
+                    roomsContainer.style.display = 'block';
+                    roomsContainer.innerHTML = ''; // Pulisci eventuali card esistenti
+
+                    stanze.forEach(stanza => {
+                        const roomCard = `
+                            <div class="room-card">
+                                <h3>Stanza ${stanza.roomId}</h3>
+                                <p>Giocatori: ${stanza.currentPlayers}/${stanza.maxPlayers}</p>
+                                <p>Versione: ${stanza.gameVersion}</p>
+                                ${!stanza.isFull ? `<button class="primary join-btn" data-room="${stanza.roomId}">Entra</button>` : `<span style="color:red">Piena</span>`}
+                            </div>
+                        `;
+                        roomsContainer.insertAdjacentHTML('beforeend', roomCard);
+                    });
+                }
+            })
+            .catch(err => console.error("Errore nel caricamento stanze:", err));
+    }
+
+    roomsContainer.addEventListener('click', function(event) {
+        const target = event.target;
+        if (!target.classList.contains('join-btn')) {
+            return;
+        }
+
+        const nome = inputNome.value;
+        const roomId = target.getAttribute('data-room');
+
+        if (!nome) {
+            alert("Devi inserire un nome!");
+            return;
+        }
+
+        fetch(`/api/stanza/${roomId}/entra`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ playerName: nome })
+        })
+        .then(response => {
+            if (response.ok) return response.json();
+            return response.json().then(err => { throw new Error(err.error || 'Errore ingresso stanza'); });
+        })
+        .then(stanzaModel => {
+            mostraLobby(stanzaModel);
+        })
+        .catch(err => {
+            console.error(err);
+            alert(err.message || "Errore nel contattare il server.");
+        });
+    });
 
     // --- EVENTO CLICK ---
     btnCrea.addEventListener('click', function(event) {
@@ -65,16 +133,31 @@ document.addEventListener('DOMContentLoaded', function() {
         sezioneListaStanze.style.display = 'none';
         sezioneLobby.style.display = 'block';
 
+        currentRoomId = stanza.roomId;
+
         // Aggiorna titolo stanza
         lobbyTitle.innerText = stanza.roomId;
+        if (playerCount) {
+            playerCount.innerText = `${stanza.currentPlayers}/${stanza.maxPlayers}`;
+        }
 
         // Pulisci lista giocatori vecchia
         playersContainer.innerHTML = '';
 
         // Elenco dei giocatori ricevuti dal Controller Java
         const players = stanza.players || {}; 
-        
+        const readyStates = stanza.readyStates || {};
+        const nomeCorrente = inputNome.value;
+
         Object.entries(players).forEach(([playerName, color]) => {
+            const isReady = !!readyStates[playerName];
+            const isSelf = playerName === nomeCorrente;
+            const readyLabel = isReady ? 'Pronto' : 'Non pronto';
+            const readyClass = isReady ? 'ready' : 'not-ready';
+            const readyControl = isSelf
+                ? `<button class="ready-btn ${readyClass}" data-player="${playerName}" data-ready="${isReady}">${readyLabel}</button>`
+                : `<span class="ready-status ${readyClass}">${readyLabel}</span>`;
+
             // Crea HTML per ogni giocatore
             const htmlGiocatore = `
                 <div class="player-card">
@@ -85,11 +168,57 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="player-name">${playerName}</div>
                         <div class="player-sub">${color}</div>
                     </div>
+                    <div class="player-ready">
+                        ${readyControl}
+                    </div>
                 </div>
             `;
             playersContainer.insertAdjacentHTML('beforeend', htmlGiocatore);
         });
+
+        const allReady = Object.values(readyStates).length > 0 && Object.values(readyStates).every(Boolean);
+        if (!gameStarted && stanza.isFull && allReady) {
+            fetch(`/api/stanza/${stanza.roomId}/avvia-gioco`, { method: 'POST' })
+                .then(response => response.json())
+                .then(result => {
+                    gameStarted = true;
+                    console.log(result.message || 'Gioco avviato');
+                })
+                .catch(err => console.error('Errore avvio gioco:', err));
+        }
     }
+
+    playersContainer.addEventListener('click', function(event) {
+        const target = event.target;
+        if (!target.classList.contains('ready-btn')) {
+            return;
+        }
+
+        if (!currentRoomId) {
+            return;
+        }
+
+        const playerName = target.getAttribute('data-player');
+        const currentReady = target.getAttribute('data-ready') === 'true';
+        const nextReady = !currentReady;
+
+        fetch(`/api/stanza/${currentRoomId}/pronto`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ playerName: playerName, ready: nextReady })
+        })
+        .then(response => {
+            if (response.ok) return response.json();
+            return response.json().then(err => { throw new Error(err.error || 'Errore stato pronto'); });
+        })
+        .then(stanzaModel => {
+            mostraLobby(stanzaModel);
+        })
+        .catch(err => {
+            console.error(err);
+            alert(err.message || "Errore nel contattare il server.");
+        });
+    });
 
     // Funzione estetica per convertire le stringhe del model in colori CSS
     function mappaColori(nomeColore) {

@@ -5,10 +5,14 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import it.uniurb.pmo.controller.dto.RoomResponseDTO;
 import it.uniurb.pmo.framework.lobby.GameStartCoordinator;
 import it.uniurb.pmo.framework.lobby.GameStartResult;
 import it.uniurb.pmo.framework.lobby.RoomManager;
+import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.utils.EnumColors;
 import it.uniurb.pmo.framework.utils.GameVersion;
 
@@ -50,10 +54,65 @@ public class RoomController {
         								   gameVersion);
         
         // Crea il DTO con le informazioni da esporre al frontend
-        RoomResponseDTO response = this.createRoomResponse(roomId, nomeGiocatore);
+        RoomResponseDTO response = this.createRoomResponse(roomId);
 
         // Restituisce il DTO al frontend
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Endpoint per entrare in una stanza esistente
+     */
+    @PostMapping("/stanza/{roomId}/entra")
+    public ResponseEntity<?> entraStanza(@PathVariable String roomId, @RequestBody Map<String, String> payload) {
+        String nomeGiocatore = payload.get("playerName");
+        if (nomeGiocatore == null || nomeGiocatore.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Nome giocatore mancante"));
+        }
+
+        RoomManager roomManager = RoomManager.getInstance();
+        try {
+            roomManager.enterRoom(roomId, nomeGiocatore);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+        }
+
+        return ResponseEntity.ok(this.createRoomResponse(roomId));
+    }
+
+    /**
+     * Endpoint per impostare lo stato di pronto di un giocatore
+     */
+    @PostMapping("/stanza/{roomId}/pronto")
+    public ResponseEntity<?> setPronto(@PathVariable String roomId, @RequestBody Map<String, Object> payload) {
+        String nomeGiocatore = payload.get("playerName") != null ? payload.get("playerName").toString() : null;
+        Boolean isReady = payload.get("ready") instanceof Boolean ? (Boolean) payload.get("ready") : null;
+
+        if (nomeGiocatore == null || nomeGiocatore.isEmpty() || isReady == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Dati pronti mancanti"));
+        }
+
+        RoomManager roomManager = RoomManager.getInstance();
+        try {
+            roomManager.setPlayerReady(roomId, nomeGiocatore, isReady);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+        }
+
+        return ResponseEntity.ok(this.createRoomResponse(roomId));
+    }
+
+    /**
+     * Endpoint per ottenere la lista delle stanze attive
+     */
+    @GetMapping("/stanze")
+    public ResponseEntity<List<RoomResponseDTO>> getStanze() {
+        RoomManager roomManager = RoomManager.getInstance();
+        List<String> roomIds = roomManager.getActiveRooms();
+
+        List<RoomResponseDTO> rooms = roomIds.stream().map(this::createRoomResponse).collect(Collectors.toList());
+
+        return ResponseEntity.ok(rooms);
     }
 
     /**
@@ -91,19 +150,28 @@ public class RoomController {
     /**
      * Crea un DTO con le informazioni della stanza da esporre al frontend
      */
-    private RoomResponseDTO createRoomResponse(String roomId, String playerName) {
+    private RoomResponseDTO createRoomResponse(String roomId) {
         RoomManager roomManager = RoomManager.getInstance();
-        String player = roomManager.getPlayers(roomId).getFirst().getName();
-        EnumColors color = roomManager.getPlayerColor(roomId, playerName);
+        Map<String, EnumColors> players = this.buildPlayersMap(roomManager.getPlayers(roomId));
+        Map<String, Boolean> readyStates = this.buildReadyMap(roomManager.getPlayers(roomId));
 
         return RoomResponseDTO.builder()
             .roomId(roomId)
-            .players(player)
-            .color(color)
+            .players(players)
+            .readyStates(readyStates)
             .currentPlayers(roomManager.getPlayersNumber(roomId))
             .gameVersion(roomManager.getGameVersion(roomId).toString())
             .maxPlayers(roomManager.getMaxPlayers(roomId))
             .isFull(roomManager.isFull(roomId))
             .build();
     }
+
+    private Map<String, EnumColors> buildPlayersMap(List<IPlayer> players) {
+        return players.stream().collect(Collectors.toMap(IPlayer::getName, IPlayer::getColor));
+    }
+
+    private Map<String, Boolean> buildReadyMap(List<IPlayer> players) {
+        return players.stream().collect(Collectors.toMap(IPlayer::getName, IPlayer::isReady));
+    }
 }
+

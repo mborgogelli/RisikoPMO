@@ -85,6 +85,21 @@ public class RoomManager implements IRoomManager {
 		this.activeRooms.remove(roomId, this.getRoom(roomId));
 	}
 
+	@Override
+	public List<String> getActiveRooms() {
+		return new ArrayList<>(this.activeRooms.keySet());
+	}
+
+	@Override
+	public void setPlayerReady(String roomId, String playerName, boolean isReady) {
+		this.getRoom(roomId).setPlayerReady(playerName, isReady);
+	}
+
+	@Override
+	public boolean areAllPlayersReady(String roomId) {
+		return this.getRoom(roomId).areAllPlayersReady();
+	}
+
 	private void checkRoom(String roomId) {
 		if (!this.activeRooms.containsKey(roomId)) {
 			throw new IllegalArgumentException("Room with ID " + roomId + " does not exist.");
