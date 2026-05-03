@@ -14,7 +14,7 @@ public interface ICard <T extends ICardType, TCardContent> {
 	 * 
 	 * @return Il tipo della carta, non può essere null
 	 */
-	ICardType getCardType();  
+	T getCardType();
 
 	/**
 	 * Restituisce il contenuto della carta, che può essere utilizzato per rappresentare informazioni specifiche legate alla carta.
