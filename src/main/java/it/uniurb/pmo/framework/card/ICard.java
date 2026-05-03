@@ -20,6 +20,9 @@ public interface ICard <ICardType, ICardContent> {
 	 * Ad esempio, una carta territorio restituirà il simbolo del territorio, mentre una carta missione restituirà il simbolo della missione.
 	 * 
 	 * @return Il tipo della carta, non può essere null
+	 * 
+	 * 
+	 * 
 	 */
 	ICardType getCardType();  
 	
