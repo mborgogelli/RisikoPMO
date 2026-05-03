@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Riferimenti agli elementi HTML
     const btnCrea = document.getElementById('createBtn');
-	const btnEntra = document.getElementById('joinBtn');
     const inputNome = document.getElementById('playerName');
 	const gameVersion = document.getElementById('mapSelect');
 	const maxPlayers = document.getElementById('maxPlayer');
@@ -50,6 +49,82 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .catch(err => console.error("Errore nel caricamento stanze:", err));
+    }
+
+    // Funzione che aggiorna la grafica
+    function mostraLobby(stanza) {
+        // Nascondi login, mostra lobby
+        sezioneLogin.style.display = 'none';
+        sezioneListaStanze.style.display = 'none';
+        sezioneLobby.style.display = 'block';
+
+        currentRoomId = stanza.roomId;
+
+        // Aggiorna titolo stanza
+        lobbyTitle.innerText = stanza.roomId;
+        if (playerCount) {
+            playerCount.innerText = `${stanza.currentPlayers}/${stanza.maxPlayers}`;
+        }
+
+        // Pulisci lista giocatori vecchia
+        playersContainer.innerHTML = '';
+
+        // Elenco dei giocatori ricevuti dal Controller Java
+        const players = stanza.players || {};
+        const readyStates = stanza.readyStates || {};
+        const nomeCorrente = inputNome.value;
+
+        Object.entries(players).forEach(([playerName, color]) => {
+            const isReady = !!readyStates[playerName];
+            const isSelf = playerName === nomeCorrente;
+            const readyLabel = isReady ? 'Pronto' : 'Non pronto';
+            const readyClass = isReady ? 'ready' : 'not-ready';
+            const readyControl = isSelf
+                ? `<button class="ready-btn ${readyClass}" data-player="${playerName}" data-ready="${isReady}">${readyLabel}</button>`
+                : `<span class="ready-status ${readyClass}">${readyLabel}</span>`;
+
+            // Crea HTML per ogni giocatore
+            const htmlGiocatore = `
+                <div class="player-card">
+                    <div class="avatar" style="background-color: ${mappaColori(color)}">
+                        ${playerName.charAt(0).toUpperCase()}
+                    </div>
+                    <div class="player-meta">
+                        <div class="player-name">${playerName}</div>
+                        <div class="player-sub">${color}</div>
+                    </div>
+                    <div class="player-ready">
+                        ${readyControl}
+                    </div>
+                </div>
+            `;
+            playersContainer.insertAdjacentHTML('beforeend', htmlGiocatore);
+        });
+
+        const allReady = Object.values(readyStates).length > 0 && Object.values(readyStates).every(Boolean);
+        if (!gameStarted && stanza.isFull && allReady) {
+            fetch(`/api/stanza/${stanza.roomId}/avvia-gioco`, { method: 'POST' })
+                .then(response => response.json())
+                .then(result => {
+                    gameStarted = true;
+                    console.log(result.message || 'Gioco avviato');
+                })
+                .catch(err => console.error('Errore avvio gioco:', err));
+        }
+    }
+
+    // Funzione estetica per convertire le stringhe del model in colori CSS
+    function mappaColori(nomeColore) {
+        // Adatta queste stringhe a come le hai chiamate nel Model Java (es. "ROSSO", "RED", ecc)
+        if (!nomeColore) return '#666';
+        const c = nomeColore.toString().toUpperCase();
+        if (c.includes('ROSSO') || c.includes('RED')) return '#ef4444';
+        if (c.includes('BLU') || c.includes('BLUE')) return '#3b82f6';
+        if (c.includes('VERDE') || c.includes('GREEN')) return '#22c55e';
+        if (c.includes('GIALLO') || c.includes('YELLOW')) return '#eab308';
+        if (c.includes('NERO') || c.includes('BLACK')) return '#111';
+        if (c.includes('VIOLA') || c.includes('PURPLE')) return '#9333ea';
+        return '#666'; // Default
     }
 
     roomsContainer.addEventListener('click', function(event) {
@@ -126,68 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Funzione che aggiorna la grafica
-    function mostraLobby(stanza) {
-        // Nascondi login, mostra lobby
-        sezioneLogin.style.display = 'none';
-        sezioneListaStanze.style.display = 'none';
-        sezioneLobby.style.display = 'block';
-
-        currentRoomId = stanza.roomId;
-
-        // Aggiorna titolo stanza
-        lobbyTitle.innerText = stanza.roomId;
-        if (playerCount) {
-            playerCount.innerText = `${stanza.currentPlayers}/${stanza.maxPlayers}`;
-        }
-
-        // Pulisci lista giocatori vecchia
-        playersContainer.innerHTML = '';
-
-        // Elenco dei giocatori ricevuti dal Controller Java
-        const players = stanza.players || {}; 
-        const readyStates = stanza.readyStates || {};
-        const nomeCorrente = inputNome.value;
-
-        Object.entries(players).forEach(([playerName, color]) => {
-            const isReady = !!readyStates[playerName];
-            const isSelf = playerName === nomeCorrente;
-            const readyLabel = isReady ? 'Pronto' : 'Non pronto';
-            const readyClass = isReady ? 'ready' : 'not-ready';
-            const readyControl = isSelf
-                ? `<button class="ready-btn ${readyClass}" data-player="${playerName}" data-ready="${isReady}">${readyLabel}</button>`
-                : `<span class="ready-status ${readyClass}">${readyLabel}</span>`;
-
-            // Crea HTML per ogni giocatore
-            const htmlGiocatore = `
-                <div class="player-card">
-                    <div class="avatar" style="background-color: ${mappaColori(color)}">
-                        ${playerName.charAt(0).toUpperCase()}
-                    </div>
-                    <div class="player-meta">
-                        <div class="player-name">${playerName}</div>
-                        <div class="player-sub">${color}</div>
-                    </div>
-                    <div class="player-ready">
-                        ${readyControl}
-                    </div>
-                </div>
-            `;
-            playersContainer.insertAdjacentHTML('beforeend', htmlGiocatore);
-        });
-
-        const allReady = Object.values(readyStates).length > 0 && Object.values(readyStates).every(Boolean);
-        if (!gameStarted && stanza.isFull && allReady) {
-            fetch(`/api/stanza/${stanza.roomId}/avvia-gioco`, { method: 'POST' })
-                .then(response => response.json())
-                .then(result => {
-                    gameStarted = true;
-                    console.log(result.message || 'Gioco avviato');
-                })
-                .catch(err => console.error('Errore avvio gioco:', err));
-        }
-    }
-
     playersContainer.addEventListener('click', function(event) {
         const target = event.target;
         if (!target.classList.contains('ready-btn')) {
@@ -220,17 +233,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Funzione estetica per convertire le stringhe del model in colori CSS
-    function mappaColori(nomeColore) {
-        // Adatta queste stringhe a come le hai chiamate nel Model Java (es. "ROSSO", "RED", ecc)
-        if (!nomeColore) return '#666';
-        const c = nomeColore.toString().toUpperCase();
-        if (c.includes('ROSSO') || c.includes('RED')) return '#ef4444';
-        if (c.includes('BLU') || c.includes('BLUE')) return '#3b82f6';
-        if (c.includes('VERDE') || c.includes('GREEN')) return '#22c55e';
-        if (c.includes('GIALLO') || c.includes('YELLOW')) return '#eab308';
-        if (c.includes('NERO') || c.includes('BLACK')) return '#111';
-        if (c.includes('VIOLA') || c.includes('PURPLE')) return '#9333ea';
-        return '#666'; // Default
-    }
 });
