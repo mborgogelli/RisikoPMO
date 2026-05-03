@@ -9,9 +9,4 @@ public enum EnumSymbolRisikoNew implements ICardType {
 	CAVALRY,
 	JOLLY;
 	
-	@Override
-	public ICardType getCardType() {
-		return this;
-	}
-
 }

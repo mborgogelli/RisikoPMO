@@ -1,7 +1,6 @@
 package it.uniurb.pmo.framework.card;
 
-// Interfaccia che rappresenta il simbolo di una carta.
+// Interfaccia Marker per identificare i tipi di carte
 public interface ICardType {
 
-	ICardType getCardType();
 }

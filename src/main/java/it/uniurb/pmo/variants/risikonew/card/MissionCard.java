@@ -1,24 +1,17 @@
 package it.uniurb.pmo.variants.risikonew.card;
 
-import it.uniurb.pmo.framework.card.IMissionCard;
-import it.uniurb.pmo.framework.card.IMissionType;
-import it.uniurb.pmo.framework.card.MissionObjective;
-import it.uniurb.pmo.framework.players.Player;
+import it.uniurb.pmo.framework.card.ICard;
+import it.uniurb.pmo.framework.card.IMissionTarget;
 
-public class MissionCard implements IMissionCard {
+public class MissionCard implements ICard<EnumMissionTypeRisikoNew, IMissionTarget> {
 
     @Override
-    public boolean isAchievementReached(Player player) {
-        return false;
-    }
-
-    @Override
-    public IMissionType getCardType() {
+    public EnumMissionTypeRisikoNew getCardType() {
         return null;
     }
 
     @Override
-    public MissionObjective getCardContent() {
+    public IMissionTarget getCardContent() {
         return null;
     }
 }
