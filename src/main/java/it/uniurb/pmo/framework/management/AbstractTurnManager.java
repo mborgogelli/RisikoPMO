@@ -22,17 +22,10 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	private int currentPhaseIndex = 0;
 	private List<IPhase> phases;
 
+	// TODO rivedere campi protetti
 	protected List<IPlayer> players;
 	protected int currentTurn;
 	protected boolean isReady;
-
-	/**
-	 * Inizializza la lista di fasi che compongono un turno di gioco.
-	 * Le classi figlie devono chiamare questo metodo durante il loro processo di startup/init.
-	 */
-	protected void initPhases(List<IPhase> phases) {
-		this.phases = phases;
-	}
 
 	/**
 	 * Metodo astratto che deve restituire la lista delle fasi del gioco per la specializzazione concreta.
@@ -49,7 +42,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	@Override
 	public void startGame() {
-		if (this.isReady && this.players != null && !this.players.isEmpty()) {
+		if (this.isReady) {
 			this.playTurn(this.players.getFirst());
 		}
 	}
@@ -59,14 +52,8 @@ public abstract class AbstractTurnManager implements ITurnManager {
 		return this.isReady;
 	}
 
-	protected List<IPlayer> shufflePlayers(List<IPlayer> players){
-		List<IPlayer> shuffledPlayers = new ArrayList<>(players);
-		Collections.shuffle(shuffledPlayers);
-		return shuffledPlayers;
-	}
-
 	@Override
-	public int getCount() {
+	public int getPlayedTurns() {
 		return this.currentTurn;
 	}
 
@@ -139,5 +126,19 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	protected IMediator getMediator() {
 		return this.mediator;
+	}
+
+	protected List<IPlayer> shufflePlayers(List<IPlayer> players){
+		List<IPlayer> shuffledPlayers = new ArrayList<>(players);
+		Collections.shuffle(shuffledPlayers);
+		return shuffledPlayers;
+	}
+
+	/**
+	 * Inizializza la lista di fasi che compongono un turno di gioco.
+	 * Le classi figlie devono chiamare questo metodo durante il loro processo di startup/init.
+	 */
+	protected void initPhases(List<IPhase> phases) {
+		this.phases = phases;
 	}
 }

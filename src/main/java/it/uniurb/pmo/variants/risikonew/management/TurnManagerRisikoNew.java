@@ -28,8 +28,10 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 
 	}
 
-	private void turnZero(IPlayer player){
-		//TO DO
+	@Override
+	public void startGame() {
+		this.runInitialPlacement();
+		super.startGame();
 	}
 
 	@Override
@@ -37,5 +39,11 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 		// Risiko Classico: prima rinforzo, poi attacco, poi spostamento (strategica)
 		return List.of(new ReinforcePhase(), new CombatPhase(), new StrategicPhase());
 	}
+
+	private void runInitialPlacement() {
+
+	}
+
+
 
 }

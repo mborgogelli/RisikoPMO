@@ -19,7 +19,7 @@ public interface ITurnManager extends IManager, IGameConductor {
 
 	IPlayer getNextPlayer();
 
-	int getCount();
+	int getPlayedTurns();
 
 	Optional<IPlayer> checkWinner();
 	
