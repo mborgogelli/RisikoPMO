@@ -11,8 +11,6 @@ public interface ICardManager extends IManager{
 	
 	List<ICard> playCards(IPlayer player);
 	
-	IMission getMission(IPlayer player);
-	
 	ICard pickCard(IPlayer player);
 	
 }
