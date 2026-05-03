@@ -6,7 +6,7 @@ package it.uniurb.pmo.framework.card;
  * La struttura specifica e le funzionalità delle carte saranno definite nelle classi che implementano questa interfaccia.
  */
 
-public interface ICard <ICardType, T> {
+public interface ICard <ICardType, ICardContent> {
 	/**
 	 * Restituisce genericamente il nome delle carta
 	 * Ad esempio, una carta territorio restituirà il territorio associato.

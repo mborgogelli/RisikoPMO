@@ -16,7 +16,7 @@ public enum EnumMissionSymbol implements ICardType {
     }
 
     @Override
-    public ICardType getSymbol() {
+    public ICardType getCardType() {
         return this;
     }
 	    

@@ -10,7 +10,7 @@ public enum EnumTerritorySymbol implements ICardType {
 	JOLLY;
 	
 	@Override
-	public ICardType getSymbol() {
+	public ICardType getCardType() {
 		return this;
 	}
 
