@@ -1,8 +1,8 @@
 package it.uniurb.pmo.variants.risikonew.card;
 
-import it.uniurb.pmo.framework.card.ISymbolCard;
+import it.uniurb.pmo.framework.card.ICardType;
 
-public enum EnumTerritorySymbol implements ISymbolCard {
+public enum EnumTerritorySymbol implements ICardType {
 	
 	INFANTRY,
 	ARTILLERY,
@@ -10,7 +10,7 @@ public enum EnumTerritorySymbol implements ISymbolCard {
 	JOLLY;
 	
 	@Override
-	public ISymbolCard getSymbol() {
+	public ICardType getSymbol() {
 		return this;
 	}
 

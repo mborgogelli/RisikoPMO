@@ -6,7 +6,7 @@ package it.uniurb.pmo.framework.card;
  * La struttura specifica e le funzionalità delle carte saranno definite nelle classi che implementano questa interfaccia.
  */
 
-public interface ICard {
+public interface ICard <ICardType, T> {
 	/**
 	 * Restituisce genericamente il nome delle carta
 	 * Ad esempio, una carta territorio restituirà il territorio associato.
@@ -16,10 +16,12 @@ public interface ICard {
 	String getName();
 	
 	/**
-	 * Restituisce il simbolo associato alla carta se presente
-	 * Ad esempio, una carta territorio avrà un simbolo che rappresente Infantry, Artillery, Cavalry
-	 * @return il simbolo della carta, non può essere null
+	 * Restituisce il tipo della carta, che può essere utilizzato per identificare la categoria o la funzione della carta.
+	 * Ad esempio, una carta territorio restituirà il simbolo del territorio, mentre una carta missione restituirà il simbolo della missione.
+	 * 
+	 * @return Il tipo della carta, non può essere null
 	 */
-	ISymbolCard getSymbol();  
+	ICardType getCardType();  
+	
 	
 }

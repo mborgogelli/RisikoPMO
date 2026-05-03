@@ -1,7 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.card;
-import it.uniurb.pmo.framework.card.ISymbolCard;
+import it.uniurb.pmo.framework.card.ICardType;
 
-public enum EnumMissionSymbol implements ISymbolCard {
+public enum EnumMissionSymbol implements ICardType {
     CONQUER("Conquista: "),
     DESTROY("Distruggi l'armata: ");
 
@@ -16,7 +16,7 @@ public enum EnumMissionSymbol implements ISymbolCard {
     }
 
     @Override
-    public ISymbolCard getSymbol() {
+    public ICardType getSymbol() {
         return this;
     }
 	    
