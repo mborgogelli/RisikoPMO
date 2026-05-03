@@ -12,7 +12,7 @@ public enum EnumRisikoNewJsonKeysBoard {
     /** Continente - raggruppa più territori */
     CONTINENTS("continents"),
 	
-	ARMY("army");
+	ARMYBONUS("armybonus");
 	
     private final String descrizione;
     
