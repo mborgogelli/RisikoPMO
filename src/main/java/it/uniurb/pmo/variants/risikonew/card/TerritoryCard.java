@@ -5,13 +5,13 @@ import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.variants.risikonew.board.Territory;
 
 // Carta territorio che rappresenta una carta del mazzo di Risiko Classic
-public class TerritoryCard  implements ICard{
+public class TerritoryCard  implements ICard <EnumTerritorySymbol, String> {
 	
-	private final ICardType symbol;
-    private final Territory territory;
+	private final EnumTerritorySymbol symbol;
+    private final String territory;
     
     // Carta territorio con simbolo specifico
-    TerritoryCard(ICardType symbol, Territory territory ) {
+    TerritoryCard(EnumTerritorySymbol symbol, String territory ) {
 		this.symbol = symbol;
 		this.territory = territory;
 	}
@@ -23,23 +23,13 @@ public class TerritoryCard  implements ICard{
 	}
 
 	@Override
-	public String getName() {
-		return this.territory.getName();
-	}
-
-	@Override
-	public ICardType getCardType() {
+	public EnumTerritorySymbol getCardType() {
 		return this.symbol;
 	}
 	
-	public Territory getTerritory() {
-		return territory;
-	}
-
-	// per Agevolare il debug
 	@Override
-	public String toString() {
-	    return territory.getName() + " (" + symbol + ")";
+	public String getCardContent() {
+		return this.territory;
 	}
 
 }

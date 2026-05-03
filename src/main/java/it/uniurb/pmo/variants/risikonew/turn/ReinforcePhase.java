@@ -73,7 +73,7 @@ public class ReinforcePhase implements IReinforcePhase {
 	 */
 	private int getTerritoryCardBonusForOwnership(List <ICard> cards) {
 		int bonus = (int) cards.stream()
-							.map(c -> c.getName())
+							.map(c -> c.getCardContent())
 							.filter(t -> this.playerTerritories.contains(t))
 							.count();
 		return bonus;

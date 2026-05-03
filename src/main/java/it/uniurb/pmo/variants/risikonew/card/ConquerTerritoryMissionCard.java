@@ -2,12 +2,12 @@ package it.uniurb.pmo.variants.risikonew.card;
 
 import it.uniurb.pmo.framework.players.Player;
 
-public class ConquerTerritoryMissionCard extends MissionCard {
+public class ConquerTerritoryMissionCard extends AbstractMissionCard {
 	
 	private final int territoriesToConquer;
 	
 	public ConquerTerritoryMissionCard(int territoriesToConquer) {
-		super(EnumMissionSymbol.CONQUER, "Conquer " + territoriesToConquer + " territories");
+		super(EnumMissionType.CONQUER, "Conquer " + territoriesToConquer + " territories");
 		this.territoriesToConquer = territoriesToConquer;
 	}
 	
