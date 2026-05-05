@@ -62,6 +62,7 @@ public class Director implements IDirector {
 		IGameFactory factory = GameFactoryProvider.getFactory(version);
 		this.mediator = factory.getMediator();
 		this.managers = factory.getManagers();
+		this.mediator.initializePlayerStatus(players);
 		this.managers.forEach(managers -> managers.initializeGame(players));
 	    this.isReady = this.checkManagersReady();
 	}

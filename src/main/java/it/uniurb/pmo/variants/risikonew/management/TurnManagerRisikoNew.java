@@ -3,7 +3,6 @@ package it.uniurb.pmo.variants.risikonew.management;
 import java.util.*;
 
 import it.uniurb.pmo.framework.management.AbstractTurnManager;
-import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITurnManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.CombatPhase;
@@ -12,8 +11,15 @@ import it.uniurb.pmo.variants.risikonew.turn.StrategicPhase;
 
 public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnManagerRisikoNew {
 
+	private boolean isReady;
+
 	public TurnManagerRisikoNew() {
 		this.isReady = false;
+	}
+
+	@Override
+	public Boolean isReady() {
+		return this.isReady;
 	}
 
 	@Override
@@ -30,8 +36,10 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 
 	@Override
 	public void startGame() {
-		this.runInitialPlacement();
-		super.startGame();
+		if(this.isReady) {
+			this.runInitialPlacement();
+			super.startGame();
+		}
 	}
 
 	@Override

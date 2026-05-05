@@ -19,13 +19,10 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	private IMediator mediator;
 	private IPlayer currentPlayer;
-	private int currentPhaseIndex = 0;
+	private int currentTurn;
+	private int currentPhaseIndex;
 	private List<IPhase> phases;
-
-	// TODO rivedere campi protetti
-	protected List<IPlayer> players;
-	protected int currentTurn;
-	protected boolean isReady;
+	private List<IPlayer> players;
 
 	/**
 	 * Metodo astratto che deve restituire la lista delle fasi del gioco per la specializzazione concreta.
@@ -35,21 +32,14 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	@Override
 	public void initializeGame(List<IPlayer> players) {
 		this.players = this.shufflePlayers(players);
-		this.currentTurn = 0;
+		this.currentTurn = 1;
+		this.currentPhaseIndex = 0;
 		this.initPhases(this.createPhases());
-		this.isReady = true;
 	}
 
 	@Override
 	public void startGame() {
-		if (this.isReady) {
-			this.playTurn(this.players.getFirst());
-		}
-	}
-
-	@Override
-	public Boolean isReady() {
-		return this.isReady;
+			this.playTurn(this.getNextPlayer());
 	}
 
 	@Override
@@ -64,17 +54,6 @@ public abstract class AbstractTurnManager implements ITurnManager {
 			winner = Optional.of(this.getCurrentPlayer());
 		}
 		return winner;
-	}
-
-	@Override
-	public IPlayer getNextPlayer() {
-		if (this.getCurrentPlayer() == null) return this.players.getFirst();
-		int currentIndex = this.players.indexOf(this.getCurrentPlayer());
-		int nextIndex = (currentIndex + 1) % this.players.size();
-		if (nextIndex == 0) {
-			this.currentTurn++;
-		}
-		return this.players.get(nextIndex);
 	}
 
 	@Override
@@ -100,6 +79,32 @@ public abstract class AbstractTurnManager implements ITurnManager {
 		}else{
 			this.playTurn(this.getNextPlayer());
 		}
+	}
+
+	@Override
+	public IPlayer getNextPlayer() {
+		int currentIndex = this.players.indexOf(this.getCurrentPlayer());
+		IPlayer nextPlayer = null;
+		boolean found = false;
+
+		for (int i = 1; i <= this.players.size() && !found; i++) {
+			int nextIndex = (currentIndex + i) % this.players.size();
+			IPlayer candidate = this.players.get(nextIndex);
+
+			if (this.mediator.isPlayerActive(candidate)) {
+				if (nextIndex == 0 && currentIndex >= 0) {
+					this.currentTurn++;
+				}
+				nextPlayer = candidate;
+				found = true;
+			}
+		}
+
+		if (!found) {
+			throw new IllegalStateException("Nessun giocatore attivo disponibile.");
+		}
+
+		return nextPlayer;
 	}
 
 	@Override
