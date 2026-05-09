@@ -19,6 +19,7 @@ public interface IMediator extends IGameConductor {
 	 * Inizializza tutti i manager registrati
 	 */
 	void initManagers();
+
 	/**
 	 * Restituisce tutte le zone di gioco.
 	 */
