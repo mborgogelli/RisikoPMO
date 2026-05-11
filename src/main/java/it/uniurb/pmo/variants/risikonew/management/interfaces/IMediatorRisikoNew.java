@@ -14,4 +14,10 @@ public interface IMediatorRisikoNew extends IMediator {
     default List<String> getAllTerritories(){
         return getAllZones();
     }
+
+    int getPlayerTank(IPlayer player);
+
+    int getZoneTank(String zone);
+
+    void deployTank(IPlayer player, String zone, int tanks);
 }

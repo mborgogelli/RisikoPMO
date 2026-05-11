@@ -8,6 +8,9 @@ import it.uniurb.pmo.variants.risikonew.management.interfaces.ITurnManagerRisiko
 import it.uniurb.pmo.variants.risikonew.turn.CombatPhase;
 import it.uniurb.pmo.variants.risikonew.turn.ReinforcePhase;
 import it.uniurb.pmo.variants.risikonew.turn.StrategicPhase;
+import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.InitialPlacementPhase;
 
 public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnManagerRisikoNew {
 
@@ -49,7 +52,18 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	}
 
 	private void runInitialPlacement() {
-
+		IMediatorRisikoNew mediator = (IMediatorRisikoNew) super.getMediator();
+		InitialPlacementPhase initialPlacement = new InitialPlacementPhase();
+		boolean hasRemainingTanks = true;
+		while (hasRemainingTanks) {
+			hasRemainingTanks = false;
+			for (IPlayer player : super.getPlayers()) {
+				if (mediator.getPlayerTank(player) > 0) {
+					hasRemainingTanks = true;
+					initialPlacement.playPhase(player, mediator);
+				}
+			}
+		}
 	}
 
 

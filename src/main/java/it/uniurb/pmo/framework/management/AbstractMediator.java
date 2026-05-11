@@ -68,7 +68,7 @@ public abstract class AbstractMediator implements IMediator {
 	}
 
 	public void notifyWinner(IPlayer iPlayer) {
-		//To do implement notification properly
+		//TODO implement notification properly
 	}
 
 	@Override

@@ -64,4 +64,19 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public int getPlayerTank(IPlayer player) {
+		return this.tankManager.getPlayerTank(player);
+	}
+
+	@Override
+	public int getZoneTank(String zone) {
+		return this.tankManager.getZoneTank(zone);
+	}
+
+	@Override
+	public void deployTank(IPlayer player, String zone, int tanks) {
+		this.tankManager.deployTank(player, zone, tanks);
+	}
 }

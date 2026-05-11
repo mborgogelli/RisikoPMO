@@ -146,4 +146,8 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	protected void initPhases(List<IPhase> phases) {
 		this.phases = phases;
 	}
+
+	protected List<IPlayer> getPlayers() {
+		return this.players;
+	}
 }
