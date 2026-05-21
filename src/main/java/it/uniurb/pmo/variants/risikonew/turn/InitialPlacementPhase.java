@@ -2,7 +2,6 @@ package it.uniurb.pmo.variants.risikonew.turn;
 
 import java.util.Comparator;
 import java.util.List;
-
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
@@ -11,7 +10,6 @@ import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew
 
 public class InitialPlacementPhase implements IPhase {
 
-	private IPlayer player;
 	private IMediatorRisikoNew mediator;
 
 	public InitialPlacementPhase() {
@@ -24,7 +22,6 @@ public class InitialPlacementPhase implements IPhase {
 
 	@Override
 	public void playPhase(IPlayer player, IMediator mediator) {
-		this.player = player;
 		this.mediator = (MediatorRisikoNew) mediator;
 
 		int remaining = this.mediator.getPlayerTank(player);

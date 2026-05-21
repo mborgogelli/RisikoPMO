@@ -3,6 +3,7 @@ package it.uniurb.pmo.framework.management;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.management.interfaces.ITurnManager;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.PlayerTurnStatus;
 import it.uniurb.pmo.framework.turn.IPhase;
 
 import java.util.List;
@@ -83,7 +84,8 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	@Override
 	public IPlayer getNextPlayer() {
-		int currentIndex = this.players.indexOf(this.getCurrentPlayer());
+		IPlayer currentPlayer = this.getCurrentPlayer();
+		int currentIndex = (currentPlayer == null) ? -1 : this.players.indexOf(currentPlayer);
 		IPlayer nextPlayer = null;
 		boolean found = false;
 
@@ -91,7 +93,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 			int nextIndex = (currentIndex + i) % this.players.size();
 			IPlayer candidate = this.players.get(nextIndex);
 
-			if (this.mediator.isPlayerActive(candidate)) {
+			if (candidate.getPlayerTurnStatus() == PlayerTurnStatus.ACTIVE) {
 				if (nextIndex == 0 && currentIndex >= 0) {
 					this.currentTurn++;
 				}
@@ -129,6 +131,11 @@ public abstract class AbstractTurnManager implements ITurnManager {
 		return this.currentPlayer;
 	}
 
+	@Override
+	public List<IPlayer> getPlayers() {
+		return Collections.unmodifiableList(this.players);
+	}
+
 	protected IMediator getMediator() {
 		return this.mediator;
 	}
@@ -147,7 +154,4 @@ public abstract class AbstractTurnManager implements ITurnManager {
 		this.phases = phases;
 	}
 
-	protected List<IPlayer> getPlayers() {
-		return this.players;
-	}
 }

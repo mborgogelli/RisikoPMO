@@ -9,6 +9,7 @@ public class Player implements IPlayer {
 	private final String name;
 	private Boolean isReady;
 	private EnumColors color;
+	private PlayerTurnStatus status;
 	
 	public Player(String name) {
 		this.name = name;
@@ -18,6 +19,7 @@ public class Player implements IPlayer {
 	// TODO: remove this constructor and use setColor instead
 	public Player(String name, EnumColors color) {
 		this.name = name;
+		this.color = color;
 		this.isReady = false;
 	}
 	
@@ -34,6 +36,16 @@ public class Player implements IPlayer {
 	@Override
 	public void setReady(Boolean ready) {
 		this.isReady = ready;
+	}
+
+	@Override
+	public PlayerTurnStatus getPlayerTurnStatus() {
+		return this.status;
+	}
+
+	@Override
+	public void setPlayerTurnStatus(PlayerTurnStatus playerTurnStatus) {
+		this.status = playerTurnStatus;
 	}
 
 	@Override
@@ -58,7 +70,7 @@ public class Player implements IPlayer {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(color, name);
+		return Objects.hash(name);
 	}
 
 	@Override
@@ -70,7 +82,7 @@ public class Player implements IPlayer {
 		if (getClass() != obj.getClass())
 			return false;
 		Player other = (Player) obj;
-		return color == other.color && Objects.equals(name, other.name);
+		return Objects.equals(name, other.name);
 	}
 	
 }

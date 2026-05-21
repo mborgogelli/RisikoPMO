@@ -7,6 +7,7 @@ import it.uniurb.pmo.framework.management.interfaces.IGameFactory;
 import it.uniurb.pmo.framework.management.interfaces.IManager;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.PlayerTurnStatus;
 import it.uniurb.pmo.framework.utils.GameFactoryProvider;
 import it.uniurb.pmo.framework.utils.GameVersion;
 
@@ -15,11 +16,9 @@ public class Director implements IDirector {
 	private boolean isReady;
 	private IMediator mediator;
 	private List<IManager> managers;
-	private final GameVersion version;
 	private final List<IPlayer> players;
 	
 	public Director(GameVersion version, List<IPlayer> players) {
-		this.version = version;
 		this.players = players;
 		this.isReady = false;
 		this.initializeGame(this.players, version);
@@ -62,7 +61,7 @@ public class Director implements IDirector {
 		IGameFactory factory = GameFactoryProvider.getFactory(version);
 		this.mediator = factory.getMediator();
 		this.managers = factory.getManagers();
-		this.mediator.initializePlayerStatus(players);
+		players.forEach(player -> player.setPlayerTurnStatus(PlayerTurnStatus.ACTIVE));
 		this.managers.forEach(managers -> managers.initializeGame(players));
 	    this.isReady = this.checkManagersReady();
 	}

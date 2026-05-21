@@ -14,6 +14,7 @@ import it.uniurb.pmo.variants.risikonew.turn.InitialPlacementPhase;
 
 public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnManagerRisikoNew {
 
+	//TODO dove passa a true?
 	private boolean isReady;
 
 	public TurnManagerRisikoNew() {
@@ -43,6 +44,11 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 			this.runInitialPlacement();
 			super.startGame();
 		}
+	}
+
+	@Override
+	protected List<IPlayer> shufflePlayers(List<IPlayer> players){
+		return super.shufflePlayers(players);
 	}
 
 	@Override

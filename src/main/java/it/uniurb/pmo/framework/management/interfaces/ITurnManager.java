@@ -3,6 +3,7 @@ package it.uniurb.pmo.framework.management.interfaces;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ITurnManager extends IManager, IGameConductor {
@@ -22,5 +23,6 @@ public interface ITurnManager extends IManager, IGameConductor {
 	int getPlayedTurns();
 
 	Optional<IPlayer> checkWinner();
-	
+
+	List<IPlayer> getPlayers();
 }

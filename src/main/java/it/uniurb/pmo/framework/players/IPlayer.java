@@ -16,4 +16,8 @@ public interface IPlayer {
 	void removeColor();
 
 	void setReady(Boolean ready);
+
+	PlayerTurnStatus getPlayerTurnStatus();
+
+	void setPlayerTurnStatus(PlayerTurnStatus playerTurnStatus);
 }
