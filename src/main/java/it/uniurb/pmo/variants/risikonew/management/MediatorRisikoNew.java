@@ -1,6 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.management;
 
 import java.util.List;
+import java.util.Map;
 
 import it.uniurb.pmo.framework.management.AbstractMediator;
 import it.uniurb.pmo.framework.management.interfaces.IDirector;
@@ -78,5 +79,10 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	@Override
 	public void deployTank(IPlayer player, String zone, int tanks) {
 		this.tankManager.deployTank(player, zone, tanks);
+	}
+
+	@Override
+	public Map<String, Integer> acquireTargetZones(IPlayer player, int toDeploy) {
+		return Map.of();
 	}
 }

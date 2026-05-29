@@ -4,6 +4,7 @@ import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IMediatorRisikoNew extends IMediator {
 
@@ -20,4 +21,6 @@ public interface IMediatorRisikoNew extends IMediator {
     int getZoneTank(String zone);
 
     void deployTank(IPlayer player, String zone, int tanks);
+
+    Map<String, Integer> acquireTargetZones(IPlayer player, int toDeploy);
 }
