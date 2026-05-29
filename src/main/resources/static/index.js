@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    
+
     // Riferimenti agli elementi HTML
     const btnCrea = document.getElementById('createBtn');
     const inputNome = document.getElementById('playerName');
 	const gameVersion = document.getElementById('mapSelect');
 	const maxPlayers = document.getElementById('maxPlayer');
-    
+
     // Sezioni da mostrare/nascondere
     const sezioneLogin = document.querySelector('aside.left');
     const sezioneListaStanze = document.querySelector('section.right[aria-label="Stanze disponibili"]');
@@ -19,9 +19,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const playerCount = document.getElementById('playerCount');
     let currentRoomId = null;
     let gameStarted = false;
+    let startRequestInFlight = false;
+    const ROOM_REFRESH_INTERVAL_MS = 1500;
+    const ROOM_LIST_REFRESH_INTERVAL_MS = 1500;
+    const statoRefreshStanza = { timer: null };
+    const statoRefreshLobby = { timer: null };
+    const autoReadyRooms = new Set();
 
     // --- CARICAMENTO INIZIALE STANZE ---
     caricaStanze();
+    avviaRefreshPeriodico(statoRefreshLobby, () => sezioneListaStanze && sezioneListaStanze.style.display !== 'none', caricaStanze, ROOM_LIST_REFRESH_INTERVAL_MS);
 
     function caricaStanze() {
         fetch('/api/stanze')
@@ -51,13 +58,74 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(err => console.error("Errore nel caricamento stanze:", err));
     }
 
-    // Funzione che aggiorna la grafica
-    function mostraLobby(stanza) {
-        // Nascondi login, mostra lobby
-        sezioneLogin.style.display = 'none';
-        sezioneListaStanze.style.display = 'none';
-        sezioneLobby.style.display = 'block';
+    function avviaRefreshPeriodico(stato, condizioneAttiva, callback, intervalloMs) {
+        if (stato.timer) {
+            return;
+        }
 
+        stato.timer = setInterval(() => {
+            if (condizioneAttiva()) {
+                callback();
+            }
+        }, intervalloMs);
+    }
+
+    function fermaRefreshPeriodico(stato) {
+        if (!stato.timer) {
+            return;
+        }
+
+        clearInterval(stato.timer);
+        stato.timer = null;
+    }
+
+    function avviaRefreshStanza() {
+        if (!currentRoomId) return;
+
+        avviaRefreshPeriodico(
+            statoRefreshStanza,
+            () => !!currentRoomId && sezioneLobby.style.display !== 'none',
+            aggiornaStanzaCorrente,
+            ROOM_REFRESH_INTERVAL_MS
+        );
+    }
+
+    function fermaRefreshStanza() {
+        fermaRefreshPeriodico(statoRefreshStanza);
+    }
+
+    function aggiornaStanzaCorrente() {
+        if (!currentRoomId || sezioneLobby.style.display === 'none') {
+            return;
+        }
+
+        fetch(`/api/stanza/${currentRoomId}`)
+            .then(response => {
+                if (response.status === 404) {
+                    // La stanza viene chiusa quando il gioco parte: porta tutti alla pagina partita.
+                    const nomeCorrente = inputNome.value || '';
+                    gameStarted = true;
+                    fermaRefreshStanza();
+                    vaiAllaPaginaPartita(currentRoomId, nomeCorrente);
+                    return null;
+                }
+
+                if (!response.ok) {
+                    throw new Error('Errore aggiornamento stanza');
+                }
+
+                return response.json();
+            })
+            .then(stanza => {
+                if (stanza) {
+                    renderLobby(stanza);
+                }
+            })
+            .catch(err => console.error('Errore nel refresh della stanza:', err));
+    }
+
+    // Funzione che disegna la lobby
+    function renderLobby(stanza) {
         currentRoomId = stanza.roomId;
 
         // Aggiorna titolo stanza
@@ -72,16 +140,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // Elenco dei giocatori ricevuti dal Controller Java
         const players = stanza.players || {};
         const readyStates = stanza.readyStates || {};
-        const nomeCorrente = inputNome.value;
+        const nomeCorrente = inputNome.value || '';
 
         Object.entries(players).forEach(([playerName, color]) => {
             const isReady = !!readyStates[playerName];
-            const isSelf = playerName === nomeCorrente;
             const readyLabel = isReady ? 'Pronto' : 'Non pronto';
             const readyClass = isReady ? 'ready' : 'not-ready';
-            const readyControl = isSelf
-                ? `<button class="ready-btn ${readyClass}" data-player="${playerName}" data-ready="${isReady}">${readyLabel}</button>`
-                : `<span class="ready-status ${readyClass}">${readyLabel}</span>`;
+            const readyControl = `<span class="ready-status ${readyClass}">${readyLabel}</span>`;
 
             // Crea HTML per ogni giocatore
             const htmlGiocatore = `
@@ -101,16 +166,89 @@ document.addEventListener('DOMContentLoaded', function() {
             playersContainer.insertAdjacentHTML('beforeend', htmlGiocatore);
         });
 
+        impostaProntoAutomatico(stanza.roomId, nomeCorrente, readyStates);
+
         const allReady = Object.values(readyStates).length > 0 && Object.values(readyStates).every(Boolean);
-        if (!gameStarted && stanza.isFull && allReady) {
+        const isFull = stanza.currentPlayers >= stanza.maxPlayers;
+        console.log(`DEBUG: roomId=${stanza.roomId}, isFull=${isFull}, allReady=${allReady}, gameStarted=${gameStarted}, startRequestInFlight=${startRequestInFlight}`);
+        console.log(`DEBUG: readyStates=${JSON.stringify(readyStates)}`);
+
+        if (!gameStarted && !startRequestInFlight && isFull && allReady) {
+            console.log('DEBUG: Condizioni met, avvio gioco...');
+            startRequestInFlight = true;
             fetch(`/api/stanza/${stanza.roomId}/avvia-gioco`, { method: 'POST' })
-                .then(response => response.json())
-                .then(result => {
-                    gameStarted = true;
-                    console.log(result.message || 'Gioco avviato');
+                .then(async response => {
+                    const payload = await response.json().catch(() => ({}));
+                    console.log(`DEBUG: avvia-gioco response status=${response.status}, payload=${JSON.stringify(payload)}`);
+                    return { ok: response.ok, payload };
                 })
-                .catch(err => console.error('Errore avvio gioco:', err));
+                .then(({ ok, payload }) => {
+                    console.log(`DEBUG: ok=${ok}, gameStarted=${gameStarted}`);
+                    if (!ok) {
+                        const errorMessage = (payload && payload.error ? payload.error : '').toLowerCase();
+                        const partitaGiaAvviata = errorMessage.includes('gia') || errorMessage.includes('già') || errorMessage.includes('already');
+                        if (!partitaGiaAvviata) {
+                            throw new Error(payload.error || 'Errore avvio gioco');
+                        }
+                    }
+
+                    gameStarted = true;
+                    console.log('DEBUG: Reindirizzamento a game.html');
+                    vaiAllaPaginaPartita(stanza.roomId, nomeCorrente);
+                })
+                .catch(err => console.error('Errore avvio gioco:', err))
+                .finally(() => {
+                    if (!gameStarted) {
+                        startRequestInFlight = false;
+                    }
+                });
+        } else if (!stanza.isFull || !allReady) {
+            startRequestInFlight = false;
         }
+    }
+
+    function impostaProntoAutomatico(roomId, playerName, readyStates) {
+        if (!roomId || !playerName || autoReadyRooms.has(roomId)) {
+            return;
+        }
+
+        if (readyStates[playerName] === true) {
+            autoReadyRooms.add(roomId);
+            return;
+        }
+
+        fetch(`/api/stanza/${roomId}/pronto`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ playerName: playerName, ready: true })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.error || 'Errore auto-ready'); });
+            }
+            autoReadyRooms.add(roomId);
+            return response.json();
+        })
+        .catch(err => console.error('Errore auto-ready:', err));
+    }
+
+    function vaiAllaPaginaPartita(roomId, playerName) {
+        const params = new URLSearchParams({
+            roomId: roomId || '',
+            playerName: playerName || ''
+        });
+        window.location.href = `/game.html?${params.toString()}`;
+    }
+
+    // Funzione che aggiorna la grafica
+    function mostraLobby(stanza) {
+        // Nascondi login, mostra lobby
+        sezioneLogin.style.display = 'none';
+        sezioneListaStanze.style.display = 'none';
+        sezioneLobby.style.display = 'block';
+        fermaRefreshPeriodico(statoRefreshLobby);
+        renderLobby(stanza);
+        avviaRefreshStanza();
     }
 
     // Funzione estetica per convertire le stringhe del model in colori CSS
@@ -166,12 +304,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const nome = inputNome.value;
 		const version = gameVersion.value;
 		const players = maxPlayers.value;
-		
+
         if (!nome) {
             alert("Devi inserire un nome!");
             return;
         }
-		
+
 		if (version !== "Classica") {
 			alert("Versione non ancora implementata!");
 			return;
@@ -192,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(stanzaModel => {
             // Qui 'stanzaModel' è l'oggetto Java convertito in JS
             console.log("Dati ricevuti dal Model:", stanzaModel);
-            
+
             mostraLobby(stanzaModel);
         })
         .catch(err => {
@@ -201,36 +339,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    playersContainer.addEventListener('click', function(event) {
-        const target = event.target;
-        if (!target.classList.contains('ready-btn')) {
-            return;
-        }
-
-        if (!currentRoomId) {
-            return;
-        }
-
-        const playerName = target.getAttribute('data-player');
-        const currentReady = target.getAttribute('data-ready') === 'true';
-        const nextReady = !currentReady;
-
-        fetch(`/api/stanza/${currentRoomId}/pronto`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ playerName: playerName, ready: nextReady })
-        })
-        .then(response => {
-            if (response.ok) return response.json();
-            return response.json().then(err => { throw new Error(err.error || 'Errore stato pronto'); });
-        })
-        .then(stanzaModel => {
-            mostraLobby(stanzaModel);
-        })
-        .catch(err => {
-            console.error(err);
-            alert(err.message || "Errore nel contattare il server.");
-        });
-    });
 
 });

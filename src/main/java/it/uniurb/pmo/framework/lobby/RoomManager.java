@@ -11,7 +11,7 @@ public class RoomManager implements IRoomManager {
 	
 	private static RoomManager instance;
 	private final Map<String, Room> activeRooms;
-	
+
 	private RoomManager() {
 		this.activeRooms = new HashMap<>();
 	}

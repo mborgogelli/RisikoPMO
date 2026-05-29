@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RISIKO Online — Partita</title>
+  <link rel="stylesheet" href="game.css" />
+</head>
+<body>
+  <div class="game-layout" role="main">
+    <header class="game-header">
+      <h1>RISIKO Online — Partita</h1>
+      <div class="game-meta">
+        <span>Stanza: <strong id="roomIdLabel">-</strong></span>
+        <span>Giocatore: <strong id="playerNameLabel">-</strong></span>
+      </div>
+    </header>
+
+    <section class="main-panel" aria-label="Mappa e eventi di gioco">
+      <div class="map-wrapper">
+        <img src="images/risikonew_board.svg" alt="Mappa Risiko New" class="board-map" />
+      </div>
+      <div class="events-panel">
+        <h2>Eventi di gioco</h2>
+        <div id="eventsList" class="events-list" aria-live="polite">
+          <p>In attesa degli eventi della partita...</p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="phase-panel" aria-label="Fase corrente">
+      <h2>Fase corrente</h2>
+      <p id="phaseName">Preparazione</p>
+      <p id="phaseInstruction">Attendi l'inizio del turno per eseguire le azioni richieste.</p>
+    </aside>
+
+    <aside class="stats-panel" aria-label="Statistiche">
+      <h2>Statistiche</h2>
+      <div class="stats-grid">
+        <div class="stat-item"><span>Territori</span><strong id="statTerritories">0</strong></div>
+        <div class="stat-item"><span>Truppe</span><strong id="statTroops">0</strong></div>
+        <div class="stat-item"><span>Carte</span><strong id="statCards">0</strong></div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
+

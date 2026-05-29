@@ -1,0 +1,171 @@
+:root {
+  --bg: #0f172a;
+  --panel: #111827;
+  --panel-soft: #1f2937;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --border: #374151;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.game-layout {
+  min-height: 100vh;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 280px 1fr 340px;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "header header header"
+    "stats main phase";
+}
+
+.game-header {
+  grid-area: header;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.game-header h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.game-meta {
+  display: flex;
+  gap: 16px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.main-panel,
+.phase-panel,
+.stats-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.main-panel {
+  grid-area: main;
+  padding: 12px;
+  display: grid;
+  gap: 12px;
+  grid-template-rows: 1fr 190px;
+}
+
+.map-wrapper {
+  background: #0b1220;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.board-map {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.events-panel {
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.events-panel h2,
+.phase-panel h2,
+.stats-panel h2 {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+
+.events-list {
+  font-size: 14px;
+  color: var(--muted);
+  max-height: 130px;
+  overflow-y: auto;
+}
+
+.phase-panel {
+  grid-area: phase;
+  padding: 14px;
+  align-self: start;
+}
+
+#phaseName {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 6px 0;
+}
+
+#phaseInstruction {
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.stats-panel {
+  grid-area: stats;
+  padding: 14px;
+  align-self: end;
+}
+
+.stats-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--panel-soft);
+}
+
+.stat-item span {
+  color: var(--muted);
+}
+
+.stat-item strong {
+  font-size: 18px;
+}
+
+@media (max-width: 1200px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "phase"
+      "main"
+      "stats";
+  }
+
+  .stats-panel,
+  .phase-panel {
+    align-self: stretch;
+  }
+}
+

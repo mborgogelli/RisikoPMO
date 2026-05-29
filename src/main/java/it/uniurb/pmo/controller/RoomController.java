@@ -103,6 +103,19 @@ public class RoomController {
     }
 
     /**
+     * Endpoint per leggere lo stato corrente di una stanza.
+     * Utile al frontend per aggiornare in polling la lobby di tutti i player.
+     */
+    @GetMapping("/stanza/{roomId}")
+    public ResponseEntity<?> getStanza(@PathVariable String roomId) {
+        try {
+            return ResponseEntity.ok(this.createRoomResponse(roomId));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
      * Endpoint per ottenere la lista delle stanze attive
      */
     @GetMapping("/stanze")
