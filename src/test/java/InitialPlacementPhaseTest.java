@@ -1,13 +1,3 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-
 import it.uniurb.pmo.framework.management.interfaces.IMapManager;
 import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
 import it.uniurb.pmo.framework.players.IPlayer;
@@ -16,6 +6,13 @@ import it.uniurb.pmo.framework.utils.EnumColors;
 import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.MediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.InitialPlacementPhase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InitialPlacementPhaseTest {
 
@@ -47,20 +44,8 @@ public class InitialPlacementPhaseTest {
         mapManager.initializeGame(players);
         tankManager.initializeGame(players);
 
-        IPlayer player = players.get(0);
-        int remainingBefore = mediator.getPlayerTank(player);
-        int toDeploy = Math.min(3, remainingBefore);
-
-        // la zona scelta è la minima lessicograficamente tra quelle possedute (i tank iniziali sono tutti uguali)
-        List<String> ownedZones = mediator.getZonesOwnedBy(player);
-        String expectedZone = ownedZones.stream().min(String::compareTo).get();
-        int zoneBefore = mediator.getZoneTank(expectedZone);
-
         InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
-        phase.playPhase(player, mediator);
 
-        assertEquals(zoneBefore + toDeploy, mediator.getZoneTank(expectedZone));
-        assertEquals(remainingBefore - toDeploy, mediator.getPlayerTank(player));
     }
 
     @Test

@@ -811,4 +811,93 @@
        y="136.14178"
        id="yakutsk_text"></text>
   </g>
+  <script type="text/javascript">
+    <![CDATA[
+    window.addEventListener('DOMContentLoaded', () => {
+        const svgNS = "http://www.w3.org/2000/svg";
+
+        // Il "layer4" nel tuo SVG originale contiene i path di tutti i continenti
+        const countriesLayer = document.getElementById('layer4');
+        if (!countriesLayer) {
+            console.error("Layer delle nazioni non trovato.");
+            return;
+        }
+
+        const countries = countriesLayer.querySelectorAll('path');
+
+        // Autogenerazione dei bollini
+        countries.forEach((path) => {
+            const id = path.id;
+            if (!id) return;
+
+            // Il browser calcola matematicamente le coordinate esatte per noi
+            const bbox = path.getBBox();
+            const cx = bbox.x + bbox.width / 2;
+            const cy = bbox.y + bbox.height / 2;
+
+            // Creazione contenitore del bollino
+            const badgeGroup = document.createElementNS(svgNS, 'g');
+            badgeGroup.setAttribute('id', 'badge-' + id);
+            badgeGroup.setAttribute('class', 'army-badge');
+
+            // Stile per far sì che i click passino attraverso il bollino fino alla nazione sotto
+            badgeGroup.style.pointerEvents = "none";
+
+            // Sfondo del bollino
+            const circle = document.createElementNS(svgNS, 'circle');
+            circle.setAttribute('cx', cx);
+            circle.setAttribute('cy', cy);
+            circle.setAttribute('r', '14');
+            circle.setAttribute('fill', '#ffffff');
+            circle.setAttribute('stroke', '#333333');
+            circle.setAttribute('stroke-width', '2');
+            circle.setAttribute('opacity', '0.9');
+
+            // Testo delle armate
+            const text = document.createElementNS(svgNS, 'text');
+            text.setAttribute('x', cx);
+            text.setAttribute('y', cy);
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('dominant-baseline', 'central');
+            text.setAttribute('font-family', 'sans-serif');
+            text.setAttribute('font-weight', 'bold');
+            text.setAttribute('font-size', '14');
+            text.setAttribute('fill', '#000000');
+            text.textContent = "1"; // Valore di partenza
+
+            badgeGroup.appendChild(circle);
+            badgeGroup.appendChild(text);
+
+            // Aggiunge il bollino sopra le mappe
+            countriesLayer.appendChild(badgeGroup);
+        });
+    });
+
+/**
+     * API GESTIONALE PER IL TUO BACKEND
+     * @param {string} countryId - L'ID del path della nazione
+     * @param {number|string} count - Il numero di armate
+     * @param {string} playerColor - Codice esadecimale del giocatore (es. '#ff0000')
+     */
+    window.updateTerritoryData = function(countryId, count, playerColor) {
+        // 1. Aggiorna solo il numero (il bollino resta neutro)
+        const badge = document.getElementById('badge-' + countryId);
+        if (badge) {
+            badge.querySelector('text').textContent = count;
+        } else {
+            console.warn("Bollino non trovato per: " + countryId);
+        }
+
+        // 2. Colora l'intera nazione (il path) per indicare la proprietà
+        const territoryPath = document.getElementById(countryId);
+        if (territoryPath) {
+            territoryPath.setAttribute('fill', playerColor);
+            // Transizione fluida a costo zero
+            territoryPath.style.transition = "fill 0.3s ease-in-out";
+        } else {
+            console.warn("Nazione non trovata: " + countryId);
+        }
+    };
+    ]]>
+  </script>
 </svg>

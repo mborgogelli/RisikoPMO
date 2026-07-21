@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch(`/api/stanza/${currentRoomId}`)
+        fetch(`/api/stanze/${currentRoomId}`)
             .then(response => {
                 if (response.status === 404) {
                     // La stanza viene chiusa quando il gioco parte: porta tutti alla pagina partita.
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!gameStarted && !startRequestInFlight && isFull && allReady) {
             console.log('DEBUG: Condizioni met, avvio gioco...');
             startRequestInFlight = true;
-            fetch(`/api/stanza/${stanza.roomId}/avvia-gioco`, { method: 'POST' })
+            fetch(`/api/stanze/${stanza.roomId}/avvia-gioco`, { method: 'POST' })
                 .then(async response => {
                     const payload = await response.json().catch(() => ({}));
                     console.log(`DEBUG: avvia-gioco response status=${response.status}, payload=${JSON.stringify(payload)}`);
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch(`/api/stanza/${roomId}/pronto`, {
+        fetch(`/api/stanze/${roomId}/pronto`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ playerName: playerName, ready: true })
@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch(`/api/stanza/${roomId}/entra`, {
+        fetch(`/api/stanze/${roomId}/entra`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ playerName: nome })
@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 
         // 1. CHIAMATA AL SERVER (Fetch)
-        fetch('/api/crea-stanza', {
+        fetch('/api/stanze/crea-stanza', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ playerName: nome,

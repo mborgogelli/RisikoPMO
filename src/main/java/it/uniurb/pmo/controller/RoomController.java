@@ -23,7 +23,7 @@ import it.uniurb.pmo.framework.utils.GameVersion;
  * avviare il gioco.
  */
 @RestController 
-@RequestMapping("/api")
+@RequestMapping("/api/stanze")
 public class RoomController {
   private final GameStartCoordinator gameStartCoordinator;
 
@@ -63,7 +63,7 @@ public class RoomController {
     /**
      * Endpoint per entrare in una stanza esistente
      */
-    @PostMapping("/stanza/{roomId}/entra")
+    @PostMapping("/{roomId}/entra")
     public ResponseEntity<?> entraStanza(@PathVariable String roomId, @RequestBody Map<String, String> payload) {
         String nomeGiocatore = payload.get("playerName");
         if (nomeGiocatore == null || nomeGiocatore.isEmpty()) {
@@ -83,7 +83,7 @@ public class RoomController {
     /**
      * Endpoint per impostare lo stato di pronto di un giocatore
      */
-    @PostMapping("/stanza/{roomId}/pronto")
+    @PostMapping("/{roomId}/pronto")
     public ResponseEntity<?> setPronto(@PathVariable String roomId, @RequestBody Map<String, Object> payload) {
         String nomeGiocatore = payload.get("playerName") != null ? payload.get("playerName").toString() : null;
         Boolean isReady = payload.get("ready") instanceof Boolean ? (Boolean) payload.get("ready") : null;
@@ -106,7 +106,7 @@ public class RoomController {
      * Endpoint per leggere lo stato corrente di una stanza.
      * Utile al frontend per aggiornare in polling la lobby di tutti i player.
      */
-    @GetMapping("/stanza/{roomId}")
+    @GetMapping("/{roomId}")
     public ResponseEntity<?> getStanza(@PathVariable String roomId) {
         try {
             return ResponseEntity.ok(this.createRoomResponse(roomId));
@@ -118,7 +118,7 @@ public class RoomController {
     /**
      * Endpoint per ottenere la lista delle stanze attive
      */
-    @GetMapping("/stanze")
+    @GetMapping
     public ResponseEntity<List<RoomResponseDTO>> getStanze() {
         RoomManager roomManager = RoomManager.getInstance();
         List<String> roomIds = roomManager.getActiveRooms();
@@ -131,7 +131,7 @@ public class RoomController {
     /**
      * Endpoint per iniziare il gioco quando la stanza è piena
      */
-    @PostMapping("/stanza/{roomId}/avvia-gioco")
+    @PostMapping("/{roomId}/avvia-gioco")
     public ResponseEntity<?> avviaGioco(@PathVariable String roomId) {
 
         GameStartResult result;
