@@ -1,4 +1,4 @@
-package it.uniurb.pmo.variants.risikonew;
+package it.uniurb.pmo.variants.risikonew.utils;
 
 import it.uniurb.pmo.framework.players.ITokenType;
 

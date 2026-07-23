@@ -9,7 +9,7 @@ import it.uniurb.pmo.framework.management.interfaces.IDirector;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.IPlayerInputProvider;
 import it.uniurb.pmo.framework.players.ITokenType;
-import it.uniurb.pmo.variants.risikonew.RisikoToken;
+import it.uniurb.pmo.variants.risikonew.utils.RisikoToken;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ICardManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
