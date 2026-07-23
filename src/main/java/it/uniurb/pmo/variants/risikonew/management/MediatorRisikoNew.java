@@ -2,11 +2,14 @@ package it.uniurb.pmo.variants.risikonew.management;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import it.uniurb.pmo.framework.management.AbstractMediator;
 import it.uniurb.pmo.framework.management.interfaces.IDirector;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.IPlayerInputProvider;
+import it.uniurb.pmo.framework.players.ITokenType;
+import it.uniurb.pmo.variants.risikonew.RisikoToken;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ICardManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -90,6 +93,12 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 
 	@Override
 	public Map<String, Integer> acquireTargetZones(IPlayer player, int toDeploy) {
-		return this.playerInputProvider.acquireDeployment(player, toDeploy);
+		Map<ITokenType, Integer> available = Map.of(RisikoToken.TANK, toDeploy);
+		Map<String, Map<ITokenType, Integer>> result = this.playerInputProvider.acquireDeployment(player, available);
+		return result.entrySet().stream()
+				.collect(Collectors.toMap(
+						Map.Entry::getKey,
+						e -> e.getValue().getOrDefault(RisikoToken.TANK, 0)
+				));
 	}
 }

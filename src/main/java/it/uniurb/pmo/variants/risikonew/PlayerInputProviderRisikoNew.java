@@ -1,38 +1,98 @@
 package it.uniurb.pmo.variants.risikonew;
 
-import java.util.Map;
-
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.IPlayerInputProvider;
-import it.uniurb.pmo.framework.utils.Pair;
+import it.uniurb.pmo.framework.players.ITokenType;
+
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Implementazione concreta di IPlayerInputProvider per la variante RisikoNew.
- * Acquisisce le scelte del giocatore tramite il canale di comunicazione specifico
+ *
+ * I metodi acquire* creano un CompletableFuture per il giocatore e si bloccano
+ * (future.join()) finché il controller REST non chiama il corrispondente submit*,
+ * che completa il future e sblocca il thread di gioco.
+ *
+ * Il controller REST dipende da IPlayerInputProvider (non da questa classe concreta)
+ * per invocare i metodi submit*.
  */
 public class PlayerInputProviderRisikoNew implements IPlayerInputProvider {
 
+    private final Map<String, CompletableFuture<Map<String, Map<ITokenType, Integer>>>> deploymentFutures
+            = new ConcurrentHashMap<>();
+
+    private final Map<String, CompletableFuture<String[]>> attackFutures
+            = new ConcurrentHashMap<>();
+
+    private final Map<String, CompletableFuture<Integer>> troopMovementFutures
+            = new ConcurrentHashMap<>();
+
+    private final Map<String, CompletableFuture<String[]>> strategicMovementFutures
+            = new ConcurrentHashMap<>();
+
+    // ── acquire* ─────────────────────────────────────────────────────────────
+
     @Override
-    public Map<String, Integer> acquireDeployment(IPlayer player, int tanksToDeploy) {
-        // TODO: acquisire la scelta di dispiegamento dal client
-        return Map.of();
+    public Map<String, Map<ITokenType, Integer>> acquireDeployment(IPlayer player, Map<ITokenType, Integer> availableTokens) {
+        CompletableFuture<Map<String, Map<ITokenType, Integer>>> future = new CompletableFuture<>();
+        this.deploymentFutures.put(player.getName(), future);
+        return future.join();
     }
 
     @Override
-    public Pair<String,String> acquireAttack(IPlayer player) {
-        // TODO: acquisire (zonaBersaglio, zonaAttaccante dal client
-        return null;
+    public String[] acquireAttack(IPlayer player) {
+        CompletableFuture<String[]> future = new CompletableFuture<>();
+        this.attackFutures.put(player.getName(), future);
+        return future.join();
     }
 
     @Override
     public int acquireTroopMovement(IPlayer player, String fromZone, String toZone, int max) {
-        // TODO: acquisire il numero di carri da spostare dopo una conquista
-        return 1;
+        CompletableFuture<Integer> future = new CompletableFuture<>();
+        this.troopMovementFutures.put(player.getName(), future);
+        return future.join();
     }
 
     @Override
-    public Pair<String,String> acquireStrategicMovement(IPlayer player) {
-        // TODO: acquisire (zonaDestinazione,zonaOrigine) dal client
-        return null;
+    public String[] acquireStrategicMovement(IPlayer player) {
+        CompletableFuture<String[]> future = new CompletableFuture<>();
+        this.strategicMovementFutures.put(player.getName(), future);
+        return future.join();
+    }
+
+    // ── submit* ───────────────────────────────────────────────────────────────
+
+    @Override
+    public void submitDeployment(String playerName, Map<String, Map<ITokenType, Integer>> choice) {
+        CompletableFuture<Map<String, Map<ITokenType, Integer>>> future = this.deploymentFutures.remove(playerName);
+        if (future != null) {
+            future.complete(choice);
+        }
+    }
+
+    @Override
+    public void submitAttack(String playerName, String[] choice) {
+        CompletableFuture<String[]> future = this.attackFutures.remove(playerName);
+        if (future != null) {
+            future.complete(choice);
+        }
+    }
+
+    @Override
+    public void submitTroopMovement(String playerName, int count) {
+        CompletableFuture<Integer> future = this.troopMovementFutures.remove(playerName);
+        if (future != null) {
+            future.complete(count);
+        }
+    }
+
+    @Override
+    public void submitStrategicMovement(String playerName, String[] choice) {
+        CompletableFuture<String[]> future = this.strategicMovementFutures.remove(playerName);
+        if (future != null) {
+            future.complete(choice);
+        }
     }
 }
