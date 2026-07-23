@@ -3,6 +3,7 @@ package it.uniurb.pmo.framework.management.interfaces;
 import java.util.List;
 
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.IPlayerInputProvider;
 
 /**
  * Interfaccia che modella un mediatore tra i manager di gioco
@@ -18,6 +19,12 @@ public interface IMediator extends IGameConductor {
 	 * Inizializza tutti i manager registrati
 	 */
 	void initManagers();
+
+	/**
+	 * Imposta il provider di input del giocatore
+	 * @param playerInputProvider
+	 */
+	void setPlayerInputProvider(IPlayerInputProvider playerInputProvider);
 
 	/**
 	 * Restituisce tutte le zone di gioco.

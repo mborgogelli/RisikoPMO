@@ -7,7 +7,6 @@ import java.util.Map;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
-import it.uniurb.pmo.variants.risikonew.management.MediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 
 public class InitialPlacementPhase implements IPhase {
@@ -35,8 +34,8 @@ public class InitialPlacementPhase implements IPhase {
 	private void deployTanks(IPlayer player) {
 		int remaining = this.mediator.getPlayerTank(this.player);
 		if (remaining > 0){
-			int toDeploy = Math.min(MAX_DEPLOYABLE, remaining);
-			Map<String, Integer> targetZones = this.mediator.acquireTargetZones(player, toDeploy);
+			int tanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
+			Map<String, Integer> targetZones = this.mediator.acquireTargetZones(player, tanksToDeploy);
 			targetZones.forEach((z, t) -> this.mediator.deployTank(this.player, z, t));
 		}else {
 			throw new RuntimeException("Not enough tanks to deploy.");
@@ -47,4 +46,6 @@ public class InitialPlacementPhase implements IPhase {
 	public void clearPhase() {
 		this.player = null;
 	}
+
+	//TODO Verifica del totale da deployare
 }

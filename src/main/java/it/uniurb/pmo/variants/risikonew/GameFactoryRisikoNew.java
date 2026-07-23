@@ -6,9 +6,11 @@ import java.util.List;
 import it.uniurb.pmo.framework.management.AbstractMediator;
 import it.uniurb.pmo.framework.management.interfaces.IGameFactory;
 import it.uniurb.pmo.framework.management.interfaces.IManager;
+import it.uniurb.pmo.framework.players.IPlayerInputProvider;
 import it.uniurb.pmo.variants.risikonew.management.CardManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.MapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.MediatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.PlayerInputProviderRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.TankManager;
 import it.uniurb.pmo.variants.risikonew.management.TurnManagerRisikoNew;
 
@@ -25,6 +27,7 @@ public class GameFactoryRisikoNew implements IGameFactory {
 		this.mediator = new MediatorRisikoNew();
 		this.createManagers();
 		this.setMediator();
+		this.setPlayerInputProvider();
 	}
 	
 	@Override
@@ -53,5 +56,12 @@ public class GameFactoryRisikoNew implements IGameFactory {
 	private void setMediator() {
 		this.managers.forEach(manager -> manager.setMediator(this.mediator));
 		this.mediator.initManagers();
+	}
+
+	/**
+	 * Inietta il provider di input del giocatore nel mediatore
+	 */
+	private void setPlayerInputProvider() {
+		this.mediator.setPlayerInputProvider(new PlayerInputProviderRisikoNew());
 	}
 }

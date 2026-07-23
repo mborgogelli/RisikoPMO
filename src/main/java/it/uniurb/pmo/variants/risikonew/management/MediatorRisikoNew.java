@@ -6,6 +6,7 @@ import java.util.Map;
 import it.uniurb.pmo.framework.management.AbstractMediator;
 import it.uniurb.pmo.framework.management.interfaces.IDirector;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.IPlayerInputProvider;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ICardManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -19,6 +20,7 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	private ITankManager tankManager;
 	private ITurnManagerRisikoNew turnManager;
 	private IDirector director;
+	private IPlayerInputProvider playerInputProvider;
 	
 	
 	@Override
@@ -82,7 +84,12 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
+	public void setPlayerInputProvider(IPlayerInputProvider playerInputProvider) {
+		this.playerInputProvider = playerInputProvider;
+	}
+
+	@Override
 	public Map<String, Integer> acquireTargetZones(IPlayer player, int toDeploy) {
-		return Map.of();
+		return this.playerInputProvider.acquireDeployment(player, toDeploy);
 	}
 }
