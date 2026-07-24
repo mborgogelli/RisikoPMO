@@ -44,7 +44,7 @@ public class InitialPlacementPhaseTest {
         mapManager.initializeGame(players);
         tankManager.initializeGame(players);
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
+        InitialPlacementPhase phase = new InitialPlacementPhase();
 
     }
 
@@ -78,7 +78,7 @@ public class InitialPlacementPhaseTest {
         String expectedZone = ownedZones.stream().min(String::compareTo).get();
         int zoneBefore = mediator.getZoneTank(expectedZone);
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
+        InitialPlacementPhase phase = new InitialPlacementPhase();
         phase.playPhase(player, mediator);
 
         assertEquals(zoneBefore + toDeploy, mediator.getZoneTank(expectedZone));
@@ -125,7 +125,7 @@ public class InitialPlacementPhaseTest {
     @Test
     @DisplayName("getId() should return 0")
     public void testGetId() {
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit);
+        InitialPlacementPhase phase = new InitialPlacementPhase();
         assertEquals(0, phase.getId());
     }
 
@@ -140,7 +140,7 @@ public class InitialPlacementPhaseTest {
         String deployZone = ownedZones.stream().min(String::compareTo).get();
         int zonesTanksBefore = mediatorUnit.getZoneTank(deployZone);
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit);
+        InitialPlacementPhase phase = new InitialPlacementPhase();
         phase.playPhase(player, mediatorUnit);
 
         int tanksAfter = mediatorUnit.getPlayerTank(player);
@@ -161,7 +161,7 @@ public class InitialPlacementPhaseTest {
         String deployZone = ownedZones.stream().min(String::compareTo).get();
         int zonesTanksBefore = mediatorUnit.getZoneTank(deployZone);
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit);
+        InitialPlacementPhase phase = new InitialPlacementPhase();
         phase.playPhase(player, mediatorUnit);
 
         int tanksAfter = mediatorUnit.getPlayerTank(player);
@@ -178,7 +178,7 @@ public class InitialPlacementPhaseTest {
         int currentTanks = mediatorUnit.getPlayerTank(player);
         tankManagerUnit.assignToken(player, -currentTanks);
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit);
+        InitialPlacementPhase phase = new InitialPlacementPhase();
 
         RuntimeException exception = assertThrows(RuntimeException.class,
             () -> phase.playPhase(player, mediatorUnit));
@@ -203,7 +203,7 @@ public class InitialPlacementPhaseTest {
         String deployZone = ownedZones.stream().min(String::compareTo).get();
         int zonesTanksBefore = mediatorUnit.getZoneTank(deployZone);
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit);
+        InitialPlacementPhase phase = new InitialPlacementPhase();
         phase.playPhase(player, mediatorUnit);
 
         int tanksAfter = mediatorUnit.getPlayerTank(player);

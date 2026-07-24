@@ -6,7 +6,6 @@ import java.util.List;
 import it.uniurb.pmo.framework.management.AbstractMediator;
 import it.uniurb.pmo.framework.management.interfaces.IGameFactory;
 import it.uniurb.pmo.framework.management.interfaces.IManager;
-import it.uniurb.pmo.framework.players.IPlayerInputProvider;
 import it.uniurb.pmo.variants.risikonew.management.CardManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.MapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.MediatorRisikoNew;
