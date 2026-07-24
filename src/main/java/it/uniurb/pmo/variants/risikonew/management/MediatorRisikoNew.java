@@ -42,6 +42,18 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
+	public Map<String, Integer> acquireTargetZones(IPlayer player, ITokenType tanks, int toDeploy) {
+		Map<ITokenType, Integer> available = Map.of(tanks, toDeploy);
+		List<String> deployableZones = this.mapManager.getZonesOwnedBy(player);
+		Map<String, Map<ITokenType, Integer>> result = this.playerInputProvider.acquireDeployment(player, deployableZones, available);
+		return result.entrySet().stream()
+					 .collect(Collectors.toMap(
+								Map.Entry::getKey,
+								e -> e.getValue().getOrDefault(tanks, 0)
+				));
+	}
+
+	@Override
 	public void notifyWinner(IPlayer player) {
 		this.director.declareWinner(player);
 	}
@@ -93,13 +105,6 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 
 	@Override
 	public Map<String, Integer> acquireTargetZones(IPlayer player, int toDeploy) {
-		Map<ITokenType, Integer> available = Map.of(ERisikoNewToken.TANK, toDeploy);
-		List<String> deployableZones = this.mapManager.getZonesOwnedBy(player);
-		Map<String, Map<ITokenType, Integer>> result = this.playerInputProvider.acquireDeployment(player, deployableZones, available);
-		return result.entrySet().stream()
-				.collect(Collectors.toMap(
-						Map.Entry::getKey,
-						e -> e.getValue().getOrDefault(ERisikoNewToken.TANK, 0)
-				));
+		return this.acquireTargetZones(player, ERisikoNewToken.TANK, toDeploy);
 	}
 }
