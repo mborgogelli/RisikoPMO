@@ -8,11 +8,11 @@ import java.util.Optional;
 
 public interface ITurnManager extends IManager, IGameConductor {
 
-	void playTurn(IPlayer p);
+	void startTurn(IPlayer p);
 
 	void endTurn(IPlayer p);
 
-	void playPhase(IPhase phase);
+	void startPhase(IPhase phase);
 
 	int nextPhase();
 

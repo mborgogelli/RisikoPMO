@@ -19,8 +19,18 @@ public class StrategicPhase implements IStrategicPhase {
         this.mediator = mediator;
 	}
 
-	@Override
-    public int getId() {
+    @Override
+    public void nextStep(IPlayer player) {
+
+    }
+
+    @Override
+    public int getPhaseId() {
+        return 0;
+    }
+
+    @Override
+    public int getStepId() {
         return 0;
     }
 

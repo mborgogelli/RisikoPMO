@@ -5,10 +5,14 @@ import it.uniurb.pmo.framework.management.interfaces.IMediator;
 
 public interface IPhase {
 	
-	int getId();
+	int getPhaseId();
+
+	int getStepId();
 
 	// TODO puoi evitare di passare il mediator mettendolo come parametro nel costruttore
 	void playPhase(IPlayer player, IMediator mediator);
+
+	void nextStep(IPlayer player);
 
 	void clearPhase();
 

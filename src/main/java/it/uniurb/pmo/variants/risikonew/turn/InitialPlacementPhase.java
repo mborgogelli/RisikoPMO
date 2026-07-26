@@ -14,7 +14,12 @@ public class InitialPlacementPhase implements IPhase {
 	private IPlayer player;
 
 	@Override
-	public int getId() {
+	public int getPhaseId() {
+		return 0;
+	}
+
+	@Override
+	public int getStepId() {
 		return 0;
 	}
 
@@ -24,6 +29,11 @@ public class InitialPlacementPhase implements IPhase {
 		this.mediator = (IMediatorRisikoNew) mediator;
 		this.deployTanks(this.player);
 		this.clearPhase();
+
+	}
+
+	@Override
+	public void nextStep(IPlayer player) {
 
 	}
 

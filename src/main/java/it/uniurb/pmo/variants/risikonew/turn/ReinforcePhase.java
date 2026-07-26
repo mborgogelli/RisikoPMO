@@ -25,10 +25,20 @@ public class ReinforcePhase implements IReinforcePhase {
 	private boolean cardsUsed = false;
 
 	@Override
+	public int getStepId() {
+		return 0;
+	}
+
+	@Override
 	public void playPhase(IPlayer player, IMediator mediator) {
 		this.player = player;
 		this.mediator = mediator;
 		this.isStarted = true;
+	}
+
+	@Override
+	public void nextStep(IPlayer player) {
+
 	}
 
 	@Override

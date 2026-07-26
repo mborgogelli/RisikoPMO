@@ -1,4 +1,4 @@
-package it.uniurb.pmo.controller;
+package it.uniurb.pmo.controller.lobby;
 
 import java.util.Map;
 
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import it.uniurb.pmo.controller.dto.RoomResponseDTO;
+import it.uniurb.pmo.controller.lobby.dto.RoomResponseDTO;
 import it.uniurb.pmo.framework.lobby.GameStartCoordinator;
 import it.uniurb.pmo.framework.lobby.GameStartResult;
 import it.uniurb.pmo.framework.lobby.RoomManager;

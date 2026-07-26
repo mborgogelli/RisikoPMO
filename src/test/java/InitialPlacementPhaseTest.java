@@ -124,9 +124,9 @@ public class InitialPlacementPhaseTest {
 
     @Test
     @DisplayName("getId() should return 0")
-    public void testGetId() {
+    public void testGetPhaseId() {
         InitialPlacementPhase phase = new InitialPlacementPhase();
-        assertEquals(0, phase.getId());
+        assertEquals(0, phase.getPhaseId());
     }
 
     @Test

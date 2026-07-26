@@ -18,7 +18,7 @@ public interface IReinforcePhase extends IPhase {
 	int reinforceByCards(List<ICard> tris);
 	
 	/* Restituisce l'id della fase di rinforzo */
-	default int getId() {
+	default int getPhaseId() {
 		return ERisikoNewPhase.REINFORCE.getId();
 	};
 

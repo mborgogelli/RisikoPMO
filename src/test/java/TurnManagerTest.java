@@ -41,13 +41,13 @@ public class TurnManagerTest {
 		this.turnManager.initializeGame(this.players);
 
 		it.uniurb.pmo.framework.players.IPlayer firstPlayer = this.turnManager.getNextPlayer();
-		this.turnManager.playTurn(firstPlayer);
+		this.turnManager.startTurn(firstPlayer);
 
 		it.uniurb.pmo.framework.players.IPlayer secondPlayer = this.turnManager.getNextPlayer();
-		this.turnManager.playTurn(secondPlayer);
+		this.turnManager.startTurn(secondPlayer);
 
 		it.uniurb.pmo.framework.players.IPlayer thirdPlayer = this.turnManager.getNextPlayer();
-		this.turnManager.playTurn(thirdPlayer);
+		this.turnManager.startTurn(thirdPlayer);
 
 		java.util.Set<it.uniurb.pmo.framework.players.IPlayer> uniquePlayers = java.util.Set.of(firstPlayer, secondPlayer, thirdPlayer);
 		org.junit.jupiter.api.Assertions.assertEquals(3, uniquePlayers.size(), "La sequenza di un giro deve contenere tre giocatori distinti");
@@ -64,7 +64,7 @@ public class TurnManagerTest {
 		this.turnManager.initializeGame(this.players);
 
 		it.uniurb.pmo.framework.players.IPlayer firstPlayer = this.turnManager.getNextPlayer();
-		this.turnManager.playTurn(firstPlayer);
+		this.turnManager.startTurn(firstPlayer);
 
 		it.uniurb.pmo.framework.players.IPlayer eliminatedPlayer = this.turnManager.getNextPlayer();
 		eliminatedPlayer.setPlayerTurnStatus(it.uniurb.pmo.framework.players.PlayerTurnStatus.ELIMINATED);
@@ -73,7 +73,7 @@ public class TurnManagerTest {
 		org.junit.jupiter.api.Assertions.assertNotEquals(eliminatedPlayer, skippedCandidate, "Il giocatore eliminato deve essere saltato");
 		org.junit.jupiter.api.Assertions.assertEquals(it.uniurb.pmo.framework.players.PlayerTurnStatus.ACTIVE, skippedCandidate.getPlayerTurnStatus());
 
-		this.turnManager.playTurn(skippedCandidate);
+		this.turnManager.startTurn(skippedCandidate);
 		it.uniurb.pmo.framework.players.IPlayer wrappedPlayer = this.turnManager.getNextPlayer();
 		org.junit.jupiter.api.Assertions.assertEquals(firstPlayer, wrappedPlayer, "Dopo aver saltato l'eliminato si deve tornare al primo giocatore attivo della rotazione");
 	}

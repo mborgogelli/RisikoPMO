@@ -15,7 +15,12 @@ public class CombatPhase implements ICombatPhase {
 	}
 
 	@Override
-	public int getId() {
+	public int getPhaseId() {
+		return 0;
+	}
+
+	@Override
+	public int getStepId() {
 		return 0;
 	}
 
@@ -23,6 +28,11 @@ public class CombatPhase implements ICombatPhase {
 	public void playPhase(IPlayer player, IMediator mediator) {
 		this.player = player;
 		this.mediator = mediator;
+
+	}
+
+	@Override
+	public void nextStep(IPlayer player) {
 
 	}
 

@@ -1,4 +1,4 @@
-package it.uniurb.pmo.controller.dto;
+package it.uniurb.pmo.controller.lobby.dto;
 
 
 import it.uniurb.pmo.framework.utils.EnumColors;

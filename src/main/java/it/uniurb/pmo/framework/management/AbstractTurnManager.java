@@ -40,7 +40,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	@Override
 	public void startGame() {
-			this.playTurn(this.getNextPlayer());
+			this.startTurn(this.getNextPlayer());
 	}
 
 	@Override
@@ -64,13 +64,13 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	}
 
 	@Override
-	public void playTurn(IPlayer player) {
+	public void startTurn(IPlayer player) {
 		if (this.phases == null || this.phases.isEmpty()) {
 			throw new IllegalStateException("Le fasi del turno non sono state inizializzate. Chiamare initPhases() prima di playTurn().");
 		}
 		this.currentPlayer = player;
 		this.currentPhaseIndex = 0;
-		this.playPhase(this.phases.getFirst());
+		this.startPhase(this.phases.getFirst());
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 		if(this.checkWinner().isPresent()) {
 			this.mediator.notifyWinner(this.checkWinner().get());
 		}else{
-			this.playTurn(this.getNextPlayer());
+			this.startTurn(this.getNextPlayer());
 		}
 	}
 
@@ -110,7 +110,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	}
 
 	@Override
-	public void playPhase(IPhase currentPhase){
+	public void startPhase(IPhase currentPhase){
 		currentPhase.playPhase(this.currentPlayer, this.mediator);
 	}
 
@@ -121,7 +121,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 		if (this.currentPhaseIndex > this.phases.size()) {
 			this.endTurn(this.currentPlayer);
 		} else {
-			this.playPhase(this.phases.get(this.currentPhaseIndex));
+			this.startPhase(this.phases.get(this.currentPhaseIndex));
 		}
 		return this.currentPhaseIndex;
 	}
