@@ -1,7 +1,5 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
-import java.util.Optional;
-
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.turn.interfaces.IStrategicPhase;
@@ -21,7 +19,6 @@ public class StrategicPhase implements IStrategicPhase {
 
     @Override
     public void nextStep(IPlayer player) {
-
     }
 
     @Override

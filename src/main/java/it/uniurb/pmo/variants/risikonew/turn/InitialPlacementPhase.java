@@ -34,7 +34,6 @@ public class InitialPlacementPhase implements IPhase {
 
 	@Override
 	public void nextStep(IPlayer player) {
-
 	}
 
 	@Override

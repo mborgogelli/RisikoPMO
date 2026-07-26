@@ -8,7 +8,7 @@ import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.turn.interfaces.IReinforcePhase;
 
 public class ReinforcePhase implements IReinforcePhase {
-	
+
 	private final static int BONUS_AFRICA = 3;
 	private final static int BONUS_ASIA = 3;
 	private final static int BONUS_AUSTRALIA = 3;
@@ -16,7 +16,7 @@ public class ReinforcePhase implements IReinforcePhase {
 	private final static int BONUS_EUROPE = 3;
 	private final static int BONUS_NORTHAMERICA = 3;
 	private final static int BONUS_DEFAULT = 0;
-	
+
 	private IPlayer player;
 	private IMediator mediator;
 	private List<String> playerTerritories;
@@ -38,7 +38,6 @@ public class ReinforcePhase implements IReinforcePhase {
 
 	@Override
 	public void nextStep(IPlayer player) {
-
 	}
 
 	@Override
