@@ -6,7 +6,6 @@ import java.util.Map;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.IPlayerInputProvider;
 import it.uniurb.pmo.framework.players.ITokenType;
-import it.uniurb.pmo.variants.risikonew.utils.EnumRisikoNewPhase;
 
 /**
  * Interfaccia che modella un mediatore tra i manager di gioco
