@@ -59,11 +59,11 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 
 	private void runInitialPlacement() {
 		IMediatorRisikoNew mediator = (IMediatorRisikoNew) super.getMediator();
-		InitialPlacementPhase initialPlacement = new InitialPlacementPhase();
+		InitialPlacementPhase initialPlacement = new InitialPlacementPhase(mediator);
 		while (haveRemainingTanks(mediator)) {
 			for (IPlayer player : super.getPlayers()) {
 				if (mediator.getPlayerTank(player) > 0) {
-					initialPlacement.playPhase(player, mediator);
+					initialPlacement.playPhase(player);
 				}
 			}
 		}

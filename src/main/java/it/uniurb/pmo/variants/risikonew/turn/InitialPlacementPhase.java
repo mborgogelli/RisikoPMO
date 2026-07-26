@@ -2,7 +2,6 @@ package it.uniurb.pmo.variants.risikonew.turn;
 
 import java.util.Map;
 
-import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -10,12 +9,19 @@ import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew
 public class InitialPlacementPhase implements IPhase {
 
 	public final static int MAX_DEPLOYABLE = 3;
-	private IMediatorRisikoNew mediator;
-	private IPlayer player;
 
-	@Override
+	private IPlayer player;
+	private final IMediatorRisikoNew mediator;
+	private final int phaseId;
+
+    public InitialPlacementPhase(IMediatorRisikoNew mediator) {
+        this.phaseId = 0;
+		this.mediator = mediator;
+    }
+
+    @Override
 	public int getPhaseId() {
-		return 0;
+		return this.phaseId;
 	}
 
 	@Override
@@ -24,9 +30,8 @@ public class InitialPlacementPhase implements IPhase {
 	}
 
 	@Override
-	public void playPhase(IPlayer player, IMediator mediator) {
+	public void playPhase(IPlayer player) {
 		this.player = player;
-		this.mediator = (IMediatorRisikoNew) mediator;
 		this.deployTanks(this.player);
 		this.clearPhase();
 
@@ -39,7 +44,6 @@ public class InitialPlacementPhase implements IPhase {
 	@Override
 	public void clearPhase() {
 		this.player = null;
-		this.mediator = null;
 	}
 
 	private void deployTanks(IPlayer player) {

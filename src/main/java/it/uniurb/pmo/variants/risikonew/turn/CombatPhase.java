@@ -23,7 +23,7 @@ public class CombatPhase implements ICombatPhase {
 	}
 
 	@Override
-	public void playPhase(IPlayer player, IMediator mediator) {
+	public void playPhase(IPlayer player) {
 		this.player = player;
 		this.mediator = mediator;
 	}

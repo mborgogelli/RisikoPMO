@@ -111,7 +111,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	@Override
 	public void startPhase(IPhase currentPhase){
-		currentPhase.playPhase(this.currentPlayer, this.mediator);
+		currentPhase.playPhase(this.currentPlayer);
 	}
 
 	@Override
