@@ -68,7 +68,6 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 			}
 		}
 
-
 	}
 
 	private boolean haveRemainingTanks(IMediatorRisikoNew mediator) {

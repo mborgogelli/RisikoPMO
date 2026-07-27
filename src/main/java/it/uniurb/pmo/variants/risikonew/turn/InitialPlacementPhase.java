@@ -34,7 +34,6 @@ public class InitialPlacementPhase implements IPhase {
 		this.player = player;
 		this.deployTanks(this.player);
 		this.clearPhase();
-
 	}
 
 	@Override
