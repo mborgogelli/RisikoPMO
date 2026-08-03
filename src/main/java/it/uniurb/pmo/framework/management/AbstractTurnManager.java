@@ -65,12 +65,11 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	@Override
 	public void startTurn(IPlayer player) {
-		if (this.phases == null || this.phases.isEmpty()) {
-			throw new IllegalStateException("Le fasi del turno non sono state inizializzate. Chiamare initPhases() prima di playTurn().");
-		}
 		this.currentPlayer = player;
 		this.currentPhaseIndex = 0;
-		this.startPhase(this.phases.getFirst());
+		if (this.phases != null && !this.phases.isEmpty()) {
+			this.startPhase(this.phases.getFirst());
+		}
 	}
 
 	@Override

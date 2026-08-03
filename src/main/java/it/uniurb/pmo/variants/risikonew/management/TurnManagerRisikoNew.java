@@ -10,6 +10,7 @@ import it.uniurb.pmo.variants.risikonew.turn.ReinforcePhase;
 import it.uniurb.pmo.variants.risikonew.turn.StrategicPhase;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.GameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.InitialPlacementPhase;
 
 public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnManagerRisikoNew {
@@ -41,6 +42,9 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	@Override
 	public void startGame() {
 		if(this.isReady) {
+			IMediatorRisikoNew mediator = (IMediatorRisikoNew) super.getMediator();
+			GameCoordinatorRisikoNew coordinator = new GameCoordinatorRisikoNew();
+			super.initPhases(List.of(new ReinforcePhase(mediator, coordinator), new CombatPhase(mediator, coordinator), new StrategicPhase(mediator, coordinator)));
 			this.runInitialPlacement();
 			super.startGame();
 		}
@@ -53,13 +57,13 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 
 	@Override
 	protected List<IPhase> createPhases() {
-		// Risiko Classico: prima rinforzo, poi attacco, poi spostamento (strategica)
-		return List.of(new ReinforcePhase(), new CombatPhase(), new StrategicPhase());
+		return List.of();
 	}
 
 	private void runInitialPlacement() {
 		IMediatorRisikoNew mediator = (IMediatorRisikoNew) super.getMediator();
-		InitialPlacementPhase initialPlacement = new InitialPlacementPhase(mediator);
+		GameCoordinatorRisikoNew coordinator = new GameCoordinatorRisikoNew();
+		InitialPlacementPhase initialPlacement = new InitialPlacementPhase(mediator, coordinator);
 		while (haveRemainingTanks(mediator)) {
 			for (IPlayer player : super.getPlayers()) {
 				if (mediator.getPlayerTank(player) > 0) {

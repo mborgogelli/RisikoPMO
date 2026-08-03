@@ -1,19 +1,11 @@
 package it.uniurb.pmo.variants.risikonew.management;
 
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import it.uniurb.pmo.framework.management.AbstractMediator;
 import it.uniurb.pmo.framework.management.interfaces.IDirector;
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.players.ITokenType;
-import it.uniurb.pmo.framework.turn.IGameCoordinator;
-import it.uniurb.pmo.variants.risikonew.dto.DeploymentRequestDTO;
-import it.uniurb.pmo.variants.risikonew.dto.DeploymentResponseDTO;
-import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ICardManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -45,44 +37,8 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
-	public Map<String, Integer> acquireTargetZones(IPlayer player, ITokenType tanks, int toDeploy) {
-		Map<ITokenType, Integer> available = Map.of(tanks, toDeploy);
-		List<String> deployableZones = this.mapManager.getZonesOwnedBy(player);
-		DeploymentRequestDTO request = new DeploymentRequestDTO(player, deployableZones, available);
-
-		IGameCoordinator<DeploymentRequestDTO, DeploymentResponseDTO> coordinator = this::resolveDeployment;
-		DeploymentResponseDTO response = coordinator.sendRequest(request);
-
-		return response.getDeployment().entrySet().stream()
-				.collect(Collectors.toMap(
-						Map.Entry::getKey,
-						e -> e.getValue().getOrDefault(tanks, 0)
-				));
-	}
-
-	private DeploymentResponseDTO resolveDeployment(DeploymentRequestDTO request) {
-		List<String> deployableZones = request.getDeployableZones();
-		Map<ITokenType, Integer> availableTokens = request.getAvailableTokens();
-
-		if (deployableZones == null || deployableZones.isEmpty()) {
-			throw new IllegalArgumentException("No deployable zones available.");
-		}
-		if (availableTokens == null || availableTokens.isEmpty()) {
-			throw new IllegalArgumentException("No available tokens provided.");
-		}
-
-		String selectedZone = deployableZones.stream()
-				.min(Comparator.naturalOrder())
-				.orElseThrow(() -> new IllegalArgumentException("No deployable zones available."));
-
-		int availableTanks = availableTokens.getOrDefault(ERisikoNewToken.TANK, 0);
-		if (availableTanks <= 0) {
-			throw new IllegalArgumentException("No tanks available for deployment.");
-		}
-
-		Map<String, Map<ITokenType, Integer>> deployment = new HashMap<>();
-		deployment.put(selectedZone, Map.of(ERisikoNewToken.TANK, availableTanks));
-		return new DeploymentResponseDTO(deployment);
+	public List<String> getCompletedContinents(IPlayer player) {
+		return this.mapManager.checkZoneCompletion(player);
 	}
 
 	@Override
@@ -130,8 +86,4 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 		this.tankManager.deployTank(player, zone, tanks);
 	}
 
-	@Override
-	public Map<String, Integer> acquireTargetZones(IPlayer player, int toDeploy) {
-		return this.acquireTargetZones(player, ERisikoNewToken.TANK, toDeploy);
-	}
 }

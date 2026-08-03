@@ -1,10 +1,11 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
 import java.util.List;
+import java.util.Map;
 
 import it.uniurb.pmo.framework.card.ICard;
-import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.interfaces.IReinforcePhase;
 
 public class ReinforcePhase implements IReinforcePhase {
@@ -18,11 +19,15 @@ public class ReinforcePhase implements IReinforcePhase {
 	private final static int BONUS_DEFAULT = 0;
 
 	private IPlayer player;
-	private IMediator mediator;
+	private final IMediatorRisikoNew mediator;
+	private final IGameCoordinatorRisikoNew coordinator;
 	private List<String> playerTerritories;
 	private List<ICard> tris;
-	private boolean isStarted = false;
-	private boolean cardsUsed = false;
+
+	public ReinforcePhase(IMediatorRisikoNew mediator, IGameCoordinatorRisikoNew coordinator) {
+		this.mediator = mediator;
+		this.coordinator = coordinator;
+	}
 
 	@Override
 	public int getStepId() {
@@ -32,8 +37,16 @@ public class ReinforcePhase implements IReinforcePhase {
 	@Override
 	public void playPhase(IPlayer player) {
 		this.player = player;
-		this.mediator = mediator;
-		this.isStarted = true;
+		this.playerTerritories = this.mediator.getZonesOwnedBy(player);
+		int reinforcements = this.reinforceByTerritories(this.playerTerritories);
+		List<String> completedContinents = this.mediator.getCompletedContinents(player);
+		for (String continent : completedContinents) {
+			reinforcements = reinforcements + this.reinforceByContinentBonus(continent);
+		}
+		List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
+		Map<String, Integer> targetZones = this.coordinator.sendDeployRequest(player, deployableZones, reinforcements);
+		targetZones.forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
+		this.clearPhase();
 	}
 
 	@Override
@@ -42,7 +55,9 @@ public class ReinforcePhase implements IReinforcePhase {
 
 	@Override
 	public void clearPhase() {
-
+		this.player = null;
+		this.playerTerritories = null;
+		this.tris = null;
 	}
 
 	@Override

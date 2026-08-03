@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.players.ITokenType;
 
 /**
  * Interfaccia che modella un mediatore tra i manager di gioco
@@ -36,8 +35,6 @@ public interface IMediator extends IGameConductor {
 	 */
 	boolean canMoveBetween(IPlayer player, String toZone, String fromZone);
 
-
-	Map<String, Integer> acquireTargetZones(IPlayer player, ITokenType token, int toDeploy);
 
 
 	void notifyWinner(IPlayer iPlayer);

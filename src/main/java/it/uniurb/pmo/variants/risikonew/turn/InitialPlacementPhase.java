@@ -1,5 +1,6 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
+import java.util.List;
 import java.util.Map;
 
 import it.uniurb.pmo.framework.players.IPlayer;
@@ -12,11 +13,13 @@ public class InitialPlacementPhase implements IPhase {
 
 	private IPlayer player;
 	private final IMediatorRisikoNew mediator;
+	private final IGameCoordinatorRisikoNew coordinator;
 	private final int phaseId;
 
-    public InitialPlacementPhase(IMediatorRisikoNew mediator) {
+    public InitialPlacementPhase(IMediatorRisikoNew mediator, IGameCoordinatorRisikoNew coordinator) {
         this.phaseId = 0;
 		this.mediator = mediator;
+		this.coordinator = coordinator;
     }
 
     @Override
@@ -49,7 +52,8 @@ public class InitialPlacementPhase implements IPhase {
 		int remaining = this.mediator.getPlayerTank(this.player);
 		if (remaining > 0){
 			int tanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
-			Map<String, Integer> targetZones = this.mediator.acquireTargetZones(player, tanksToDeploy);
+			List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
+			Map<String, Integer> targetZones = this.coordinator.sendDeployRequest(player, deployableZones, tanksToDeploy);
 			this.deployTanks(targetZones, tanksToDeploy);
 		} else {
 			throw new RuntimeException("Not enough tanks to deploy.");

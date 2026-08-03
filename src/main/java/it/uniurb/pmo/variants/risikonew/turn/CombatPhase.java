@@ -1,15 +1,21 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
-import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.variants.risikonew.dto.AttackChoiceDTO;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.interfaces.ICombatPhase;
+
+import java.util.List;
 
 public class CombatPhase implements ICombatPhase {
 
 	private IPlayer player;
-	private IMediator mediator;
+	private final IMediatorRisikoNew mediator;
+	private final IGameCoordinatorRisikoNew coordinator;
 
-	public CombatPhase() {
+	public CombatPhase(IMediatorRisikoNew mediator, IGameCoordinatorRisikoNew coordinator) {
+		this.mediator = mediator;
+		this.coordinator = coordinator;
 	}
 
 	@Override
@@ -25,7 +31,9 @@ public class CombatPhase implements ICombatPhase {
 	@Override
 	public void playPhase(IPlayer player) {
 		this.player = player;
-		this.mediator = mediator;
+		List<String> ownedZones = this.mediator.getZonesOwnedBy(player);
+		AttackChoiceDTO choice = this.coordinator.sendAttackRequest(player, ownedZones);
+		this.clearPhase();
 	}
 
 	@Override
@@ -34,6 +42,6 @@ public class CombatPhase implements ICombatPhase {
 
 	@Override
 	public void clearPhase() {
-
+		this.player = null;
 	}
 }
