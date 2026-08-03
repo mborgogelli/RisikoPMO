@@ -9,7 +9,6 @@ import it.uniurb.pmo.framework.management.interfaces.IManager;
 import it.uniurb.pmo.variants.risikonew.management.CardManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.MapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.MediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.PlayerInputProviderRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.TankManager;
 import it.uniurb.pmo.variants.risikonew.management.TurnManagerRisikoNew;
 
@@ -26,7 +25,6 @@ public class GameFactoryRisikoNew implements IGameFactory {
 		this.mediator = new MediatorRisikoNew();
 		this.createManagers();
 		this.setMediator();
-		this.setPlayerInputProvider();
 	}
 	
 	@Override
@@ -57,10 +55,4 @@ public class GameFactoryRisikoNew implements IGameFactory {
 		this.mediator.initManagers();
 	}
 
-	/**
-	 * Inietta il provider di input del giocatore nel mediatore
-	 */
-	private void setPlayerInputProvider() {
-		this.mediator.setPlayerInputProvider(new PlayerInputProviderRisikoNew());
-	}
 }

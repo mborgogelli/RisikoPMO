@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.players.IPlayerInputProvider;
 import it.uniurb.pmo.framework.players.ITokenType;
 
 /**
@@ -21,12 +20,6 @@ public interface IMediator extends IGameConductor {
 	 * Inizializza tutti i manager registrati
 	 */
 	void initManagers();
-
-	/**
-	 * Imposta il provider di input del giocatore
-	 * @param playerInputProvider
-	 */
-	void setPlayerInputProvider(IPlayerInputProvider playerInputProvider);
 
 	/**
 	 * Restituisce tutte le zone di gioco.
