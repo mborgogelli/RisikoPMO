@@ -17,6 +17,8 @@ public class GameStartCoordinator {
         this.roomManager = RoomManager.getInstance();
     }
 
+    //TODO: Verifica se i giocatori sono tutti pronti
+
     public GameStartResult startGame(String roomId) {
         if (!this.roomManager.isFull(roomId)) {
             throw new IllegalStateException("La stanza non è ancora piena");

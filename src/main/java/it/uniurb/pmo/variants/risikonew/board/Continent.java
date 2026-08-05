@@ -10,7 +10,7 @@ import it.uniurb.pmo.framework.board.IZone;
 public class Continent implements IZone {
 	
 	private final String name;
-	private List<IZone> territories;
+	private final List<IZone> territories;
 	private Integer armyBonus;
 	
 	public Continent(String name) {
@@ -36,7 +36,7 @@ public class Continent implements IZone {
 	@Override
 	public List<String> getNeighbours() {
 		List<String> territories = this.territories.stream()
-	            .map(zone -> zone.getName())
+	            .map(IZone::getName)
 	            .toList();
 	    return this.territories.stream()
 	            .flatMap(zone -> zone.getNeighbours().stream())

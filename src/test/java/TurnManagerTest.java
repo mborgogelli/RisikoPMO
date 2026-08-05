@@ -14,9 +14,9 @@ public class TurnManagerTest {
     void setUp() {
 		GameFactoryRisikoNew gf = new GameFactoryRisikoNew();
 		this.players = java.util.List.of(
-		    new it.uniurb.pmo.framework.players.Player("Player1", it.uniurb.pmo.framework.utils.EnumColors.RED),
-		    new it.uniurb.pmo.framework.players.Player("Player2", it.uniurb.pmo.framework.utils.EnumColors.YELLOW),
-		    new it.uniurb.pmo.framework.players.Player("Player3", it.uniurb.pmo.framework.utils.EnumColors.BLUE)
+		    new it.uniurb.pmo.framework.players.Player("Player1"),
+		    new it.uniurb.pmo.framework.players.Player("Player2"),
+		    new it.uniurb.pmo.framework.players.Player("Player3")
         );
 		this.turnManager = gf.getManagers().stream()
 				.filter(it.uniurb.pmo.framework.management.interfaces.ITurnManager.class::isInstance)

@@ -16,8 +16,7 @@ import it.uniurb.pmo.framework.management.interfaces.IMediator;
 public abstract class AbstractMapManager implements IMapManager {
 	
 	private final IGameBoard gameBoard;
-	private IMediator mediator;
-	
+
 	/**
 	 * Costruttore che accetta un BoardCreator per inizializzare la mappa di gioco.
 	 * 
@@ -29,8 +28,7 @@ public abstract class AbstractMapManager implements IMapManager {
 	
 	@Override
 	public void setMediator(IMediator mediator) {
-		this.mediator = mediator;
-		this.mediator.registerManager(this);
+		mediator.registerManager(this);
 	}
 	
 	/**
@@ -42,7 +40,7 @@ public abstract class AbstractMapManager implements IMapManager {
 	public List<String> getAllZones() {
 		return this.gameBoard.getRootZones().stream()
 						.flatMap(root -> root.getChildZones().stream())
-						.map(zone -> zone.getName())
+						.map(IZone::getName)
 						.collect(Collectors.toList());
 	}
 
@@ -50,13 +48,13 @@ public abstract class AbstractMapManager implements IMapManager {
 	public List<String> getChildZones(String rootZone){
 		List<IZone> childZones = this.gameBoard.findZoneByName(rootZone).getChildZones();
 		return childZones.stream()
-						.map(zone -> zone.getName())
+						.map(IZone::getName)
 						.toList();
 	}
 
 	protected List<String> getParentZones(){
 		return this.gameBoard.getRootZones().stream()
-				.map(zone -> zone.getName())
+				.map(IZone::getName)
 				.toList();
 	}
 

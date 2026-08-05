@@ -20,7 +20,6 @@ public class RoomResponseDTO {
     private final int maxPlayers;
     private final boolean isFull;
 
-    //
     private RoomResponseDTO(Builder builder) {
         this.players = builder.players;
         this.readyStates = builder.readyStates;

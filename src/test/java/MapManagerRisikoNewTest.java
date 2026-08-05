@@ -17,9 +17,9 @@ import it.uniurb.pmo.variants.risikonew.management.MapManagerRisikoNew;
 class MapManagerRisikoNewTest extends MapManagerRisikoNew {
 
     private final MapManagerRisikoNew mapManager = new MapManagerRisikoNew();
-    private final List<IPlayer> players = List.of(new Player("Player1", EnumColors.RED),
-											new Player("Player2", EnumColors.YELLOW),
-											new Player("Player3", EnumColors.BLUE));
+    private final List<IPlayer> players = List.of(new Player("Player1"),
+											new Player("Player2"),
+											new Player("Player3"));
 
     @BeforeEach
     void initialize() {

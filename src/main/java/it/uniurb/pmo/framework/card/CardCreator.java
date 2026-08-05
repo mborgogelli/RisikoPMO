@@ -13,13 +13,13 @@ public abstract class CardCreator<T extends ICardType, TCardContent> implements 
 
     /**
      * Metodo astratto: deve essere implementato per creare il mazzo di carte specifico
-     * @return
+     * @return List<ICard<T, TCardContent>> Il mazzo di carte del gioco
      */
     protected abstract List<ICard<T, TCardContent>> createDeck();
 
     /**
      * Metodo che restituisce il mazzo di carte del gioco.
-     * @return
+     * @return List<ICard<T, TCardContent>> Il mazzo di carte del gioco
      */
     public List<ICard<T, TCardContent>> getDeck() {
 		return createDeck();

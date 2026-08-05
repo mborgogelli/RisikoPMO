@@ -31,10 +31,10 @@ public class InitialPlacementPhaseTest {
     @DisplayName("Integration: Deploy exactly 3 tanks when available")
     void testPlayPhaseDeploysThreeWhenAvailable() {
         List<IPlayer> players = List.of(
-            new Player("A", EnumColors.RED),
-            new Player("B", EnumColors.YELLOW),
-            new Player("C", EnumColors.BLUE),
-            new Player("D", EnumColors.GREEN)
+            new Player("A"),
+            new Player("B"),
+            new Player("C"),
+            new Player("D")
         );
 
         IMapManager mapManager = resolveManager(IMapManager.class);
@@ -53,10 +53,10 @@ public class InitialPlacementPhaseTest {
     @DisplayName("Integration: Deploy less than 3 tanks when fewer available")
     void testPlayPhaseDeploysRemainingWhenLessThanThree() {
         List<IPlayer> players = List.of(
-            new Player("X", EnumColors.RED),
-            new Player("Y", EnumColors.YELLOW),
-            new Player("Z", EnumColors.BLUE),
-            new Player("W", EnumColors.GREEN)
+            new Player("X"),
+            new Player("Y"),
+            new Player("Z"),
+            new Player("W")
         );
 
         IMapManager mapManager = resolveManager(IMapManager.class);
@@ -113,10 +113,10 @@ public class InitialPlacementPhaseTest {
         mediatorUnit = (MediatorRisikoNew) gfUnit.getMediator();
 
         playersUnit = List.of(
-            new Player("Unit1", EnumColors.RED),
-            new Player("Unit2", EnumColors.YELLOW),
-            new Player("Unit3", EnumColors.BLUE),
-            new Player("Unit4", EnumColors.GREEN)
+            new Player("Unit1"),
+            new Player("Unit2"),
+            new Player("Unit3"),
+            new Player("Unit4")
         );
 
         mapManagerUnit.initializeGame(playersUnit);

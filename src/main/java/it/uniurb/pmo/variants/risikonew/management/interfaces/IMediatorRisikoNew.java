@@ -3,7 +3,6 @@ package it.uniurb.pmo.variants.risikonew.management.interfaces;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
 import java.util.List;
-import java.util.Map;
 
 public interface IMediatorRisikoNew extends IMediator {
 

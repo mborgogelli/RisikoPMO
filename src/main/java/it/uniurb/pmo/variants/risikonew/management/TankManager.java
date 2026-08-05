@@ -1,13 +1,13 @@
 package it.uniurb.pmo.variants.risikonew.management;
 
+import it.uniurb.pmo.framework.management.AbstractTokenManager;
+import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import it.uniurb.pmo.framework.management.AbstractTokenManager;
-import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
 
 public class TankManager extends AbstractTokenManager implements ITankManager{
 
@@ -69,7 +69,7 @@ public class TankManager extends AbstractTokenManager implements ITankManager{
 	public Map<String, Integer> getDeployedPerZone(IPlayer player){
 		return this.deployedTank.keySet().stream()
 										.filter(zone -> super.getZonesOwnedBy(player).contains(zone))
-										.collect(Collectors.toMap(zone -> zone, zone -> this.deployedTank.get(zone)));
+										.collect(Collectors.toMap(zone -> zone, this.deployedTank::get));
 		
 	}
 	
@@ -102,7 +102,7 @@ public class TankManager extends AbstractTokenManager implements ITankManager{
 	public void moveToken(IPlayer player, String toZone, String fromZone, int amount) {
 		checkReady();
 		checkIfPlayerCanMoveBetween(player, toZone, fromZone);
-		checkDeployedTanksAfterMove(player, fromZone, amount);
+		checkDeployedTanksAfterMove(fromZone, amount);
 		removeTanksFromZone(fromZone, amount);
 		addTanksToZone(toZone, amount);
 	}
@@ -123,12 +123,12 @@ public class TankManager extends AbstractTokenManager implements ITankManager{
 	private void initTokensPerPlayer(List<IPlayer> players) {
 		checkInitialized();
 		int tanksPerPlayer = this.calculateTanksPerPlayer(players.size());
-		players.stream().forEach(p -> this.assignToken(p, tanksPerPlayer));
+		players.forEach(p -> this.assignToken(p, tanksPerPlayer));
 	}
 
 	private void initTokensPerZone(List<String> territories) {
 		checkInitialized();
-		territories.stream().forEach(z -> this.deployedTank.put(z, 1));
+		territories.forEach(z -> this.deployedTank.put(z, 1));
 		for (IPlayer p : this.availableTanks.keySet()) {
 			this.removeTanksFromPlayer(p, super.getZonesOwnedBy(p).size());
 		}
@@ -140,13 +140,13 @@ public class TankManager extends AbstractTokenManager implements ITankManager{
 	 * @return numero di tank per giocatore
 	 */
 	private int calculateTanksPerPlayer(int playerCount) {
-		switch(playerCount) {
-			case 3: return 35;
-			case 4: return 30;
-			case 5: return 25;
-			case 6: return 20;
-			default: throw new IllegalArgumentException("Invalid number of players: " + playerCount);
-		}
+        return switch (playerCount) {
+            case 3 -> 35;
+            case 4 -> 30;
+            case 5 -> 25;
+            case 6 -> 20;
+            default -> throw new IllegalArgumentException("Invalid number of players: " + playerCount);
+        };
 	}
 
 
@@ -155,12 +155,12 @@ public class TankManager extends AbstractTokenManager implements ITankManager{
 	 * Imposta a 0 il numero di tank posseduti se il numero da rimuovere è maggiore
 	 * del numero di tank posseduti.
 	 * 
-	 * @param player
-	 * @param amount
+	 * @param player il giocatore
+	 * @param amount il numero di tank da rimuovere
 	 */
 	private void removeTanksFromPlayer(IPlayer player, int amount) {
 		int newAmount = this.getPlayerToken(player) - amount;
-		this.availableTanks.put(player, (newAmount > 0)? newAmount: 0);
+		this.availableTanks.put(player, Math.max(newAmount, 0));
 	}
 	
 	/**
@@ -168,12 +168,12 @@ public class TankManager extends AbstractTokenManager implements ITankManager{
 	 * Imposta a 0 il numero di tank nella zona se il numero da rimuovere è maggiore
 	 * del numero di tank presenti nella zona.
 	 * 
-	 * @param zone
-	 * @param amount
+	 * @param zone la zona
+	 * @param amount il numero di tank da rimuovere
 	 */
 	private void removeTanksFromZone(String zone, int amount) {
 		int newAmount = this.getZoneToken(zone) - amount;
-		this.deployedTank.put(zone, (newAmount > 0)? newAmount: 0);
+		this.deployedTank.put(zone, Math.max(newAmount, 0));
 	}
 	
 	private void addTanksToZone(String zone, int amount) {
@@ -196,12 +196,10 @@ public class TankManager extends AbstractTokenManager implements ITankManager{
 	/** Controlla se un giocatore può spostare un certo numero di tank da una zona
 	 * Verifica che il numero di tank da spostare sia maggiore di 0 e che nella zona di partenza rimanga almeno 1 tank
 	 * 
-	 * @param player il giocatore
 	 * @param fromZone la zona di partenza
 	 * @param amount il numero di tank da spostare
-	 * @return true se il giocatore può spostare i tank, false altrimenti
 	 */
-	private void checkDeployedTanksAfterMove(IPlayer player, String fromZone, int amount) {
+	private void checkDeployedTanksAfterMove(String fromZone, int amount) {
 		int current = this.deployedTank.get(fromZone);
 		if(amount <= 0 || (current - amount < 1)) {
 			throw new IllegalArgumentException("Cannot move " + amount + "tanks. Amount must be greater than 0 and less than or equal to " + (current - 1));
@@ -214,7 +212,6 @@ public class TankManager extends AbstractTokenManager implements ITankManager{
 	 * @param player il giocatore
 	 * @param fromZone la zona di partenza
 	 * @param toZone la zona di arrivo
-	 * @return true se il giocatore può spostare i tank, false altrimenti
 	 */
 	private void checkIfPlayerCanMoveBetween(IPlayer player, String toZone, String fromZone) {
 		if (!super.canMoveBetween(player, toZone, fromZone)) {

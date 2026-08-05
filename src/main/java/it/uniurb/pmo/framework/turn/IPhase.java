@@ -8,7 +8,6 @@ public interface IPhase {
 
 	int getStepId();
 
-	// TODO puoi evitare di passare il mediator mettendolo come parametro nel costruttore
 	void playPhase(IPlayer player);
 
 	void nextStep(IPlayer player);

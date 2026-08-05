@@ -61,7 +61,8 @@ public class RoomManager implements IRoomManager {
 
 	@Override
 	public void exitRoom(String roomId, String nomeGiocatore) {
-		//TO DO Check if last player
+
+		//TODO Check if last player
 		this.getRoom(roomId).exitRoom(nomeGiocatore);
 	}
 
@@ -82,7 +83,7 @@ public class RoomManager implements IRoomManager {
 
 	@Override
 	public void closeRoom(String roomId) {
-		this.activeRooms.remove(roomId, this.getRoom(roomId));
+		this.activeRooms.remove(roomId);
 	}
 
 	@Override
@@ -100,7 +101,7 @@ public class RoomManager implements IRoomManager {
 		return this.getRoom(roomId).areAllPlayersReady();
 	}
 
-	private void checkRoom(String roomId) {
+	private void checkRoom(String roomId) throws IllegalArgumentException {
 		if (!this.activeRooms.containsKey(roomId)) {
 			throw new IllegalArgumentException("Room with ID " + roomId + " does not exist.");
 		}

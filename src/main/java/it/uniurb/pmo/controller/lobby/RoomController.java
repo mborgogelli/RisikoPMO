@@ -123,7 +123,9 @@ public class RoomController {
         RoomManager roomManager = RoomManager.getInstance();
         List<String> roomIds = roomManager.getActiveRooms();
 
-        List<RoomResponseDTO> rooms = roomIds.stream().map(this::createRoomResponse).collect(Collectors.toList());
+        List<RoomResponseDTO> rooms = roomIds.stream()
+                                        .map(this::createRoomResponse)
+                                        .collect(Collectors.toList());
 
         return ResponseEntity.ok(rooms);
     }
@@ -179,10 +181,20 @@ public class RoomController {
             .build();
     }
 
+    /**
+     * Crea una mappa con le informazioni della stanza da esporre al frontend
+     * @param players Elenco dei giocatori
+     * @return Mappa dei giocatori
+     */
     private Map<String, EnumColors> buildPlayersMap(List<IPlayer> players) {
         return players.stream().collect(Collectors.toMap(IPlayer::getName, IPlayer::getColor));
     }
 
+    /**
+     * Crea una mappa con gli stati di preparazione dei giocatori
+     * @param players Elenco dei giocatori
+     * @return Mappa degli stati di preparazione
+     */
     private Map<String, Boolean> buildReadyMap(List<IPlayer> players) {
         return players.stream().collect(Collectors.toMap(IPlayer::getName, IPlayer::isReady));
     }

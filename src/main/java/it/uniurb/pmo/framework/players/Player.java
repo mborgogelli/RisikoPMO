@@ -16,13 +16,6 @@ public class Player implements IPlayer {
 		this.isReady = false;
 	}
 
-	// TODO: remove this constructor and use setColor instead
-	public Player(String name, EnumColors color) {
-		this.name = name;
-		this.color = color;
-		this.isReady = false;
-	}
-	
 	@Override
 	public String getName() {
 		return this.name;

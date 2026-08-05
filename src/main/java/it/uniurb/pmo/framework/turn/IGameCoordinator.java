@@ -9,7 +9,6 @@ import java.util.Map;
 
 /**
  * Canale di comunicazione tra la logica di gioco e i giocatori.
- *
  * Il GameCoordinator si occupa di inviare messaggi/richieste al giocatore
  * e di raccogliere la risposta, mantenendo il framework agnostico rispetto
  * alla variante di gioco concreta.

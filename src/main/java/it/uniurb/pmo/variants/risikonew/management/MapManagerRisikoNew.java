@@ -1,15 +1,11 @@
 package it.uniurb.pmo.variants.risikonew.management;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import it.uniurb.pmo.framework.management.AbstractMapManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.board.BoardCreatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
+
+import java.util.*;
 
 public class MapManagerRisikoNew extends AbstractMapManager implements IMapManagerRisikoNew {
 	
@@ -89,12 +85,11 @@ public class MapManagerRisikoNew extends AbstractMapManager implements IMapManag
 
 	@Override
 	public List<String> checkZoneCompletion(IPlayer player) {
-		boolean isContinentComplete = false;
+		boolean isContinentComplete;
 		List<String> myContinents = new ArrayList<>();
 		List<String> playerTerritories = this.playerTerritories.get(player);
 		for(String continent : this.continents.keySet()) {
-			isContinentComplete = this.continents.get(continent).stream()
-											.allMatch(territory -> playerTerritories.contains(territory));
+			isContinentComplete = new HashSet<>(playerTerritories).containsAll(this.continents.get(continent));
 			if(isContinentComplete) {
 				myContinents.add(continent);
 				isContinentComplete = false;
@@ -115,7 +110,7 @@ public class MapManagerRisikoNew extends AbstractMapManager implements IMapManag
 	
 	private void initializeMap(List<IPlayer> players) {
 		for (IPlayer player : players) {
-			this.playerTerritories.put(player, new ArrayList<String>());
+			this.playerTerritories.put(player, new ArrayList<>());
 		}
 	}
 	
@@ -137,7 +132,7 @@ public class MapManagerRisikoNew extends AbstractMapManager implements IMapManag
 		checkReady();
 		checkIfExists(zone1);
 		checkIfExists(zone2);
-		return this.playerTerritories.get(player).containsAll(List.of(zone1, zone2));
+		return new HashSet<>(this.playerTerritories.get(player)).containsAll(List.of(zone1, zone2));
 	}
 
 	/**
@@ -150,16 +145,14 @@ public class MapManagerRisikoNew extends AbstractMapManager implements IMapManag
 	}
 	
 	private void checkIfExists(String territory) {
-		if (territory == null || territory == "" || !super.getAllZones().contains(territory)) {
+		if (territory == null || territory.isEmpty() || !super.getAllZones().contains(territory)) {
 			throw new IllegalArgumentException("Territory " + territory + " not found.");
 		}
 	}
 	
 	private void checkIfExists(IPlayer player) {
 		if (player == null || this.players.isEmpty() || !this.players.contains(player)) {
-			throw new IllegalArgumentException("Player " + player.toString() + " not found.");
+			throw new IllegalArgumentException("Player " + player + " not found.");
 		}
 	}
-
-	
 }
