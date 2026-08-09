@@ -1,3 +1,4 @@
+package it.uniurb.pmo.variants.risikonew.management;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -5,16 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.Player;
-import it.uniurb.pmo.framework.utils.EnumColors;
-import it.uniurb.pmo.variants.risikonew.management.MapManagerRisikoNew;
 
-class MapManagerRisikoNewTest extends MapManagerRisikoNew {
+class MapManagerRisikoNewIntegrationTest extends MapManagerRisikoNew {
 
     private final MapManagerRisikoNew mapManager = new MapManagerRisikoNew();
     private final List<IPlayer> players = List.of(new Player("Player1"),
@@ -27,6 +25,7 @@ class MapManagerRisikoNewTest extends MapManagerRisikoNew {
     }
 
     @Test
+    @DisplayName("Integration: Map Initialization")
 	void testMapInitialization() {
 		var allZones = mapManager.getAllTerritories();
 		var totalTerritories = allZones.size();
@@ -42,6 +41,7 @@ class MapManagerRisikoNewTest extends MapManagerRisikoNew {
 	}
     
     @Test
+    @DisplayName("Integration: Get All Territories")
     void testGetAllTerritories() {
         var allTerritories = mapManager.getAllTerritories();
         var allTerritoriesFromMap = mapManager.getTerritoriesAssignment().values().stream()
@@ -52,6 +52,7 @@ class MapManagerRisikoNewTest extends MapManagerRisikoNew {
     }
     
     @Test
+    @DisplayName("Integration: Get Territory Owner")
     void testGetOwner() {
     	
         var allTerritories = mapManager.getAllTerritories();
@@ -61,11 +62,12 @@ class MapManagerRisikoNewTest extends MapManagerRisikoNew {
         var owner = mapManager.getOwner(territory);
         var ownedTerritories = mapManager.getTerritoriesOwnedBy(owner);
         
-        assertTrue(ownedTerritories.contains(territory), 
+        assertTrue(ownedTerritories.contains(territory),
                    "Territory should be in the owner's territory list");
     }
     
     @Test
+    @DisplayName("Integration: Get Owner for All Territories")
     void testGetOwnerForAllTerritories() {
         var allTerritories = mapManager.getAllTerritories();
 
@@ -73,12 +75,13 @@ class MapManagerRisikoNewTest extends MapManagerRisikoNew {
             var owner = mapManager.getOwner(territory);
             var ownedByPlayer = mapManager.getTerritoriesOwnedBy(owner);
             
-            assertTrue(ownedByPlayer.contains(territory), 
+            assertTrue(ownedByPlayer.contains(territory),
                        "Territory should be in owner's list");
         }
     }
     
     @Test
+    @DisplayName("Integration: Check Zone Completion")
     void testCheckZoneCompletion() {
         var player = players.getFirst();
 

@@ -1,3 +1,4 @@
+package it.uniurb.pmo.variants.risikonew.board;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import it.uniurb.pmo.framework.board.IGameBoard;
 import it.uniurb.pmo.framework.board.IZone;
 import it.uniurb.pmo.framework.utils.GameVersion;
-import it.uniurb.pmo.variants.risikonew.board.BoardCreatorRisikoNew;
 
 public class GameBoardIntegrationTest {
     

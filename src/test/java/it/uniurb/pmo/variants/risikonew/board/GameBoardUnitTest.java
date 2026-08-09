@@ -20,11 +20,6 @@ class GameBoardUnitTest {
 
 	private GameBoardRisikoNew gameBoard;
 
-	@BeforeEach
-	void setUp() {
-		this.gameBoard = new GameBoardRisikoNew(buildContinents());
-	}
-
 	private List<IZone> buildContinents() {
 		Continent europa = new Continent("europa");
 		Territory islanda = new Territory("islanda");
@@ -47,8 +42,13 @@ class GameBoardUnitTest {
 		return List.of(europa, asia);
 	}
 
+	@BeforeEach
+	void setUp() {
+		this.gameBoard = new GameBoardRisikoNew(buildContinents());
+	}
+
 	@Test
-	@DisplayName("getRootZones restituisce le continenti passati al costruttore")
+	@DisplayName("Unit Test: Verifica i continenti")
 	void getRootZonesReturnsContinents() {
 		List<IZone> rootZones = this.gameBoard.getRootZones();
 
@@ -59,13 +59,13 @@ class GameBoardUnitTest {
 	}
 
 	@Test
-	@DisplayName("getGameVersion restituisce RISIKONEW")
+	@DisplayName("Unit Test: Verifica la versione del gioco")
 	void getGameVersionReturnsRisikoNew() {
 		assertEquals(GameVersion.RISIKONEW, this.gameBoard.getGameVersion());
 	}
 
 	@Test
-	@DisplayName("findZoneByName trova territori e continenti ignorando il case")
+	@DisplayName("Unit Test: Verifica il nome delle zone")
 	void findZoneByNameIsCaseInsensitive() {
 		IZone islanda = this.gameBoard.findZoneByName("ISLANDA");
 		IZone europa = this.gameBoard.findZoneByName("euROPa");
@@ -78,7 +78,7 @@ class GameBoardUnitTest {
 	}
 
 	@Test
-	@DisplayName("getNeighbours restituisce i vicini del territorio")
+	@DisplayName("Unit Test: Verifica i territori raggiungibili da un certo territorio")
 	void getNeighboursReturnsTerritoryNeighbours() {
 		List<String> neighbours = this.gameBoard.getNeighbours("islanda");
 
@@ -90,7 +90,7 @@ class GameBoardUnitTest {
 	}
 
 	@Test
-	@DisplayName("whereIsZone restituisce il continente contenitore del territorio")
+	@DisplayName("Unit Test: Verifica il continente a cui appartiene il territorio")
 	void whereIsZoneReturnsParentContinent() {
 		Optional<IZone> parentZone = this.gameBoard.whereIsZone("kamchatka");
 
@@ -100,7 +100,7 @@ class GameBoardUnitTest {
 	}
 
 	@Test
-	@DisplayName("canReach verifica la raggiungibilità tra territori")
+	@DisplayName("Unit Test: Verifica la raggiungibilità tra territori")
 	void canReachChecksNeighbourhood() {
 		assertTrue(this.gameBoard.canReach("gran_bretagna", "islanda"));
 		assertTrue(this.gameBoard.canReach("islanda", "gran_bretagna"));
@@ -110,7 +110,7 @@ class GameBoardUnitTest {
 	}
 
 	@Test
-	@DisplayName("getValue restituisce il valore assegnato alla zona")
+	@DisplayName("Unit Test: Verifica il valore assegnato alla zona")
 	void getValueReturnsZoneValue() {
 		assertEquals(3, this.gameBoard.getValue("islanda"));
 		assertEquals(4, this.gameBoard.getValue("gran_bretagna"));

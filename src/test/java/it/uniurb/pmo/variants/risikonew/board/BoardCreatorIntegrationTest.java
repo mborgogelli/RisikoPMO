@@ -1,3 +1,5 @@
+package it.uniurb.pmo.variants.risikonew.board;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,18 +21,10 @@ import com.google.gson.JsonObject;
 import it.uniurb.pmo.framework.board.IGameBoard;
 import it.uniurb.pmo.framework.board.IZone;
 import it.uniurb.pmo.framework.utils.RiskJsonParser;
-import it.uniurb.pmo.variants.risikonew.board.BoardCreatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.board.Continent;
-import it.uniurb.pmo.variants.risikonew.board.Territory;
 
 class BoardCreatorIntegrationTest {
 
 	private JsonObject jsonMap;
-
-	@BeforeEach
-	public void setUp() {
-		this.jsonMap = getLoadedMap();
-	}
 
 	private JsonObject getLoadedMap() {
 		return new BoardCreatorTestSupport().getLoadedMap();
@@ -46,6 +40,11 @@ class BoardCreatorIntegrationTest {
 
 	private <T> List<T> getValues(String key, List<JsonElement> elements, Class<T> type) {
 		return RiskJsonParser.getValues(key, elements, type);
+	}
+
+	@BeforeEach
+	public void setUp() {
+		this.jsonMap = getLoadedMap();
 	}
 
 	@Test
@@ -83,7 +82,7 @@ class BoardCreatorIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("Integration: Get army from continent")
+	@DisplayName("Integration: Get army bonus from continent")
 	public void getArmyFromContinent() {
 		List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
 
@@ -167,14 +166,12 @@ class BoardCreatorIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("Integration: Set neighbours")
+	@DisplayName("Integration: Check neighbours")
 	public void testSetNeighbours() {
 	    IGameBoard gameBoard = BoardCreatorRisikoNew.getInstance().getMap();
 
 	    List<String> islandaNeighbours = gameBoard.getNeighbours("islanda");
 
-	    /*gameBoard.getZones().stream().forEach(c -> c.getChildZones().stream().map(IZone::getNeighbours)
-	    		 .forEach(System.out::println));*/
 	    assertNotNull(islandaNeighbours);
 	    assertTrue(islandaNeighbours.contains("gran_bretagna"));
 	    assertTrue(islandaNeighbours.contains("scandinavia"));

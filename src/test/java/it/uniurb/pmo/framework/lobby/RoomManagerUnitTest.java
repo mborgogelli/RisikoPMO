@@ -1,12 +1,12 @@
-import it.uniurb.pmo.framework.lobby.IRoomManager;
-import it.uniurb.pmo.framework.lobby.RoomManager;
+package it.uniurb.pmo.framework.lobby;
+
 import it.uniurb.pmo.framework.utils.GameVersion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RoomManagerTest {
+public class RoomManagerUnitTest {
 
     private final IRoomManager roomManager = RoomManager.getInstance();
     private String roomId;
