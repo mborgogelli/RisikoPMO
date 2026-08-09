@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonArray;
@@ -48,6 +49,7 @@ class BoardCreatorTest {
 	}
 
 	@Test
+	@DisplayName("Integration: get continents name from json")
 	public void getContinentsNameFromJson(){
 		List<JsonElement> continents = getValues("continents", this.jsonMap);
 		List<String> list = getValues("name", continents, String.class);

@@ -35,7 +35,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 		this.players = this.shufflePlayers(players);
 		this.currentTurn = 1;
 		this.currentPhaseIndex = 0;
-		this.initPhases(this.createPhases());
+		this.initPhases();
 	}
 
 	@Override
@@ -149,8 +149,8 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	 * Inizializza la lista di fasi che compongono un turno di gioco.
 	 * Le classi figlie devono chiamare questo metodo durante il loro processo di startup/init.
 	 */
-	protected void initPhases(List<IPhase> phases) {
-		this.phases = phases;
+	protected void initPhases() {
+		this.phases = this.createPhases();
 	}
 
 }

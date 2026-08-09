@@ -40,11 +40,16 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	}
 
 	@Override
+	protected List<IPhase> createPhases() {
+		IMediatorRisikoNew mediator = (IMediatorRisikoNew) super.getMediator();
+		GameCoordinatorRisikoNew coordinator = new GameCoordinatorRisikoNew();
+		return List.of(new ReinforcePhase(mediator, coordinator), new CombatPhase(mediator, coordinator), new StrategicPhase(mediator, coordinator));
+	}
+
+	@Override
 	public void startGame() {
 		if(this.isReady) {
-			IMediatorRisikoNew mediator = (IMediatorRisikoNew) super.getMediator();
-			GameCoordinatorRisikoNew coordinator = new GameCoordinatorRisikoNew();
-			super.initPhases(List.of(new ReinforcePhase(mediator, coordinator), new CombatPhase(mediator, coordinator), new StrategicPhase(mediator, coordinator)));
+			super.initPhases();
 			this.runInitialPlacement();
 			super.startGame();
 		}
@@ -53,11 +58,6 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	@Override
 	protected List<IPlayer> shufflePlayers(List<IPlayer> players){
 		return super.shufflePlayers(players);
-	}
-
-	@Override
-	protected List<IPhase> createPhases() {
-		return List.of();
 	}
 
 	private void runInitialPlacement() {
@@ -71,7 +71,6 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 				}
 			}
 		}
-
 	}
 
 	private boolean haveRemainingTanks(IMediatorRisikoNew mediator) {

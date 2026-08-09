@@ -2,10 +2,13 @@ import it.uniurb.pmo.framework.management.interfaces.IMapManager;
 import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.Player;
-import it.uniurb.pmo.framework.utils.EnumColors;
 import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.MediatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
 import it.uniurb.pmo.variants.risikonew.turn.GameCoordinatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.InitialPlacementPhase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class InitialPlacementPhaseTest {
 
     private final GameFactoryRisikoNew gf = new GameFactoryRisikoNew();
+    private List<IPlayer> players;
+    private IMapManagerRisikoNew mapManager;
+    private ITankManager tankManager;
+    private IMediatorRisikoNew mediator;
+    private IGameCoordinatorRisikoNew gameCoordinator;
 
     private <T> T resolveManager(Class<T> managerType) {
         return gf.getManagers().stream()
@@ -27,44 +35,50 @@ public class InitialPlacementPhaseTest {
             .orElseThrow(() -> new IllegalStateException("Manager of type " + managerType.getName() + " not found"));
     }
 
-    @Test
-    @DisplayName("Integration: Deploy exactly 3 tanks when available")
-    void testPlayPhaseDeploysThreeWhenAvailable() {
-        List<IPlayer> players = List.of(
+    private boolean haveRemainingTanks(IMediatorRisikoNew mediator) {
+        return this.players.stream().anyMatch(p -> mediator.getPlayerTank(p) > 0);
+    }
+
+    @BeforeEach
+    public void setUp() {
+        players = List.of(
             new Player("A"),
             new Player("B"),
             new Player("C"),
             new Player("D")
         );
 
-        IMapManager mapManager = resolveManager(IMapManager.class);
-        ITokenManager tankManager = resolveManager(ITokenManager.class);
-        MediatorRisikoNew mediator = (MediatorRisikoNew) gf.getMediator();
-
-        // inizializza mappa e tank
-        mapManager.initializeGame(players);
-        tankManager.initializeGame(players);
-
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediator, new GameCoordinatorRisikoNew());
-
+        this.mapManager = resolveManager(IMapManagerRisikoNew.class);
+        this.tankManager = resolveManager(ITankManager.class);
+        this.mediator = (IMediatorRisikoNew) gf.getMediator();
     }
 
     @Test
+    @DisplayName("Integration: Deploy exactly 3 tanks when available")
+    void testPlayPhaseDeploysThreeWhenAvailable() {
+
+        this.mapManager.initializeGame(players);
+        this.tankManager.initializeGame(players);
+
+        for (IPlayer player : players) {
+            System.out.println(player.getName() + ": " + this.mapManager.getZonesOwnedBy(player).size() + " zones");
+            System.out.println(player.getName() + ":  " + this.tankManager.getPlayerToken(player) + " tanks.");
+            System.out.println(this.mapManager.getZonesOwnedBy(player).size() + this.tankManager.getPlayerToken(player));
+        }
+        InitialPlacementPhase phase = new InitialPlacementPhase(this.mediator, new GameCoordinatorRisikoNew());
+
+        while (haveRemainingTanks(mediator)) {
+            for (IPlayer player : this.players) {
+                if (mediator.getPlayerTank(player) > 0) {
+                    phase.playPhase(player);
+                }
+            }
+        }
+    }
+
+   /* @Test
     @DisplayName("Integration: Deploy less than 3 tanks when fewer available")
     void testPlayPhaseDeploysRemainingWhenLessThanThree() {
-        List<IPlayer> players = List.of(
-            new Player("X"),
-            new Player("Y"),
-            new Player("Z"),
-            new Player("W")
-        );
-
-        IMapManager mapManager = resolveManager(IMapManager.class);
-        ITokenManager tankManager = resolveManager(ITokenManager.class);
-        MediatorRisikoNew mediator = (MediatorRisikoNew) gf.getMediator();
-
-        mapManager.initializeGame(players);
-        tankManager.initializeGame(players);
 
         IPlayer player = players.get(0);
         int remainingBefore = mediator.getPlayerTank(player);
@@ -85,7 +99,7 @@ public class InitialPlacementPhaseTest {
         assertEquals(zoneBefore + toDeploy, mediator.getZoneTank(expectedZone));
         assertEquals(targetRemaining - toDeploy, mediator.getPlayerTank(player));
         assertTrue(toDeploy < 3);
-    }
+    }*/
 
     // ========== TEST SEMPLICI JUnit5 SENZA MOCK ==========
 

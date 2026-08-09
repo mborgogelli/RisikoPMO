@@ -54,22 +54,22 @@ public class InitialPlacementPhase implements IPhase {
 			int tanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
 			List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
 			Map<String, Integer> targetZones = this.coordinator.sendDeployRequest(player, deployableZones, tanksToDeploy);
-			this.deployTanks(targetZones, tanksToDeploy);
+			this.checkMaxDeployable(targetZones, tanksToDeploy);
+			this.deployTanks(targetZones);
 		} else {
 			throw new RuntimeException("Not enough tanks to deploy.");
 		}
 	}
 
-	private boolean checkMaxDeployable(Map<String, Integer> targetZones, int tanksToDeploy) {
-		return targetZones.entrySet().stream()
-					.reduce(0, (accumulator, entry) -> accumulator + entry.getValue(), Integer::sum) != tanksToDeploy;
+	private void checkMaxDeployable(Map<String, Integer> targetZones, int tanksToDeploy) {
+		boolean cannotDeploy = targetZones.entrySet().stream()
+				                    .reduce(0, (accumulator, entry) -> accumulator + entry.getValue(), Integer::sum) != tanksToDeploy;
+		if (cannotDeploy) {
+			throw new RuntimeException("You must deploy " + tanksToDeploy + " tanks.");
+		}
 	}
 
-	private void deployTanks(Map<String, Integer> targetZones, int tanksToDeploy) {
-		if (this.checkMaxDeployable(targetZones, tanksToDeploy)){
-			throw new RuntimeException("Not enough tanks provided to deploy.");
-		} else {
-			targetZones.forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
-		}
+	private void deployTanks(Map<String, Integer> targetZones) {
+		targetZones.forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
 	}
 }
