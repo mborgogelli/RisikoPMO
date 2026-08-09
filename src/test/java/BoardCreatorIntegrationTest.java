@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
+import it.uniurb.pmo.framework.board.BoardCreator;
+import it.uniurb.pmo.framework.utils.GameVersion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import it.uniurb.pmo.framework.board.BoardCreatorTestSupport;
 import it.uniurb.pmo.framework.board.IGameBoard;
 import it.uniurb.pmo.framework.board.IZone;
 import it.uniurb.pmo.framework.utils.RiskJsonParser;
@@ -22,10 +23,9 @@ import it.uniurb.pmo.variants.risikonew.board.BoardCreatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.board.Continent;
 import it.uniurb.pmo.variants.risikonew.board.Territory;
 
-class BoardCreatorTest {
+class BoardCreatorIntegrationTest {
 
 	private JsonObject jsonMap;
-	private final BoardCreatorTestSupport creator = new BoardCreatorTestSupport();
 
 	@BeforeEach
 	public void setUp() {
@@ -33,7 +33,7 @@ class BoardCreatorTest {
 	}
 
 	private JsonObject getLoadedMap() {
-		return creator.getLoadedMap();
+		return new BoardCreatorTestSupport().getLoadedMap();
 	}
 
 	private List<JsonElement> getValues(String key, JsonElement element) {
@@ -49,7 +49,7 @@ class BoardCreatorTest {
 	}
 
 	@Test
-	@DisplayName("Integration: get continents name from json")
+	@DisplayName("Integration: Get continents name from json")
 	public void getContinentsNameFromJson(){
 		List<JsonElement> continents = getValues("continents", this.jsonMap);
 		List<String> list = getValues("name", continents, String.class);
@@ -65,6 +65,7 @@ class BoardCreatorTest {
 	}
 
 	@Test
+	@DisplayName("Integration: Continents creation")
 	public void createContinents() {
 		List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
 
@@ -73,6 +74,7 @@ class BoardCreatorTest {
 	}
 
 	@Test
+	@DisplayName("Integration: Territories creation")
 	public void createTerritories() {
 		List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
 
@@ -81,6 +83,7 @@ class BoardCreatorTest {
 	}
 
 	@Test
+	@DisplayName("Integration: Get army from continent")
 	public void getArmyFromContinent() {
 		List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
 
@@ -93,6 +96,7 @@ class BoardCreatorTest {
 	}
 
 	@Test
+	@DisplayName("Integration: Get continents bonus from json")
 	public void getContinentsArmyFromJson(){
 		List<JsonElement> continents = getValues("continents", this.jsonMap);
 		List<Integer> list = getValues("armybonus", continents, Integer.class);
@@ -105,7 +109,8 @@ class BoardCreatorTest {
 	}
 
 	@Test
-	public void testEuropaTerritoriesArmyValues() {
+	@DisplayName("Integration: Get Europe bonus points from json")
+	public void testEuropaTerritoriesBonusPoints() {
 	    List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
 	    IZone europa = continents.stream()
 						        .filter(zone -> zone instanceof Continent && zone.getName().equals("europa"))
@@ -114,16 +119,17 @@ class BoardCreatorTest {
 
 	    List<IZone> europaTerritories = europa.getChildZones();
 
-	    List<Integer> expectedArmyValues = List.of(3, 4, 4, 6, 5, 4, 6);
+	    List<Integer> expectedBonusValues = List.of(3, 4, 4, 6, 5, 4, 6);
 
-	    List<Integer> actualArmyValues = europaTerritories.stream()
+	    List<Integer> actualBonusValues = europaTerritories.stream()
 												        .map(IZone::getValue)
 												        .toList();
 
-	    assertEquals(expectedArmyValues, actualArmyValues);
+	    assertEquals(expectedBonusValues, actualBonusValues);
 	}
 
 	@Test
+	@DisplayName("Integration: Get Europe territories from json")
 	public void getEuropaTerritoriesFromJson(){
 		List<JsonElement> continents = getValues("continents", this.jsonMap);
 		JsonArray continentsArray = continents.getFirst().getAsJsonArray();
@@ -150,6 +156,7 @@ class BoardCreatorTest {
 	}
 
 	@Test
+	@DisplayName("Integration: Cannot return empty list")
 	public void cannotReturnEmptyList() {
 	    List<JsonElement> continents = getValues("continents", this.jsonMap);
 	    List<JsonElement> territories = getValues("territories", continents);
@@ -160,6 +167,7 @@ class BoardCreatorTest {
 	}
 
 	@Test
+	@DisplayName("Integration: Set neighbours")
 	public void testSetNeighbours() {
 	    IGameBoard gameBoard = BoardCreatorRisikoNew.getInstance().getMap();
 
@@ -182,5 +190,26 @@ class BoardCreatorTest {
 	    assertTrue(ucrainaNeighbours.contains("urali"));
 	    assertEquals(6, ucrainaNeighbours.size());
 	}
+
+	/**
+	 * Inner class for testing purposes
+	 */
+	private static class BoardCreatorTestSupport extends BoardCreator {
+
+		public BoardCreatorTestSupport() {
+			super(GameVersion.RISIKONEW);
+		}
+
+		@Override
+		protected IGameBoard createMap() {
+			return null;
+		}
+
+		@Override
+		public JsonObject getLoadedMap() {
+			return super.getLoadedMap();
+		}
+	}
+
 
 }

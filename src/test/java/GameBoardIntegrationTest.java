@@ -16,7 +16,7 @@ import it.uniurb.pmo.framework.board.IZone;
 import it.uniurb.pmo.framework.utils.GameVersion;
 import it.uniurb.pmo.variants.risikonew.board.BoardCreatorRisikoNew;
 
-public class GameBoardTest {
+public class GameBoardIntegrationTest {
     
     private IGameBoard gameBoard;
     
