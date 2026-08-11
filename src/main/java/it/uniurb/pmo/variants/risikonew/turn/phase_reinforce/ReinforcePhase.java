@@ -1,4 +1,4 @@
-package it.uniurb.pmo.variants.risikonew.turn;
+package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.interfaces.IReinforcePhase;
+import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 
 public class ReinforcePhase implements IReinforcePhase {
 

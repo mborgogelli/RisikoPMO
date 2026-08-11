@@ -1,4 +1,4 @@
-package it.uniurb.pmo.variants.risikonew.turn.interfaces;
+package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 
 import java.util.List;
 

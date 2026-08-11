@@ -1,10 +1,11 @@
 package it.uniurb.pmo.framework.turn;
 
+import it.uniurb.pmo.framework.players.IPlayer;
+
 import java.util.Map;
 
-public interface IMessageToPlayer <X,Y> {
+public interface IMessageToPlayer {
 
-    String getMessage();
+    IPlayer getPlayer();
 
-    Map<X,Y> getContent();
 }

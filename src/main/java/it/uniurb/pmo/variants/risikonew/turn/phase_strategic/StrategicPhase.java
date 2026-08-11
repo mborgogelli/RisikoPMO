@@ -1,9 +1,9 @@
-package it.uniurb.pmo.variants.risikonew.turn;
+package it.uniurb.pmo.variants.risikonew.turn.phase_strategic;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.dto.MoveChoiceDTO;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.interfaces.IStrategicPhase;
+import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 
 import java.util.List;
 

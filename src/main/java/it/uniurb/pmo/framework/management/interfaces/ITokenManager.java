@@ -65,5 +65,6 @@ public interface ITokenManager extends IManager {
 	 * @param token
 	 */
 	void assignToken(IPlayer player, int token);
-	
+
+	void removeToken(IPlayer player, int token);
 }

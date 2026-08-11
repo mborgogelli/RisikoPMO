@@ -1,4 +1,4 @@
-package it.uniurb.pmo.variants.risikonew.turn;
+package it.uniurb.pmo.variants.risikonew.turn.gamecoordinator;
 
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;

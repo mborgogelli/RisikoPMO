@@ -1,6 +1,7 @@
 package it.uniurb.pmo.framework.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.variants.risikonew.dto.AttackChoiceDTO;
 import it.uniurb.pmo.variants.risikonew.dto.MoveChoiceDTO;
 
@@ -9,21 +10,22 @@ import java.util.Map;
 
 /**
  * Canale di comunicazione tra la logica di gioco e i giocatori.
- * Il GameCoordinator si occupa di inviare messaggi/richieste al giocatore
+ * Il AbstractGameCoordinator si occupa di inviare messaggi/richieste al giocatore
  * e di raccogliere la risposta, mantenendo il framework agnostico rispetto
  * alla variante di gioco concreta.
  */
 public interface IGameCoordinator {
 
     /**
-     * Chiede al giocatore dove distribuire i tank disponibili.
+     * Chiede al giocatore dove distribuire un certo tipo di token disponibili.
      *
      * @param player          il giocatore che deve effettuare il deploy
      * @param deployableZones lista delle zone in cui può deployare
-     * @param toDeploy        numero di tank da distribuire
-     * @return mappa zona → numero di tank da piazzare
+     * @param tokenType       il tipo di token da distribuire
+     * @param toDeploy        numero di token da distribuire
+     * @return mappa zona → numero di token da piazzare
      */
-    Map<String, Integer> sendDeployRequest(IPlayer player, List<String> deployableZones, int toDeploy);
+    Map<String, Integer> sendDeployRequest(IPlayer player, List<String> deployableZones, ITokenType tokenType, int toDeploy);
 
     /**
      * Chiede al giocatore se e dove attaccare.

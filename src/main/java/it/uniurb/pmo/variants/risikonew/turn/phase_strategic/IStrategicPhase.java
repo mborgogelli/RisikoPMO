@@ -1,4 +1,4 @@
-package it.uniurb.pmo.variants.risikonew.turn.interfaces;
+package it.uniurb.pmo.variants.risikonew.turn.phase_strategic;
 
 import it.uniurb.pmo.framework.turn.IPhase;
 
