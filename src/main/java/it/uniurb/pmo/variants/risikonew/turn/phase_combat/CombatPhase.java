@@ -1,7 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_combat;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.variants.risikonew.dto.AttackChoiceDTO;
+import it.uniurb.pmo.framework.turn.dto.AttackChoiceDTO;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 

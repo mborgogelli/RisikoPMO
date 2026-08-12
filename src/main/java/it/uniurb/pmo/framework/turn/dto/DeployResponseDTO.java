@@ -1,4 +1,4 @@
-package it.uniurb.pmo.variants.risikonew.dto;
+package it.uniurb.pmo.framework.turn.dto;
 
 import it.uniurb.pmo.framework.players.ITokenType;
 
@@ -8,11 +8,11 @@ import java.util.Map;
  * DTO di risposta per la fase di dispiegamento (deployment).
  * Contiene la scelta del giocatore: mappa territorio → (tipoPedina → quantità piazzata).
  */
-public class DeploymentResponseDTO {
+public class DeployResponseDTO {
 
     private final Map<String, Map<ITokenType, Integer>> deployment;
 
-    public DeploymentResponseDTO(Map<String, Map<ITokenType, Integer>> deployment) {
+    public DeployResponseDTO(Map<String, Map<ITokenType, Integer>> deployment) {
         this.deployment = deployment;
     }
 

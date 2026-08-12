@@ -1,12 +1,12 @@
-package it.uniurb.pmo.variants.risikonew.dto;
+package it.uniurb.pmo.framework.turn.dto;
 
-public class MoveChoiceDTO {
+public class FortifyChoiceDTO {
 
     private final String fromZone;
     private final String toZone;
     private final int numberOfTanks;
 
-    public MoveChoiceDTO(String fromZone, String toZone, int numberOfTanks) {
+    public FortifyChoiceDTO(String fromZone, String toZone, int numberOfTanks) {
         this.fromZone = fromZone;
         this.toZone = toZone;
         this.numberOfTanks = numberOfTanks;

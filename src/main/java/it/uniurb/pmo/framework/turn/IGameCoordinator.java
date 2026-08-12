@@ -1,12 +1,6 @@
 package it.uniurb.pmo.framework.turn;
 
-import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.players.ITokenType;
-import it.uniurb.pmo.variants.risikonew.dto.AttackChoiceDTO;
-import it.uniurb.pmo.variants.risikonew.dto.MoveChoiceDTO;
-
-import java.util.List;
-import java.util.Map;
+import it.uniurb.pmo.framework.turn.dto.*;
 
 /**
  * Canale di comunicazione tra la logica di gioco e i giocatori.
@@ -19,29 +13,24 @@ public interface IGameCoordinator {
     /**
      * Chiede al giocatore dove distribuire un certo tipo di token disponibili.
      *
-     * @param player          il giocatore che deve effettuare il deploy
-     * @param deployableZones lista delle zone in cui può deployare
-     * @param tokenType       il tipo di token da distribuire
-     * @param toDeploy        numero di token da distribuire
-     * @return mappa zona → numero di token da piazzare
+     * @param request il DTO contenente le informazioni sulla distribuzione
+     * @return la scelta di distribuzione del giocatore
      */
-    Map<String, Integer> sendDeployRequest(IPlayer player, List<String> deployableZones, ITokenType tokenType, int toDeploy);
+    DeployResponseDTO sendDeployRequest(DeployRequestDTO request);
 
     /**
      * Chiede al giocatore se e dove attaccare.
      *
-     * @param player          il giocatore attaccante
-     * @param deployableZones lista delle zone attaccabili
+     * @param request il DTO contenente le informazioni sull'attacco
      * @return la scelta di attacco del giocatore
      */
-    AttackChoiceDTO sendAttackRequest(IPlayer player, List<String> deployableZones);
+    AttackChoiceDTO sendAttackRequest(AttackRequestDTO request);
 
     /**
      * Chiede al giocatore se e dove spostare truppe.
      *
-     * @param player          il giocatore che effettua lo spostamento
-     * @param deployableZones lista delle zone da cui può spostare
+     * @param request il DTO contenente le informazioni sullo spostamento
      * @return la scelta di spostamento del giocatore
      */
-    MoveChoiceDTO sendMoveRequest(IPlayer player, List<String> deployableZones);
+    FortifyChoiceDTO sendMoveRequest(FortifyRequestDTO request);
 }

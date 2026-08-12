@@ -5,6 +5,8 @@ import java.util.Map;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
+import it.uniurb.pmo.framework.turn.dto.DeployRequestDTO;
+import it.uniurb.pmo.framework.turn.dto.FortifyChoiceDTO;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 
@@ -54,9 +56,9 @@ public class InitialPlacementPhase implements IPhase {
 		if (remaining > 0) {
 			int tanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
 			List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
-			Map<String, Integer> targetZones = this.coordinator.sendDeployRequest(player, deployableZones, tanksToDeploy);
-			this.checkMaxDeployable(targetZones, tanksToDeploy);
-			this.deployTanks(targetZones);
+			Map<String, Integer> initialDeploy = this.coordinator.sendInitialPlacementRequest(new InitialDeployRequestDTO(player, deployableZones, tanksToDeploy));
+			this.checkMaxDeployable(initialDeploy, tanksToDeploy);
+			this.deployTanks(initialDeploy);
 		} else {
 			throw new RuntimeException("Not enough tanks to deploy.");
 		}

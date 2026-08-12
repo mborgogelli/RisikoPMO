@@ -36,7 +36,7 @@ public class RoomController {
     public ResponseEntity<RoomResponseDTO> creaPartita(@RequestBody Map<String, String> payload) {
 
         // Recupera informazioni dal JSON inviato dal frontend
-        String nomeGiocatore = payload.get("playerName");
+        String nomeGiocatore = payload.get("player");
         GameVersion gameVersion = this.getGameVersionFromString(payload.get("gameVersion"));
         int maxPlayer = Integer.parseInt(payload.get("maxPlayers"));
         
@@ -65,7 +65,7 @@ public class RoomController {
      */
     @PostMapping("/{roomId}/entra")
     public ResponseEntity<?> entraStanza(@PathVariable String roomId, @RequestBody Map<String, String> payload) {
-        String nomeGiocatore = payload.get("playerName");
+        String nomeGiocatore = payload.get("player");
         if (nomeGiocatore == null || nomeGiocatore.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Nome giocatore mancante"));
         }
@@ -85,7 +85,7 @@ public class RoomController {
      */
     @PostMapping("/{roomId}/pronto")
     public ResponseEntity<?> setPronto(@PathVariable String roomId, @RequestBody Map<String, Object> payload) {
-        String nomeGiocatore = payload.get("playerName") != null ? payload.get("playerName").toString() : null;
+        String nomeGiocatore = payload.get("player") != null ? payload.get("player").toString() : null;
         Boolean isReady = payload.get("ready") instanceof Boolean ? (Boolean) payload.get("ready") : null;
 
         if (nomeGiocatore == null || nomeGiocatore.isEmpty() || isReady == null) {

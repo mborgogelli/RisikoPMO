@@ -4,16 +4,17 @@ import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.management.interfaces.IMapManager;
 import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.players.Player;
+import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
-import it.uniurb.pmo.variants.risikonew.dto.AttackChoiceDTO;
-import it.uniurb.pmo.variants.risikonew.dto.MoveChoiceDTO;
 import it.uniurb.pmo.variants.risikonew.management.MediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialDeployRequestDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -244,23 +245,23 @@ public class InitialPlacementPhaseIntegrationTest {
         private record CoordinatorStub(Map<String, Integer> response) implements IGameCoordinatorRisikoNew {
 
         @Override
-            public Map<String, Integer> sendDeployRequest(IPlayer player, List<String> deployableZones, int toDeploy) {
-                return response;
-            }
+        public Map<String, Integer> sendInitialPlacementRequest(InitialDeployRequestDTO request) {
+            return Map.of();
+        }
 
         @Override
-        public AttackChoiceDTO sendAttackRequest(IPlayer player, List<String> deployableZones) {
+        public DeployResponseDTO sendDeployRequest(DeployRequestDTO request) {
             return null;
         }
 
         @Override
-        public MoveChoiceDTO sendMoveRequest(IPlayer player, List<String> deployableZones) {
+        public AttackChoiceDTO sendAttackRequest(AttackRequestDTO request) {
             return null;
         }
 
         @Override
-        public List<ICard> sendCardRedemptionRequest(IPlayer player, List<ICard> cards) {
-            return Collections.emptyList();
+        public FortifyChoiceDTO sendMoveRequest(FortifyRequestDTO request) {
+            return null;
         }
-        }
+    }
 }

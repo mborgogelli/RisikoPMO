@@ -1,4 +1,4 @@
-package it.uniurb.pmo.variants.risikonew.dto;
+package it.uniurb.pmo.framework.turn.dto;
 
 public class AttackChoiceDTO {
 
