@@ -25,11 +25,6 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	private List<IPhase> phases;
 	private List<IPlayer> players;
 
-	/**
-	 * Metodo astratto che deve restituire la lista delle fasi del gioco per la specializzazione concreta.
-	 */
-	protected abstract List<IPhase> createPhases();
-
 	@Override
 	public void initializeGame(List<IPlayer> players) {
 		this.players = this.shufflePlayers(players);
@@ -40,7 +35,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	@Override
 	public void startGame() {
-			this.startTurn(this.getNextPlayer());
+		this.startTurn(this.getNextPlayer());
 	}
 
 	@Override
@@ -134,6 +129,11 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	public List<IPlayer> getPlayers() {
 		return Collections.unmodifiableList(this.players);
 	}
+
+	/**
+	 * Metodo astratto che deve restituire la lista delle fasi del gioco per la specializzazione concreta.
+	 */
+	protected abstract List<IPhase> createPhases();
 
 	protected IMediator getMediator() {
 		return this.mediator;

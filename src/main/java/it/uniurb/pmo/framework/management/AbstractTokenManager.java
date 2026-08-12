@@ -18,7 +18,7 @@ public abstract class AbstractTokenManager implements ITokenManager{
 	private IMediator mediator;
 	private final Map<IPlayer, Map<ITokenType, Integer>> playerTokens;
 
-	protected AbstractTokenManager() {
+	public AbstractTokenManager() {
 		this.playerTokens = new HashMap<>();
 	}
 
@@ -26,6 +26,35 @@ public abstract class AbstractTokenManager implements ITokenManager{
 	public void setMediator(IMediator mediator) {
 		this.mediator = mediator;
 		this.mediator.registerManager(this);
+	}
+
+	@Override
+	public int getPlayerToken(IPlayer player, ITokenType type) {
+		return this.getPlayerTokenAmount(player, type);
+	}
+
+	@Override
+	public void assignToken(IPlayer player, ITokenType type, int token) {
+		if (token >= 0) {
+			this.addPlayerTokenAmount(player, type, token);
+		} else {
+			this.removePlayerTokenAmount(player, type, -token);
+		}
+	}
+
+	@Override
+	public void assignToken(IPlayer player, int token) {
+		this.assignToken(player, this.getDefaultTokenType(), token);
+	}
+
+	@Override
+	public void removeToken(IPlayer player, ITokenType type, int token) {
+		this.removePlayerTokenAmount(player, type, token);
+	}
+
+	@Override
+	public void removeToken(IPlayer player, int token) {
+		this.removeToken(player, this.getDefaultTokenType(), token);
 	}
 
 	protected abstract void resetTokenData();
@@ -71,40 +100,6 @@ public abstract class AbstractTokenManager implements ITokenManager{
 
 	protected boolean canMoveBetween(IPlayer player, String toZone, String fromZone) {
 		return this.mediator.canMoveBetween(player, toZone, fromZone);
-	}
-
-	@Override
-	public int getPlayerToken(IPlayer player) {
-		return this.playerTokens.getOrDefault(player, Map.of()).values().stream().reduce(0, Integer::sum);
-	}
-
-	@Override
-	public int getPlayerToken(IPlayer player, ITokenType type) {
-		return this.getPlayerTokenAmount(player, type);
-	}
-
-	@Override
-	public void assignToken(IPlayer player, ITokenType type, int token) {
-		if (token >= 0) {
-			this.addPlayerTokenAmount(player, type, token);
-		} else {
-			this.removePlayerTokenAmount(player, type, -token);
-		}
-	}
-
-	@Override
-	public void assignToken(IPlayer player, int token) {
-		this.assignToken(player, this.getDefaultTokenType(), token);
-	}
-
-	@Override
-	public void removeToken(IPlayer player, ITokenType type, int token) {
-		this.removePlayerTokenAmount(player, type, token);
-	}
-
-	@Override
-	public void removeToken(IPlayer player, int token) {
-		this.removeToken(player, this.getDefaultTokenType(), token);
 	}
 
 }

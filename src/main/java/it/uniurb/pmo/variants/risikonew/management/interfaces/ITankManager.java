@@ -2,20 +2,32 @@ package it.uniurb.pmo.variants.risikonew.management.interfaces;
 
 import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
+import java.util.Map;
+
 public interface ITankManager extends ITokenManager {
+
+	int getTotalDeployed(IPlayer player);
+
+	Map<String, Integer> getDeployedPerZone(IPlayer player);
 
 	default int getPlayerTank(IPlayer player) {
 		return getPlayerToken(player, ERisikoNewToken.TANK);
 	}
 
-	default int getPlayerTank(IPlayer player, ERisikoNewToken type) {
-		return getPlayerToken(player, type);
+	default int getPlayerToken(IPlayer player) {
+		return getPlayerTank(player);
+	}
+
+	default int getTerritoryTanks(String zone) {
+		Map<ITokenType, Integer> tokens = getZoneToken(zone);
+		return tokens.getOrDefault(ERisikoNewToken.TANK, 0);
 	}
 
 	default int getZoneTank(String zone) {
-		return getZoneToken(zone);
+		return getTerritoryTanks(zone);
 	}
 	
 	default void deployTank(IPlayer player, String zone, int tank) {
@@ -26,7 +38,4 @@ public interface ITankManager extends ITokenManager {
 		moveToken(player, ERisikoNewToken.TANK, toZone, fromZone, tanks);
 	}
 
-	default void moveTank(IPlayer player, ERisikoNewToken type, String toZone, String fromZone, int tanks) {
-		moveToken(player, type, toZone, fromZone, tanks);
-	}
 }

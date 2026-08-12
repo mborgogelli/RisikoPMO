@@ -10,6 +10,9 @@ import it.uniurb.pmo.framework.players.Player;
 import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
 import java.util.List;
 
+import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import org.junit.jupiter.api.Test;
 
 public class TankManagerTest extends RisikoNewTestSetup {
@@ -18,14 +21,14 @@ public class TankManagerTest extends RisikoNewTestSetup {
     void testInitializeGame_TooFewPlayers() {
         // Usa una factory fresca per evitare che il tokenManager sia già inizializzato
         GameFactoryRisikoNew freshFactory = new GameFactoryRisikoNew();
-        ITokenManager freshTokenManager = freshFactory.getManagers().stream()
-            .filter(ITokenManager.class::isInstance)
-            .map(ITokenManager.class::cast)
+        ITankManager freshTokenManager = freshFactory.getManagers().stream()
+            .filter(ITankManager.class::isInstance)
+            .map(ITankManager.class::cast)
             .findFirst()
             .orElseThrow();
-        IMapManager freshMapManager = freshFactory.getManagers().stream()
-            .filter(IMapManager.class::isInstance)
-            .map(IMapManager.class::cast)
+        IMapManagerRisikoNew freshMapManager = freshFactory.getManagers().stream()
+            .filter(IMapManagerRisikoNew.class::isInstance)
+            .map(IMapManagerRisikoNew.class::cast)
             .findFirst()
             .orElseThrow();
         List<IPlayer> twoPlayers = List.of(new Player("P1"), new Player("P2"));
@@ -54,9 +57,9 @@ public class TankManagerTest extends RisikoNewTestSetup {
     
     @Test
     void testTanksAssignment() {
-        var myAvailableTanks = tokenManager.getPlayerToken(players.get(0));
-        var myTerritoriesCount = mapManager.getZonesOwnedBy(players.get(0)).size();
-        var myTerritories = mapManager.getZonesOwnedBy(players.get(0));
+        var myAvailableTanks = tokenManager.getPlayerTank(players.get(0));
+        var myTerritoriesCount = mapManager.getTerritoriesOwnedBy(players.get(0)).size();
+        var myTerritories = mapManager.getTerritoriesOwnedBy(players.get(0));
         var totalDeployed = tokenManager.getTotalDeployed(players.get(0));
         var deployedPerZone = tokenManager.getDeployedPerZone(players.get(0));
         
