@@ -4,14 +4,13 @@ import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
-
 import java.util.Map;
 
 public interface ITankManager extends ITokenManager {
 
-	int getTotalDeployed(IPlayer player);
-
-	Map<String, Integer> getDeployedPerZone(IPlayer player);
+	default int getTotalDeployed(IPlayer player) {
+		return getTotalDeployed(player, ERisikoNewToken.TANK);
+	}
 
 	default int getPlayerTank(IPlayer player) {
 		return getPlayerToken(player, ERisikoNewToken.TANK);

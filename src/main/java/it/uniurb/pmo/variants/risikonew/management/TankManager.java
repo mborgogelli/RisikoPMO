@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 public class TankManager extends AbstractTokenManager implements ITankManager {
 
 	private boolean isReady;
-	private final Map<String, Integer> deployedTank;
+	private final Map<String, Integer> territoryTanks;
 
 	public TankManager() {
 		super();
 		this.isReady = false;
-		this.deployedTank = new HashMap<>();
+		this.territoryTanks = new HashMap<>();
 	}
 
 	@Override
@@ -41,6 +41,22 @@ public class TankManager extends AbstractTokenManager implements ITankManager {
 		this.isReady = true;
 	}
 
+	public Map<String, Integer> getDeployedPerZone(IPlayer player) {
+		return super.getZonesOwnedBy(player).stream()
+				.collect(Collectors.toMap(z -> z, z -> this.territoryTanks.getOrDefault(z, 0)));
+	}
+
+	@Override
+	public int getTotalDeployed(IPlayer player, ITokenType type) {
+		if (type != ERisikoNewToken.TANK) {
+			throw new IllegalArgumentException("Unsupported token type: " + type);
+		}
+		return this.territoryTanks.keySet().stream()
+				.filter(z -> super.getZonesOwnedBy(player).contains(z))
+				.mapToInt(z -> this.territoryTanks.getOrDefault(z, 0))
+				.sum();
+	}
+
 	@Override
 	public int getPlayerToken(IPlayer player, ITokenType type) {
 		if (type != ERisikoNewToken.TANK) {
@@ -52,7 +68,7 @@ public class TankManager extends AbstractTokenManager implements ITankManager {
 	@Override
 	public Map<ITokenType, Integer> getZoneToken(String zone) {
 		checkReady();
-		return Map.of(ERisikoNewToken.TANK, this.deployedTank.getOrDefault(zone, 0));
+		return Map.of(ERisikoNewToken.TANK, this.territoryTanks.getOrDefault(zone, 0));
 	}
 
 	@Override
@@ -93,7 +109,7 @@ public class TankManager extends AbstractTokenManager implements ITankManager {
 	protected void resetTokenData() {
 		checkInitialized();
 		this.clearPlayerTokenData();
-		this.deployedTank.clear();
+		this.territoryTanks.clear();
 	}
 
 	private void initTokensPerPlayer(List<IPlayer> players) {
@@ -104,7 +120,7 @@ public class TankManager extends AbstractTokenManager implements ITankManager {
 
 	private void initTokensPerZone(List<String> territories, List<IPlayer> players) {
 		checkInitialized();
-		territories.forEach(z -> this.deployedTank.put(z, 1));
+		territories.forEach(z -> this.territoryTanks.put(z, 1));
 		players.forEach(p -> super.removePlayerTokenAmount(p, ERisikoNewToken.TANK, super.getZonesOwnedBy(p).size()));
 	}
 
@@ -123,19 +139,13 @@ public class TankManager extends AbstractTokenManager implements ITankManager {
 	}
 
 	private void removeTanksFromZone(String zone, int amount) {
-		int newAmount = this.deployedTank.getOrDefault(zone, 0) - amount;
-		this.deployedTank.put(zone, Math.max(newAmount, 0));
+		int newAmount = this.territoryTanks.getOrDefault(zone, 0) - amount;
+		this.territoryTanks.put(zone, Math.max(newAmount, 0));
 	}
 
 	private void addTanksToZone(String zone, int amount) {
-		int newAmount = this.deployedTank.getOrDefault(zone, 0) + amount;
-		this.deployedTank.put(zone, newAmount);
-	}
-
-	@Override
-	public Map<String, Integer> getDeployedPerZone(IPlayer player) {
-		return super.getZonesOwnedBy(player).stream()
-				.collect(Collectors.toMap(z -> z, z -> this.deployedTank.getOrDefault(z, 0)));
+		int newAmount = this.territoryTanks.getOrDefault(zone, 0) + amount;
+		this.territoryTanks.put(zone, newAmount);
 	}
 
 	private void checkIfPlayerHasTank(IPlayer player, int amount) {
@@ -145,7 +155,7 @@ public class TankManager extends AbstractTokenManager implements ITankManager {
 	}
 
 	private void checkDeployedTanksAfterMove(String fromZone, int amount) {
-		int current = this.deployedTank.getOrDefault(fromZone, 0);
+		int current = this.territoryTanks.getOrDefault(fromZone, 0);
 		if (amount <= 0 || (current - amount < 1)) {
 			throw new IllegalArgumentException("Cannot move " + amount + "tanks. Amount must be greater than 0 and less than or equal to " + (current - 1));
 		}

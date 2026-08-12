@@ -3,15 +3,14 @@ package it.uniurb.pmo.framework.management;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
 
 /**
- * AbstractTokenManager gestisce i token nel gioco, sia quelli distribuiti nelle zone che quelli posseduti dai giocatori.
- * Fornisce metodi per assegnare, aggiungere e rimuovere token.
+ * AbstractTokenManager gestisce i token posseduti dai giocatori.
+ * Fornisce metodi per assegnare, aggiungere e rimuovere token ai giocatori.
  */
 public abstract class AbstractTokenManager implements ITokenManager{
 	
@@ -30,7 +29,7 @@ public abstract class AbstractTokenManager implements ITokenManager{
 
 	@Override
 	public int getPlayerToken(IPlayer player, ITokenType type) {
-		return this.getPlayerTokenAmount(player, type);
+		return this.playerTokens.get(player).getOrDefault(type, 0);
 	}
 
 	@Override
@@ -52,18 +51,9 @@ public abstract class AbstractTokenManager implements ITokenManager{
 		this.removePlayerTokenAmount(player, type, token);
 	}
 
-	@Override
-	public void removeToken(IPlayer player, int token) {
-		this.removeToken(player, this.getDefaultTokenType(), token);
-	}
-
 	protected abstract void resetTokenData();
 
 	protected abstract ITokenType getDefaultTokenType();
-
-	protected final int getPlayerTokenAmount(IPlayer player, ITokenType type) {
-		return this.playerTokens.getOrDefault(player, Map.of()).getOrDefault(type, 0);
-	}
 
 	protected final void addPlayerTokenAmount(IPlayer player, ITokenType type, int amount) {
 		if (amount < 0) {

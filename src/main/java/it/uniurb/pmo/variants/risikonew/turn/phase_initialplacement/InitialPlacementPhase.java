@@ -62,15 +62,15 @@ public class InitialPlacementPhase implements IPhase {
 		}
 	}
 
+	private void deployTanks(Map<String, Integer> targetZones) {
+		targetZones.forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
+	}
+
 	private void checkMaxDeployable(Map<String, Integer> targetZones, int tanksToDeploy) {
 		int deployed = targetZones.values().stream().reduce(0, Integer::sum);
 		boolean cannotDeploy = deployed != tanksToDeploy;
 		if (cannotDeploy) {
 			throw new RuntimeException("You must deploy " + tanksToDeploy + " tanks.");
 		}
-	}
-
-	private void deployTanks(Map<String, Integer> targetZones) {
-		targetZones.forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
 	}
 }

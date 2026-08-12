@@ -15,6 +15,7 @@ import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRis
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialDeployRequestDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialDeployResponseDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class InitialPlacementPhaseIntegrationTest {
     private IMapManagerRisikoNew mapManager;
     private ITankManager tankManager;
     private IMediatorRisikoNew mediator;
-    private final IGameCoordinatorRisikoNew gameCoordinator = mock(IGameCoordinatorRisikoNew.class);
+    private IGameCoordinatorRisikoNew gameCoordinator;
 
     private <T> T resolveManager(Class<T> managerType) {
         return gf.getManagers().stream()
@@ -94,7 +95,7 @@ public class InitialPlacementPhaseIntegrationTest {
         // forza remaining a 2 per verificare il ramo < 3
         int targetRemaining = 2;
         if (remainingBefore > targetRemaining) {
-            tankManager.removeToken(player, remainingBefore - targetRemaining);
+            tankManager.removeToken(player, ERisikoNewToken.TANK, remainingBefore - targetRemaining);
         } else if (remainingBefore < targetRemaining) {
             tankManager.assignToken(player, targetRemaining - remainingBefore);
         }
@@ -226,7 +227,7 @@ public class InitialPlacementPhaseIntegrationTest {
         IPlayer player = playersUnit.get(3);
         int currentTanks = mediatorUnit.getPlayerTank(player);
         if (currentTanks > 3) {
-            tankManagerUnit.removeToken(player, currentTanks - 3);
+            tankManagerUnit.removeToken(player, ERisikoNewToken.TANK, currentTanks - 3);
         } else if (currentTanks < 3) {
             tankManagerUnit.assignToken(player, 3 - currentTanks);
         }

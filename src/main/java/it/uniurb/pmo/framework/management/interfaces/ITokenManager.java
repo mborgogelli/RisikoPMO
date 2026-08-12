@@ -6,7 +6,16 @@ import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
 
 public interface ITokenManager extends IManager {
-	
+
+	/**
+	 * Ottiene il numero totale di token dispiegati da un giocatore
+	 *
+	 * @param player il giocatore
+	 * @param type il tipo di token
+	 * @return il numero di token dispiegati
+	 */
+	int getTotalDeployed(IPlayer player, ITokenType type);
+
 	/**
 	 * Ottiene il numero di token di un giocatore
 	 * 
@@ -56,5 +65,4 @@ public interface ITokenManager extends IManager {
 
 	void removeToken(IPlayer player, ITokenType type, int token);
 
-	void removeToken(IPlayer player, int token);
 }
