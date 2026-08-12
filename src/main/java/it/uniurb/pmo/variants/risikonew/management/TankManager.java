@@ -110,13 +110,22 @@ public class TankManager extends AbstractTokenManager implements ITankManager{
 
 	@Override
 	public void assignToken(IPlayer player, int token) {
+		if (token >= 0) {
+			this.availableTanks.put(player, this.getPlayerToken(player) + token);
+		} else {
+			this.removeTanksFromPlayer(player, -token);
+		}
+	}
+
+	@Override
+	public void removeToken(IPlayer player, int token) {
 		if (token < 0) {
 			throw new IllegalArgumentException("Token amount cannot be negative");
 		} else {
-			this.availableTanks.put(player, this.getPlayerToken(player) + token);
+			this.removeTanksFromPlayer(player, token);
 		}
 	}
-	
+
 	@Override
 	protected void resetTokenData() {
 		checkInitialized();

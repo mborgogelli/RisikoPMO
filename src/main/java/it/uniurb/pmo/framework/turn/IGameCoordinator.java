@@ -32,5 +32,5 @@ public interface IGameCoordinator {
      * @param request il DTO contenente le informazioni sullo spostamento
      * @return la scelta di spostamento del giocatore
      */
-    FortifyChoiceDTO sendMoveRequest(FortifyRequestDTO request);
+    FortifyChoiceDTO sendFortifyRequest(FortifyRequestDTO request);
 }

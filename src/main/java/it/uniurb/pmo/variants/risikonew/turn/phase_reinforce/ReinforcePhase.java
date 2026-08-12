@@ -5,8 +5,11 @@ import java.util.Map;
 
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.turn.dto.DeployRequestDTO;
+import it.uniurb.pmo.framework.turn.dto.DeployResponseDTO;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
 public class ReinforcePhase implements IReinforcePhase {
 
@@ -44,8 +47,9 @@ public class ReinforcePhase implements IReinforcePhase {
 			reinforcements = reinforcements + this.reinforceByContinentBonus(continent);
 		}
 		List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
-		Map<String, Integer> targetZones = this.coordinator.sendDeployRequest(player, deployableZones, reinforcements);
-		targetZones.forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
+		DeployResponseDTO response = this.coordinator.sendDeployRequest(new DeployRequestDTO(player, deployableZones, Map.of(ERisikoNewToken.TANK, reinforcements)) {});
+		Map<String, Map<it.uniurb.pmo.framework.players.ITokenType, Integer>> targetZones = response.getDeployment();
+		targetZones.forEach((zone, tokens) -> this.mediator.deployTank(this.player, zone, tokens.getOrDefault(ERisikoNewToken.TANK, 0)));
 		this.clearPhase();
 	}
 

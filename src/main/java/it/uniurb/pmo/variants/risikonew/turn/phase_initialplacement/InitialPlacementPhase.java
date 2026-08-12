@@ -5,8 +5,6 @@ import java.util.Map;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
-import it.uniurb.pmo.framework.turn.dto.DeployRequestDTO;
-import it.uniurb.pmo.framework.turn.dto.FortifyChoiceDTO;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 
@@ -56,17 +54,17 @@ public class InitialPlacementPhase implements IPhase {
 		if (remaining > 0) {
 			int tanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
 			List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
-			Map<String, Integer> initialDeploy = this.coordinator.sendInitialPlacementRequest(new InitialDeployRequestDTO(player, deployableZones, tanksToDeploy));
-			this.checkMaxDeployable(initialDeploy, tanksToDeploy);
-			this.deployTanks(initialDeploy);
+			InitialDeployResponseDTO initialDeploy = this.coordinator.sendInitialPlacementRequest(new InitialDeployRequestDTO(player, deployableZones, tanksToDeploy));
+			this.checkMaxDeployable(initialDeploy.deployment(), tanksToDeploy);
+			this.deployTanks(initialDeploy.deployment());
 		} else {
 			throw new RuntimeException("Not enough tanks to deploy.");
 		}
 	}
 
 	private void checkMaxDeployable(Map<String, Integer> targetZones, int tanksToDeploy) {
-		boolean cannotDeploy = targetZones.entrySet().stream()
-				                    .reduce(0, (accumulator, entry) -> accumulator + entry.getValue(), Integer::sum) != tanksToDeploy;
+		int deployed = targetZones.values().stream().reduce(0, Integer::sum);
+		boolean cannotDeploy = deployed != tanksToDeploy;
 		if (cannotDeploy) {
 			throw new RuntimeException("You must deploy " + tanksToDeploy + " tanks.");
 		}

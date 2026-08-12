@@ -1,10 +1,8 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
-import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.management.interfaces.IMapManager;
 import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.players.Player;
 import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
@@ -15,6 +13,7 @@ import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialDeployRequestDTO;
+import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialDeployResponseDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +33,7 @@ public class InitialPlacementPhaseIntegrationTest {
     private IMapManagerRisikoNew mapManager;
     private ITankManager tankManager;
     private IMediatorRisikoNew mediator;
-    private IGameCoordinatorRisikoNew gameCoordinator = mock(IGameCoordinatorRisikoNew.class);
+    private final IGameCoordinatorRisikoNew gameCoordinator = mock(IGameCoordinatorRisikoNew.class);
 
     private <T> T resolveManager(Class<T> managerType) {
         return gf.getManagers().stream()
@@ -95,12 +94,16 @@ public class InitialPlacementPhaseIntegrationTest {
 
         // forza remaining a 2 per verificare il ramo < 3
         int targetRemaining = 2;
-        tankManager.assignToken(player, targetRemaining - remainingBefore);
+        if (remainingBefore > targetRemaining) {
+            tankManager.removeToken(player, remainingBefore - targetRemaining);
+        } else if (remainingBefore < targetRemaining) {
+            tankManager.assignToken(player, targetRemaining - remainingBefore);
+        }
 
         int toDeploy = Math.min(3, mediator.getPlayerTank(player));
 
         List<String> ownedZones = mediator.getTerritoriesOwnedBy(player);
-        String expectedZone = ownedZones.stream().min(String::compareTo).get();
+        String expectedZone = ownedZones.stream().min(String::compareTo).orElseThrow();
         int zoneBefore = mediator.getZoneTank(expectedZone);
 
         InitialPlacementPhase phase = new InitialPlacementPhase(mediator, new GameCoordinatorRisikoNew());
@@ -151,9 +154,9 @@ public class InitialPlacementPhaseIntegrationTest {
     @DisplayName("Should deploy exactly 3 tanks when available (Single Zone)")
     public void testDeploySingleZone() {
         //SetUp
-        IPlayer player = playersUnit.get(0);
+        IPlayer player = playersUnit.getFirst();
         List<String> ownedZones = mediatorUnit.getZonesOwnedBy(player);
-        String deployZone = ownedZones.stream().min(String::compareTo).get();
+        String deployZone = ownedZones.stream().min(String::compareTo).orElseThrow();
 
         int tanksBefore = mediatorUnit.getPlayerTank(player);
         int zoneTanksBefore = mediatorUnit.getZoneTank(deployZone);
@@ -169,7 +172,7 @@ public class InitialPlacementPhaseIntegrationTest {
     @Test
     @DisplayName("Should deploy exactly 3 tanks when available (Multi Zone)")
     public void testDeployMultiZone() {
-        IPlayer player = playersUnit.get(0);
+        IPlayer player = playersUnit.getFirst();
         List<String> ownedZones = mediatorUnit.getZonesOwnedBy(player);
         String z1 = ownedZones.get(0);
         String z2 = ownedZones.get(1);
@@ -191,10 +194,10 @@ public class InitialPlacementPhaseIntegrationTest {
     @Test
     @DisplayName("Should throw RuntimeException when invalid sum is provided")
     public void testDeployInvalidSumThrows() {
-        IPlayer player = playersUnit.get(0);
+        IPlayer player = playersUnit.getFirst();
 
         List<String> ownedZones = mediatorUnit.getZonesOwnedBy(player);
-        String deployZone = ownedZones.stream().min(String::compareTo).get();
+        String deployZone = ownedZones.stream().min(String::compareTo).orElseThrow();
 
         Map<String,Integer> response = Map.of(deployZone, 2);
         InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit, new CoordinatorStub(response));
@@ -223,10 +226,14 @@ public class InitialPlacementPhaseIntegrationTest {
     public void testDeployExactlyMaxDeployable() {
         IPlayer player = playersUnit.get(3);
         int currentTanks = mediatorUnit.getPlayerTank(player);
-        tankManagerUnit.assignToken(player, 3 - currentTanks);
+        if (currentTanks > 3) {
+            tankManagerUnit.removeToken(player, currentTanks - 3);
+        } else if (currentTanks < 3) {
+            tankManagerUnit.assignToken(player, 3 - currentTanks);
+        }
 
         List<String> ownedZones = mediatorUnit.getZonesOwnedBy(player);
-        String deployZone = ownedZones.stream().min(String::compareTo).get();
+        String deployZone = ownedZones.stream().min(String::compareTo).orElseThrow();
         int zonesTanksBefore = mediatorUnit.getZoneTank(deployZone);
 
         InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit, new GameCoordinatorRisikoNew());
@@ -245,13 +252,13 @@ public class InitialPlacementPhaseIntegrationTest {
         private record CoordinatorStub(Map<String, Integer> response) implements IGameCoordinatorRisikoNew {
 
         @Override
-        public Map<String, Integer> sendInitialPlacementRequest(InitialDeployRequestDTO request) {
-            return Map.of();
+        public InitialDeployResponseDTO sendInitialPlacementRequest(InitialDeployRequestDTO request) {
+            return new InitialDeployResponseDTO(response);
         }
 
         @Override
         public DeployResponseDTO sendDeployRequest(DeployRequestDTO request) {
-            return null;
+            return new DeployResponseDTO(Map.of());
         }
 
         @Override
@@ -260,7 +267,7 @@ public class InitialPlacementPhaseIntegrationTest {
         }
 
         @Override
-        public FortifyChoiceDTO sendMoveRequest(FortifyRequestDTO request) {
+        public FortifyChoiceDTO sendFortifyRequest(FortifyRequestDTO request) {
             return null;
         }
     }

@@ -2,6 +2,7 @@ package it.uniurb.pmo.variants.risikonew.turn.phase_combat;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.dto.AttackChoiceDTO;
+import it.uniurb.pmo.framework.turn.dto.AttackRequestDTO;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 
@@ -32,7 +33,7 @@ public class CombatPhase implements ICombatPhase {
 	public void playPhase(IPlayer player) {
 		this.player = player;
 		List<String> ownedZones = this.mediator.getZonesOwnedBy(player);
-		AttackChoiceDTO choice = this.coordinator.sendAttackRequest(player, ownedZones);
+		AttackChoiceDTO choice = this.coordinator.sendAttackRequest(new AttackRequestDTO(player, ownedZones));
 		this.clearPhase();
 	}
 
