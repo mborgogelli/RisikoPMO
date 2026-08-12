@@ -27,10 +27,6 @@ public abstract class DeployRequestDTO implements IPlayerRequestDTO {
         return deployableZones;
     }
 
-    public IPlayer getPlayer() {
-        return player;
-    }
-
     public Map<ITokenType, Integer> getTokenDeploy() {
         return tokensToDeploy;
     }
