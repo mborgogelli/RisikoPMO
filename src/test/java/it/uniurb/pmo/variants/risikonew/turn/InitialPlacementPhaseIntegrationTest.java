@@ -95,9 +95,9 @@ public class InitialPlacementPhaseIntegrationTest {
         // forza remaining a 2 per verificare il ramo < 3
         int targetRemaining = 2;
         if (remainingBefore > targetRemaining) {
-            tankManager.removeToken(player, ERisikoNewToken.TANK, remainingBefore - targetRemaining);
+            tankManager.removeTank(player, remainingBefore - targetRemaining);
         } else if (remainingBefore < targetRemaining) {
-            tankManager.assignToken(player, targetRemaining - remainingBefore);
+            tankManager.assignTank(player, targetRemaining - remainingBefore);
         }
 
         int toDeploy = Math.min(3, mediator.getPlayerTank(player));
@@ -118,7 +118,7 @@ public class InitialPlacementPhaseIntegrationTest {
 
     private GameFactoryRisikoNew gfUnit;
     private IMapManager mapManagerUnit;
-    private ITokenManager tankManagerUnit;
+    private ITankManager tankManagerUnit;
     private IMediatorRisikoNew mediatorUnit;
     private List<IPlayer> playersUnit;
 
@@ -132,8 +132,8 @@ public class InitialPlacementPhaseIntegrationTest {
             .orElseThrow();
 
         tankManagerUnit = gfUnit.getManagers().stream()
-            .filter(ITokenManager.class::isInstance)
-            .map(ITokenManager.class::cast)
+            .filter(ITankManager.class::isInstance)
+            .map(ITankManager.class::cast)
             .findFirst()
             .orElseThrow();
 
@@ -211,7 +211,7 @@ public class InitialPlacementPhaseIntegrationTest {
     public void testThrowExceptionWhenNoTanks() {
         IPlayer player = playersUnit.get(2);
         int currentTanks = mediatorUnit.getPlayerTank(player);
-        tankManagerUnit.assignToken(player, -currentTanks);
+        tankManagerUnit.removeTank(player, currentTanks);
 
         InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit, new GameCoordinatorRisikoNew());
 
@@ -227,9 +227,9 @@ public class InitialPlacementPhaseIntegrationTest {
         IPlayer player = playersUnit.get(3);
         int currentTanks = mediatorUnit.getPlayerTank(player);
         if (currentTanks > 3) {
-            tankManagerUnit.removeToken(player, ERisikoNewToken.TANK, currentTanks - 3);
+            tankManagerUnit.removeTank(player, currentTanks - 3);
         } else if (currentTanks < 3) {
-            tankManagerUnit.assignToken(player, 3 - currentTanks);
+            tankManagerUnit.assignTank(player, 3 - currentTanks);
         }
 
         List<String> ownedZones = mediatorUnit.getZonesOwnedBy(player);

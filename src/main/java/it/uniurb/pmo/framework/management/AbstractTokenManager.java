@@ -42,18 +42,11 @@ public abstract class AbstractTokenManager implements ITokenManager{
 	}
 
 	@Override
-	public void assignToken(IPlayer player, int token) {
-		this.assignToken(player, this.getDefaultTokenType(), token);
-	}
-
-	@Override
 	public void removeToken(IPlayer player, ITokenType type, int token) {
 		this.removePlayerTokenAmount(player, type, token);
 	}
 
 	protected abstract void resetTokenData();
-
-	protected abstract ITokenType getDefaultTokenType();
 
 	protected final void addPlayerTokenAmount(IPlayer player, ITokenType type, int amount) {
 		if (amount < 0) {

@@ -55,14 +55,20 @@ public interface ITokenManager extends IManager {
 
 	/**
 	 * Aggiunge token al giocatore
-	 * @param player
-	 * @param type
-	 * @param token
+	 * @param player Il giocatore
+	 * @param type Il tipo di token
+	 * @param token Il numero di token da aggiungere
 	 */
 	void assignToken(IPlayer player, ITokenType type, int token);
 
-	void assignToken(IPlayer player, int token);
+	//void assignToken(IPlayer player, int token);
 
+	/**
+	 * Rimuove token da un giocatore
+	 * @param player Il giocatore
+	 * @param type Il tipo di token
+	 * @param token Il numero di token da rimuovere
+	 */
 	void removeToken(IPlayer player, ITokenType type, int token);
 
 }
