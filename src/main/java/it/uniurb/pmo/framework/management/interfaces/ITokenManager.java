@@ -40,7 +40,7 @@ public interface ITokenManager extends IManager {
 	 * @param amount il numero di token da dispiegare
 	 * 
 	 */
-	void deployToken(IPlayer player, ITokenType type, String zone, int amount);
+	void deployToken(IPlayer player, ITokenType type, String toZone, int amount);
 
 	/**
 	 * Muove i token di un giocatore da una zona ad un'altra.

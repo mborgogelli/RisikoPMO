@@ -1,12 +1,13 @@
 package it.uniurb.pmo.framework.management.interfaces;
 
 import java.util.List;
-import java.util.Map;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 
 /**
  * Interfaccia che modella un mediatore tra i manager di gioco
+ * Lo scopo del mediatore è quello di gestire la comunicazione tra i vari manager di gioco.
+ *
  */
 public interface IMediator extends IGameConductor {
 

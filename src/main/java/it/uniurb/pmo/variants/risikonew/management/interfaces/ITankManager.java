@@ -5,8 +5,15 @@ import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
 import java.util.Map;
 
+/**
+ * Interfaccia che definisce le operazioni per la gestione dei tank.
+ */
 public interface ITankManager extends ITokenManager {
 
+	/**
+	 *  Permette di ottenere il tipo di token di default per i tank.
+	 * @return il tipo di token di default per i tank
+	 */
 	ITokenType getDefaultTokenType();
 
 	default int getTotalDeployed(IPlayer player) {
@@ -15,10 +22,6 @@ public interface ITankManager extends ITokenManager {
 
 	default int getPlayerTank(IPlayer player) {
 		return getPlayerToken(player, getDefaultTokenType());
-	}
-
-	default int getPlayerToken(IPlayer player) {
-		return getPlayerTank(player);
 	}
 
 	default int getTerritoryTanks(String zone) {

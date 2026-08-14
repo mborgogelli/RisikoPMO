@@ -46,6 +46,12 @@ public abstract class AbstractTokenManager implements ITokenManager{
 		this.removePlayerTokenAmount(player, type, token);
 	}
 
+	@Override
+	public final void resetGame() {
+		this.clearPlayerTokenData();
+		this.resetTokenData();
+	}
+
 	protected abstract void resetTokenData();
 
 	protected final void addPlayerTokenAmount(IPlayer player, ITokenType type, int amount) {

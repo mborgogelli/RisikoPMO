@@ -8,6 +8,11 @@ import it.uniurb.pmo.framework.management.interfaces.IManager;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
 
+/**
+ * Classe astratta che implementa
+ * l'interfaccia IMediator e fornisce un'implementazione base per la gestione dei mediatori.
+ *
+ */
 public abstract class AbstractMediator implements IMediator {
 	
 	private final List<IManager> managers;

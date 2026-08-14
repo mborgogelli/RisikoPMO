@@ -18,7 +18,7 @@ public abstract class RisikoNewTestSetup {
     protected GameFactoryRisikoNew gameFactory;
     protected List<IPlayer> players;
     protected IMapManagerRisikoNew mapManager;
-    protected ITankManager tokenManager;
+    protected ITankManager tankManager;
     protected IMediatorRisikoNew mediator;
 
     @BeforeEach
@@ -28,11 +28,11 @@ public abstract class RisikoNewTestSetup {
         players = createPlayers();
 
         mapManager = resolveManager(IMapManagerRisikoNew.class);
-        tokenManager = resolveManager(ITankManager.class);
+        tankManager = resolveManager(ITankManager.class);
         mediator = (IMediatorRisikoNew) gameFactory.getMediator();
 
         mapManager.initializeGame(players);
-        tokenManager.initializeGame(players);
+        tankManager.initializeGame(players);
     }
 
     protected List<IPlayer> createPlayers() {

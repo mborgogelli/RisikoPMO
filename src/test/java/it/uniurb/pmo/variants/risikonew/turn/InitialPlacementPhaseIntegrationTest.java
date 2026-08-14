@@ -1,7 +1,6 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.management.interfaces.IMapManager;
-import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.Player;
 import it.uniurb.pmo.framework.turn.dto.*;
@@ -15,7 +14,6 @@ import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRis
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialDeployRequestDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialDeployResponseDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
-import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 public class InitialPlacementPhaseIntegrationTest {
 
@@ -70,8 +67,8 @@ public class InitialPlacementPhaseIntegrationTest {
 
         for (IPlayer player : players) {
             System.out.println(player.getName() + ": " + this.mapManager.getZonesOwnedBy(player).size() + " zones");
-            System.out.println(player.getName() + ":  " + this.tankManager.getPlayerToken(player) + " tanks.");
-            System.out.println(this.mapManager.getZonesOwnedBy(player).size() + this.tankManager.getPlayerToken(player));
+            System.out.println(player.getName() + ":  " + this.tankManager.getPlayerTank(player) + " tanks.");
+            System.out.println(this.mapManager.getZonesOwnedBy(player).size() + this.tankManager.getPlayerTank(player));
         }
         InitialPlacementPhase phase = new InitialPlacementPhase(this.mediator, new GameCoordinatorRisikoNew());
 
