@@ -11,7 +11,7 @@ import java.util.Map;
  * DTO di richiesta per la fase di dispiegamento (deployment).
  * Contiene il contesto necessario al giocatore per scegliere dove piazzare le pedine.
  */
-public abstract class DeployRequestDTO implements IPlayerRequestDTO {
+public abstract class DeployRequestDTO implements IPlayerRequestDTO, IDeployRequestDTO {
 
     protected final IPlayer player;
     protected final List<String> deployableZones;
@@ -23,11 +23,11 @@ public abstract class DeployRequestDTO implements IPlayerRequestDTO {
         this.tokensToDeploy = tokensToDeploy;
     }
 
-    public List<String> getDeployableZones() {
+    public List<String> deployableZones() {
         return deployableZones;
     }
 
-    public Map<ITokenType, Integer> getTokenDeploy() {
+    public Map<ITokenType, Integer> tokenDeploy() {
         return tokensToDeploy;
     }
 }

@@ -11,6 +11,8 @@ import it.uniurb.pmo.variants.risikonew.management.MapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.MediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.TankManager;
 import it.uniurb.pmo.variants.risikonew.management.TurnManagerRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 
 /**
  * Classe factory per la creazione dei manager e del mediatore
@@ -18,11 +20,13 @@ import it.uniurb.pmo.variants.risikonew.management.TurnManagerRisikoNew;
 public class GameFactoryRisikoNew implements IGameFactory {
 	
 	private final AbstractMediator mediator;
+	private final IGameCoordinatorRisikoNew gameCoordinator;
 	private final List<IManager> managers;
 	
 	public GameFactoryRisikoNew() {
 		this.managers = new ArrayList<>();
 		this.mediator = new MediatorRisikoNew();
+		this.gameCoordinator = new GameCoordinatorRisikoNew();
 		this.createManagers();
 		this.setMediator();
 	}
@@ -44,7 +48,7 @@ public class GameFactoryRisikoNew implements IGameFactory {
 		this.managers.add(new MapManagerRisikoNew());
 		this.managers.add(new TankManager());
 		this.managers.add(new CardManagerRisikoNew());
-		this.managers.add(new TurnManagerRisikoNew());
+		this.managers.add(new TurnManagerRisikoNew(this.gameCoordinator));
 	}
 	
 	/**

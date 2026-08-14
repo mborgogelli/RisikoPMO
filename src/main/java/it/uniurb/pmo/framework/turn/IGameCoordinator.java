@@ -16,7 +16,7 @@ public interface IGameCoordinator {
      * @param request il DTO contenente le informazioni sulla distribuzione
      * @return la scelta di distribuzione del giocatore
      */
-    DeployResponseDTO sendDeployRequest(DeployRequestDTO request);
+    DeployResponseDTO sendDeployRequest(IDeployRequestDTO request);
 
     /**
      * Chiede al giocatore se e dove attaccare.

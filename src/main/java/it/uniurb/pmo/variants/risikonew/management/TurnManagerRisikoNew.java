@@ -5,6 +5,7 @@ import java.util.*;
 import it.uniurb.pmo.framework.management.AbstractTurnManager;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITurnManagerRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_combat.CombatPhase;
 import it.uniurb.pmo.variants.risikonew.turn.phase_reinforce.ReinforcePhase;
 import it.uniurb.pmo.variants.risikonew.turn.phase_strategic.StrategicPhase;
@@ -18,7 +19,8 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	//TODO dove passa a true?
 	private boolean isReady;
 
-	public TurnManagerRisikoNew() {
+	public TurnManagerRisikoNew(IGameCoordinatorRisikoNew gameCoordinatorRisikoNew) {
+		super(gameCoordinatorRisikoNew);
 		this.isReady = false;
 	}
 
@@ -39,12 +41,6 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 
 	}
 
-	@Override
-	protected List<IPhase> createPhases() {
-		IMediatorRisikoNew mediator = (IMediatorRisikoNew) super.getMediator();
-		GameCoordinatorRisikoNew coordinator = new GameCoordinatorRisikoNew();
-		return List.of(new ReinforcePhase(mediator, coordinator), new CombatPhase(mediator, coordinator), new StrategicPhase(mediator, coordinator));
-	}
 
 	@Override
 	public void startGame() {
@@ -53,6 +49,13 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 			this.runInitialPlacement();
 			super.startGame();
 		}
+	}
+
+	@Override
+	protected List<IPhase> createPhases() {
+		IMediatorRisikoNew mediator = (IMediatorRisikoNew) super.getMediator();
+		IGameCoordinatorRisikoNew coordinator = (IGameCoordinatorRisikoNew) super.getGameCoordinator();
+		return List.of(new ReinforcePhase(mediator, coordinator), new CombatPhase(mediator, coordinator), new StrategicPhase(mediator, coordinator));
 	}
 
 	@Override

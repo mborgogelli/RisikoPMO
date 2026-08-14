@@ -4,7 +4,6 @@ import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
 import org.junit.jupiter.api.Test;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

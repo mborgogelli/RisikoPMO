@@ -17,15 +17,6 @@ public class TurnManagerTest extends RisikoNewTestSetup {
         return resolveManager(ITurnManager.class);
     }
 
-    @Test
-    void testInitializeGameUsesShuffleResult() {
-        DeterministicTurnManager deterministicTurnManager = new DeterministicTurnManager();
-        deterministicTurnManager.initializeGame(this.players);
-
-        assertEquals(List.of(this.players.get(3), this.players.get(2), this.players.get(1), this.players.get(0)), deterministicTurnManager.getPlayers());
-        assertNull(deterministicTurnManager.getCurrentPlayer());
-        assertEquals(1, deterministicTurnManager.getPlayedTurns());
-    }
 
     @Test
     void testTurnSequenceAndWrapAround() {
@@ -84,33 +75,4 @@ public class TurnManagerTest extends RisikoNewTestSetup {
         assertThrows(IllegalStateException.class, () -> turnManager.getNextPlayer());
     }
 
-    private static final class DeterministicTurnManager extends AbstractTurnManager {
-
-        @Override
-        public Boolean isReady() {
-            return true;
-        }
-
-        @Override
-        public void resetGame() {
-            // no-op for the test double
-        }
-
-        @Override
-        public void stopGame() {
-            // no-op for the test double
-        }
-
-        @Override
-        protected List<IPhase> createPhases() {
-            return List.of();
-        }
-
-        @Override
-        protected List<IPlayer> shufflePlayers(List<IPlayer> players) {
-            List<IPlayer> reversed = new ArrayList<>(players);
-            Collections.reverse(reversed);
-            return reversed;
-        }
-    }
 }

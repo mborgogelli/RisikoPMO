@@ -4,6 +4,7 @@ import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.management.interfaces.ITurnManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
+import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.framework.turn.IPhase;
 
 import java.util.List;
@@ -18,12 +19,17 @@ import java.util.Optional;
  */
 public abstract class AbstractTurnManager implements ITurnManager {
 
+	private final IGameCoordinator gameCoordinator;
 	private IMediator mediator;
 	private IPlayer currentPlayer;
 	private int currentTurn;
 	private int currentPhaseIndex;
 	private List<IPhase> phases;
 	private List<IPlayer> players;
+
+	public AbstractTurnManager(IGameCoordinator gameCoordinator) {
+		this.gameCoordinator = gameCoordinator;
+	}
 
 	@Override
 	public void initializeGame(List<IPlayer> players) {
@@ -54,8 +60,10 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	@Override
 	public void setMediator(IMediator mediator) {
-		this.mediator = mediator;
-		this.mediator.registerManager(this);
+		if (this.mediator == null) {
+			this.mediator = mediator;
+			this.mediator.registerManager(this);
+		}
 	}
 
 	@Override
@@ -137,6 +145,10 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	protected IMediator getMediator() {
 		return this.mediator;
+	}
+
+	protected IGameCoordinator getGameCoordinator() {
+		return this.gameCoordinator;
 	}
 
 	protected List<IPlayer> shufflePlayers(List<IPlayer> players){

@@ -254,8 +254,8 @@ public class InitialPlacementPhaseIntegrationTest {
         }
 
         @Override
-        public DeployResponseDTO sendDeployRequest(DeployRequestDTO request) {
-            return new DeployResponseDTO(Map.of());
+        public DeployResponseDTO sendDeployRequest(IDeployRequestDTO request) {
+            return null;
         }
 
         @Override
