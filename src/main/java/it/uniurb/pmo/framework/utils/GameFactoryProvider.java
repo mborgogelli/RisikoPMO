@@ -11,4 +11,5 @@ public class GameFactoryProvider {
             default -> throw new IllegalArgumentException("Versione di gioco non supportata: " + version);
         };
     }
+
 }

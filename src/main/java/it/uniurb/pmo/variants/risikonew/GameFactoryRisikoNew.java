@@ -6,6 +6,8 @@ import java.util.List;
 import it.uniurb.pmo.framework.management.AbstractMediator;
 import it.uniurb.pmo.framework.management.interfaces.IGameFactory;
 import it.uniurb.pmo.framework.management.interfaces.IManager;
+import it.uniurb.pmo.framework.management.interfaces.IMediator;
+import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.variants.risikonew.management.CardManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.MapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.MediatorRisikoNew;
@@ -18,7 +20,7 @@ import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRis
  * Classe factory per la creazione dei manager e del mediatore
  */
 public class GameFactoryRisikoNew implements IGameFactory {
-	
+
 	private final AbstractMediator mediator;
 	private final IGameCoordinatorRisikoNew gameCoordinator;
 	private final List<IManager> managers;
@@ -30,10 +32,15 @@ public class GameFactoryRisikoNew implements IGameFactory {
 		this.createManagers();
 		this.setMediator();
 	}
-	
+
 	@Override
-	public AbstractMediator getMediator() {
+	public IMediator getMediator() {
 		return this.mediator;
+	}
+
+	@Override
+	public IGameCoordinator getGameCoordinator() {
+		return this.gameCoordinator;
 	}
 
 	@Override

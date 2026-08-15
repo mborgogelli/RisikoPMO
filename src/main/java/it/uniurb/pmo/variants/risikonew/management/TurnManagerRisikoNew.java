@@ -11,16 +11,18 @@ import it.uniurb.pmo.variants.risikonew.turn.phase_reinforce.ReinforcePhase;
 import it.uniurb.pmo.variants.risikonew.turn.phase_strategic.StrategicPhase;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
 
 public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnManagerRisikoNew {
 
+	IMediatorRisikoNew mediator;
+	IGameCoordinatorRisikoNew coordinator;
+
 	//TODO dove passa a true?
 	private boolean isReady;
 
-	public TurnManagerRisikoNew(IGameCoordinatorRisikoNew gameCoordinatorRisikoNew) {
-		super(gameCoordinatorRisikoNew);
+	public TurnManagerRisikoNew(IGameCoordinatorRisikoNew gameCoordinator) {
+		super(gameCoordinator);
 		this.isReady = false;
 	}
 
@@ -41,11 +43,9 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 
 	}
 
-
 	@Override
 	public void startGame() {
 		if(this.isReady) {
-			super.initPhases();
 			this.runInitialPlacement();
 			super.startGame();
 		}
@@ -53,8 +53,7 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 
 	@Override
 	protected List<IPhase> createPhases() {
-		IMediatorRisikoNew mediator = (IMediatorRisikoNew) super.getMediator();
-		IGameCoordinatorRisikoNew coordinator = (IGameCoordinatorRisikoNew) super.getGameCoordinator();
+		this.initMediatorAndCoordinator();
 		return List.of(new ReinforcePhase(mediator, coordinator), new CombatPhase(mediator, coordinator), new StrategicPhase(mediator, coordinator));
 	}
 
@@ -64,8 +63,6 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	}
 
 	private void runInitialPlacement() {
-		IMediatorRisikoNew mediator = (IMediatorRisikoNew) super.getMediator();
-		GameCoordinatorRisikoNew coordinator = new GameCoordinatorRisikoNew();
 		InitialPlacementPhase initialPlacement = new InitialPlacementPhase(mediator, coordinator);
 		while (haveRemainingTanks(mediator)) {
 			for (IPlayer player : super.getPlayers()) {
@@ -80,4 +77,8 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 		return super.getPlayers().stream().anyMatch(p -> mediator.getPlayerTank(p) > 0);
 	}
 
+	private void initMediatorAndCoordinator() {
+		this.mediator = (IMediatorRisikoNew) super.getMediator();
+		this.coordinator = (IGameCoordinatorRisikoNew) super.getGameCoordinator();
+	}
 }

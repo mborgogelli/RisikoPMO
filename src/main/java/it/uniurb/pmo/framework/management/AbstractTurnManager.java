@@ -19,8 +19,8 @@ import java.util.Optional;
  */
 public abstract class AbstractTurnManager implements ITurnManager {
 
-	private final IGameCoordinator gameCoordinator;
 	private IMediator mediator;
+	private IGameCoordinator gameCoordinator;
 	private IPlayer currentPlayer;
 	private int currentTurn;
 	private int currentPhaseIndex;
@@ -52,7 +52,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	@Override
 	public Optional<IPlayer> checkWinner() {
 		Optional<IPlayer> winner = Optional.empty();
-		if (this.getMediator() != null && this.getMediator().checkVictory(this.getCurrentPlayer())) {
+		if (this.mediator.checkVictory(this.getCurrentPlayer())) {
 			winner = Optional.of(this.getCurrentPlayer());
 		}
 		return winner;
@@ -143,14 +143,6 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	 */
 	protected abstract List<IPhase> createPhases();
 
-	protected IMediator getMediator() {
-		return this.mediator;
-	}
-
-	protected IGameCoordinator getGameCoordinator() {
-		return this.gameCoordinator;
-	}
-
 	protected List<IPlayer> shufflePlayers(List<IPlayer> players){
 		List<IPlayer> shuffledPlayers = new ArrayList<>(players);
 		Collections.shuffle(shuffledPlayers);
@@ -163,6 +155,14 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	 */
 	protected void initPhases() {
 		this.phases = this.createPhases();
+	}
+
+	protected IGameCoordinator getGameCoordinator() {
+		return this.gameCoordinator;
+	}
+
+	protected IMediator getMediator() {
+		return this.mediator;
 	}
 
 }
