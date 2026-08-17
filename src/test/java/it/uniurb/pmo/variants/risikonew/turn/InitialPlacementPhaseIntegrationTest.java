@@ -1,5 +1,6 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
+import it.uniurb.pmo.framework.board.IZone;
 import it.uniurb.pmo.framework.management.interfaces.IMapManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.Player;
@@ -14,6 +15,7 @@ import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRis
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialDeployRequestDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialDeployResponseDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
+import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,54 +25,33 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class InitialPlacementPhaseIntegrationTest {
+public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
 
-    private final GameFactoryRisikoNew gf = new GameFactoryRisikoNew();
     private List<IPlayer> players;
     private IMapManagerRisikoNew mapManager;
     private ITankManager tankManager;
     private IMediatorRisikoNew mediator;
     private IGameCoordinatorRisikoNew gameCoordinator;
 
-    private <T> T resolveManager(Class<T> managerType) {
-        return gf.getManagers().stream()
-            .filter(managerType::isInstance)
-            .map(managerType::cast)
-            .findFirst()
-            .orElseThrow(() -> new IllegalStateException("Manager of type " + managerType.getName() + " not found"));
-    }
-
-    private boolean haveRemainingTanks(IMediatorRisikoNew mediator) {
-        return this.players.stream().anyMatch(p -> mediator.getPlayerTank(p) > 0);
-    }
-
     @BeforeEach
     public void setUp() {
-        players = List.of(
-            new Player("A"),
-            new Player("B"),
-            new Player("C"),
-            new Player("D")
-        );
+        super.setUpRisikoNew();
+        this.initManagers();
+    }
 
+    private void initManagers() {
+        this.players = super.getPlayers();
         this.mapManager = resolveManager(IMapManagerRisikoNew.class);
         this.tankManager = resolveManager(ITankManager.class);
-        this.mediator = (IMediatorRisikoNew) gf.getMediator();
-
-        this.mapManager.initializeGame(players);
-        this.tankManager.initializeGame(players);
+        this.mediator = super.getMediator();
+        this.gameCoordinator = super.getGameCoordinator();
     }
 
     @Test
-    @DisplayName("Integration: Deploy exactly 3 tanks when available")
+    @DisplayName("Integration: Deploy tanks until none are left")
     void testPlayPhaseDeploysThreeWhenAvailable() {
 
-        for (IPlayer player : players) {
-            System.out.println(player.getName() + ": " + this.mapManager.getZonesOwnedBy(player).size() + " zones");
-            System.out.println(player.getName() + ":  " + this.tankManager.getPlayerTank(player) + " tanks.");
-            System.out.println(this.mapManager.getZonesOwnedBy(player).size() + this.tankManager.getPlayerTank(player));
-        }
-        InitialPlacementPhase phase = new InitialPlacementPhase(this.mediator, new GameCoordinatorRisikoNew());
+        InitialPlacementPhase phase = new InitialPlacementPhase(this.mediator, this.gameCoordinator);
 
         while (haveRemainingTanks(mediator)) {
             for (IPlayer player : this.players) {
@@ -80,6 +61,12 @@ public class InitialPlacementPhaseIntegrationTest {
                 }
             }
         }
+
+        for (IPlayer player : this.players) {
+            assertTrue(this.mediator.getPlayerTank(player) == 0);
+            assertTrue(this.players.size() == 4 && this.tankManager.getTotalDeployed(player) == 30);
+        }
+
     }
 
    @Test
@@ -241,6 +228,10 @@ public class InitialPlacementPhaseIntegrationTest {
 
         assertEquals(0, tanksAfter);
         assertEquals(zonesTanksBefore + 3, zonesTanksAfter);
+    }
+
+    private boolean haveRemainingTanks(IMediatorRisikoNew mediator) {
+        return this.players.stream().anyMatch(p -> mediator.getPlayerTank(p) > 0);
     }
 
     /**

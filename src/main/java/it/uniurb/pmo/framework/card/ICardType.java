@@ -4,3 +4,4 @@ package it.uniurb.pmo.framework.card;
 public interface ICardType {
 
 }
+

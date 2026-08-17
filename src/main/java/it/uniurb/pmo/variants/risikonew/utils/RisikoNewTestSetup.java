@@ -1,3 +1,5 @@
+package it.uniurb.pmo.variants.risikonew.utils;
+
 import it.uniurb.pmo.framework.management.interfaces.IManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.Player;
@@ -5,8 +7,10 @@ import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
+import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +29,7 @@ public abstract class RisikoNewTestSetup {
     public void setUpRisikoNew() {
         gameFactory = new GameFactoryRisikoNew();
 
-        players = createPlayers();
+        players = createPlayers(4);
 
         mapManager = resolveManager(IMapManagerRisikoNew.class);
         tankManager = resolveManager(ITankManager.class);
@@ -35,20 +39,31 @@ public abstract class RisikoNewTestSetup {
         tankManager.initializeGame(players);
     }
 
-    protected List<IPlayer> createPlayers() {
-        return List.of(
-            new Player("Player1"),
-            new Player("Player2"),
-            new Player("Player3"),
-            new Player("Player4")
-        );
+    protected List<IPlayer> createPlayers(int numberOfPlayers) {
+        List<IPlayer> players = new ArrayList<>();
+        for (int i = 0; i < numberOfPlayers; i++) {
+            players.add(new Player("Player" + (i + 1)));
+        }
+        return players;
     }
 
     protected <T extends IManager> T resolveManager(Class<T> managerType) {
         return gameFactory.getManagers().stream()
-            .filter(managerType::isInstance)
-            .map(managerType::cast)
-            .findFirst()
-            .orElseThrow(() -> new IllegalStateException("Manager of type " + managerType.getName() + " not found"));
+                .filter(managerType::isInstance)
+                .map(managerType::cast)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Manager of type " + managerType.getName() + " not found"));
+    }
+
+    protected List<IPlayer> getPlayers() {
+        return players;
+    }
+
+    protected IMediatorRisikoNew getMediator() {
+        return mediator;
+    }
+
+    protected GameCoordinatorRisikoNew getGameCoordinator() {
+        return (GameCoordinatorRisikoNew) gameFactory.getGameCoordinator();
     }
 }

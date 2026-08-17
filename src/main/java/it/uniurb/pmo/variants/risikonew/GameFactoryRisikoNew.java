@@ -13,6 +13,7 @@ import it.uniurb.pmo.variants.risikonew.management.MapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.MediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.TankManager;
 import it.uniurb.pmo.variants.risikonew.management.TurnManagerRisikoNew;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 
@@ -21,7 +22,7 @@ import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRis
  */
 public class GameFactoryRisikoNew implements IGameFactory {
 
-	private final AbstractMediator mediator;
+	private final IMediatorRisikoNew mediator;
 	private final IGameCoordinatorRisikoNew gameCoordinator;
 	private final List<IManager> managers;
 	

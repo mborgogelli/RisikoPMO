@@ -1,15 +1,18 @@
+package it.uniurb.pmo.variants.risikonew.management;
+
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.Player;
 import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
+import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TankManagerTest extends RisikoNewTestSetup {
+public class TankManagerIntegrationTest extends RisikoNewTestSetup {
 
     @Test
     void testInitializeGame_TooFewPlayers() {

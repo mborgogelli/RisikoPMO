@@ -1,17 +1,16 @@
-import it.uniurb.pmo.framework.management.AbstractTurnManager;
+package it.uniurb.pmo.variants.risikonew.turn;
+
 import it.uniurb.pmo.framework.management.interfaces.ITurnManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
-import it.uniurb.pmo.framework.turn.IPhase;
+import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TurnManagerTest extends RisikoNewTestSetup {
+public class TurnManagerIntegrationTest extends RisikoNewTestSetup {
 
     private ITurnManager resolveTurnManager() {
         return resolveManager(ITurnManager.class);
