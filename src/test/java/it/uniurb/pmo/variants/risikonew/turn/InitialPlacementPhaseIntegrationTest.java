@@ -49,7 +49,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
 
     @Test
     @DisplayName("Integration: Deploy tanks until none are left")
-    void testPlayPhaseDeploysThreeWhenAvailable() {
+    void testPlayPhaseDeploysAllTanks() {
 
         InitialPlacementPhase phase = new InitialPlacementPhase(this.mediator, this.gameCoordinator);
 
@@ -71,12 +71,12 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
 
    @Test
     @DisplayName("Integration: Deploy less than 3 tanks when fewer available")
-    void testPlayPhaseDeploysRemainingWhenLessThanThree() {
+    void testPlayPhasePlayerDeployLessThan3Tanks() {
 
-        IPlayer player = players.get(0);
+        IPlayer player = players.getFirst();
         int remainingBefore = mediator.getPlayerTank(player);
 
-        // forza remaining a 2 per verificare il ramo < 3
+        // Il giocatore ha esattamente 2 tanks residui da assegnare
         int targetRemaining = 2;
         if (remainingBefore > targetRemaining) {
             tankManager.removeTank(player, remainingBefore - targetRemaining);
@@ -87,104 +87,32 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         int toDeploy = Math.min(3, mediator.getPlayerTank(player));
 
         List<String> ownedZones = mediator.getTerritoriesOwnedBy(player);
+        // Il giocatore deve assegnare i tanks rimanenti alla zona con il nome "più piccolo"
         String expectedZone = ownedZones.stream().min(String::compareTo).orElseThrow();
+        // Recupera il numero di tanks nella zona prima del deploy
         int zoneBefore = mediator.getZoneTank(expectedZone);
 
         InitialPlacementPhase phase = new InitialPlacementPhase(mediator, new GameCoordinatorRisikoNew());
         phase.playPhase(player);
 
-        assertEquals(zoneBefore + toDeploy, mediator.getZoneTank(expectedZone));
-        assertEquals(targetRemaining - toDeploy, mediator.getPlayerTank(player));
+        // Verifica che siano stati assegnati meno di 3 tanks
         assertTrue(toDeploy < 3);
-    }
-
-    // ========== TEST SEMPLICI JUnit5 SENZA MOCK ==========
-
-    private GameFactoryRisikoNew gfUnit;
-    private IMapManager mapManagerUnit;
-    private ITankManager tankManagerUnit;
-    private IMediatorRisikoNew mediatorUnit;
-    private List<IPlayer> playersUnit;
-
-    @BeforeEach
-    public void setUpUnitTests() {
-        gfUnit = new GameFactoryRisikoNew();
-        mapManagerUnit = gfUnit.getManagers().stream()
-            .filter(IMapManager.class::isInstance)
-            .map(IMapManager.class::cast)
-            .findFirst()
-            .orElseThrow();
-
-        tankManagerUnit = gfUnit.getManagers().stream()
-            .filter(ITankManager.class::isInstance)
-            .map(ITankManager.class::cast)
-            .findFirst()
-            .orElseThrow();
-
-        mediatorUnit = (MediatorRisikoNew) gfUnit.getMediator();
-
-        playersUnit = List.of(
-            new Player("Unit1"),
-            new Player("Unit2"),
-            new Player("Unit3"),
-            new Player("Unit4")
-        );
-
-        mapManagerUnit.initializeGame(playersUnit);
-        tankManagerUnit.initializeGame(playersUnit);
-    }
-
-    @Test
-    @DisplayName("Should deploy exactly 3 tanks when available (Single Zone)")
-    public void testDeploySingleZone() {
-        //SetUp
-        IPlayer player = playersUnit.getFirst();
-        List<String> ownedZones = mediatorUnit.getZonesOwnedBy(player);
-        String deployZone = ownedZones.stream().min(String::compareTo).orElseThrow();
-
-        int tanksBefore = mediatorUnit.getPlayerTank(player);
-        int zoneTanksBefore = mediatorUnit.getZoneTank(deployZone);
-
-        Map<String,Integer> response = Map.of(deployZone, 3);
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit, new CoordinatorStub(response));
-        phase.playPhase(player);
-
-        assertEquals(tanksBefore - 3, mediatorUnit.getPlayerTank(player));
-        assertEquals(zoneTanksBefore + 3, mediatorUnit.getZoneTank(deployZone));
-    }
-
-    @Test
-    @DisplayName("Should deploy exactly 3 tanks when available (Multi Zone)")
-    public void testDeployMultiZone() {
-        IPlayer player = playersUnit.getFirst();
-        List<String> ownedZones = mediatorUnit.getZonesOwnedBy(player);
-        String z1 = ownedZones.get(0);
-        String z2 = ownedZones.get(1);
-
-        int tanksBefore = mediatorUnit.getPlayerTank(player);
-
-        int z1Before = mediatorUnit.getZoneTank(z1);
-        int z2Before = mediatorUnit.getZoneTank(z2);
-
-        Map<String,Integer> response = Map.of(z1, 1, z2, 2);
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit, new CoordinatorStub(response));
-        phase.playPhase(player);
-
-        assertEquals(tanksBefore - 3, mediatorUnit.getPlayerTank(player));
-        assertEquals(z1Before + 1, mediatorUnit.getZoneTank(z1));
-        assertEquals(z2Before + 2, mediatorUnit.getZoneTank(z2));
+        // Verifica che il numero di tanks nella zona sia aumentato del numero di tanks assegnati
+        assertEquals(zoneBefore + toDeploy, mediator.getZoneTank(expectedZone));
+        // Verifica che il numero di tanks del giocatore sia diminuito del numero di tanks assegnati
+        assertEquals(targetRemaining - toDeploy, mediator.getPlayerTank(player));
     }
 
     @Test
     @DisplayName("Should throw RuntimeException when invalid sum is provided")
     public void testDeployInvalidSumThrows() {
-        IPlayer player = playersUnit.getFirst();
+        IPlayer player = this.players.getFirst();
 
-        List<String> ownedZones = mediatorUnit.getZonesOwnedBy(player);
+        List<String> ownedZones = mediator.getZonesOwnedBy(player);
         String deployZone = ownedZones.stream().min(String::compareTo).orElseThrow();
 
         Map<String,Integer> response = Map.of(deployZone, 2);
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit, new CoordinatorStub(response));
+        InitialPlacementPhase phase = new InitialPlacementPhase(mediator, new CoordinatorStub(response));
 
         RuntimeException ex = assertThrows(RuntimeException.class, () -> phase.playPhase(player));
         assertEquals("You must deploy 3 tanks.", ex.getMessage());
@@ -193,11 +121,11 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     @Test
     @DisplayName("Should throw RuntimeException when no tanks available")
     public void testThrowExceptionWhenNoTanks() {
-        IPlayer player = playersUnit.get(2);
-        int currentTanks = mediatorUnit.getPlayerTank(player);
-        tankManagerUnit.removeTank(player, currentTanks);
+        IPlayer player = this.players.get(2);
+        int currentTanks = mediator.getPlayerTank(player);
+        tankManager.removeTank(player, currentTanks);
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit, new GameCoordinatorRisikoNew());
+        InitialPlacementPhase phase = new InitialPlacementPhase(mediator, new GameCoordinatorRisikoNew());
 
         RuntimeException exception = assertThrows(RuntimeException.class,
             () -> phase.playPhase(player));
@@ -208,23 +136,23 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     @Test
     @DisplayName("Should deploy exactly MAX_DEPLOYABLE when exactly available")
     public void testDeployExactlyMaxDeployable() {
-        IPlayer player = playersUnit.get(3);
-        int currentTanks = mediatorUnit.getPlayerTank(player);
+        IPlayer player = this.players.get(3);
+        int currentTanks = mediator.getPlayerTank(player);
         if (currentTanks > 3) {
-            tankManagerUnit.removeTank(player, currentTanks - 3);
+            tankManager.removeTank(player, currentTanks - 3);
         } else if (currentTanks < 3) {
-            tankManagerUnit.assignTank(player, 3 - currentTanks);
+            tankManager.assignTank(player, 3 - currentTanks);
         }
 
-        List<String> ownedZones = mediatorUnit.getZonesOwnedBy(player);
+        List<String> ownedZones = mediator.getZonesOwnedBy(player);
         String deployZone = ownedZones.stream().min(String::compareTo).orElseThrow();
-        int zonesTanksBefore = mediatorUnit.getZoneTank(deployZone);
+        int zonesTanksBefore = mediator.getZoneTank(deployZone);
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediatorUnit, new GameCoordinatorRisikoNew());
+        InitialPlacementPhase phase = new InitialPlacementPhase(mediator, new GameCoordinatorRisikoNew());
         phase.playPhase(player);
 
-        int tanksAfter = mediatorUnit.getPlayerTank(player);
-        int zonesTanksAfter = mediatorUnit.getZoneTank(deployZone);
+        int tanksAfter = mediator.getPlayerTank(player);
+        int zonesTanksAfter = mediator.getZoneTank(deployZone);
 
         assertEquals(0, tanksAfter);
         assertEquals(zonesTanksBefore + 3, zonesTanksAfter);

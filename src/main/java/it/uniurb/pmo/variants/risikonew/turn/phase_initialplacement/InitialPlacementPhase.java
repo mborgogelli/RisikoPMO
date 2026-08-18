@@ -55,7 +55,7 @@ public class InitialPlacementPhase implements IPhase {
 		if (remaining > 0) {
 			int tanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
 			this.deployableZones = this.mediator.getZonesOwnedBy(player);
-			InitialDeployResponseDTO initialDeploy = this.coordinator.sendInitialPlacementRequest(new InitialDeployRequestDTO(player, deployableZones, tanksToDeploy));
+			InitialDeployResponseDTO initialDeploy = this.coordinator.sendInitialPlacementRequest(new InitialDeployRequestDTO(player.getName(), player.getColor(), deployableZones, tanksToDeploy));
 			this.checkDeploy(initialDeploy.deployment(), tanksToDeploy);
 			this.deployTanks(initialDeploy.deployment());
 		} else {

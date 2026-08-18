@@ -3,6 +3,7 @@ package it.uniurb.pmo.framework.turn.dto;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.turn.IPlayerRequestDTO;
+import it.uniurb.pmo.framework.utils.EnumColors;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
  * DTO di richiesta per la fase di dispiegamento (deployment).
  * Contiene il contesto necessario al giocatore per scegliere dove piazzare le pedine.
  */
-public abstract class DeployRequestDTO implements IPlayerRequestDTO, IDeployRequestDTO {
+public abstract class DeployRequestDTO implements IDeployRequestDTO {
 
     protected final IPlayer player;
     protected final List<String> deployableZones;
@@ -29,5 +30,15 @@ public abstract class DeployRequestDTO implements IPlayerRequestDTO, IDeployRequ
 
     public Map<ITokenType, Integer> tokenDeploy() {
         return tokensToDeploy;
+    }
+
+    @Override
+    public String playerName() {
+        return player.getName();
+    }
+
+    @Override
+    public EnumColors playerColor() {
+        return player.getColor();
     }
 }

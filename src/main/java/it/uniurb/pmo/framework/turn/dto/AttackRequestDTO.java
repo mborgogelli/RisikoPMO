@@ -2,6 +2,7 @@ package it.uniurb.pmo.framework.turn.dto;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPlayerRequestDTO;
+import it.uniurb.pmo.framework.utils.EnumColors;
 
 import java.util.List;
 
@@ -21,5 +22,15 @@ public class AttackRequestDTO implements IPlayerRequestDTO {
 
 	public List<String> getOwnedZones() {
 		return this.ownedZones;
+	}
+
+	@Override
+	public String playerName() {
+		return player.getName();
+	}
+
+	@Override
+	public EnumColors playerColor() {
+		return player.getColor();
 	}
 }
