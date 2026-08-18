@@ -7,19 +7,15 @@ import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TurnManagerIntegrationTest extends RisikoNewTestSetup {
 
-    private ITurnManager resolveTurnManager() {
-        return resolveManager(ITurnManager.class);
-    }
-
-
     @Test
     void testTurnSequenceAndWrapAround() {
-        ITurnManager turnManager = resolveTurnManager();
+        ITurnManager turnManager = super.getManager(ITurnManager.class);
         this.players.forEach(player -> player.setPlayerTurnStatus(PlayerTurnStatus.ACTIVE));
         turnManager.initializeGame(this.players);
 
@@ -32,7 +28,7 @@ public class TurnManagerIntegrationTest extends RisikoNewTestSetup {
         IPlayer thirdPlayer = turnManager.getNextPlayer();
         turnManager.startTurn(thirdPlayer);
 
-        java.util.Set<IPlayer> uniquePlayers = java.util.Set.of(firstPlayer, secondPlayer, thirdPlayer);
+        Set<IPlayer> uniquePlayers = Set.of(firstPlayer, secondPlayer, thirdPlayer);
         assertEquals(3, uniquePlayers.size(), "La sequenza di un giro deve contenere tre giocatori distinti");
         assertTrue(turnManager.getPlayers().containsAll(List.of(firstPlayer, secondPlayer, thirdPlayer)));
 
@@ -46,7 +42,7 @@ public class TurnManagerIntegrationTest extends RisikoNewTestSetup {
 
     @Test
     void testSkipEliminatedPlayers() {
-        ITurnManager turnManager = resolveTurnManager();
+        ITurnManager turnManager = super.getManager(ITurnManager.class);
         this.players.forEach(player -> player.setPlayerTurnStatus(PlayerTurnStatus.ACTIVE));
         turnManager.initializeGame(this.players);
 
@@ -67,7 +63,7 @@ public class TurnManagerIntegrationTest extends RisikoNewTestSetup {
 
     @Test
     void testExceptionWhenNoActivePlayer() {
-        ITurnManager turnManager = resolveTurnManager();
+        ITurnManager turnManager = super.getManager(ITurnManager.class);
         turnManager.initializeGame(this.players);
         this.players.forEach(player -> player.setPlayerTurnStatus(PlayerTurnStatus.ELIMINATED));
 

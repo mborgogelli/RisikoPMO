@@ -70,4 +70,10 @@ public interface IMapManager extends IManager {
 	 */
 	List<String> getChildZones(String rootZone);
 
+	/**
+	 * Restituisce il valore di una zona.
+	 * @param zone la zona di cui si vuole conoscere il valore
+	 * @return il valore della zona
+	 */
+	int getZoneValue(String zone);
 }

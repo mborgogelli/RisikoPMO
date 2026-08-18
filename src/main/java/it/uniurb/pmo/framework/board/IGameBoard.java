@@ -60,7 +60,7 @@ public interface IGameBoard {
 	 * @param zoneName il nome della zona di cui si vuole conoscere il valore
 	 * @return il valore della zona
 	 */
-	Integer getValue(String zoneName);
+	Integer getZoneValue(String zoneName);
 
 	
 }

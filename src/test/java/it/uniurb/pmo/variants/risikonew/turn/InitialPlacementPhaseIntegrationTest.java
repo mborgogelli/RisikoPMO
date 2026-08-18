@@ -1,12 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
-import it.uniurb.pmo.framework.board.IZone;
-import it.uniurb.pmo.framework.management.interfaces.IMapManager;
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.players.Player;
 import it.uniurb.pmo.framework.turn.dto.*;
-import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
-import it.uniurb.pmo.variants.risikonew.management.MediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
@@ -41,8 +36,8 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
 
     private void initManagers() {
         this.players = super.getPlayers();
-        this.mapManager = resolveManager(IMapManagerRisikoNew.class);
-        this.tankManager = resolveManager(ITankManager.class);
+        this.mapManager = getManager(IMapManagerRisikoNew.class);
+        this.tankManager = getManager(ITankManager.class);
         this.mediator = super.getMediator();
         this.gameCoordinator = super.getGameCoordinator();
     }

@@ -63,7 +63,7 @@ class GameBoardRisikoNew implements IGameBoard {
 	}
 
 	@Override
-	public Integer getValue(String zoneName) {
+	public Integer getZoneValue(String zoneName) {
 		IZone zone = findZoneByName(zoneName);
 		return zone.getValue();
 	}

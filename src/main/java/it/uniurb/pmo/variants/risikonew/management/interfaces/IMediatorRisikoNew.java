@@ -22,5 +22,12 @@ public interface IMediatorRisikoNew extends IMediator {
 
     void deployTank(IPlayer player, String zone, int tanks);
 
+    default int getContinentArmyBonus(String continent) {
+        return getZoneValue(continent);
+    };
+
+    default int getTerritoryValue(String territory) {
+        return getZoneValue(territory);
+    };
 
 }

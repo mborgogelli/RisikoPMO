@@ -112,9 +112,9 @@ class GameBoardUnitTest {
 	@Test
 	@DisplayName("Unit Test: Verifica il valore assegnato alla zona")
 	void getValueReturnsZoneValue() {
-		assertEquals(3, this.gameBoard.getValue("islanda"));
-		assertEquals(4, this.gameBoard.getValue("gran_bretagna"));
-		assertEquals(5, this.gameBoard.getValue("kamchatka"));
+		assertEquals(3, this.gameBoard.getZoneValue("islanda"));
+		assertEquals(4, this.gameBoard.getZoneValue("gran_bretagna"));
+		assertEquals(5, this.gameBoard.getZoneValue("kamchatka"));
 	}
 }
 

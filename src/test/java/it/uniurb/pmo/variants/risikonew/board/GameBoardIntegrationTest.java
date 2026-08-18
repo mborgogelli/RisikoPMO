@@ -151,7 +151,7 @@ public class GameBoardIntegrationTest {
         
         assertNotNull(territoryName);
         
-        Integer value = gameBoard.getValue(territoryName);
+        Integer value = gameBoard.getZoneValue(territoryName);
         assertNotNull(value);
         assertTrue(value >= 0);
     }
@@ -168,10 +168,10 @@ public class GameBoardIntegrationTest {
         assertNotNull(territoryName);
         
         // Test that getArmyBonus returns the same as getValue
-        Integer armyBonus = gameBoard.getValue(territoryName);
+        Integer armyBonus = gameBoard.getZoneValue(territoryName);
         
         assertNotNull(armyBonus);
-		assertEquals(armyBonus, gameBoard.getValue(territoryName));
+		assertEquals(armyBonus, gameBoard.getZoneValue(territoryName));
 		assertTrue(armyBonus >= 0);
 	}
 }

@@ -31,8 +31,8 @@ public abstract class RisikoNewTestSetup {
 
         players = createPlayers(4);
 
-        mapManager = resolveManager(IMapManagerRisikoNew.class);
-        tankManager = resolveManager(ITankManager.class);
+        mapManager = getManager(IMapManagerRisikoNew.class);
+        tankManager = getManager(ITankManager.class);
         mediator = (IMediatorRisikoNew) gameFactory.getMediator();
 
         mapManager.initializeGame(players);
@@ -47,7 +47,7 @@ public abstract class RisikoNewTestSetup {
         return players;
     }
 
-    protected <T extends IManager> T resolveManager(Class<T> managerType) {
+    protected <T extends IManager> T getManager(Class<T> managerType) {
         return gameFactory.getManagers().stream()
                 .filter(managerType::isInstance)
                 .map(managerType::cast)

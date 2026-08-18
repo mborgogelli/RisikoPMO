@@ -69,7 +69,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	@Override
 	public void startTurn(IPlayer player) {
 		this.currentPlayer = player;
-		this.currentPhaseIndex = 0;
+		this.currentPhaseIndex = 1;
 		if (this.phases != null && !this.phases.isEmpty()) {
 			this.startPhase(this.phases.getFirst());
 		}

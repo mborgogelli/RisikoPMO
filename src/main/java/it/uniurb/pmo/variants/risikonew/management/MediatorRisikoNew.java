@@ -32,6 +32,11 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
+	public int getZoneValue(String zone) {
+		return this.mapManager.getZoneValue(zone);
+	}
+
+	@Override
 	public boolean canMoveBetween(IPlayer player, String toZone, String fromZone) {
 		return mapManager.canMoveBetween(player, toZone, fromZone);
 	}

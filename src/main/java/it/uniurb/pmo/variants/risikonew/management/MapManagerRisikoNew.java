@@ -1,5 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.management;
 
+import it.uniurb.pmo.framework.board.BoardCreator;
+import it.uniurb.pmo.framework.board.IGameBoard;
 import it.uniurb.pmo.framework.management.AbstractMapManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.board.BoardCreatorRisikoNew;
@@ -22,7 +24,7 @@ public class MapManagerRisikoNew extends AbstractMapManager implements IMapManag
 		this.playerTerritories = new HashMap<>();
 		this.continents = new HashMap<>();
 	}
-	
+
 	@Override
 	public Boolean isReady() {
 		return this.isReady;
@@ -42,7 +44,17 @@ public class MapManagerRisikoNew extends AbstractMapManager implements IMapManag
 		this.playerTerritories.clear();
 		this.isReady = false;
 	}
-	
+
+	@Override
+	public boolean isTerritory(String territory) {
+		return super.getAllZones().contains(territory);
+	}
+
+	@Override
+	public boolean isContinent(String continent) {
+		return this.continents.containsKey(continent);
+	}
+
 	@Override
 	public boolean canMoveBetween(IPlayer player, String toTerritory, String fromTerritory) {
 		checkReady();
@@ -155,4 +167,5 @@ public class MapManagerRisikoNew extends AbstractMapManager implements IMapManag
 			throw new IllegalArgumentException("Player " + player + " not found.");
 		}
 	}
+
 }

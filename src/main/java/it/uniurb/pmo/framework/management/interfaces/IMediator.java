@@ -32,6 +32,13 @@ public interface IMediator extends IGameConductor {
 	List<String> getZonesOwnedBy(IPlayer player);
 
 	/**
+	 * Restituisce il valore numerico associato a una zona.
+	 * @param zone la zona
+	 * @return il valore della zona
+	 */
+	int getZoneValue(String zone);
+
+	/**
 	 * Verifica se il giocatore puo' muovere un token tra due zone.
 	 */
 	boolean canMoveBetween(IPlayer player, String toZone, String fromZone);

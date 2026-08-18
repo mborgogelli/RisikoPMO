@@ -12,28 +12,27 @@ public interface IZone {
 	/**
 	 * Restituisce il nome della zona.
 	 *
-	 * @return il nome della zona, non può essere null
+	 * @return il nome della zona
 	 */
 	String getName();
 	
 	/**
 	 * Restituisce il valore numerico associato alla zona.
-	 * Valore per la modalità "TIME ATTACK"
-	 * 
-	 * @return il valore della zona, non può essere null
+	 *
+	 * @return il valore della zona
 	 */
 	Integer getValue();
 
 	/**
 	 * Imposta il valore numerico associato alla zona.
 	 *
-	 * @param value Valore per la modalità "TIME ATTACK"
+	 * @param value Il valore della zona
 	 */
 	void setValue(Integer value);
 	
       /**
      * Restituisce la zona contenitore di questa zona.
-     * Ad esempio, un territorio apparterrà ad un continente.
+     * Ad esempio, un territorio apparterrà a un continente.
      * 
      * @return la zona contenitore, null se questa è una zona di livello radice
      */

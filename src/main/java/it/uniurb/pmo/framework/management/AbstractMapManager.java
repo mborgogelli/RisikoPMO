@@ -52,6 +52,11 @@ public abstract class AbstractMapManager implements IMapManager {
 						.toList();
 	}
 
+	@Override
+	public int getZoneValue(String zone) {
+		return this.gameBoard.getZoneValue(zone);
+	}
+
 	protected List<String> getParentZones(){
 		return this.gameBoard.getRootZones().stream()
 				.map(IZone::getName)
