@@ -95,7 +95,13 @@ public abstract class AbstractTurnManager implements ITurnManager {
 			int nextIndex = (currentIndex + i) % this.players.size();
 			IPlayer candidate = this.players.get(nextIndex);
 
+
+			 // Trova il prossimo giocatore attivo
 			if (candidate.getPlayerTurnStatus() == PlayerTurnStatus.ACTIVE) {
+				/**
+				 * Se l'indice del prossimo giocatore è uguale a zero e l'indice corrente
+				 * è maggiore o uguale a zero, incrementa il turno corrente.
+				 */
 				if (nextIndex == 0 && currentIndex >= 0) {
 					this.currentTurn++;
 				}
