@@ -7,8 +7,8 @@ import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialDeployRequestDTO;
-import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialDeployResponseDTO;
+import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployRequestRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployResponseRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
@@ -163,12 +163,12 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         private record CoordinatorStub(Map<String, Integer> response) implements IGameCoordinatorRisikoNew {
 
         @Override
-        public InitialDeployResponseDTO sendInitialPlacementRequest(InitialDeployRequestDTO request) {
-            return new InitialDeployResponseDTO(response);
+        public DeployResponseRisikoNewDTO sendInitialPlacementRequest(DeployRequestRisikoNewDTO request) {
+            return new DeployResponseRisikoNewDTO(response);
         }
 
         @Override
-        public DeployResponseDTO sendDeployRequest(IDeployRequestDTO request) {
+        public IDeployResponseDTO sendDeployRequest(IDeployRequestDTO request) {
             return null;
         }
 

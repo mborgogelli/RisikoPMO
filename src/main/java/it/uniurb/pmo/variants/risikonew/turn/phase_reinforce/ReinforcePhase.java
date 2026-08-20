@@ -5,21 +5,13 @@ import java.util.Map;
 
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.turn.dto.DeployRequestDTO;
-import it.uniurb.pmo.framework.turn.dto.DeployResponseDTO;
+import it.uniurb.pmo.framework.turn.dto.IDeployResponseDTO;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
+import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployRequestRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployResponseRisikoNewDTO;
 
 public class ReinforcePhase implements IReinforcePhase {
-
-	private final static int BONUS_AFRICA = 3;
-	private final static int BONUS_ASIA = 3;
-	private final static int BONUS_AUSTRALIA = 3;
-	private final static int BONUS_SOUTHAMERICA = 3;
-	private final static int BONUS_EUROPE = 3;
-	private final static int BONUS_NORTHAMERICA = 3;
-	private final static int BONUS_DEFAULT = 0;
 
 	private IPlayer player;
 	private final IMediatorRisikoNew mediator;
@@ -41,18 +33,16 @@ public class ReinforcePhase implements IReinforcePhase {
 	public void playPhase(IPlayer player) {
 		this.player = player;
 		this.playerTerritories = this.mediator.getZonesOwnedBy(player);
-		int reinforcements = this.reinforceByTerritories(this.playerTerritories);
-		List<String> completedContinents = this.mediator.getCompletedContinents(player);
-		for (String continent : completedContinents) {
-			reinforcements = reinforcements + this.reinforceByContinentBonus(continent);
-		}
+		int reinforcementsFromTerritories = this.reinforceByTerritories();
+		int reinforcementsFromContinents = this.reinforceByContinentBonus();
+		int reinforcements = reinforcementsFromTerritories + reinforcementsFromContinents;
 		List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
-		DeployResponseDTO response = this.coordinator.sendDeployRequest(new DeployRequestDTO(player, deployableZones, Map.of(ERisikoNewToken.TANK, reinforcements)) {});
-		Map<String, Map<it.uniurb.pmo.framework.players.ITokenType, Integer>> targetZones = response.getDeployment();
-		targetZones.forEach((zone, tokens) -> this.mediator.deployTank(this.player, zone, tokens.getOrDefault(ERisikoNewToken.TANK, 0)));
+		DeployResponseRisikoNewDTO response = (DeployResponseRisikoNewDTO) this.coordinator.sendDeployRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), deployableZones, reinforcements));
+		response.deployment().forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
 		this.clearPhase();
 	}
 
+	// TODO rimuovere nextStep
 	@Override
 	public void nextStep(IPlayer player) {
 	}
@@ -65,28 +55,22 @@ public class ReinforcePhase implements IReinforcePhase {
 	}
 
 	@Override
-	public int reinforceByTerritories(List<String> playerTerritories) {
-		this.playerTerritories = playerTerritories;
+	public int reinforceByTerritories() {
 		return this.playerTerritories.size() / 3;
 	}
 
 	@Override
-	public int reinforceByContinentBonus(String continent) {
-		int tanks;
-		switch (continent) {
-			case "africa" -> tanks = BONUS_AFRICA;
-			case "asia" -> tanks = BONUS_ASIA;
-			case "australia" -> tanks = BONUS_AUSTRALIA;
-			case "south_america" -> tanks = BONUS_SOUTHAMERICA;
-			case "europe" -> tanks = BONUS_EUROPE;
-			case "north_america" ->	tanks = BONUS_NORTHAMERICA;
-			default -> tanks = BONUS_DEFAULT;
+	public int reinforceByContinentBonus() {
+		int tanks = 0;
+		List<String> completedContinents = this.mediator.getCompletedContinents(player);
+		for (String c : completedContinents) {
+			tanks += mediator.getContinentArmyBonus(c);
 		}
 		return tanks;
 	}
 
 	@Override
-	public int reinforceByCards(List<ICard> tris) {
+	public int reinforceByCards() {
 		this.tris = tris;
 		int bonus = getTerritoryCardBonusForOwnership(tris);
 		this.tris.clear();

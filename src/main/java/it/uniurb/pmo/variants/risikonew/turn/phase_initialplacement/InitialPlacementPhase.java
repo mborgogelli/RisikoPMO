@@ -55,7 +55,7 @@ public class InitialPlacementPhase implements IPhase {
 		if (remaining > 0) {
 			int tanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
 			this.deployableZones = this.mediator.getZonesOwnedBy(player);
-			InitialDeployResponseDTO initialDeploy = this.coordinator.sendInitialPlacementRequest(new InitialDeployRequestDTO(player.getName(), player.getColor(), deployableZones, tanksToDeploy));
+			DeployResponseRisikoNewDTO initialDeploy = this.coordinator.sendInitialPlacementRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), deployableZones, tanksToDeploy));
 			this.checkDeploy(initialDeploy.deployment(), tanksToDeploy);
 			this.deployTanks(initialDeploy.deployment());
 		} else {
@@ -71,7 +71,7 @@ public class InitialPlacementPhase implements IPhase {
 		int deployed = targetZones.values().stream().reduce(0, Integer::sum);
 		boolean sameTerritories = this.deployableZones.containsAll(targetZones.keySet()) && (this.deployableZones.size() == targetZones.size());
 		boolean cannotDeploy = deployed != tanksToDeploy;// || !sameTerritories;
-		//TODO
+		// TODO modificare il metodo di stub per fare ritornare tutta la lista di territory
 		if (cannotDeploy) {
 			throw new RuntimeException("You must deploy " + tanksToDeploy + " tanks.");
 		}

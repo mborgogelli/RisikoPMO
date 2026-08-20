@@ -16,21 +16,6 @@ public interface IGameCoordinator {
      * @param request il DTO contenente le informazioni sulla distribuzione
      * @return la scelta di distribuzione del giocatore
      */
-    DeployResponseDTO sendDeployRequest(IDeployRequestDTO request);
-
-    /**
-     * Chiede al giocatore se e dove attaccare.
-     *
-     * @param request il DTO contenente le informazioni sull'attacco
-     * @return la scelta di attacco del giocatore
-     */
-    AttackChoiceDTO sendAttackRequest(AttackRequestDTO request);
-
-    /**
-     * Chiede al giocatore se e dove spostare truppe.
-     *
-     * @param request il DTO contenente le informazioni sullo spostamento
-     * @return la scelta di spostamento del giocatore
-     */
-    FortifyChoiceDTO sendFortifyRequest(FortifyRequestDTO request);
+    IDeployResponseDTO sendDeployRequest(IDeployRequestDTO request);
 }
+

@@ -10,5 +10,5 @@ public interface IDeployRequestDTO extends IPlayerRequestDTO {
 
     List<String> deployableZones();
 
-    Map<ITokenType, Integer> tokenDeploy();
+    Map<ITokenType, Integer> tokenToDeploy();
 }
