@@ -1,9 +1,10 @@
 package it.uniurb.pmo.variants.risikonew.card;
 
 import it.uniurb.pmo.framework.card.ICard;
+import it.uniurb.pmo.framework.card.ICardContent;
 import it.uniurb.pmo.framework.card.IMissionTarget;
 
-public class MissionCard implements ICard<EnumMissionTypeRisikoNew, IMissionTarget> {
+public class MissionCard implements ICard {
 	private final EnumMissionTypeRisikoNew missionType;
 	private final IMissionTarget missionTarget;
 	
@@ -19,7 +20,7 @@ public class MissionCard implements ICard<EnumMissionTypeRisikoNew, IMissionTarg
     }
 
     @Override
-    public IMissionTarget getCardContent() {
+    public ICardContent getCardContent() {
         return this.missionTarget;
     }
 }

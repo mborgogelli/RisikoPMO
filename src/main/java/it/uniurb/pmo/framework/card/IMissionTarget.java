@@ -9,7 +9,7 @@ import it.uniurb.pmo.framework.players.Player;
  * 
  **/
 
-public interface IMissionTarget {
+public interface IMissionTarget extends ICardContent{
 
 	 boolean isAchievementReachable(Player player);
 	

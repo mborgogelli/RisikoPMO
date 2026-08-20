@@ -8,7 +8,7 @@ package it.uniurb.pmo.framework.card;
  *                       potrebbe essere il nome di un territorio o i dettagli di una missione.
  */
 
-public interface ICard <ICardType, TCardContent> {
+public interface ICard {
 	
 	/**
 	 * Restituisce il tipo della carta, che può essere utilizzato per identificare la categoria della carta.
@@ -24,5 +24,6 @@ public interface ICard <ICardType, TCardContent> {
 	 * 
 	 * @return Il contenuto della carta
 	 */
-	TCardContent getCardContent();
+	ICardContent getCardContent();
+	
 }

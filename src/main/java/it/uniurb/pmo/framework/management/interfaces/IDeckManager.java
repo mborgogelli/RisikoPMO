@@ -6,13 +6,13 @@ import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.players.IPlayer;
 
-public interface IDeckManager<T extends ICardType, TCardContent> extends IManager {
+public interface IDeckManager extends IManager {
 
 	void shuffleDeck();
 
-	List<ICard<T, TCardContent>> playCards(IPlayer player);
+	List<ICard> playCards(IPlayer player, ICardType cardType);
 
-	ICard<T, TCardContent> pickCard(IPlayer player);
+	ICard pickCard(IPlayer player, ICardType cardType);
 }
 
 

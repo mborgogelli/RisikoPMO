@@ -1,9 +1,10 @@
 package it.uniurb.pmo.variants.risikonew.card;
 
 import it.uniurb.pmo.framework.card.ICard;
+import it.uniurb.pmo.framework.card.ICardContent;
 
 // Carta territorio che rappresenta una carta del mazzo di Risiko Classic
-public class TerritoryCard  implements ICard <EnumSymbolRisikoNew, String> {
+public class TerritoryCard  implements ICard  {
 	
 	private final EnumSymbolRisikoNew symbol;
     private final String territory;
@@ -26,8 +27,8 @@ public class TerritoryCard  implements ICard <EnumSymbolRisikoNew, String> {
 	}
 	
 	@Override
-	public String getCardContent() {
-		return this.territory;
+	public ICardContent getCardContent() {
+		return null;
 	}
 
 }

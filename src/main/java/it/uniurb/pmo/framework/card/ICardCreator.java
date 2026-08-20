@@ -2,7 +2,7 @@ package it.uniurb.pmo.framework.card;
 
 import java.util.List;
 
-public interface ICardCreator<ICardType, TCardContent> {
+public interface ICardCreator {
 
-    List<ICard<ICardType, TCardContent>> getDeck();
+    List<ICard> getDeck();
 }
