@@ -18,12 +18,37 @@ public interface IRoomManager {
 	 */
 	String createRoom(String nomeGiocatore, int maxPlayers, EGameVersion gemeVersion);
 
+	/**
+	 * Filtra le stanze in base alla versione del gioco.
+	 *
+	 * @param gameVersion la versione del gioco da filtrare
+	 * @return una lista di ID delle stanze che corrispondono alla versione del gioco
+	 */
 	List<String> filterRoomsByGameVersion(EGameVersion gameVersion);
 	
+	/**
+	 * Restituisce il numero di giocatori presenti in una stanza.
+	 *
+	 * @param roomId l'ID della stanza
+	 * @return il numero di giocatori nella stanza
+	 */
 	int getPlayersNumber(String roomId);
 
+	/**
+	 * Restituisce il colore assegnato a un giocatore in una stanza.
+	 *
+	 * @param roomId l'ID della stanza
+	 * @param playerName il nome del giocatore
+	 * @return il colore assegnato al giocatore
+	 */
 	EColors getPlayerColor(String roomId, String playerName);
 
+	/**
+	 * Restituisce la versione del gioco associata a una stanza.
+	 *
+	 * @param roomId l'ID della stanza
+	 * @return la versione del gioco della stanza
+	 */
 	EGameVersion getGameVersion(String roomId);
 
 	/**
@@ -42,12 +67,35 @@ public interface IRoomManager {
 	 */
 	void exitRoom(String roomId, String nomeGiocatore);
 
+	/**
+	 * Restituisce il numero massimo di giocatori consentiti in una stanza.
+	 *
+	 * @param roomId l'ID della stanza
+	 * @return il numero massimo di giocatori nella stanza
+	 */
 	int getMaxPlayers(String roomId);
 
+	/**
+	 * Restituisce la lista dei giocatori presenti in una stanza.
+	 *
+	 * @param roomId l'ID della stanza
+	 * @return la lista dei giocatori nella stanza
+	 */
 	List<IPlayer> getPlayers(String roomId);
 
+	/**
+	 * Verifica se una stanza è piena.
+	 *
+	 * @param roomId l'ID della stanza
+	 * @return true se la stanza è piena, false altrimenti
+	 */
 	Boolean isFull(String roomId);
 
+	/**
+	 * Chiude una stanza di gioco.
+	 *
+	 * @param roomId l'ID della stanza da chiudere
+	 */
 	void closeRoom(String roomId);
 
 	/**
