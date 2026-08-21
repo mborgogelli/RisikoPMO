@@ -9,7 +9,7 @@ import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
 import it.uniurb.pmo.framework.utils.GameFactoryProvider;
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 
 public class Director implements IDirector {
 	
@@ -18,7 +18,7 @@ public class Director implements IDirector {
 	private List<IManager> managers;
 	private final List<IPlayer> players;
 	
-	public Director(GameVersion version, List<IPlayer> players) {
+	public Director(EGameVersion version, List<IPlayer> players) {
 		this.players = players;
 		this.isReady = false;
 		this.initializeGame(this.players, version);
@@ -57,7 +57,7 @@ public class Director implements IDirector {
 		this.managers.forEach(IManager::resetGame);
 	}
 
-	private void initializeGame(List<IPlayer> players, GameVersion version) {
+	private void initializeGame(List<IPlayer> players, EGameVersion version) {
 		IGameFactory factory = GameFactoryProvider.getFactory(version);
 		this.mediator = factory.getMediator();
 		this.managers = factory.getManagers();

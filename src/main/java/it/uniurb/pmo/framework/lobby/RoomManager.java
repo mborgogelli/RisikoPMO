@@ -3,8 +3,8 @@ package it.uniurb.pmo.framework.lobby;
 import java.util.*;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.utils.EnumColors;
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EColors;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 
 public class RoomManager implements IRoomManager {
 	
@@ -24,7 +24,7 @@ public class RoomManager implements IRoomManager {
 	}
 	
     @Override
-	public List<String> filterRoomsByGameVersion(GameVersion gameVersion) {
+	public List<String> filterRoomsByGameVersion(EGameVersion gameVersion) {
 		return this.activeRooms.entrySet().stream()
 							.filter(e -> gameVersion.equals(e.getValue().getRisikoVersion()))
 							.map(Map.Entry::getKey)
@@ -37,12 +37,12 @@ public class RoomManager implements IRoomManager {
 	}
 
 	@Override
-	public EnumColors getPlayerColor(String roomId, String playerName) {
+	public EColors getPlayerColor(String roomId, String playerName) {
 		return this.getRoom(roomId).getAssignedColor(playerName);
 	}
 
 	@Override
-	public GameVersion getGameVersion(String roomId) {
+	public EGameVersion getGameVersion(String roomId) {
 		return this.getRoom(roomId).getRisikoVersion();
 	}
 
@@ -52,7 +52,7 @@ public class RoomManager implements IRoomManager {
 	}
 
 	@Override
-	public String createRoom(String nomeGiocatore, int maxPlayers, GameVersion gameVersion) {
+	public String createRoom(String nomeGiocatore, int maxPlayers, EGameVersion gameVersion) {
         String idStanza = UUID.randomUUID().toString().substring(0, 5);
         this.activeRooms.put(idStanza, new Room(maxPlayers, gameVersion));
         this.activeRooms.get(idStanza).enterRoom(nomeGiocatore);

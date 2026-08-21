@@ -1,8 +1,8 @@
 package it.uniurb.pmo.framework.lobby;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.utils.EnumColors;
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EColors;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface IRoom {
 	
 	void exitRoom(String playerName);
 	
-	EnumColors getAssignedColor(String playerName);
+	EColors getAssignedColor(String playerName);
 	
 	boolean isRoomFull();
 
@@ -28,7 +28,7 @@ public interface IRoom {
 	
 	void kickPlayer(String playerName);
 	
-	GameVersion getRisikoVersion();
+	EGameVersion getRisikoVersion();
 
 	boolean hasPlayer(String playerName);
 

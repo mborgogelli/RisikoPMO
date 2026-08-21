@@ -14,7 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import it.uniurb.pmo.framework.board.IZone;
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 
 class GameBoardUnitTest {
 
@@ -61,7 +61,7 @@ class GameBoardUnitTest {
 	@Test
 	@DisplayName("Unit Test: Verifica la versione del gioco")
 	void getGameVersionReturnsRisikoNew() {
-		assertEquals(GameVersion.RISIKONEW, this.gameBoard.getGameVersion());
+		assertEquals(EGameVersion.RISIKONEW, this.gameBoard.getGameVersion());
 	}
 
 	@Test

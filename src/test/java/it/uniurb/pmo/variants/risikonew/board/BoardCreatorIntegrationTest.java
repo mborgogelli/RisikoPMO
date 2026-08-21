@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 import it.uniurb.pmo.framework.board.BoardCreator;
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -194,7 +194,7 @@ class BoardCreatorIntegrationTest {
 	private static class BoardCreatorTestSupport extends BoardCreator {
 
 		public BoardCreatorTestSupport() {
-			super(GameVersion.RISIKONEW);
+			super(EGameVersion.RISIKONEW);
 		}
 
 		@Override

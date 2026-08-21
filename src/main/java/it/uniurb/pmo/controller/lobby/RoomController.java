@@ -2,6 +2,7 @@ package it.uniurb.pmo.controller.lobby;
 
 import java.util.Map;
 
+import it.uniurb.pmo.framework.utils.EColors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +14,7 @@ import it.uniurb.pmo.framework.lobby.GameStartCoordinator;
 import it.uniurb.pmo.framework.lobby.GameStartResult;
 import it.uniurb.pmo.framework.lobby.RoomManager;
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.utils.EnumColors;
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 
 /**
  * Controller per la gestione delle stanze di gioco. Espone endpoint REST per
@@ -37,7 +37,7 @@ public class RoomController {
 
         // Recupera informazioni dal JSON inviato dal frontend
         String nomeGiocatore = payload.get("player");
-        GameVersion gameVersion = this.getGameVersionFromString(payload.get("gameVersion"));
+        EGameVersion gameVersion = this.getGameVersionFromString(payload.get("gameVersion"));
         int maxPlayer = Integer.parseInt(payload.get("maxPlayers"));
         
         // Valida i dati recuperati
@@ -151,12 +151,12 @@ public class RoomController {
         ));
     }
 
-	private GameVersion getGameVersionFromString(String version) {
-		GameVersion gameVersion;
+	private EGameVersion getGameVersionFromString(String version) {
+		EGameVersion gameVersion;
 		switch (version.toLowerCase()) {
-			case "classica" -> gameVersion = GameVersion.RISIKONEW;
-			case "antartide" -> gameVersion = GameVersion.RISIKOANTARTIDE;
-			case "oceano" -> gameVersion = GameVersion.RISIKOOCEANO;
+			case "classica" -> gameVersion = EGameVersion.RISIKONEW;
+			case "antartide" -> gameVersion = EGameVersion.RISIKOANTARTIDE;
+			case "oceano" -> gameVersion = EGameVersion.RISIKOOCEANO;
 			default -> throw new IllegalArgumentException("Invalid game version: " + version);
 		}
 		return gameVersion;
@@ -167,7 +167,7 @@ public class RoomController {
      */
     private RoomResponseDTO createRoomResponse(String roomId) {
         RoomManager roomManager = RoomManager.getInstance();
-        Map<String, EnumColors> players = this.buildPlayersMap(roomManager.getPlayers(roomId));
+        Map<String, EColors> players = this.buildPlayersMap(roomManager.getPlayers(roomId));
         Map<String, Boolean> readyStates = this.buildReadyMap(roomManager.getPlayers(roomId));
 
         return RoomResponseDTO.builder()
@@ -186,7 +186,7 @@ public class RoomController {
      * @param players Elenco dei giocatori
      * @return Mappa dei giocatori
      */
-    private Map<String, EnumColors> buildPlayersMap(List<IPlayer> players) {
+    private Map<String, EColors> buildPlayersMap(List<IPlayer> players) {
         return players.stream().collect(Collectors.toMap(IPlayer::getName, IPlayer::getColor));
     }
 
