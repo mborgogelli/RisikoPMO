@@ -11,10 +11,12 @@ import java.util.List;
 
 public abstract class CardCreator implements ICardCreator {
 
-    /**
-     * Metodo astratto: deve essere implementato per creare il mazzo di carte specifico
-     * @return List<ICard<T, TCardContent>> Il mazzo di carte del gioco
-     */
+	
+/**
+	 * Metodo astratto che deve essere implementato dalle sottoclassi per creare il mazzo di carte specifico della variante di gioco.
+	 * @param cardType Il tipo di carta da creare
+	 * @return List<ICard> Il mazzo di carte creato
+	 */
     protected abstract List<ICard> createDeck(ICardType cardType);
 
     /**
