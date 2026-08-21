@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 import it.uniurb.pmo.framework.utils.RiskJsonLoader;
 import it.uniurb.pmo.framework.utils.RiskJsonParser;
 
@@ -28,7 +28,7 @@ public abstract class BoardCreator implements IBoardCreator{
 	 * 
 	 * @param gameVersion La versione del gioco per cui caricare la mappa.
 	 */	
-	protected BoardCreator(GameVersion gameVersion) {
+	protected BoardCreator(EGameVersion gameVersion) {
 		this.jsonMap = this.loadMap(gameVersion);
 	}
 	
@@ -86,7 +86,7 @@ public abstract class BoardCreator implements IBoardCreator{
 	 * @param gameVersion La versione del gioco per cui caricare la mappa.
 	 * @return Un oggetto JsonObject che rappresenta la mappa del gioco.
      */
-	private JsonObject loadMap(GameVersion gameVersion) {
+	private JsonObject loadMap(EGameVersion gameVersion) {
 		JsonObject jsonObject = null;
 		try {
 			jsonObject = RiskJsonLoader.loadJsonFile(gameVersion.getDescrizione() + SUFFIX_MAP);

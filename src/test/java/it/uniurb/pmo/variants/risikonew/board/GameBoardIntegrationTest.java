@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import it.uniurb.pmo.framework.board.IGameBoard;
 import it.uniurb.pmo.framework.board.IZone;
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 
 public class GameBoardIntegrationTest {
     
@@ -43,9 +43,9 @@ public class GameBoardIntegrationTest {
     
     @Test
     void testGetGameVersion() {
-        GameVersion version = gameBoard.getGameVersion();
+        EGameVersion version = gameBoard.getGameVersion();
         assertNotNull(version);
-        assertEquals(GameVersion.RISIKONEW, version);
+        assertEquals(EGameVersion.RISIKONEW, version);
     }
     
     @Test

@@ -3,7 +3,7 @@ package it.uniurb.pmo.framework.board;
 import java.util.List;
 import java.util.Optional;
 
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 
 public interface IGameBoard {
 	
@@ -19,7 +19,7 @@ public interface IGameBoard {
 	 * 
 	 * @return versione del gioco
 	 */
-	GameVersion getGameVersion();
+	EGameVersion getGameVersion();
 	
 	/**
 	 * Trova una zona specifica per nome.

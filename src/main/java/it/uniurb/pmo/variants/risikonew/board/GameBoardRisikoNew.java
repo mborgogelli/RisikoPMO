@@ -7,17 +7,17 @@ import java.util.Optional;
 
 import it.uniurb.pmo.framework.board.IGameBoard;
 import it.uniurb.pmo.framework.board.IZone;
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 
 class GameBoardRisikoNew implements IGameBoard {
 	
 	private final List<IZone> continents;
-	private final GameVersion gameVersion;
+	private final EGameVersion gameVersion;
 	private final Map<String, List<String>> neighbours;
 	
 	GameBoardRisikoNew(List<IZone> continents) {
 		this.continents = continents;
-		this.gameVersion = GameVersion.RISIKONEW;
+		this.gameVersion = EGameVersion.RISIKONEW;
 		this.neighbours = getNeighboursFromMap();
 	}
 	
@@ -27,7 +27,7 @@ class GameBoardRisikoNew implements IGameBoard {
 	}
 
 	@Override
-	public GameVersion getGameVersion() {
+	public EGameVersion getGameVersion() {
 		return this.gameVersion;
 	}
 

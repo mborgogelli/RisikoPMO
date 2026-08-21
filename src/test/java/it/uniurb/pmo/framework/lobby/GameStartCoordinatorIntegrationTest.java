@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 
 class GameStartCoordinatorTest {
 
@@ -28,7 +28,7 @@ class GameStartCoordinatorTest {
 
     @Test
     void startGameClosesRoomAndReturnsResult() {
-        this.roomId = this.roomManager.createRoom("Alice", 3, GameVersion.RISIKONEW);
+        this.roomId = this.roomManager.createRoom("Alice", 3, EGameVersion.RISIKONEW);
         this.roomManager.enterRoom(this.roomId, "Bob");
         this.roomManager.enterRoom(this.roomId, "Charlie");
 
@@ -43,7 +43,7 @@ class GameStartCoordinatorTest {
 
     @Test
     void startGameRejectsNotFullRoom() {
-        this.roomId = this.roomManager.createRoom("Alice", 4, GameVersion.RISIKONEW);
+        this.roomId = this.roomManager.createRoom("Alice", 4, EGameVersion.RISIKONEW);
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> new GameStartCoordinator().startGame(this.roomId));

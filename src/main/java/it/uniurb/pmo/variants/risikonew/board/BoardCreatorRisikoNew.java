@@ -5,13 +5,13 @@ import java.util.List;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import static it.uniurb.pmo.variants.risikonew.utils.EnumRisikoNewJsonKeysBoard.*;
+import static it.uniurb.pmo.variants.risikonew.utils.ERisikoNewGameBoardJsonKeys.*;
 import it.uniurb.pmo.framework.board.BoardCreator;
 import it.uniurb.pmo.framework.board.IGameBoard;
 import it.uniurb.pmo.framework.board.IZone;
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 import it.uniurb.pmo.framework.utils.RiskJsonParser;
-import it.uniurb.pmo.variants.risikonew.utils.EnumRisikoNewJsonKeysBoard;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewGameBoardJsonKeys;
 
 /**
  * Classe concreta che estende BoardCreator per creare la mappa del gioco RisikoNew.
@@ -33,7 +33,7 @@ public final class BoardCreatorRisikoNew extends BoardCreator {
 	 * Carica la mappa dal file JSON specificato nella versione del gioco.
 	 */
 	private BoardCreatorRisikoNew() {
-		super(GameVersion.RISIKONEW);
+		super(EGameVersion.RISIKONEW);
 		this.jsonMap = super.getLoadedMap();
 	}
 	
@@ -135,7 +135,7 @@ public final class BoardCreatorRisikoNew extends BoardCreator {
 	 * 
 	 * @param zoneType Tipo di zona (CONTINENTS o TERRITORIES)
 	 */
-	private void setZoneValue(EnumRisikoNewJsonKeysBoard zoneType) {
+	private void setZoneValue(ERisikoNewGameBoardJsonKeys zoneType) {
 	    if (zoneType == CONTINENTS) {
 	        setArmyBonusForContinents();
 	    } else if (zoneType == TERRITORIES) {

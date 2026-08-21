@@ -1,7 +1,7 @@
 package it.uniurb.pmo.controller.lobby.dto;
 
 
-import it.uniurb.pmo.framework.utils.EnumColors;
+import it.uniurb.pmo.framework.utils.EColors;
 
 import java.util.Map;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 public class RoomResponseDTO {
 
     private final String roomId;
-    private final Map<String, EnumColors> players;
+    private final Map<String, EColors> players;
     private final Map<String, Boolean> readyStates;
     private final String gameVersion;
     private final int currentPlayers;
@@ -38,7 +38,7 @@ public class RoomResponseDTO {
         return roomId;
     }
 
-    public Map<String, EnumColors> getPlayers() {
+    public Map<String, EColors> getPlayers() {
         return this.players;
     }
 
@@ -68,7 +68,7 @@ public class RoomResponseDTO {
      */
     public static class Builder {
         private String roomId;
-        private Map<String, EnumColors> players;
+        private Map<String, EColors> players;
         private Map<String, Boolean> readyStates;
         private String gameVersion;
         private int currentPlayers;
@@ -80,7 +80,7 @@ public class RoomResponseDTO {
             return this;
         }
 
-        public Builder players(Map<String, EnumColors> players) {
+        public Builder players(Map<String, EColors> players) {
             this.players = players;
             return this;
         }

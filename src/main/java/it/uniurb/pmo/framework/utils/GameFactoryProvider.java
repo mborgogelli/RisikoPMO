@@ -5,7 +5,7 @@ import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
 
 public class GameFactoryProvider {
 	
-	public static IGameFactory getFactory(GameVersion version) {
+	public static IGameFactory getFactory(EGameVersion version) {
         return switch (version) {
             case RISIKONEW -> new GameFactoryRisikoNew();
             default -> throw new IllegalArgumentException("Versione di gioco non supportata: " + version);

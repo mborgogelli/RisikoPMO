@@ -1,6 +1,6 @@
 package it.uniurb.pmo.framework.lobby;
 
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ public class RoomManagerUnitTest {
 
     @BeforeEach
     public void setUp() {
-        roomId = roomManager.createRoom("Maronno", 4, GameVersion.RISIKONEW);
+        roomId = roomManager.createRoom("Maronno", 4, EGameVersion.RISIKONEW);
 
         roomManager.enterRoom(roomId, "Gianni");
         roomManager.enterRoom(roomId, "Pinotto");

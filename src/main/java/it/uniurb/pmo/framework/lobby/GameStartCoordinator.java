@@ -6,7 +6,7 @@ import it.uniurb.pmo.framework.management.Director;
 import org.springframework.stereotype.Component;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 
 @Component
 public class GameStartCoordinator {
@@ -24,7 +24,7 @@ public class GameStartCoordinator {
             throw new IllegalStateException("La stanza non è ancora piena");
         }
 
-        GameVersion gameVersion = this.roomManager.getGameVersion(roomId);
+        EGameVersion gameVersion = this.roomManager.getGameVersion(roomId);
         List<IPlayer> players = this.roomManager.getPlayers(roomId);
 
         new Director(gameVersion, players);

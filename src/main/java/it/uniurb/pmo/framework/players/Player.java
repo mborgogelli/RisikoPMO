@@ -2,13 +2,13 @@ package it.uniurb.pmo.framework.players;
 
 import java.util.Objects;
 
-import it.uniurb.pmo.framework.utils.EnumColors;
+import it.uniurb.pmo.framework.utils.EColors;
 
 public class Player implements IPlayer {
 
 	private final String name;
 	private Boolean isReady;
-	private EnumColors color;
+	private EColors color;
 	private PlayerTurnStatus status;
 	
 	public Player(String name) {
@@ -42,12 +42,12 @@ public class Player implements IPlayer {
 	}
 
 	@Override
-	public EnumColors getColor() {
+	public EColors getColor() {
 		return this.color;
 	}
 
 	@Override
-	public void setColor(EnumColors color) {
+	public void setColor(EColors color) {
         this.color = color;		
 	}
 

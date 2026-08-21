@@ -4,7 +4,7 @@ package it.uniurb.pmo.variants.risikonew.utils;
  * Enumerazione che definisce i diversi tipi di zone nel gioco.
  * Ogni tipo ha caratteristiche specifiche per il gameplay.
  */
-public enum EnumRisikoNewJsonKeysBoard {
+public enum ERisikoNewGameBoardJsonKeys {
 
 	/** Territorio - l'unità fondamentale del gioco classico */
     TERRITORIES("territories"),
@@ -16,7 +16,7 @@ public enum EnumRisikoNewJsonKeysBoard {
 	
     private final String descrizione;
     
-    EnumRisikoNewJsonKeysBoard(String descrizione) {
+    ERisikoNewGameBoardJsonKeys(String descrizione) {
         this.descrizione = descrizione;
     }
     

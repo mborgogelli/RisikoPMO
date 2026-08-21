@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RiskJsonLoaderUnitTest {
 
-	private final static String JSON_MAP = GameVersion.RISIKONEW.getDescrizione() + "_map";
+	private final static String JSON_MAP = EGameVersion.RISIKONEW.getDescrizione() + "_map";
 	private JsonObject map;
 	
 	@Test

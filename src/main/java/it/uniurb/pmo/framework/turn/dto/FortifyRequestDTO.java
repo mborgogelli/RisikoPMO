@@ -2,7 +2,7 @@ package it.uniurb.pmo.framework.turn.dto;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPlayerRequestDTO;
-import it.uniurb.pmo.framework.utils.EnumColors;
+import it.uniurb.pmo.framework.utils.EColors;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class FortifyRequestDTO implements IPlayerRequestDTO {
 	}
 
 	@Override
-	public EnumColors playerColor() {
+	public EColors playerColor() {
 		return player.getColor();
 	}
 }

@@ -1,16 +1,16 @@
 package it.uniurb.pmo.controller.game.dto;
 
-import it.uniurb.pmo.framework.utils.EnumColors;
+import it.uniurb.pmo.framework.utils.EColors;
 
 import java.util.List;
 import java.util.Map;
 
 public class CurrentStateDTO {
     private final String currentPlayerName;
-    private final EnumColors currentPlayerColor;
+    private final EColors currentPlayerColor;
     private final String nextPlayerName;
-    private final EnumColors nextPlayerColor;
-    private final Map<EnumColors, String> players;
+    private final EColors nextPlayerColor;
+    private final Map<EColors, String> players;
     private final Map<String, Map<String, Integer>> deployedTokensByTerritory;
     private final Map<String, Integer> availableTokens;
     private final Map<String, List<String>> playerTerritories;
@@ -42,7 +42,7 @@ public class CurrentStateDTO {
         return currentPlayerName;
     }
 
-    public EnumColors getCurrentPlayerColor() {
+    public EColors getCurrentPlayerColor() {
         return currentPlayerColor;
     }
 
@@ -50,11 +50,11 @@ public class CurrentStateDTO {
         return nextPlayerName;
     }
 
-    public EnumColors getNextPlayerColor() {
+    public EColors getNextPlayerColor() {
         return nextPlayerColor;
     }
 
-    public Map<EnumColors, String> getPlayers() {
+    public Map<EColors, String> getPlayers() {
         return players;
     }
 
@@ -89,10 +89,10 @@ public class CurrentStateDTO {
     public static class Builder {
 
         private String currentPlayerName;
-        private EnumColors currentPlayerColor;
+        private EColors currentPlayerColor;
         private String nextPlayerName;
-        private EnumColors nextPlayerColor;
-        private Map<EnumColors, String> players;
+        private EColors nextPlayerColor;
+        private Map<EColors, String> players;
         private Map<String, Map<String, Integer>> deployedTokensByTerritory;
         private Map<String, Integer> availableTokens;
         private Map<String, List<String>> playerTerritories;
@@ -106,7 +106,7 @@ public class CurrentStateDTO {
             return this;
         }
 
-        public Builder currentPlayerColor(EnumColors currentPlayerColor) {
+        public Builder currentPlayerColor(EColors currentPlayerColor) {
             this.currentPlayerColor = currentPlayerColor;
             return this;
         }
@@ -116,12 +116,12 @@ public class CurrentStateDTO {
             return this;
         }
 
-        public Builder nextPlayerColor(EnumColors nextPlayerColor) {
+        public Builder nextPlayerColor(EColors nextPlayerColor) {
             this.nextPlayerColor = nextPlayerColor;
             return this;
         }
 
-        public Builder players(Map<EnumColors, String> players) {
+        public Builder players(Map<EColors, String> players) {
             this.players = players;
             return this;
         }

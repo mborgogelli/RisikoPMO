@@ -1,6 +1,6 @@
 package it.uniurb.pmo.variants.risikonew.utils;
 
-public enum EnumRisikoNewMissionType {
+public enum ERisikoNewMissionCardType {
 	CONQUER, 
 	ELIMINATION,
 	CONTROL

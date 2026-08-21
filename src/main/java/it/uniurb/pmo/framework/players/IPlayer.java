@@ -1,6 +1,6 @@
 package it.uniurb.pmo.framework.players;
 
-import it.uniurb.pmo.framework.utils.EnumColors;
+import it.uniurb.pmo.framework.utils.EColors;
 
 public interface IPlayer {
 
@@ -9,9 +9,9 @@ public interface IPlayer {
 
 	Boolean isReady();
 
-	EnumColors getColor();
+	EColors getColor();
 
-	void setColor(EnumColors color);
+	void setColor(EColors color);
 
 	void removeColor();
 

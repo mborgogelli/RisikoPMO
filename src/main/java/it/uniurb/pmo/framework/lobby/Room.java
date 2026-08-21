@@ -3,8 +3,8 @@ package it.uniurb.pmo.framework.lobby;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.Player;
-import it.uniurb.pmo.framework.utils.EnumColors;
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EColors;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,16 +15,16 @@ public class Room implements IRoom {
 	private boolean isFull;
 	private boolean isEmpty;
 	private final int maxPlayers;
-	private final GameVersion gameVersion;
+	private final EGameVersion gameVersion;
 	private final List<IPlayer> players;
-	private List<EnumColors> availableColors;
+	private List<EColors> availableColors;
 
 	
-	public Room(int maxPlayers, GameVersion gameVersion) {
+	public Room(int maxPlayers, EGameVersion gameVersion) {
 		this.maxPlayers = maxPlayers;
 		this.gameVersion = gameVersion;
 		this.players = new ArrayList<>();
-		this.availableColors = new ArrayList<>(EnumColors.getAvailableColors());
+		this.availableColors = new ArrayList<>(EColors.getAvailableColors());
 		this.isFull = false;
 		this.isEmpty = true;
 	}
@@ -81,12 +81,12 @@ public class Room implements IRoom {
 	}
 
 	@Override
-	public GameVersion getRisikoVersion() {
+	public EGameVersion getRisikoVersion() {
 		return this.gameVersion;
 	}
 
 	@Override
-	public EnumColors getAssignedColor(String playerName) {
+	public EColors getAssignedColor(String playerName) {
 		return this.getPlayer(playerName).getColor();
 	}
 	
@@ -124,9 +124,9 @@ public class Room implements IRoom {
 		}
 	}
 
-	private EnumColors pickRandomColor() {
+	private EColors pickRandomColor() {
 		int index = (int) (Math.random() * this.availableColors.size());
-		EnumColors color = this.availableColors.get(index);
+		EColors color = this.availableColors.get(index);
 		this.availableColors.remove(index);
 		return color;
 	}

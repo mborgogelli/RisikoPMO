@@ -1,8 +1,8 @@
 package it.uniurb.pmo.framework.lobby;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.utils.EnumColors;
-import it.uniurb.pmo.framework.utils.GameVersion;
+import it.uniurb.pmo.framework.utils.EColors;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 
 import java.util.List;
 
@@ -16,15 +16,15 @@ public interface IRoomManager {
 	 * @param gemeVersion la versione del gioco per la stanza
 	 * @return l'Id della stanza appena creata
 	 */
-	String createRoom(String nomeGiocatore, int maxPlayers, GameVersion gemeVersion);
+	String createRoom(String nomeGiocatore, int maxPlayers, EGameVersion gemeVersion);
 
-	List<String> filterRoomsByGameVersion(GameVersion gameVersion);
+	List<String> filterRoomsByGameVersion(EGameVersion gameVersion);
 	
 	int getPlayersNumber(String roomId);
 
-	EnumColors getPlayerColor(String roomId, String playerName);
+	EColors getPlayerColor(String roomId, String playerName);
 
-	GameVersion getGameVersion(String roomId);
+	EGameVersion getGameVersion(String roomId);
 
 	/**
 	 * Permette a un giocatore di entrare in una stanza.

@@ -3,7 +3,7 @@ package it.uniurb.pmo.framework.utils;
 /** 
  * Enumerazione delle versioni di gioco disponibili.
  */
-public enum GameVersion {
+public enum EGameVersion {
 	
 	RISIKONEW("risikonew"),
 	RISIKOANTARTIDE("risikoantartide"),
@@ -12,7 +12,7 @@ public enum GameVersion {
 	
     private final String descrizione;
     
-    GameVersion(String descrizione) {
+    EGameVersion(String descrizione) {
         this.descrizione = descrizione;
     }
     
