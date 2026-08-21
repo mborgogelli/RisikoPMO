@@ -5,13 +5,15 @@ import java.util.Map;
 
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.dto.IDeployResponseDTO;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployResponseRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
 
-public class ReinforcePhase implements IReinforcePhase {
+public class ReinforcePhase implements IPhase {
 
 	private IPlayer player;
 	private final IMediatorRisikoNew mediator;
@@ -22,6 +24,11 @@ public class ReinforcePhase implements IReinforcePhase {
 	public ReinforcePhase(IMediatorRisikoNew mediator, IGameCoordinatorRisikoNew coordinator) {
 		this.mediator = mediator;
 		this.coordinator = coordinator;
+	}
+
+	@Override
+	public int getPhaseId() {
+		return ERisikoNewPhase.REINFORCE.getId();
 	}
 
 	@Override
@@ -54,13 +61,11 @@ public class ReinforcePhase implements IReinforcePhase {
 		this.tris = null;
 	}
 
-	@Override
-	public int reinforceByTerritories() {
+	private int reinforceByTerritories() {
 		return this.playerTerritories.size() / 3;
 	}
 
-	@Override
-	public int reinforceByContinentBonus() {
+	private int reinforceByContinentBonus() {
 		int tanks = 0;
 		List<String> completedContinents = this.mediator.getCompletedContinents(player);
 		for (String c : completedContinents) {
@@ -69,10 +74,8 @@ public class ReinforcePhase implements IReinforcePhase {
 		return tanks;
 	}
 
-	@Override
-	public int reinforceByCards() {
-		this.tris = tris;
-		int bonus = getTerritoryCardBonusForOwnership(tris);
+	private int reinforceByCards() {
+        int bonus = getTerritoryCardBonusForOwnership(tris);
 		this.tris.clear();
 		return bonus * 2;
 	}
