@@ -71,7 +71,7 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 	}
 
 	@Override
-	public List<ICard> playCards(IPlayer player) {
+	public List<ICard> playCards(IPlayer player, int numberOfCards) {
 		// TODO Auto-generated method stub
 		return null;
 	}

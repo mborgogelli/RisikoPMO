@@ -17,7 +17,7 @@ public interface ICardManager extends IManager{
 	 * 
 	 * @param players
 	 */
-	List<ICard> playCards(IPlayer player);
+	List<ICard> playCards(IPlayer player, int numberOfCards);
 	
 	/**
 	 * Permette a un giocatore di scegliere una carta da giocare

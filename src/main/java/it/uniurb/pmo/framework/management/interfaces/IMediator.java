@@ -2,6 +2,8 @@ package it.uniurb.pmo.framework.management.interfaces;
 
 import java.util.List;
 
+import it.uniurb.pmo.framework.card.ICard;
+import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.players.IPlayer;
 
 /**
@@ -52,5 +54,9 @@ public interface IMediator extends IGameConductor {
 	 */
 	boolean checkVictory(IPlayer player);
 
+	/**
+	 * Restituisce le carte possedute da un giocatore.
+	 */
+	List<ICard> getPlayerCardsByType(IPlayer player, ICardType cardType);
 
 }

@@ -13,13 +13,14 @@ import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployReques
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployResponseRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
 
+import javax.smartcardio.Card;
+
 public class ReinforcePhase implements IPhase {
 
 	private IPlayer player;
 	private final IMediatorRisikoNew mediator;
 	private final IGameCoordinatorRisikoNew coordinator;
 	private List<String> playerTerritories;
-	private List<ICard> tris;
 
 	public ReinforcePhase(IMediatorRisikoNew mediator, IGameCoordinatorRisikoNew coordinator) {
 		this.mediator = mediator;
@@ -42,7 +43,8 @@ public class ReinforcePhase implements IPhase {
 		this.playerTerritories = this.mediator.getZonesOwnedBy(player);
 		int reinforcementsFromTerritories = this.reinforceByTerritories();
 		int reinforcementsFromContinents = this.reinforceByContinentBonus();
-		int reinforcements = reinforcementsFromTerritories + reinforcementsFromContinents;
+		int reinforcementsFromCards = this.reinforceByCards();
+		int reinforcements = reinforcementsFromTerritories + reinforcementsFromContinents + reinforcementsFromCards;
 		List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
 		DeployResponseRisikoNewDTO response = (DeployResponseRisikoNewDTO) this.coordinator.sendDeployRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), deployableZones, reinforcements));
 		response.deployment().forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
@@ -58,7 +60,6 @@ public class ReinforcePhase implements IPhase {
 	public void clearPhase() {
 		this.player = null;
 		this.playerTerritories = null;
-		this.tris = null;
 	}
 
 	private int reinforceByTerritories() {
@@ -75,9 +76,29 @@ public class ReinforcePhase implements IPhase {
 	}
 
 	private int reinforceByCards() {
-        int bonus = getTerritoryCardBonusForOwnership(tris);
-		this.tris.clear();
-		return bonus * 2;
+		List<ICard> cardsToPlay = this.mediator.getTerritoryCards(player);
+		// Caso 1: Nessuna carta giocata o nessuna combinazione disponibile -> nessun bonus
+		if (cardsToPlay == null || cardsToPlay.isEmpty()) {
+			return 0;
+		}
+
+		// Caso 2: Numero di carte invalido per formare un tris -> errore
+		if (cardsToPlay.size() != 3) {
+			throw new IllegalArgumentException(
+					"Tentativo di giocare un numero non valido di carte: " + cardsToPlay.size() + " (richieste 3 o 0)"
+			);
+		}
+
+		// Caso 3: Happy path (3 carte valide)
+		int totalBonus = 0;
+		totalBonus += evaluateTerritoryCardBonusForTriplet(cardsToPlay);
+		totalBonus += getTerritoryCardBonusForOwnership(cardsToPlay);
+
+		return totalBonus;
+	}
+
+	private int evaluateTerritoryCardBonusForTriplet(List<ICard> tris) {
+		return 0;
 	}
 
 	/**

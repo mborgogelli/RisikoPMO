@@ -5,17 +5,17 @@ import it.uniurb.pmo.framework.card.ICardContent;
 import it.uniurb.pmo.framework.card.IMissionTarget;
 
 public class MissionCard implements ICard {
-	private final EnumMissionTypeRisikoNew missionType;
+	private final ERisikoNewMissionType missionType;
 	private final IMissionTarget missionTarget;
 	
-	public MissionCard(EnumMissionTypeRisikoNew missionType, IMissionTarget missionTarget) {
+	public MissionCard(ERisikoNewMissionType missionType, IMissionTarget missionTarget) {
 		this.missionType = missionType;
 		this.missionTarget = missionTarget;
 	}
 	
 		
     @Override
-    public EnumMissionTypeRisikoNew getCardType() {
+    public ERisikoNewMissionType getCardType() {
         return this.missionType;
     }
 

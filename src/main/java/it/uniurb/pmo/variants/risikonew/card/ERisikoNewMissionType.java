@@ -1,7 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.card;
 import it.uniurb.pmo.framework.card.ICardType;
 
-public enum EnumMissionTypeRisikoNew implements ICardType {
+public enum ERisikoNewMissionType implements ICardType {
 
     CONTROL("Controlla:"),
     CONQUER("Conquista: "),
@@ -9,7 +9,7 @@ public enum EnumMissionTypeRisikoNew implements ICardType {
 
     private final String description;
 
-    EnumMissionTypeRisikoNew(String description) {
+    ERisikoNewMissionType(String description) {
         this.description = description;
     }
 

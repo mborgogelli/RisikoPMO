@@ -1,8 +1,9 @@
 package it.uniurb.pmo.variants.risikonew.management;
 
 import java.util.List;
-import java.util.Map;
 
+import it.uniurb.pmo.framework.card.ICard;
+import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.management.AbstractMediator;
 import it.uniurb.pmo.framework.management.interfaces.IDirector;
 import it.uniurb.pmo.framework.players.IPlayer;
@@ -49,6 +50,11 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	@Override
 	public void notifyWinner(IPlayer player) {
 		this.director.declareWinner(player);
+	}
+
+	@Override
+	public List<ICard> getPlayerCardsByType(IPlayer player, ICardType cardType) {
+		return List.of();
 	}
 
 	@Override
