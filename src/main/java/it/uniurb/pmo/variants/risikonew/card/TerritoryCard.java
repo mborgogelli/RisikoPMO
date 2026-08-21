@@ -7,19 +7,14 @@ import it.uniurb.pmo.framework.card.ICardContent;
 public class TerritoryCard  implements ICard  {
 	
 	private final EnumSymbolRisikoNew symbol;
-    private final String territory;
+    private final ITerritoryCardContent cardContent;
     
     // Carta territorio con simbolo specifico
-    TerritoryCard(EnumSymbolRisikoNew symbol, String territory ) {
+    TerritoryCard(EnumSymbolRisikoNew symbol, ITerritoryCardContent cardContent ) {
 		this.symbol = symbol;
-		this.territory = territory;
+		this.cardContent = cardContent;
 	}
     
-   // Carta jolly 
-    TerritoryCard() {
-		this.symbol = EnumSymbolRisikoNew.JOLLY;
-		this.territory = null;
-	}
 
 	@Override
 	public EnumSymbolRisikoNew getCardType() {
@@ -28,7 +23,7 @@ public class TerritoryCard  implements ICard  {
 	
 	@Override
 	public ICardContent getCardContent() {
-		return null;
+		return this.cardContent;
 	}
 
 }
