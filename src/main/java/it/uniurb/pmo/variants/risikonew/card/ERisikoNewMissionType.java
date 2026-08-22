@@ -1,7 +1,5 @@
 package it.uniurb.pmo.variants.risikonew.card;
-import it.uniurb.pmo.framework.card.ICardType;
-
-public enum ERisikoNewMissionType implements ICardType {
+public enum ERisikoNewMissionType {
 
     CONTROL("Controlla:"),
     CONQUER("Conquista: "),

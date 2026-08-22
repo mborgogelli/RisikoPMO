@@ -2,10 +2,6 @@ package it.uniurb.pmo.framework.card;
 
 /**
  * Rappresenta una carta generica che può essere utilizzata in qualunque variante di Risiko.
- *
- * @param <ICardType> Il tipo della carta, che deve estendere ICardType. Questo permette di identificare la categoria o la funzione della carta.
- * @param <TCardContent> Il contenuto della carta, che rappresenta informazioni specifiche legate alla carta. Ad esempio,
- *                       potrebbe essere il nome di un territorio o i dettagli di una missione.
  */
 
 public interface ICard {

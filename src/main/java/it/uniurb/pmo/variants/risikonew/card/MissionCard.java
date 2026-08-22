@@ -1,6 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.card;
 
 import it.uniurb.pmo.framework.card.ICard;
+import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.card.ICardContent;
 import it.uniurb.pmo.framework.card.IMissionTarget;
 
@@ -15,9 +16,9 @@ public class MissionCard implements ICard {
 	
 		
     @Override
-    public ERisikoNewMissionType getCardType() {
-        return this.missionType;
-    }
+   	public ICardType getCardType() {
+		return ERisikoNewCardType.MISSION;
+	}
 
     @Override
     public ICardContent getCardContent() {

@@ -1,12 +1,9 @@
 package it.uniurb.pmo.variants.risikonew.card;
 
-import it.uniurb.pmo.framework.card.ICardType;
 
-public enum ERisikoNewTerritorySymbols implements ICardType {
+public enum ERisikoNewTerritorySymbols {
 	
 	INFANTRY,
 	ARTILLERY,
 	CAVALRY,
-	JOLLY;
-	
 }
