@@ -1,6 +1,6 @@
 package it.uniurb.pmo.framework.card;
 
-import it.uniurb.pmo.framework.players.Player;
+import it.uniurb.pmo.framework.players.IPlayer;
 
 /**
  * Interfaccia che rappresenta l'obiettivo di una missione.
@@ -11,7 +11,7 @@ import it.uniurb.pmo.framework.players.Player;
 
 public interface IMissionTarget extends ICardContent{
 
-	 boolean isAchievementReachable(Player player);
+	 boolean isAchievementReachable(IPlayer player);
 	
-	 boolean isAchievementReached(Player player);
+	 boolean isAchievementReached(IPlayer player);
 }
