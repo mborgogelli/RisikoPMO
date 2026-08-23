@@ -65,7 +65,7 @@ public class ReinforcePhase implements IPhase {
 	}
 
 	private int reinforceByCards() {
-		return this.mediator.getBestReinforcementByCards(player);
+		return 0;
 	}
 
 }

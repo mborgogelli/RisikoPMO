@@ -9,7 +9,7 @@ import it.uniurb.pmo.framework.players.IPlayer;
  * 
  **/
 
-public interface IMissionTarget extends ICardContent{
+public interface IMissionTarget extends ICard{
 
 	 boolean isAchievementReachable(IPlayer player);
 	

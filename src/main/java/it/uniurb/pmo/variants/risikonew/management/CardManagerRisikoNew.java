@@ -1,13 +1,14 @@
 package it.uniurb.pmo.variants.risikonew.management;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.management.AbstractCardManager;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ICardManagerRisikoNew;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CardManagerRisikoNew extends AbstractCardManager implements ICardManagerRisikoNew {
 	
@@ -30,17 +31,6 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 		this.isReady = true;
 	}
 
-
-//	@Override
-	// io non lo devo inizializzare ma controllare che sia stato inizializzato dal mapmanager
-//	public void initializeGame() {
-//		//TODO -- Assegnazione 
-////	    List<IZone> territories = MapManagerRisikoNew.getInstance().getAllTerritories();
-////	    for (IZone territory : territories) {
-////	        territoryCards.add(new TerritoryCard(territory)); // Assicurati che TerritoryCard implementi ICard
-////	    }
-//
-//	}
 
 	@Override
 	public Boolean isReady() {
@@ -86,18 +76,6 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 		return List.of();
 	}
 
-	@Override
-	public int getBestReinforcementByCards(IPlayer player) {
-		return 0;
-	}
-
-
-//	@Test
-//	public void getTerritoriesList(){
-//		MapManagerRisikoNew.getInstance().initializeGame();
-//		List<IZone> territories = MapManagerRisikoNew.getInstance().getAllTerritories();
-//		System.out.println(territories);
-//
-//	}
+	
 
 }

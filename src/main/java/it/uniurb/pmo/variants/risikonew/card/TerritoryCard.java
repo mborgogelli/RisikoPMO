@@ -1,28 +1,13 @@
 package it.uniurb.pmo.variants.risikonew.card;
 
 import it.uniurb.pmo.framework.card.ICard;
-import it.uniurb.pmo.framework.card.ICardContent;
-import it.uniurb.pmo.framework.card.ICardType;
 
-// Carta territorio che rappresenta una carta del mazzo di Risiko New
-public class TerritoryCard  implements ICard  {
-	
-	private final ICardContent content;
-	private final ERisikoNewCardType cardType;
+public record TerritoryCard(ERisikoNewTerritorySymbols symbol, String territory) implements ICard {
 
-    TerritoryCard(ERisikoNewTerritorySymbols symbol, String territory) {
-		this.cardType = ERisikoNewCardType.TERRITORY;
-		this.content = new TerritoryCardContent(symbol, territory);
-	}
-
-	@Override
-	public ICardType getCardType() {
-		return this.cardType;
-	}
 	
 	@Override
-	public ICardContent getCardContent() {
-		return this.content;
+	public ERisikoNewCardType getCardType() {
+		return ERisikoNewCardType.TERRITORY;
 	}
-
+	
 }

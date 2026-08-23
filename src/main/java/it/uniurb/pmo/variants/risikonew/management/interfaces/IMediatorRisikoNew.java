@@ -31,7 +31,4 @@ public interface IMediatorRisikoNew extends IMediator {
         return getZoneValue(territory);
     };
 
-    int getBestReinforcementByCards(IPlayer player);
-
-
 }

@@ -14,12 +14,5 @@ public interface ICard {
 	 */
 	ICardType getCardType();
 
-	/**
-	 * Restituisce il contenuto della carta, che può essere utilizzato per rappresentare informazioni specifiche legate alla carta.
-	 * Ad esempio, una carta territorio potrebbe restituire il nome del territorio, mentre una carta missione potrebbe restituire i dettagli della missione.
-	 * 
-	 * @return Il contenuto della carta
-	 */
-	ICardContent getCardContent();
 	
 }

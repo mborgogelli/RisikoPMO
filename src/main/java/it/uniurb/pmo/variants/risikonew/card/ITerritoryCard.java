@@ -1,8 +1,8 @@
 package it.uniurb.pmo.variants.risikonew.card;
 
-import it.uniurb.pmo.framework.card.ICardContent;
+import it.uniurb.pmo.framework.card.ICard;
 
-public interface ITerritoryCardContent  extends ICardContent{
+public interface ITerritoryCard extends ICard {
 	
 	ERisikoNewTerritorySymbols getSymbol();
 	
