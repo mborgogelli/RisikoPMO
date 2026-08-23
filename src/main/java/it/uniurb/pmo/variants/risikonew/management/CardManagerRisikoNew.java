@@ -1,12 +1,13 @@
 package it.uniurb.pmo.variants.risikonew.management;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.uniurb.pmo.framework.card.ICard;
+import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.management.AbstractCardManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ICardManagerRisikoNew;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CardManagerRisikoNew extends AbstractCardManager implements ICardManagerRisikoNew {
 	
@@ -65,21 +66,19 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 	}
 
 	@Override
-	public void shuffleDeck() {
+	public void shuffleDeck(ICardType deckType) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public List<ICard> playCards(IPlayer player, int numberOfCards) {
+	public void playCard(IPlayer player, ICard cardToPlay) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public ICard pickCard(IPlayer player) {
+	public void pickCard(IPlayer player) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 

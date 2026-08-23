@@ -1,8 +1,7 @@
 package it.uniurb.pmo.framework.management.interfaces;
 
-import java.util.List;
-
 import it.uniurb.pmo.framework.card.ICard;
+import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.players.IPlayer;
 
 public interface ICardManager extends IManager{
@@ -10,21 +9,22 @@ public interface ICardManager extends IManager{
 	/**
 	 * Mescola il mazzo di carte
 	 */
-	void shuffleDeck();
+	void shuffleDeck(ICardType deckType);
 	
 	/**
-	 * Distribuisce le carte ai giocatori
-	 * 
-	 * @param players
+	 * Gioca una carta
+	 *
+	 * @param player     il giocatore che riceve le carte
+	 * @param cardToPlay la carta da giocare
 	 */
-	List<ICard> playCards(IPlayer player, int numberOfCards);
+	void playCard(IPlayer player, ICard cardToPlay);
 	
 	/**
-	 * Permette a un giocatore di scegliere una carta da giocare
-	 * 
+	 * Pesca una carta
+	 *
 	 * @param player il giocatore che sceglie la carta
-	 * @return la carta scelta
 	 */
-	ICard pickCard(IPlayer player);
-	
+	void pickCard(IPlayer player);
+
+
 }

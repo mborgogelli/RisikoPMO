@@ -1,19 +1,18 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 
-import java.util.List;
-import java.util.Map;
-
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
-import it.uniurb.pmo.framework.turn.dto.IDeployResponseDTO;
+import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
+import it.uniurb.pmo.variants.risikonew.card.ITerritoryCardContent;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployResponseRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
 
-import javax.smartcardio.Card;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReinforcePhase implements IPhase {
 
@@ -21,10 +20,12 @@ public class ReinforcePhase implements IPhase {
 	private final IMediatorRisikoNew mediator;
 	private final IGameCoordinatorRisikoNew coordinator;
 	private List<String> playerTerritories;
+	private List<ICard> tris;
 
 	public ReinforcePhase(IMediatorRisikoNew mediator, IGameCoordinatorRisikoNew coordinator) {
 		this.mediator = mediator;
 		this.coordinator = coordinator;
+		this.tris = new ArrayList<>();
 	}
 
 	@Override
@@ -77,42 +78,43 @@ public class ReinforcePhase implements IPhase {
 
 	private int reinforceByCards() {
 		List<ICard> cardsToPlay = this.mediator.getTerritoryCards(player);
-		// Caso 1: Nessuna carta giocata o nessuna combinazione disponibile -> nessun bonus
-		if (cardsToPlay == null || cardsToPlay.isEmpty()) {
+
+		// Caso 1: Nessuna carta giocata o numero di carte insufficiente -> nessun bonus
+		if (cardsToPlay == null || cardsToPlay.size() < 3) {
 			return 0;
 		}
 
-		// Caso 2: Numero di carte invalido per formare un tris -> errore
-		if (cardsToPlay.size() != 3) {
-			throw new IllegalArgumentException(
-					"Tentativo di giocare un numero non valido di carte: " + cardsToPlay.size() + " (richieste 3 o 0)"
-			);
-		}
-
-		// Caso 3: Happy path (3 carte valide)
+		// Caso 2: almeno 3 carte disponibili
 		int totalBonus = 0;
 		totalBonus += evaluateTerritoryCardBonusForTriplet(cardsToPlay);
-		totalBonus += getTerritoryCardBonusForOwnership(cardsToPlay);
 
 		return totalBonus;
 	}
 
-	private int evaluateTerritoryCardBonusForTriplet(List<ICard> tris) {
+	private int evaluateTerritoryCardBonusForTriplet(List<ICard> cards) {
 		return 0;
 	}
 
 	/**
 	 * Calcola il bonus ottenuto dal possesso dei territori indicati nelle carte
 	 * 
-	 * @param cards
-	 * @return
+	 * @param cards le carte da valutare
+	 * @return il bonus ottenuto
 	 */
 	private int getTerritoryCardBonusForOwnership(List <ICard> cards) {
 		int bonus = (int) cards.stream()
-							.map(c -> c.getCardContent())
-							.filter(t -> this.playerTerritories.contains(t))
+							.map(c -> (ITerritoryCardContent) c.getCardContent())
+							.filter(t -> this.playerTerritories.contains(t.getTerritoryName()))
 							.count();
-		return bonus;
+		return bonus * 2;
+	}
+
+	private List<ICard> checkForJockerAndTwoOfSameSymbol(List<ICard> cards) {
+		return null;
+	}
+
+	private boolean checkForSymbolInCard(List<ICard> cards, ERisikoNewTerritorySymbols symbol) {
+		return false;
 	}
 
 }

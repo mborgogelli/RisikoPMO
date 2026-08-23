@@ -1,17 +1,13 @@
 package it.uniurb.pmo.variants.risikonew.management;
 
-import java.util.List;
-
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.management.AbstractMediator;
 import it.uniurb.pmo.framework.management.interfaces.IDirector;
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.variants.risikonew.management.interfaces.ICardManagerRisikoNew;
-import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
-import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
-import it.uniurb.pmo.variants.risikonew.management.interfaces.ITurnManagerRisikoNew;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.*;
+
+import java.util.List;
 
 public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisikoNew {
 	
@@ -55,6 +51,11 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	@Override
 	public List<ICard> getPlayerCardsByType(IPlayer player, ICardType cardType) {
 		return List.of();
+	}
+
+	@Override
+	public void playCard(IPlayer player, ICard card) {
+		this.cardManager.playCard(player, card);
 	}
 
 	@Override

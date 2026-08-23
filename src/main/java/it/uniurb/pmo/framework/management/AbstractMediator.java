@@ -1,12 +1,12 @@
 package it.uniurb.pmo.framework.management;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.uniurb.pmo.framework.management.interfaces.IManager;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe astratta che implementa
@@ -31,17 +31,17 @@ public abstract class AbstractMediator implements IMediator {
         this.managers.add(manager);
     }
     
-      protected <T extends IManager> T resolveManager(Class<T> managerType) {
-        T myManager = null;
+  	protected <T extends IManager> T resolveManager(Class<T> managerType) {
+		T myManager = null;
 		for (IManager manager : this.managers) {
-            if (managerType.isInstance(manager)) {
-            	myManager = managerType.cast(manager);
-            }
-        }
+			if (managerType.isInstance(manager)) {
+				myManager = managerType.cast(manager);
+			}
+		}
 		if (myManager == null) {
-	     	throw new IllegalArgumentException("Manager of type " + managerType.getName() + " not found.");
-	    }
-        return myManager;
+			throw new IllegalArgumentException("Manager of type " + managerType.getName() + " not found.");
+		}
+		return myManager;
     }
 
 
