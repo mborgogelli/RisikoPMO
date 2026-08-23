@@ -81,6 +81,11 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public int getBestReinforcementByCards(IPlayer player) {
+		return 0;
+	}
+
 
 //	@Test
 //	public void getTerritoriesList(){

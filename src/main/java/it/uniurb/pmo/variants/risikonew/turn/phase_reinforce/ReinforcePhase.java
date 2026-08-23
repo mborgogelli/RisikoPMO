@@ -3,7 +3,6 @@ package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
-import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.ITerritoryCardContent;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
@@ -77,22 +76,7 @@ public class ReinforcePhase implements IPhase {
 	}
 
 	private int reinforceByCards() {
-		List<ICard> cardsToPlay = this.mediator.getTerritoryCards(player);
-
-		// Caso 1: Nessuna carta giocata o numero di carte insufficiente -> nessun bonus
-		if (cardsToPlay == null || cardsToPlay.size() < 3) {
-			return 0;
-		}
-
-		// Caso 2: almeno 3 carte disponibili
-		int totalBonus = 0;
-		totalBonus += evaluateTerritoryCardBonusForTriplet(cardsToPlay);
-
-		return totalBonus;
-	}
-
-	private int evaluateTerritoryCardBonusForTriplet(List<ICard> cards) {
-		return 0;
+		return this.mediator.getBestReinforcementByCards(player);
 	}
 
 	/**
@@ -107,14 +91,6 @@ public class ReinforcePhase implements IPhase {
 							.filter(t -> this.playerTerritories.contains(t.getTerritoryName()))
 							.count();
 		return bonus * 2;
-	}
-
-	private List<ICard> checkForJockerAndTwoOfSameSymbol(List<ICard> cards) {
-		return null;
-	}
-
-	private boolean checkForSymbolInCard(List<ICard> cards, ERisikoNewTerritorySymbols symbol) {
-		return false;
 	}
 
 }

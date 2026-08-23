@@ -1,11 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.management.interfaces;
 
-import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.variants.risikonew.board.Territory;
-import it.uniurb.pmo.variants.risikonew.card.ERisikoNewCardType;
-import it.uniurb.pmo.variants.risikonew.card.TerritoryCard;
 
 import java.util.List;
 
@@ -35,10 +31,7 @@ public interface IMediatorRisikoNew extends IMediator {
         return getZoneValue(territory);
     };
 
-    default List<ICard> getTerritoryCards(IPlayer player){
-        return getPlayerCardsByType(player, ERisikoNewCardType.TERRITORY);
-    };
-
+    int getBestReinforcementByCards(IPlayer player);
 
 
 }

@@ -98,4 +98,9 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 		this.tankManager.deployTank(player, zone, tanks);
 	}
 
+	@Override
+	public int getBestReinforcementByCards(IPlayer player) {
+		return this.cardManager.getBestReinforcementByCards(player);
+	}
+
 }
