@@ -82,6 +82,11 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 	}
 
 	@Override
+	public List<ICard> getPlayerDeck(IPlayer player, ICardType deckType) {
+		return List.of();
+	}
+
+	@Override
 	public int getBestReinforcementByCards(IPlayer player) {
 		return 0;
 	}

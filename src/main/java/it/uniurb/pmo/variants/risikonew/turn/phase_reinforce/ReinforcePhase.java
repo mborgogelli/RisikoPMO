@@ -3,7 +3,6 @@ package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
-import it.uniurb.pmo.variants.risikonew.card.ITerritoryCardContent;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployRequestRisikoNewDTO;
@@ -33,11 +32,6 @@ public class ReinforcePhase implements IPhase {
 	}
 
 	@Override
-	public int getStepId() {
-		return 0;
-	}
-
-	@Override
 	public void playPhase(IPlayer player) {
 		this.player = player;
 		this.playerTerritories = this.mediator.getZonesOwnedBy(player);
@@ -49,11 +43,6 @@ public class ReinforcePhase implements IPhase {
 		DeployResponseRisikoNewDTO response = (DeployResponseRisikoNewDTO) this.coordinator.sendDeployRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), deployableZones, reinforcements));
 		response.deployment().forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
 		this.clearPhase();
-	}
-
-	// TODO rimuovere nextStep
-	@Override
-	public void nextStep(IPlayer player) {
 	}
 
 	@Override
@@ -77,20 +66,6 @@ public class ReinforcePhase implements IPhase {
 
 	private int reinforceByCards() {
 		return this.mediator.getBestReinforcementByCards(player);
-	}
-
-	/**
-	 * Calcola il bonus ottenuto dal possesso dei territori indicati nelle carte
-	 * 
-	 * @param cards le carte da valutare
-	 * @return il bonus ottenuto
-	 */
-	private int getTerritoryCardBonusForOwnership(List <ICard> cards) {
-		int bonus = (int) cards.stream()
-							.map(c -> (ITerritoryCardContent) c.getCardContent())
-							.filter(t -> this.playerTerritories.contains(t.getTerritoryName()))
-							.count();
-		return bonus * 2;
 	}
 
 }

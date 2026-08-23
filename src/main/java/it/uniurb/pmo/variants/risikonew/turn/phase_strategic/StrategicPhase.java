@@ -28,16 +28,7 @@ public class StrategicPhase implements IStrategicPhase {
 	}
 
 	@Override
-	public void nextStep(IPlayer player) {
-	}
-
-	@Override
 	public int getPhaseId() {
-		return 0;
-	}
-
-	@Override
-	public int getStepId() {
 		return 0;
 	}
 

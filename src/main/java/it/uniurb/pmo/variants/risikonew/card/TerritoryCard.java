@@ -10,7 +10,7 @@ public class TerritoryCard  implements ICard  {
 	private final ICardContent content;
 	private final ERisikoNewCardType cardType;
 
-    TerritoryCard(ERisikoNewTerritorySymbols symbol, String territory ) {
+    TerritoryCard(ERisikoNewTerritorySymbols symbol, String territory) {
 		this.cardType = ERisikoNewCardType.TERRITORY;
 		this.content = new TerritoryCardContent(symbol, territory);
 	}

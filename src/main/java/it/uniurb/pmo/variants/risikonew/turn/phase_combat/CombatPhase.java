@@ -25,11 +25,6 @@ public class CombatPhase implements ICombatPhase {
 	}
 
 	@Override
-	public int getStepId() {
-		return 0;
-	}
-
-	@Override
 	public void playPhase(IPlayer player) {
 		this.player = player;
 		List<String> ownedZones = this.mediator.getZonesOwnedBy(player);
@@ -37,11 +32,7 @@ public class CombatPhase implements ICombatPhase {
 		this.clearPhase();
 	}
 
-	@Override
-	public void nextStep(IPlayer player) {
-	}
-
-	@Override
+    @Override
 	public void clearPhase() {
 		this.player = null;
 	}

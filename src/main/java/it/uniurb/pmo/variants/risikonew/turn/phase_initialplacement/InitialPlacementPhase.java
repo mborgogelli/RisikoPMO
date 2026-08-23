@@ -30,22 +30,13 @@ public class InitialPlacementPhase implements IPhase {
 	}
 
 	@Override
-	public int getStepId() {
-		return 0;
-	}
-
-	@Override
 	public void playPhase(IPlayer player) {
 		this.player = player;
 		this.deployTanks(this.player);
 		this.clearPhase();
 	}
 
-	@Override
-	public void nextStep(IPlayer player) {
-	}
-
-	@Override
+    @Override
 	public void clearPhase() {
 		this.player = null;
 	}

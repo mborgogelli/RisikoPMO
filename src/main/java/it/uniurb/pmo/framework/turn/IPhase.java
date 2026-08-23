@@ -6,11 +6,7 @@ public interface IPhase {
 	
 	int getPhaseId();
 
-	int getStepId();
-
 	void playPhase(IPlayer player);
-
-	void nextStep(IPlayer player);
 
 	void clearPhase();
 
