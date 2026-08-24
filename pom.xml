@@ -28,9 +28,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<!-- LCI versione non attendibile per Eclipse
-				<artifactId>spring-boot-starter-webmvc</artifactId>
-			-->
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
@@ -39,29 +36,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
-		<!-- LCI DIPENDENZE TEMPORANEAMENTE DISATTIVATE PER RISOLVERE CONFLITTO JUNIT
-
-		Esplicita l'intero modulo Jupiter (API + Engine + Params) gestito dal parent
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		Risolve la dipendenza org.junit.platform.commons.annotation.Testable per l'esecutore di Eclipse
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-commons</artifactId>
-			<scope>test</scope>
-		</dependency>
-		-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -78,12 +52,6 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
-		<!-- LCI Doppione
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-		</dependency>
-		-->
 	</dependencies>
 
 	<build>
