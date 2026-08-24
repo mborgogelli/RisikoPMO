@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
+		<!-- LCI versione non attendibile per Eclipse
 		<version>4.0.3</version>
+		-->
+		<version>3.3.0</version>
 		<relativePath />
 	</parent>
 
@@ -24,7 +28,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webmvc</artifactId>
+			<!-- LCI versione non attendibile per Eclipse
+				<artifactId>spring-boot-starter-webmvc</artifactId>
+			-->
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
 		<dependency>
@@ -32,8 +39,10 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- LCI DIPENDENZE TEMPORANEAMENTE DISATTIVATE PER RISOLVERE CONFLITTO JUNIT
 
-		<!-- Esplicita l'intero modulo Jupiter (API + Engine + Params) gestito dal parent -->
+		Esplicita l'intero modulo Jupiter (API + Engine + Params) gestito dal parent
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
@@ -46,12 +55,13 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Risolve la dipendenza org.junit.platform.commons.annotation.Testable per l'esecutore di Eclipse -->
+		Risolve la dipendenza org.junit.platform.commons.annotation.Testable per l'esecutore di Eclipse
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-commons</artifactId>
 			<scope>test</scope>
 		</dependency>
+		-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -68,10 +78,12 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
+		<!-- LCI Doppione
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 		</dependency>
+		-->
 	</dependencies>
 
 	<build>
@@ -108,7 +120,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<argLine>-javaagent:${org.mockito:mockito-core:jar}</argLine>
+					<!--  LCI l'argomento non deve essere passato per ECLIPSE
+					<argLine>-javaagent:${org.mockito:mockito-core:jar}</argL\ine>
+					-->
 				</configuration>
 			</plugin>
 		</plugins>
