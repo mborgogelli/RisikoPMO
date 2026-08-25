@@ -23,7 +23,34 @@ public abstract class AbstractCardManager implements ICardManager {
 		this.mediator = mediator;
 		this.mediator.registerManager(this);
 	}
-	
+
+	/**
+	 * Restituisce uno Stream di tutte le combinazioni di dimensione 'k'.
+	 */
+	@Override
+	public Stream<List<ICard>> getCombinationsOf(List<ICard> playerCards, int k) {
+
+		// caso base
+		if (k <= 0 || k > playerCards.size()) {
+			return Stream.empty();
+		}
+		// caso base
+		if (k == 1) {
+			return playerCards.stream().map(List::of);
+		}
+
+		// Per ogni indice i, prende l'i-esimo elemento e lo concatena
+		// a tutte le combinazioni di dimensione (k - 1) della sottolista successiva
+		return IntStream.range(0, playerCards.size() - k + 1)
+				.boxed()
+				.flatMap(i -> getCombinationsOf(playerCards.subList(i + 1, playerCards.size()), k - 1)
+						.map(subCombination -> Stream.concat(
+								Stream.of(playerCards.get(i)), // concatena l'i-esimo elemento con tutte le combinazioni
+								subCombination.stream()		   // di dimensione (k - 1) della sottolista successiva
+						).toList())
+				);
+	}
+
 	/**
 	 * Aggiunge una carta al mazzo specificato.
 	 * Se la carta è già presente nel mazzo, lancia un'eccezione.
@@ -70,33 +97,5 @@ public abstract class AbstractCardManager implements ICardManager {
 			throw new IllegalArgumentException("Deck or card is null");
 		}
 		return cards.contains(card);
-	}
-
-
-	/**
-	* Restituisce uno Stream di tutte le combinazioni di dimensione 'k'.
-	*/
-	@Override
-	public Stream<List<ICard>> getCombinationsOf(List<ICard> playerCards, int k) {
-		// caso base
-		if (k <= 0 || k > playerCards.size()) {
-			return Stream.empty();
-		}
-
-		// caso base
-		if (k == 1) {
-			return playerCards.stream().map(List::of);
-		}
-
-		// Per ogni indice i, prende l'i-esimo elemento e lo concatena
-		// a tutte le combinazioni di dimensione (k - 1) della sottolista successiva
-		return IntStream.range(0, playerCards.size() - k + 1)
-				.boxed()
-				.flatMap(i -> getCombinationsOf(playerCards.subList(i + 1, playerCards.size()), k - 1)
-						.map(subCombination -> Stream.concat(
-								Stream.of(playerCards.get(i)), // concatena l'i-esimo elemento con tutte le combinazioni
-								subCombination.stream()		   // di dimensione (k - 1) della sottolista successiva
-						).toList())
-				);
 	}
 }
