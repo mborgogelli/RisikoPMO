@@ -5,6 +5,7 @@ import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.management.AbstractMediator;
 import it.uniurb.pmo.framework.management.interfaces.IDirector;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.*;
 
 import java.util.List;

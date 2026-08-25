@@ -6,4 +6,5 @@ public enum ERisikoNewTerritorySymbols {
 	INFANTRY,
 	ARTILLERY,
 	CAVALRY,
+	JOLLY
 }

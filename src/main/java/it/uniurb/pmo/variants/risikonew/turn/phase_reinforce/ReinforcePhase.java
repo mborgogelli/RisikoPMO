@@ -1,16 +1,19 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
+import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
+import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployResponseRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ReinforcePhase implements IPhase {
 
@@ -68,4 +71,44 @@ public class ReinforcePhase implements IPhase {
 		return 0;
 	}
 
+	
+	private Optional<List<ICard>> findBestCombination() {
+		//TODO
+		return null;
+	}
+	
+	private int getTrisScore(List<ITerritoryCard> tris) {
+		List<ERisikoNewTerritorySymbols> symbols = tris.stream().map(ITerritoryCard::getSymbol).toList();
+		
+		// se contiene almeno un jolly, il punteggio è 12
+		boolean trisWithJolly = symbols.contains(ERisikoNewTerritorySymbols.JOLLY) && (symbols.stream().distinct().count() == 2);
+
+		if (trisWithJolly) {
+			return 12;
+		}
+		
+		// se contiene tre simboli uguali
+		boolean trisWithSameSymbols = symbols.get(0) == symbols.get(1) && symbols.get(1) == symbols.get(2);
+		if (trisWithSameSymbols) {
+			switch (symbols.get(0)) {
+			case INFANTRY: return 6;	
+			case CAVALRY: return 8;
+			case ARTILLERY: return 10;
+			default: return 0;
+			}
+		}
+
+		// se contiene tre simboli diversi
+		boolean trisWithDifferentSymbols = symbols.stream().distinct().count() == 3;
+		if (trisWithDifferentSymbols) {
+			return 10;
+		}
+		// tris non valid0
+		return 0;
+	}
+	
+	private boolean isTrisValid(List<ITerritoryCard> tris) {
+		return this.getTrisScore(tris) > 0;
+	}
+	
 }
