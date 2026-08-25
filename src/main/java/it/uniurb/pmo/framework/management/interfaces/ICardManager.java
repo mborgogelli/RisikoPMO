@@ -5,6 +5,7 @@ import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.players.IPlayer;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface ICardManager extends IManager{
 	
@@ -36,4 +37,12 @@ public interface ICardManager extends IManager{
 	 */
 	List<ICard> getPlayerDeck(IPlayer player,ICardType deckType);
 
+	/**
+	 * Restituisce uno Stream di tutte le combinazioni di dimensione 'k' ottenibili
+	 * dal mazzo di carte di un giocatore
+	 * @param playerCards il mazzo di carte di un giocatore
+	 * @param k la dimensione delle combinazioni
+	 * @return uno Stream di tutte le combinazioni di dimensione 'k' ottenibili
+	 */
+	Stream<List<ICard>> getCombinationsOf(List<ICard> playerCards, int k);
 }
