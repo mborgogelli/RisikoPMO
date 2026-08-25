@@ -1,9 +1,5 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
@@ -15,18 +11,21 @@ import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployReques
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployResponseRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+
 public class ReinforcePhase implements IPhase {
 
 	private IPlayer player;
 	private final IMediatorRisikoNew mediator;
 	private final IGameCoordinatorRisikoNew coordinator;
 	private List<String> playerTerritories;
-	private List<ICard> tris;
+	private Optional<List<ICard>> tris;
 
 	public ReinforcePhase(IMediatorRisikoNew mediator, IGameCoordinatorRisikoNew coordinator) {
 		this.mediator = mediator;
 		this.coordinator = coordinator;
-		this.tris = new ArrayList<>();
 	}
 
 	@Override
@@ -68,33 +67,42 @@ public class ReinforcePhase implements IPhase {
 	}
 
 	private int reinforceByCards() {
-		return 0;
+		this.tris = this.findBestCombination();
+		if (this.tris.isPresent()){
+			this.mediator.playTris(this.player, this.tris.get());
+		}
+		return this.tris.map(this::getTrisScore).orElse(0);
 	}
 
-	
 	private Optional<List<ICard>> findBestCombination() {
-		//TODO
-		return null;
+		return this.mediator.getAvailableTris(this.player)
+				.filter(this::isTrisValid)
+				.max(Comparator.comparingInt(this::getTrisScore));
 	}
 	
-	private int getTrisScore(List<ITerritoryCard> tris) {
-		List<ERisikoNewTerritorySymbols> symbols = tris.stream().map(ITerritoryCard::getSymbol).toList();
-		
+	private boolean isTrisValid(List<ICard> tris) {
+		return this.getTrisScore(tris) > 0;
+	}
+
+	private int getTrisScore(List<ICard> tris) {
+		List<ERisikoNewTerritorySymbols> symbols = tris.stream()
+				.map(card -> ((ITerritoryCard) card).getSymbol())
+				.toList();
 		// se contiene almeno un jolly, il punteggio è 12
 		boolean trisWithJolly = symbols.contains(ERisikoNewTerritorySymbols.JOLLY) && (symbols.stream().distinct().count() == 2);
 
 		if (trisWithJolly) {
 			return 12;
 		}
-		
+
 		// se contiene tre simboli uguali
 		boolean trisWithSameSymbols = symbols.get(0) == symbols.get(1) && symbols.get(1) == symbols.get(2);
 		if (trisWithSameSymbols) {
 			switch (symbols.get(0)) {
-			case INFANTRY: return 6;	
-			case CAVALRY: return 8;
-			case ARTILLERY: return 10;
-			default: return 0;
+				case INFANTRY: return 6;
+				case CAVALRY: return 8;
+				case ARTILLERY: return 10;
+				default: return 0;
 			}
 		}
 
@@ -106,9 +114,5 @@ public class ReinforcePhase implements IPhase {
 		// tris non valid0
 		return 0;
 	}
-	
-	private boolean isTrisValid(List<ITerritoryCard> tris) {
-		return this.getTrisScore(tris) > 0;
-	}
-	
+
 }

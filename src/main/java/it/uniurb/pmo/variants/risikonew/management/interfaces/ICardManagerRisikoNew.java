@@ -1,13 +1,13 @@
 package it.uniurb.pmo.variants.risikonew.management.interfaces;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.management.interfaces.ICardManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewCardType;
 import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 public interface ICardManagerRisikoNew extends ICardManager {
 
@@ -19,5 +19,8 @@ public interface ICardManagerRisikoNew extends ICardManager {
 		List<ICard> territoryCards = this.getPlayerDeck(player, ERisikoNewCardType.TERRITORY);
 		return this.getCombinationsOf(territoryCards, 3);
 	}
-	
+
+	default void playTris(IPlayer player, List<ICard> cards){
+		cards.stream().forEach(card -> this.playCard(player, card));
+	};
 }
