@@ -8,6 +8,7 @@ import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.*;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisikoNew {
 	
@@ -96,6 +97,17 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	@Override
 	public void deployTank(IPlayer player, String zone, int tanks) {
 		this.tankManager.deployTank(player, zone, tanks);
+	}
+
+	@Override
+	public Stream<List<ICard>> getCombinationsOf(List<ICard> playerCards, int k) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Stream<List<ICard>> getAvailableTris(IPlayer player) {
+		return this.cardManager.getAvailableTris(player);
 	}
 
 }

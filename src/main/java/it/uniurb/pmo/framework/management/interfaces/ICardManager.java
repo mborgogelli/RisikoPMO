@@ -45,4 +45,6 @@ public interface ICardManager extends IManager{
 	 * @return uno Stream di tutte le combinazioni di dimensione 'k' ottenibili
 	 */
 	Stream<List<ICard>> getCombinationsOf(List<ICard> playerCards, int k);
+	
+	
 }

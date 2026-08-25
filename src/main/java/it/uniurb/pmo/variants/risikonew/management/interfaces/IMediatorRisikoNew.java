@@ -1,9 +1,12 @@
 package it.uniurb.pmo.variants.risikonew.management.interfaces;
 
+import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.variants.risikonew.card.ERisikoNewCardType;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface IMediatorRisikoNew extends IMediator {
 
@@ -30,5 +33,7 @@ public interface IMediatorRisikoNew extends IMediator {
     default int getTerritoryValue(String territory) {
         return getZoneValue(territory);
     };
+    
+	Stream<List<ICard>> getAvailableTris(IPlayer player);
 
 }

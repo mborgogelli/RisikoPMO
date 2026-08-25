@@ -5,6 +5,7 @@ import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.players.IPlayer;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Interfaccia che modella un mediatore tra i manager di gioco
@@ -72,4 +73,13 @@ public interface IMediator extends IGameConductor {
 	 * @param card la carta da giocare
 	 */
 	void playCard(IPlayer player, ICard card);
+	
+	/**
+	 * 
+	 * @param playerCards
+	 * @param k
+	 * @return
+	 */
+	Stream<List<ICard>> getCombinationsOf(List<ICard> playerCards, int k);
+	
 }

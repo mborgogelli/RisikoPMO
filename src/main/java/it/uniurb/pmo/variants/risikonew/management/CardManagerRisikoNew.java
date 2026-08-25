@@ -76,6 +76,4 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 		return List.of();
 	}
 
-	
-
 }

@@ -53,5 +53,5 @@ public abstract class AbstractMediator implements IMediator {
 	public boolean checkVictory(IPlayer player) {
 		return false;   // To do delegate to MissionManager or CardManager
 	}
-
+	
 }
