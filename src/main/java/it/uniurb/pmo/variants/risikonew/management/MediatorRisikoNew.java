@@ -27,7 +27,7 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 
 	@Override
 	public List<String> getZonesOwnedBy(IPlayer player) {
-		return mapManager.getZonesOwnedBy(player);
+		return mapManager.getTerritoriesOwnedBy(player);
 	}
 
 	@Override

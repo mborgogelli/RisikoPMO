@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 public interface IMediatorRisikoNew extends IMediator {
 
     default List<String> getTerritoriesOwnedBy(IPlayer player){
-        return getZonesOwnedBy(player);
+        return this.getZonesOwnedBy(player);
     }
 
     default List<String> getAllTerritories(){

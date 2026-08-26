@@ -4,8 +4,8 @@ import it.uniurb.pmo.framework.card.ICard;
 
 public interface ITerritoryCard extends ICard {
 	
-	ERisikoNewTerritorySymbols getSymbol();
+	ERisikoNewTerritorySymbols symbol();
 	
-	String getTerritoryName();
+	String territoryName();
 
 }

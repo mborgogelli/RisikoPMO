@@ -87,7 +87,7 @@ public class ReinforcePhase implements IPhase {
 
 	private int getTrisScore(List<ICard> tris) {
 		List<ERisikoNewTerritorySymbols> symbols = tris.stream()
-				.map(card -> ((ITerritoryCard) card).getSymbol())
+				.map(card -> ((ITerritoryCard) card).symbol())
 				.toList();
 		// se contiene almeno un jolly, il punteggio è 12
 		boolean trisWithJolly = symbols.contains(ERisikoNewTerritorySymbols.JOLLY) && (symbols.stream().distinct().count() == 2);
