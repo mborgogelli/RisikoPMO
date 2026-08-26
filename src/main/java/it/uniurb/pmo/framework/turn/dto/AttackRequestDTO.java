@@ -1,12 +1,12 @@
 package it.uniurb.pmo.framework.turn.dto;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.turn.IPlayerRequestDTO;
+import it.uniurb.pmo.framework.turn.IPlayerDataDTO;
 import it.uniurb.pmo.framework.utils.EColors;
 
 import java.util.List;
 
-public class AttackRequestDTO implements IPlayerRequestDTO {
+public class AttackRequestDTO implements IPlayerDataDTO {
 
 	private final IPlayer player;
 	private final List<String> ownedZones;

@@ -3,6 +3,7 @@ package it.uniurb.pmo.variants.risikonew.management.interfaces;
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -36,4 +37,8 @@ public interface IMediatorRisikoNew extends IMediator {
 	Stream<List<ICard>> getAvailableTris(IPlayer player);
 
     void playTris(IPlayer player, List<ICard> cards);
+
+    default void reinforcePlayer(IPlayer player, int reinforcements) {
+        this.reinforcePlayer(player, ERisikoNewToken.TANK, reinforcements);
+    };
 }

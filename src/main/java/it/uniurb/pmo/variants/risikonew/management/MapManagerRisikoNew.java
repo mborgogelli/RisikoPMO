@@ -1,7 +1,5 @@
 package it.uniurb.pmo.variants.risikonew.management;
 
-import it.uniurb.pmo.framework.board.BoardCreator;
-import it.uniurb.pmo.framework.board.IGameBoard;
 import it.uniurb.pmo.framework.management.AbstractMapManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.board.BoardCreatorRisikoNew;
@@ -68,7 +66,7 @@ public class MapManagerRisikoNew extends AbstractMapManager implements IMapManag
 	public List<String> getZonesOwnedBy(IPlayer player) {
 		this.checkReady();
 		this.checkIfExists(player);
-		return this.playerTerritories.get(player);
+		return this.playerTerritories.get(player).stream().toList();
 	}
 	
 	@Override

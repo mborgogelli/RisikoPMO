@@ -3,6 +3,7 @@ package it.uniurb.pmo.framework.management.interfaces;
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.ITokenType;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -81,5 +82,6 @@ public interface IMediator extends IGameConductor {
 	 * @return
 	 */
 	Stream<List<ICard>> getCombinationsOf(List<ICard> playerCards, int k);
-	
+
+	void reinforcePlayer(IPlayer player, ITokenType tokenType, int reinforcements);
 }

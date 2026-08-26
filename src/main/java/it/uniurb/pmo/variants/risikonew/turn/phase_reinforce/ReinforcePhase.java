@@ -26,6 +26,7 @@ public class ReinforcePhase implements IPhase {
 	public ReinforcePhase(IMediatorRisikoNew mediator, IGameCoordinatorRisikoNew coordinator) {
 		this.mediator = mediator;
 		this.coordinator = coordinator;
+
 	}
 
 	@Override
@@ -35,16 +36,16 @@ public class ReinforcePhase implements IPhase {
 
 	@Override
 	public void playPhase(IPlayer player) {
+		this.clearPhase();
 		this.player = player;
 		this.playerTerritories = this.mediator.getZonesOwnedBy(player);
 		int reinforcementsFromTerritories = this.reinforceByTerritories();
 		int reinforcementsFromContinents = this.reinforceByContinentBonus();
 		int reinforcementsFromCards = this.reinforceByCards();
 		int reinforcements = reinforcementsFromTerritories + reinforcementsFromContinents + reinforcementsFromCards;
-		List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
-		DeployResponseRisikoNewDTO response = (DeployResponseRisikoNewDTO) this.coordinator.sendDeployRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), deployableZones, reinforcements));
+		this.mediator.reinforcePlayer(this.player, reinforcements);
+		DeployResponseRisikoNewDTO response = (DeployResponseRisikoNewDTO) this.coordinator.sendDeployRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), this.playerTerritories, reinforcements));
 		response.deployment().forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
-		this.clearPhase();
 	}
 
 	@Override
