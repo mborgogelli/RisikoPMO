@@ -11,7 +11,7 @@ import it.uniurb.pmo.framework.players.IPlayer;
 
 public interface IMissionTarget extends ICard{
 
-	 boolean isAchievementReachable(IPlayer player);
+	 boolean isAchievableBy(IPlayer player);
 	
-	 boolean isAchievementReached(IPlayer player);
+	 boolean isCompletedBy(IPlayer player);
 }
