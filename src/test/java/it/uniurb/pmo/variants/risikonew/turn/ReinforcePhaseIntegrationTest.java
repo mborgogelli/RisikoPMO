@@ -73,4 +73,63 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
         assertEquals(tanksBefore + 15, tanksAfter);
     }
 
+    @Test
+    @DisplayName("Verifica che venga calcolato correttamente il numero di rinforzi da territori, continente ma senza tris")
+    void testReinforceWithNoTris() {
+        IPlayer player1 = players.getFirst();
+        IMediatorRisikoNew phaseMediator = spy(mediator);
+
+        doReturn(List.of("topolinia", "paperopoli", "centinarola"))
+                .when(phaseMediator).getZonesOwnedBy(player1);
+
+        doReturn(List.of("oceania"))
+                .when(phaseMediator).getCompletedContinents(player1);
+
+        doReturn(2)
+                .when(phaseMediator).getContinentArmyBonus("oceania");
+
+        doReturn(Stream.of())
+                .when(phaseMediator).getAvailableTris(player1);
+
+        int tanksBefore = mediator.getPlayerTank(player1);
+
+        ReinforcePhase phase = new ReinforcePhase(phaseMediator, gameCoordinator);
+        phase.playPhase(player1);
+        int tanksAfter = mediator.getPlayerTank(player1);
+        assertEquals(tanksBefore + 3, tanksAfter);
+    }
+
+    @Test
+    @DisplayName("Verifica che venga scelto il tris migliore")
+    void testPointsFromBestTris() {
+        IPlayer player1 = players.getFirst();
+        IMediatorRisikoNew phaseMediator = spy(mediator);
+
+        doReturn(List.of("topolinia", "paperopoli"))
+                .when(phaseMediator).getZonesOwnedBy(player1);
+
+        List<ICard> trisDebole = List.of(
+                new TerritoryCard(ERisikoNewTerritorySymbols.JOLLY, ""),
+                new TerritoryCard(ERisikoNewTerritorySymbols.INFANTRY, "pesaro"),
+                new TerritoryCard(ERisikoNewTerritorySymbols.INFANTRY, "fano")
+        );
+
+        List<ICard> trisForte = List.of(
+                new TerritoryCard(ERisikoNewTerritorySymbols.ARTILLERY, "topolinia"),
+                new TerritoryCard(ERisikoNewTerritorySymbols.INFANTRY, "paperopoli"),
+                new TerritoryCard(ERisikoNewTerritorySymbols.CAVALRY, "pesaro")
+        );
+
+        doReturn(Stream.of(trisDebole,trisForte))
+                .when(phaseMediator).getAvailableTris(player1);
+
+        int tanksBefore = mediator.getPlayerTank(player1);
+
+        ReinforcePhase phase = new ReinforcePhase(phaseMediator, gameCoordinator);
+        phase.playPhase(player1);
+        int tanksAfter = mediator.getPlayerTank(player1);
+        assertEquals(tanksBefore + 14, tanksAfter);
+    }
 }
+
+
