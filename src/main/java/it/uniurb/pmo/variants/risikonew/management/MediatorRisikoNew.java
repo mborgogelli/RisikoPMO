@@ -42,6 +42,11 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
+	public List<String> getNeighboursOf(String zone) {
+		return this.mapManager.getNeighboursOf(zone);
+	}
+
+	@Override
 	public List<String> getCompletedContinents(IPlayer player) {
 		return this.mapManager.checkZoneCompletion(player);
 	}

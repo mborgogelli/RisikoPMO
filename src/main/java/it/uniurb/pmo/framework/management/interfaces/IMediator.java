@@ -52,7 +52,7 @@ public interface IMediator extends IGameConductor {
 	 */
 	boolean canMoveBetween(IPlayer player, String toZone, String fromZone);
 
-
+	List<String> getNeighboursOf(String zone);
 
 	void notifyWinner(IPlayer iPlayer);
 

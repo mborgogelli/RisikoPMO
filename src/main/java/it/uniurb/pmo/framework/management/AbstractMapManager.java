@@ -1,13 +1,13 @@
 package it.uniurb.pmo.framework.management;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import it.uniurb.pmo.framework.board.IBoardCreator;
 import it.uniurb.pmo.framework.board.IGameBoard;
 import it.uniurb.pmo.framework.board.IZone;
 import it.uniurb.pmo.framework.management.interfaces.IMapManager;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /* Classe astratta per la gestione delle mappe di gioco.
  * Fornisce metodi per ottenere la mappa di gioco in base alla versione del gioco.
@@ -63,12 +63,13 @@ public abstract class AbstractMapManager implements IMapManager {
 				.toList();
 	}
 
+	@Override
+	public List<String> getNeighboursOf(String territoryName) {
+		return this.gameBoard.getNeighbours(territoryName);
+	}
+
 	protected IZone findZoneByName(String territoryName) {
         return this.gameBoard.findZoneByName(territoryName);
-    }
-
-    protected List<String> getNeighbours(String territoryName) {
-        return this.gameBoard.getNeighbours(territoryName);
     }
 
     protected boolean canMoveBetween(String toTerritory, String fromTerritory) {
