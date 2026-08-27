@@ -15,12 +15,12 @@ public interface ICardManagerRisikoNew extends ICardManager {
 		return this.getPlayerDeck(player, ERisikoNewCardType.TERRITORY).stream().map(card -> (ITerritoryCard) card).toList();
 	};
 	
-	default Stream<List<ICard>> getAvailableTris(IPlayer player) {
-		List<ICard> territoryCards = this.getPlayerDeck(player, ERisikoNewCardType.TERRITORY);
+	default Stream<List<ITerritoryCard>> getAvailableTris(IPlayer player) {
+		List<ITerritoryCard> territoryCards = this.getTerritoryCardsForPlayer(player);
 		return this.getCombinationsOf(territoryCards, 3);
 	}
 
-	default void playTris(IPlayer player, List<ICard> cards){
+	default void playTris(IPlayer player, List<? extends ICard> cards){
 		cards.stream().forEach(card -> this.playCard(player, card));
 	};
 }

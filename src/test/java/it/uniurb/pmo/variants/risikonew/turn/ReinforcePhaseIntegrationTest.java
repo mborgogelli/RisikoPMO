@@ -30,12 +30,12 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
     }
 
     @Test
-    @DisplayName("Il bonus continente viene sommato ai rinforzi da territori quando il giocatore possiede un continente intero")
+    @DisplayName("Verifica che venga calcolato correttamente il numero di rinforzi da territori, continente e tris valido")
     void testReinforceWithContinentBonus() {
         IPlayer player1 = players.getFirst();
         IMediatorRisikoNew phaseMediator = spy(mediator);
 
-        doReturn(List.of("topolinia", "paperopoli"))
+        doReturn(List.of("topolinia", "paperopoli", "centinarola"))
                 .when(phaseMediator).getZonesOwnedBy(player1);
 
         doReturn(List.of("oceania"))
@@ -47,25 +47,30 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
         List<ICard> trisDebole = List.of(
                 new TerritoryCard(ERisikoNewTerritorySymbols.INFANTRY, "topolinia"),
                 new TerritoryCard(ERisikoNewTerritorySymbols.INFANTRY, "paperopoli"),
-                new TerritoryCard(ERisikoNewTerritorySymbols.INFANTRY, "oceania")
+                new TerritoryCard(ERisikoNewTerritorySymbols.INFANTRY, "fano")
         );
 
         List<ICard> trisForte = List.of(
                 new TerritoryCard(ERisikoNewTerritorySymbols.CAVALRY, "topolinia"),
                 new TerritoryCard(ERisikoNewTerritorySymbols.CAVALRY, "paperopoli"),
-                new TerritoryCard(ERisikoNewTerritorySymbols.CAVALRY, "oceania")
+                new TerritoryCard(ERisikoNewTerritorySymbols.CAVALRY, "pesaro")
         );
 
-        doReturn(Stream.of(trisDebole,trisForte))
+        List<ICard> trisInvalido = List.of(
+                new TerritoryCard(ERisikoNewTerritorySymbols.CAVALRY, "topolinia"),
+                new TerritoryCard(ERisikoNewTerritorySymbols.INFANTRY, "paperopoli"),
+                new TerritoryCard(ERisikoNewTerritorySymbols.INFANTRY, "urbino")
+        );
+
+        doReturn(Stream.of(trisDebole,trisForte, trisInvalido))
                 .when(phaseMediator).getAvailableTris(player1);
 
         int tanksBefore = mediator.getPlayerTank(player1);
 
         ReinforcePhase phase = new ReinforcePhase(phaseMediator, gameCoordinator);
         phase.playPhase(player1);
-
         int tanksAfter = mediator.getPlayerTank(player1);
-        assertEquals(tanksBefore + 10, tanksAfter);
+        assertEquals(tanksBefore + 15, tanksAfter);
     }
 
 }

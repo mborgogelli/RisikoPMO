@@ -6,6 +6,7 @@ import it.uniurb.pmo.framework.management.AbstractMediator;
 import it.uniurb.pmo.framework.management.interfaces.IDirector;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
+import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.*;
 
 import java.util.List;
@@ -101,9 +102,8 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
-	public Stream<List<ICard>> getCombinationsOf(List<ICard> playerCards, int k) {
-		// TODO Auto-generated method stub
-		return null;
+	public <T extends ICard> Stream<List<T>> getCombinationsOf(List<T> playerCards, int k) {
+		return cardManager.getCombinationsOf(playerCards, k);
 	}
 
 	@Override
@@ -112,12 +112,12 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
-	public Stream<List<ICard>> getAvailableTris(IPlayer player) {
+	public Stream<List<ITerritoryCard>> getAvailableTris(IPlayer player) {
 		return this.cardManager.getAvailableTris(player);
 	}
 
 	@Override
-	public void playTris(IPlayer player, List<ICard> cards) {
+	public void playTris(IPlayer player, List<? extends ITerritoryCard> cards) {
 		this.cardManager.playTris(player, cards);
 	}
 
