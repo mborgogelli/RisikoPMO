@@ -1,10 +1,10 @@
 package it.uniurb.pmo.framework.management.interfaces;
 
 
+import it.uniurb.pmo.framework.players.IPlayer;
+
 import java.util.List;
 import java.util.Map;
-
-import it.uniurb.pmo.framework.players.IPlayer;
 
 /**
  * Interfaccia per la gestione delle mappe di gioco.
@@ -76,4 +76,11 @@ public interface IMapManager extends IManager {
 	 * @return il valore della zona
 	 */
 	int getZoneValue(String zone);
+
+	/**
+	 * Restituisce le zone adiacenti di una zona specificata.
+	 * @param zone la zona di cui si vogliono conoscere le zone adiacenti
+	 * @return la lista delle zone adiacenti alla zona specificata, o vuota se la zona non esiste o non ha zone adiacenti
+	 */
+	List<String> getNeighboursOf(String zone);
 }

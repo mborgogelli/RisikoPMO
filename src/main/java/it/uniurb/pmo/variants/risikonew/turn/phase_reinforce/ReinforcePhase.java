@@ -1,6 +1,5 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 
-import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
@@ -21,7 +20,7 @@ public class ReinforcePhase implements IPhase {
 	private final IMediatorRisikoNew mediator;
 	private final IGameCoordinatorRisikoNew coordinator;
 	private List<String> playerTerritories;
-	private Optional<List<ICard>> tris;
+	private Optional<List<ITerritoryCard>> tris;
 
 	public ReinforcePhase(IMediatorRisikoNew mediator, IGameCoordinatorRisikoNew coordinator) {
 		this.mediator = mediator;
@@ -75,45 +74,59 @@ public class ReinforcePhase implements IPhase {
 		return this.tris.map(this::getTrisScore).orElse(0);
 	}
 
-	private Optional<List<ICard>> findBestCombination() {
+	private Optional<List<ITerritoryCard>> findBestCombination() {
 		return this.mediator.getAvailableTris(this.player)
 				.filter(this::isTrisValid)
 				.max(Comparator.comparingInt(this::getTrisScore));
 	}
 	
-	private boolean isTrisValid(List<ICard> tris) {
+	private boolean isTrisValid(List<ITerritoryCard> tris) {
 		return this.getTrisScore(tris) > 0;
 	}
 
-	private int getTrisScore(List<ICard> tris) {
+	private int getTrisScore(List<ITerritoryCard> tris) {
 		List<ERisikoNewTerritorySymbols> symbols = tris.stream()
-				.map(card -> ((ITerritoryCard) card).symbol())
+				.map(card -> (card).symbol())
 				.toList();
+		int value = 0;
+
 		// se contiene almeno un jolly, il punteggio è 12
 		boolean trisWithJolly = symbols.contains(ERisikoNewTerritorySymbols.JOLLY) && (symbols.stream().distinct().count() == 2);
 
 		if (trisWithJolly) {
-			return 12;
+			value = 12;
 		}
 
 		// se contiene tre simboli uguali
 		boolean trisWithSameSymbols = symbols.get(0) == symbols.get(1) && symbols.get(1) == symbols.get(2);
+
 		if (trisWithSameSymbols) {
-			switch (symbols.get(0)) {
-				case INFANTRY: return 6;
-				case CAVALRY: return 8;
-				case ARTILLERY: return 10;
-				default: return 0;
-			}
+			value = switch (symbols.getFirst()) {
+				case INFANTRY -> 6 ;
+				case CAVALRY -> 8;
+				case ARTILLERY -> 10;
+				default -> 0;
+			};
 		}
 
 		// se contiene tre simboli diversi
 		boolean trisWithDifferentSymbols = symbols.stream().distinct().count() == 3;
 		if (trisWithDifferentSymbols) {
-			return 10;
+			value = 10;
 		}
-		// tris non valid0
-		return 0;
+
+		if (value != 0){
+			value += this.addBonusForTerritoryOwnership(tris);
+		}
+
+		// tris non valido
+		return value;
 	}
 
+	private int addBonusForTerritoryOwnership(List<ITerritoryCard> tris) {
+		return Math.toIntExact(tris.stream()
+                .filter(card -> card.symbol() != ERisikoNewTerritorySymbols.JOLLY)
+                .filter(card -> mediator.getTerritoriesOwnedBy(this.player).contains(card.territoryName()))
+                .count() * 2);
+	}
 }

@@ -44,7 +44,6 @@ public abstract class AbstractMediator implements IMediator {
 		return myManager;
     }
 
-
 	public void notifyWinner(IPlayer iPlayer) {
 		//TODO implement notification properly
 	}

@@ -52,7 +52,7 @@ public interface IMediator extends IGameConductor {
 	 */
 	boolean canMoveBetween(IPlayer player, String toZone, String fromZone);
 
-
+	List<String> getNeighboursOf(String zone);
 
 	void notifyWinner(IPlayer iPlayer);
 
@@ -81,7 +81,7 @@ public interface IMediator extends IGameConductor {
 	 * @param k
 	 * @return
 	 */
-	Stream<List<ICard>> getCombinationsOf(List<ICard> playerCards, int k);
+	<T extends ICard> Stream<List<T>> getCombinationsOf(List<T> playerCards, int k);
 
 	void reinforcePlayer(IPlayer player, ITokenType tokenType, int reinforcements);
 }

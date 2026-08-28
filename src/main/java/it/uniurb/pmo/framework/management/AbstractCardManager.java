@@ -28,7 +28,7 @@ public abstract class AbstractCardManager implements ICardManager {
 	 * Restituisce uno Stream di tutte le combinazioni di dimensione 'k'.
 	 */
 	@Override
-	public Stream<List<ICard>> getCombinationsOf(List<ICard> playerCards, int k) {
+	public <T extends ICard> Stream<List<T>> getCombinationsOf(List<T> playerCards, int k) {
 
 		// caso base
 		if (k <= 0 || k > playerCards.size()) {
