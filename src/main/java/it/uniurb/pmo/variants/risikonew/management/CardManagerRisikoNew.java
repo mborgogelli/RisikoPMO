@@ -7,7 +7,7 @@ import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.management.AbstractCardManager;
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
+import it.uniurb.pmo.variants.risikonew.card.ERisikoNewCardType;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ICardManagerRisikoNew;
 
 public class CardManagerRisikoNew extends AbstractCardManager implements ICardManagerRisikoNew {
@@ -39,14 +39,15 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 	
 	@Override
 	protected void addCard(List<ICard> cards, ICard card) {
-		// TODO Auto-generated method stub
+	    validateCardType(cards, card);   	// Validazione specifica
+	    super.addCard(cards, card);        	// Logica generica
 		
 	}
 	
 	@Override
 	protected void removeCard(List<ICard> cards, ICard card) {
-		// TODO Auto-generated method stub
-		
+	    validateCardType(cards, card);    // Validazione specifica
+	    super.addCard(cards, card);        // Logica generica
 	}
 	
 	@Override
@@ -57,8 +58,16 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 
 	@Override
 	public void shuffleDeck(ICardType deckType) {
-		// TODO Auto-generated method stub
-		
+		switch (deckType) {
+            case ERisikoNewCardType.TERRITORY:
+                this.shuffleCards(this.territoryCards);
+                break;
+            case ERisikoNewCardType.MISSION:
+                this.shuffleCards(this.missionCards);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid deck type: " + deckType);
+        }
 	}
 
 	@Override
@@ -74,6 +83,18 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 	@Override
 	public List<ICard> getPlayerDeck(IPlayer player, ICardType deckType) {
 		return List.of();
+	}
+	
+	private void validateCardType(List<ICard> cards, ICard card) {
+	    List<ICard> expectedDeck = switch (card.getCardType()) {
+	        case ERisikoNewCardType.TERRITORY -> this.territoryCards;
+	        case ERisikoNewCardType.MISSION -> this.missionCards;
+	        default -> throw new IllegalArgumentException("Unknown card type: " + card.getCardType());
+	    };
+	    
+	    if (cards != expectedDeck) {
+	        throw new IllegalArgumentException("Card type mismatch with deck");
+	    }
 	}
 
 }
