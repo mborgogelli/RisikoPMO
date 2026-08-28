@@ -14,7 +14,7 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 	
 	private final List<ICard> territoryCards;
 	private final List<ICard> missionCards;
-	private final List<ICard> playedCards;
+	private final List<ICard> playedTerritoryCards;
 	private boolean isReady;
 	
 	public CardManagerRisikoNew() {
@@ -22,7 +22,7 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 		this.isReady = false;
 		this.territoryCards = new ArrayList<ICard>();
 		this.missionCards = new ArrayList<ICard>();
-		this.playedCards = new ArrayList<ICard>();
+		this.playedTerritoryCards = new ArrayList<ICard>();
 	}
 
 	@Override
@@ -47,18 +47,27 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
 	@Override
 	protected void removeCard(List<ICard> cards, ICard card) {
 	    validateCardType(cards, card);    // Validazione specifica
-	    super.addCard(cards, card);        // Logica generica
+	    super.removeCard(cards, card);        // Logica generica
 	}
 	
 	@Override
 	public void resetGame() {
-		// TODO Auto-generated method stub
-		
+	    this.territoryCards.clear();
+	    this.missionCards.clear();
+	    this.playedTerritoryCards.clear();
+	    this.isReady = false;
 	}
 
 	@Override
 	public void shuffleDeck(ICardType deckType) {
-		switch (deckType) {
+	    if (deckType == null) {
+	        throw new IllegalArgumentException("deckType cannot be null");
+	    }
+	    if (!(deckType instanceof ERisikoNewCardType type)) {
+	        throw new IllegalArgumentException("Unsupported deck type: " + deckType);
+	    }
+		
+		switch (type) {
             case ERisikoNewCardType.TERRITORY:
                 this.shuffleCards(this.territoryCards);
                 break;
@@ -66,7 +75,7 @@ public class CardManagerRisikoNew extends AbstractCardManager implements ICardMa
                 this.shuffleCards(this.missionCards);
                 break;
             default:
-                throw new IllegalArgumentException("Invalid deck type: " + deckType);
+                throw new IllegalArgumentException("Invalid deck type: " + type);
         }
 	}
 
