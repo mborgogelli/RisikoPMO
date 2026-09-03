@@ -31,8 +31,9 @@ public class CombatPhase implements IPhase {
 	@Override
 	public void playPhase(IPlayer player) {
 		this.attacker = player;
-		List<String> ownedZones = this.mediator.getTerritoriesOwnedBy(this.attacker);
-		AttackChoiceDTO choice = this.coordinator.sendAttackRequest(new AttackRequestDTO(this.attacker, ownedZones));
+		List<String> possibleTargets = this.possibleTargets(this.attacker);
+		System.out.println(possibleTargets);
+		AttackChoiceDTO choice = this.coordinator.sendAttackRequest(new AttackRequestDTO(this.attacker, possibleTargets));
 		this.clearPhase();
 	}
 
