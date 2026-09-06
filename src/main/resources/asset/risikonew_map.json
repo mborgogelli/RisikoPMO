@@ -140,7 +140,7 @@
           "name": "jacuzia",
 		  "points": 3,
           "symbol": "cavalleria",
-          "neighbours": ["mongolia", "cita", "kamchatka"]
+          "neighbours": ["siberia", "cita", "kamchatka"]
         },
         {
           "name": "cita",

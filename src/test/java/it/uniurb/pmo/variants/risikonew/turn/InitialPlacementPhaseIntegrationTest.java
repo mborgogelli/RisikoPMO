@@ -5,10 +5,11 @@ import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
+import it.uniurb.pmo.variants.risikonew.turn.dto.AttackRequestRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployRequestRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployResponseRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
@@ -163,17 +164,22 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         private record CoordinatorStub(Map<String, Integer> response) implements IGameCoordinatorRisikoNew {
 
         @Override
-        public DeployResponseRisikoNewDTO sendInitialPlacementRequest(DeployRequestRisikoNewDTO request) {
-            return new DeployResponseRisikoNewDTO(response);
+        public DeployChoiceRisikoNewDTO sendInitialPlacementRequest(DeployRequestRisikoNewDTO request) {
+            return new DeployChoiceRisikoNewDTO(response);
         }
 
         @Override
-        public IDeployResponseDTO sendDeployRequest(IDeployRequestDTO request) {
+        public AttackChoiceDTO sendAttackRequest(AttackRequestRisikoNewDTO request) {
             return null;
         }
 
         @Override
-        public AttackChoiceDTO sendAttackRequest(AttackRequestDTO request) {
+        public IDeployChoiceDTO sendDeployRequest(IDeployRequestDTO request) {
+            return null;
+        }
+
+        @Override
+        public IAttackChoiceDTO sendAttackRequest(IAttackRequestDTO request) {
             return null;
         }
 

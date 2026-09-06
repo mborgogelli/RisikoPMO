@@ -7,7 +7,7 @@ import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ public abstract class RisikoNewTestSetup {
     protected IMapManagerRisikoNew mapManager;
     protected ITankManager tankManager;
     protected IMediatorRisikoNew mediator;
+    protected IGameCoordinatorRisikoNew gameCoordinator;
 
     @BeforeEach
     public void setUpRisikoNew() {
@@ -34,6 +35,7 @@ public abstract class RisikoNewTestSetup {
         mapManager = getManager(IMapManagerRisikoNew.class);
         tankManager = getManager(ITankManager.class);
         mediator = (IMediatorRisikoNew) gameFactory.getMediator();
+        gameCoordinator = (IGameCoordinatorRisikoNew) gameFactory.getGameCoordinator();
 
         mapManager.initializeGame(players);
         tankManager.initializeGame(players);
@@ -63,7 +65,7 @@ public abstract class RisikoNewTestSetup {
         return mediator;
     }
 
-    protected GameCoordinatorRisikoNew getGameCoordinator() {
-        return (GameCoordinatorRisikoNew) gameFactory.getGameCoordinator();
+    protected IGameCoordinatorRisikoNew getGameCoordinator() {
+        return gameCoordinator;
     }
 }

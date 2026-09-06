@@ -1,13 +1,13 @@
-package it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement;
+package it.uniurb.pmo.variants.risikonew.turn.dto;
 
 import it.uniurb.pmo.framework.players.ITokenType;
-import it.uniurb.pmo.framework.turn.dto.IDeployResponseDTO;
+import it.uniurb.pmo.framework.turn.dto.IDeployChoiceDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public record DeployResponseRisikoNewDTO(Map<String, Integer> deployment) implements IDeployResponseDTO {
+public record DeployChoiceRisikoNewDTO(Map<String, Integer> deployment) implements IDeployChoiceDTO {
 
     @Override
     public Map<String, Map<ITokenType, Integer>> deployedTokenByZone() {

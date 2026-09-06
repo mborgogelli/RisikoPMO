@@ -1,12 +1,14 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement;
 
-import java.util.List;
-import java.util.Map;
-
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
+
+import java.util.List;
+import java.util.Map;
 
 public class InitialPlacementPhase implements IPhase {
 
@@ -46,7 +48,7 @@ public class InitialPlacementPhase implements IPhase {
 		if (remaining > 0) {
 			int tanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
 			this.deployableZones = this.mediator.getZonesOwnedBy(player);
-			DeployResponseRisikoNewDTO initialDeploy = this.coordinator.sendInitialPlacementRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), deployableZones, tanksToDeploy));
+			DeployChoiceRisikoNewDTO initialDeploy = this.coordinator.sendInitialPlacementRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), deployableZones, tanksToDeploy));
 			this.checkDeploy(initialDeploy.deployment(), tanksToDeploy);
 			this.deployTanks(initialDeploy.deployment());
 		} else {

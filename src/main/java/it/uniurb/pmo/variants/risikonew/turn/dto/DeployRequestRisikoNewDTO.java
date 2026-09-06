@@ -1,4 +1,4 @@
-package it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement;
+package it.uniurb.pmo.variants.risikonew.turn.dto;
 
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;

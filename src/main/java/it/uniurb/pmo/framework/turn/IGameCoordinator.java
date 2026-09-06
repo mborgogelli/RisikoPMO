@@ -1,6 +1,9 @@
 package it.uniurb.pmo.framework.turn;
 
-import it.uniurb.pmo.framework.turn.dto.*;
+import it.uniurb.pmo.framework.turn.dto.IAttackChoiceDTO;
+import it.uniurb.pmo.framework.turn.dto.IAttackRequestDTO;
+import it.uniurb.pmo.framework.turn.dto.IDeployChoiceDTO;
+import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
 
 /**
  * Canale di comunicazione tra la logica di gioco e i giocatori.
@@ -16,6 +19,8 @@ public interface IGameCoordinator {
      * @param request il DTO contenente le informazioni sulla distribuzione
      * @return la scelta di distribuzione del giocatore
      */
-    IDeployResponseDTO sendDeployRequest(IDeployRequestDTO request);
+    IDeployChoiceDTO sendDeployRequest(IDeployRequestDTO request);
+
+    IAttackChoiceDTO sendAttackRequest(IAttackRequestDTO request);
 }
 

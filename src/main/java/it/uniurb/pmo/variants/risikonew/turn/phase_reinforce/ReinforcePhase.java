@@ -5,9 +5,9 @@ import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployRequestRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.DeployResponseRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
 
 import java.util.Comparator;
@@ -43,7 +43,7 @@ public class ReinforcePhase implements IPhase {
 		int reinforcementsFromCards = this.reinforceByCards();
 		int reinforcements = reinforcementsFromTerritories + reinforcementsFromContinents + reinforcementsFromCards;
 		this.mediator.reinforcePlayer(this.player, reinforcements);
-		DeployResponseRisikoNewDTO response = (DeployResponseRisikoNewDTO) this.coordinator.sendDeployRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), this.playerTerritories, reinforcements));
+		DeployChoiceRisikoNewDTO response = (DeployChoiceRisikoNewDTO) this.coordinator.sendDeployRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), this.playerTerritories, reinforcements));
 		response.deployment().forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
 	}
 

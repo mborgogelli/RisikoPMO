@@ -7,21 +7,31 @@ import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
+import java.util.List;
+import java.util.Random;
 
-    IGameCoordinatorRisikoNew gameCoordinator;
+import static org.mockito.Mockito.spy;
+
+public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
 
     @BeforeEach
     public void setUp() {
         super.setUpRisikoNew();
-        this.gameCoordinator = super.getGameCoordinator();
     }
 
     @Test
     public void testTargetAcquisition() {
         IPlayer attacker = players.getFirst();
+        IGameCoordinatorRisikoNew phaseCoordinator = spy(super.gameCoordinator);
+        List<String> playerTerritories = mediator.getZonesOwnedBy(attacker);
 
-        CombatPhase combatPhase = new CombatPhase(mediator,this.gameCoordinator);
+        while(mediator.getPlayerTank(attacker) > 0) {
+            mediator.deployTank(attacker,playerTerritories.get(new Random().nextInt(playerTerritories.size())),1);
+        }
+
+        playerTerritories.stream().filter(territory -> this.mediator.getZoneTank(territory) > 1).forEach(territory -> System.out.println(territory + "->" + this.mediator.getNeighboursOf(territory)));
+
+        CombatPhase combatPhase = new CombatPhase(mediator,phaseCoordinator);
         combatPhase.playPhase(attacker);
     }
 }

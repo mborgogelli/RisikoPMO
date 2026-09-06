@@ -4,7 +4,7 @@ import it.uniurb.pmo.framework.players.ITokenType;
 
 import java.util.Map;
 
-public interface IDeployResponseDTO {
+public interface IDeployChoiceDTO {
 
     Map<String, Map<ITokenType, Integer>> deployedTokenByZone();
 }
