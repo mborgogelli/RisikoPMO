@@ -1,12 +1,12 @@
 package it.uniurb.pmo.variants.risikonew.turn.gamecoordinator;
 
 import it.uniurb.pmo.framework.turn.dto.*;
-import it.uniurb.pmo.variants.risikonew.turn.dto.AttackRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
 
@@ -23,7 +23,7 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
     }
 
     @Override
-    public AttackChoiceDTO sendAttackRequest(AttackRequestRisikoNewDTO request) {
+    public DeployChoiceRisikoNewDTO sendDeploymentChoice(DeployChoiceRisikoNewDTO choice) {
         return null;
     }
 
@@ -37,8 +37,8 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
     }
 
     @Override
-    public IAttackChoiceDTO sendAttackRequest(IAttackRequestDTO request) {
-        return null;
+    public Optional<IAttackChoiceDTO> sendAttackRequest(IAttackRequestDTO request) {
+        return Optional.empty();
     }
 
     @Override

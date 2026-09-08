@@ -5,6 +5,8 @@ import it.uniurb.pmo.framework.turn.dto.IAttackRequestDTO;
 import it.uniurb.pmo.framework.turn.dto.IDeployChoiceDTO;
 import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
 
+import java.util.Optional;
+
 /**
  * Canale di comunicazione tra la logica di gioco e i giocatori.
  * Il AbstractGameCoordinator si occupa di inviare messaggi/richieste al giocatore
@@ -21,6 +23,8 @@ public interface IGameCoordinator {
      */
     IDeployChoiceDTO sendDeployRequest(IDeployRequestDTO request);
 
-    IAttackChoiceDTO sendAttackRequest(IAttackRequestDTO request);
+    Optional<IAttackChoiceDTO> sendAttackRequest(IAttackRequestDTO request);
+
+
 }
 

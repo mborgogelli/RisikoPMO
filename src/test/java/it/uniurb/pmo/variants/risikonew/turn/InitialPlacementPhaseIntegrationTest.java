@@ -5,7 +5,6 @@ import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
-import it.uniurb.pmo.variants.risikonew.turn.dto.AttackRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,7 +53,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
             for (IPlayer player : this.players) {
                 if (mediator.getPlayerTank(player) > 0) {
                     phase.playPhase(player);
-                    System.out.println(player.getName() + ": " + mediator.getPlayerTank(player) + " tanks remaining");
+                    //System.out.println(player.getName() + ": " + mediator.getPlayerTank(player) + " tanks remaining");
                 }
             }
         }
@@ -169,7 +169,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         }
 
         @Override
-        public AttackChoiceDTO sendAttackRequest(AttackRequestRisikoNewDTO request) {
+        public DeployChoiceRisikoNewDTO sendDeploymentChoice(DeployChoiceRisikoNewDTO choice) {
             return null;
         }
 
@@ -179,7 +179,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         }
 
         @Override
-        public IAttackChoiceDTO sendAttackRequest(IAttackRequestDTO request) {
+        public Optional<IAttackChoiceDTO> sendAttackRequest(IAttackRequestDTO request) {
             return null;
         }
 

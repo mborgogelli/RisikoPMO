@@ -27,8 +27,8 @@ public class CardManagerTest {
         for (int i = 0; i < 5; i++) {
             this.cards.add(new TerritoryCard(ERisikoNewTerritorySymbols.INFANTRY,"Italia" + (i + 1)));
         }
-        System.out.println(this.cards.size());
-        System.out.println(cardManager.getCombinationsOf(this.cards, 3).toList().size());
+        //System.out.println(this.cards.size());
+        //System.out.println(cardManager.getCombinationsOf(this.cards, 3).toList().size());
     }
 
 
