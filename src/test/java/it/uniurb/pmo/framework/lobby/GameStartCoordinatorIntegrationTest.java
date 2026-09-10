@@ -2,6 +2,7 @@ package it.uniurb.pmo.framework.lobby;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,20 @@ class GameStartCoordinatorTest {
         assertEquals(3, result.playersCount());
         assertThrows(IllegalArgumentException.class, () -> this.roomManager.getPlayersNumber(this.roomId));
 
+        this.roomId = null;
+    }
+
+    @Test
+    void startGameRegistersTheGameCoordinatorForTheRoom() {
+        GameSessionRegistry gameSessions = new GameSessionRegistry();
+        this.roomId = this.roomManager.createRoom("Alice", 3, EGameVersion.RISIKONEW);
+        this.roomManager.enterRoom(this.roomId, "Bob");
+        this.roomManager.enterRoom(this.roomId, "Charlie");
+
+        new GameStartCoordinator(gameSessions).startGame(this.roomId);
+
+        assertTrue(gameSessions.getGameCoordinator(this.roomId).isPresent());
+        gameSessions.remove(this.roomId);
         this.roomId = null;
     }
 

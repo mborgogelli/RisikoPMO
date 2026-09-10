@@ -8,6 +8,7 @@ import it.uniurb.pmo.framework.management.interfaces.IManager;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
+import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.framework.utils.GameFactoryProvider;
 import it.uniurb.pmo.framework.utils.EGameVersion;
 
@@ -16,6 +17,7 @@ public class Director implements IDirector {
 	private boolean isReady;
 	private IMediator mediator;
 	private List<IManager> managers;
+	private IGameCoordinator gameCoordinator;
 	private final List<IPlayer> players;
 	
 	public Director(EGameVersion version, List<IPlayer> players) {
@@ -57,8 +59,16 @@ public class Director implements IDirector {
 		this.managers.forEach(IManager::resetGame);
 	}
 
+	/**
+	 * Restituisce il coordinator creato dalla factory per questa partita.
+	 */
+	public IGameCoordinator getGameCoordinator() {
+		return this.gameCoordinator;
+	}
+
 	private void initializeGame(List<IPlayer> players, EGameVersion version) {
 		IGameFactory factory = GameFactoryProvider.getFactory(version);
+		this.gameCoordinator = factory.getGameCoordinator();
 		this.mediator = factory.getMediator();
 		this.managers = factory.getManagers();
 		players.forEach(player -> player.setPlayerTurnStatus(PlayerTurnStatus.ACTIVE));
