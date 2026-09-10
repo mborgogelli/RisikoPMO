@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(`DEBUG: readyStates=${JSON.stringify(readyStates)}`);
 
         if (!gameStarted && !startRequestInFlight && isFull && allReady) {
-            console.log('DEBUG: Condizioni met, avvio gioco...');
+            console.log('DEBUG: Condizioni soddisfatte, avvio gioco...');
             startRequestInFlight = true;
             fetch(`/api/stanze/${stanza.roomId}/avvia-gioco`, { method: 'POST' })
                 .then(async response => {

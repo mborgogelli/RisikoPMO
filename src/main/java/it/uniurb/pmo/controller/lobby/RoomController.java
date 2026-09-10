@@ -1,20 +1,18 @@
 package it.uniurb.pmo.controller.lobby;
 
-import java.util.Map;
-
-import it.uniurb.pmo.framework.utils.EColors;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 import it.uniurb.pmo.controller.lobby.dto.RoomResponseDTO;
 import it.uniurb.pmo.framework.lobby.GameStartCoordinator;
 import it.uniurb.pmo.framework.lobby.GameStartResult;
 import it.uniurb.pmo.framework.lobby.RoomManager;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.utils.EColors;
 import it.uniurb.pmo.framework.utils.EGameVersion;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Controller per la gestione delle stanze di gioco. Espone endpoint REST per
@@ -36,7 +34,7 @@ public class RoomController {
     public ResponseEntity<RoomResponseDTO> creaPartita(@RequestBody Map<String, String> payload) {
 
         // Recupera informazioni dal JSON inviato dal frontend
-        String nomeGiocatore = payload.get("player");
+        String nomeGiocatore = payload.get("playerName");
         EGameVersion gameVersion = this.getGameVersionFromString(payload.get("gameVersion"));
         int maxPlayer = Integer.parseInt(payload.get("maxPlayers"));
         
@@ -65,7 +63,7 @@ public class RoomController {
      */
     @PostMapping("/{roomId}/entra")
     public ResponseEntity<?> entraStanza(@PathVariable String roomId, @RequestBody Map<String, String> payload) {
-        String nomeGiocatore = payload.get("player");
+        String nomeGiocatore = payload.get("playerName");
         if (nomeGiocatore == null || nomeGiocatore.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Nome giocatore mancante"));
         }
@@ -85,7 +83,7 @@ public class RoomController {
      */
     @PostMapping("/{roomId}/pronto")
     public ResponseEntity<?> setPronto(@PathVariable String roomId, @RequestBody Map<String, Object> payload) {
-        String nomeGiocatore = payload.get("player") != null ? payload.get("player").toString() : null;
+        String nomeGiocatore = payload.get("playerName") != null ? payload.get("playerName").toString() : null;
         Boolean isReady = payload.get("ready") instanceof Boolean ? (Boolean) payload.get("ready") : null;
 
         if (nomeGiocatore == null || nomeGiocatore.isEmpty() || isReady == null) {
