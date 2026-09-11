@@ -56,7 +56,9 @@ public class GameFactoryRisikoNew implements IGameFactory {
 		this.managers.add(new MapManagerRisikoNew());
 		this.managers.add(new TankManager());
 		this.managers.add(new CardManagerRisikoNew());
-		this.managers.add(new TurnManagerRisikoNew(this.gameCoordinator));
+		TurnManagerRisikoNew turnManager = new TurnManagerRisikoNew(this.gameCoordinator);
+		turnManager.addObserver(this.gameCoordinator);
+		this.managers.add(turnManager);
 	}
 	
 	/**

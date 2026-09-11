@@ -4,12 +4,11 @@ import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.management.interfaces.ITurnManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
-import it.uniurb.pmo.framework.turn.IGameCoordinator;
-import it.uniurb.pmo.framework.turn.IPhase;
+import it.uniurb.pmo.framework.turn.*;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -17,7 +16,7 @@ import java.util.Optional;
  * Implementa l'interfaccia ITurnManager e fornisce un'implementazione di base per la gestione dei turni,
  * lasciando ai sottotipi la responsabilità di definire l'ordine delle fasi e il reset del contatore delle fasi.
  */
-public abstract class AbstractTurnManager implements ITurnManager {
+public abstract class AbstractTurnManager implements ITurnManager, IGameEventPublisher {
 
 	private IMediator mediator;
 	private IGameCoordinator gameCoordinator;
@@ -27,8 +26,11 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	private List<IPhase> phases;
 	private List<IPlayer> players;
 
+	private final List<IGameStateObserver> observers;
+
 	public AbstractTurnManager(IGameCoordinator gameCoordinator) {
 		this.gameCoordinator = gameCoordinator;
+		this.observers = new ArrayList<>();
 	}
 
 	@Override
@@ -70,6 +72,7 @@ public abstract class AbstractTurnManager implements ITurnManager {
 	public void startTurn(IPlayer player) {
 		this.currentPlayer = player;
 		this.currentPhaseIndex = 1;
+		this.notifyObservers(new GameEvent(GameEventType.TURN_STARTED, player.getName(), this.currentTurn, null));
 		if (this.phases != null && !this.phases.isEmpty()) {
 			this.startPhase(this.phases.getFirst());
 		}
@@ -119,7 +122,18 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	@Override
 	public void startPhase(IPhase currentPhase){
+		this.notifyObservers(new GameEvent(GameEventType.PHASE_STARTED, this.currentPlayer.getName(), this.currentTurn, currentPhase.getPhaseId()));
 		currentPhase.playPhase(this.currentPlayer);
+	}
+
+	@Override
+	public void addObserver(IGameStateObserver observer) {
+		this.observers.add(observer);
+	}
+
+	@Override
+	public void removeObserver(IGameStateObserver observer) {
+		this.observers.remove(observer);
 	}
 
 	@Override
@@ -169,6 +183,10 @@ public abstract class AbstractTurnManager implements ITurnManager {
 
 	protected IMediator getMediator() {
 		return this.mediator;
+	}
+
+	private void notifyObservers(GameEvent event) {
+		this.observers.forEach(observer -> observer.onGameEvent(event));
 	}
 
 }

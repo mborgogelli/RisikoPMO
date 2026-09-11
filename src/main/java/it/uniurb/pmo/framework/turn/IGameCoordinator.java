@@ -13,7 +13,7 @@ import java.util.Optional;
  * e di raccogliere la risposta, mantenendo il framework agnostico rispetto
  * alla variante di gioco concreta.
  */
-public interface IGameCoordinator {
+public interface IGameCoordinator extends IGameStateObserver {
 
     /**
      * Chiede al giocatore dove distribuire un certo tipo di token disponibili.
@@ -27,4 +27,3 @@ public interface IGameCoordinator {
 
 
 }
-
