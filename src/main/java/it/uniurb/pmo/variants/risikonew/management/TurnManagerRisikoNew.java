@@ -1,17 +1,17 @@
 package it.uniurb.pmo.variants.risikonew.management;
 
-import java.util.*;
-
 import it.uniurb.pmo.framework.management.AbstractTurnManager;
+import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITurnManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_combat.CombatPhase;
+import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
 import it.uniurb.pmo.variants.risikonew.turn.phase_reinforce.ReinforcePhase;
 import it.uniurb.pmo.variants.risikonew.turn.phase_strategic.StrategicPhase;
-import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
+
+import java.util.List;
 
 public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnManagerRisikoNew {
 
@@ -22,7 +22,8 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	private boolean isReady;
 
 	public TurnManagerRisikoNew(IGameCoordinatorRisikoNew gameCoordinator) {
-		super(gameCoordinator);
+		super();
+		this.coordinator = gameCoordinator;
 		this.isReady = false;
 	}
 
@@ -79,6 +80,5 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 
 	private void initMediatorAndCoordinator() {
 		this.mediator = (IMediatorRisikoNew) super.getMediator();
-		this.coordinator = (IGameCoordinatorRisikoNew) super.getGameCoordinator();
 	}
 }

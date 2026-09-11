@@ -14,5 +14,5 @@ public interface IGameCommandReceiver<T> {
      *
      * @param command comando ricevuto dall'esterno
      */
-    void receiveCommand(T command);
+    void handleCommand(T command);
 }

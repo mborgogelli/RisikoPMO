@@ -1,12 +1,12 @@
 package it.uniurb.pmo.framework.turn;
 
-public interface IGameStateObserver {
+public interface IGameEventReceiver {
 
     /**
      * Riceve un cambiamento prodotto dalla logica della partita.
      *
      * @param event aggiornamento pubblicato dal TurnManager
      */
-    default void onGameEvent(GameEvent event) {
+    default void onGameEvent(IGameEvent<? extends IGameState> event) {
     }
 }

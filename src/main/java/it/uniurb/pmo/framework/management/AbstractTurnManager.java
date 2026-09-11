@@ -26,10 +26,9 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	private List<IPhase> phases;
 	private List<IPlayer> players;
 
-	private final List<IGameStateObserver> observers;
+	private final List<IGameEventReceiver> observers;
 
-	public AbstractTurnManager(IGameCoordinator gameCoordinator) {
-		this.gameCoordinator = gameCoordinator;
+	public AbstractTurnManager() {
 		this.observers = new ArrayList<>();
 	}
 
@@ -72,7 +71,8 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	public void startTurn(IPlayer player) {
 		this.currentPlayer = player;
 		this.currentPhaseIndex = 1;
-		this.notifyObservers(new GameEvent(GameEventType.TURN_STARTED, player.getName(), this.currentTurn, null));
+		//TODO
+		//this.notifyObservers(new GameEvent(EGameEventType.TURN_STARTED, player.getName(), this.currentTurn, null));
 		if (this.phases != null && !this.phases.isEmpty()) {
 			this.startPhase(this.phases.getFirst());
 		}
@@ -122,17 +122,18 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 
 	@Override
 	public void startPhase(IPhase currentPhase){
-		this.notifyObservers(new GameEvent(GameEventType.PHASE_STARTED, this.currentPlayer.getName(), this.currentTurn, currentPhase.getPhaseId()));
+		// TODO
+		//this.notifyObservers(new GameEvent(EGameEventType.PHASE_STARTED, this.currentPlayer.getName(), this.currentTurn, currentPhase.getPhaseId()));
 		currentPhase.playPhase(this.currentPlayer);
 	}
 
 	@Override
-	public void addObserver(IGameStateObserver observer) {
+	public void addObserver(IGameEventReceiver observer) {
 		this.observers.add(observer);
 	}
 
 	@Override
-	public void removeObserver(IGameStateObserver observer) {
+	public void removeObserver(IGameEventReceiver observer) {
 		this.observers.remove(observer);
 	}
 
@@ -185,7 +186,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		return this.mediator;
 	}
 
-	private void notifyObservers(GameEvent event) {
+	private void notifyObservers(IGameEvent event) {
 		this.observers.forEach(observer -> observer.onGameEvent(event));
 	}
 

@@ -10,7 +10,7 @@ package it.uniurb.pmo.framework.turn;
  * @param phaseId identificativo della fase, nullo per eventi relativi al turno
  */
 public record GameEvent(
-        GameEventType type,
+        EGameEventType type,
         String playerName,
         int turnNumber,
         Integer phaseId) {

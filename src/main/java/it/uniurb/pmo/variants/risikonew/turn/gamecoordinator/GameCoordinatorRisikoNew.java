@@ -1,7 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.turn.gamecoordinator;
 
+import it.uniurb.pmo.framework.turn.IGameEvent;
 import it.uniurb.pmo.framework.turn.dto.*;
-import it.uniurb.pmo.framework.turn.GameEvent;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
@@ -11,10 +11,10 @@ import java.util.Optional;
 
 public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
 
-    private GameEvent lastGameEvent;
+    private IGameEvent lastGameEvent;
 
     @Override
-    public void onGameEvent(GameEvent event) {
+    public void onGameEvent(IGameEvent event) {
         this.lastGameEvent = event;
     }
 
@@ -22,7 +22,7 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
      * Restituisce l'ultimo aggiornamento ricevuto dal TurnManager.
      * Sara' usato dal controller per esporre lo stato della partita.
      */
-    public GameEvent getLastGameEvent() {
+    public IGameEvent getLastGameEvent() {
         return this.lastGameEvent;
     }
 

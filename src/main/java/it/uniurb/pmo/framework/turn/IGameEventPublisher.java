@@ -10,12 +10,12 @@ public interface IGameEventPublisher {
      *
      * @param observer osservatore da registrare
      */
-    void addObserver(IGameStateObserver observer);
+    void addObserver(IGameEventReceiver observer);
 
     /**
      * Rimuove un osservatore precedentemente registrato.
      *
      * @param observer osservatore da rimuovere
      */
-    void removeObserver(IGameStateObserver observer);
+    void removeObserver(IGameEventReceiver observer);
 }
