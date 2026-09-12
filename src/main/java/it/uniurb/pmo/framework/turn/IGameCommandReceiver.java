@@ -5,7 +5,7 @@ package it.uniurb.pmo.framework.turn;
  *
  * @param <T> tipo di comando accettato dalla partita o dalla fase corrente
  */
-public interface IGameCommandReceiver<T> {
+public interface IGameCommandReceiver<C extends IGameCommand> {
 
     /**
      * Riceve un comando gia' associato alla partita destinataria.
@@ -14,5 +14,7 @@ public interface IGameCommandReceiver<T> {
      *
      * @param command comando ricevuto dall'esterno
      */
-    void handleCommand(T command);
+    void handleCommand(C command);
+
+    boolean isValidCommand(C command);
 }

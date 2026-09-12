@@ -1,6 +1,8 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_strategic;
 
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.turn.IGameCommand;
+import it.uniurb.pmo.framework.turn.IPhaseResult;
 import it.uniurb.pmo.framework.turn.dto.FortifyChoiceDTO;
 import it.uniurb.pmo.framework.turn.dto.FortifyRequestDTO;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -35,5 +37,10 @@ public class StrategicPhase implements IStrategicPhase {
 	@Override
 	public void clearPhase() {
 		this.player = null;
+	}
+
+	@Override
+	public IPhaseResult handleCommand(IGameCommand command) {
+		return null;
 	}
 }

@@ -10,4 +10,6 @@ public interface IPhase {
 
 	void clearPhase();
 
+	IPhaseResult handleCommand(IGameCommand command);
+
 }

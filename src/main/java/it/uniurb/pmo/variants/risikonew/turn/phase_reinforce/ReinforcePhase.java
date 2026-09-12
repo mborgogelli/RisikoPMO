@@ -1,7 +1,9 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.turn.IGameCommand;
 import it.uniurb.pmo.framework.turn.IPhase;
+import it.uniurb.pmo.framework.turn.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -51,6 +53,11 @@ public class ReinforcePhase implements IPhase {
 	public void clearPhase() {
 		this.player = null;
 		this.playerTerritories = null;
+	}
+
+	@Override
+	public IPhaseResult handleCommand(IGameCommand command) {
+		return null;
 	}
 
 	private int reinforceByTerritories() {

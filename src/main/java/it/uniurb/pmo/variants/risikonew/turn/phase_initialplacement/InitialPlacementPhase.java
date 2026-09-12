@@ -1,7 +1,9 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement;
 
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.turn.IGameCommand;
 import it.uniurb.pmo.framework.turn.IPhase;
+import it.uniurb.pmo.framework.turn.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
@@ -41,6 +43,11 @@ public class InitialPlacementPhase implements IPhase {
     @Override
 	public void clearPhase() {
 		this.player = null;
+	}
+
+	@Override
+	public IPhaseResult handleCommand(IGameCommand command) {
+		return null;
 	}
 
 	private void deployTanks(IPlayer player) {
