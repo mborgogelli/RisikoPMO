@@ -50,6 +50,11 @@ public class InitialPlacementPhase implements IPhase {
 		return null;
 	}
 
+	@Override
+	public boolean isValidCommand(IGameCommand command) {
+		return false;
+	}
+
 	private void deployTanks(IPlayer player) {
 		int remaining = this.mediator.getPlayerTank(this.player);
 		if (remaining > 0) {

@@ -60,6 +60,11 @@ public class ReinforcePhase implements IPhase {
 		return null;
 	}
 
+	@Override
+	public boolean isValidCommand(IGameCommand command) {
+		return false;
+	}
+
 	private int reinforceByTerritories() {
 		return this.playerTerritories.size() / 3;
 	}

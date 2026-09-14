@@ -162,7 +162,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	}
 
 	@Override
-	public void handleCommand(IGameCommand command) {
+	public IPhaseResult handleCommand(IGameCommand command) {
 		/*this.validateCommand(command);
 
 		IPhaseResult result = this.currentPhase.handleCommand(command);
@@ -173,7 +173,14 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 			this.currentPhase.clearPhase();
 			this.nextPhase();
 		}*/
+		return null;
 	}
+
+	@Override
+	public boolean isValidCommand(IGameCommand command) {
+		return this.currentPhase.isValidCommand(command);
+	}
+
 
 	/**
 	 * Metodo astratto che deve restituire la lista delle fasi del gioco per la specializzazione concreta.

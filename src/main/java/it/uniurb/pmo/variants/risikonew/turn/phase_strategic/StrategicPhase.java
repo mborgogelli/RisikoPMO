@@ -43,4 +43,9 @@ public class StrategicPhase implements IStrategicPhase {
 	public IPhaseResult handleCommand(IGameCommand command) {
 		return null;
 	}
+
+	@Override
+	public boolean isValidCommand(IGameCommand command) {
+		return false;
+	}
 }

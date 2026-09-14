@@ -14,7 +14,7 @@ public interface IGameCommandReceiver<C extends IGameCommand> {
      *
      * @param command comando ricevuto dall'esterno
      */
-    void handleCommand(C command);
+    IPhaseResult handleCommand(C command);
 
     boolean isValidCommand(C command);
 }

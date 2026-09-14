@@ -56,6 +56,11 @@ public class CombatPhase implements IPhase {
 		return null;
 	}
 
+	@Override
+	public boolean isValidCommand(IGameCommand command) {
+		return false;
+	}
+
 	private void acquirePlayerTargets (IPlayer attacker){
 		List<String> ownedZones = this.mediator.getTerritoriesOwnedBy(this.attacker);
 		 this.getAllPossibleTargets(ownedZones)
