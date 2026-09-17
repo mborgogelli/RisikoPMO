@@ -10,7 +10,7 @@ public interface IGameCoordinatorRisikoNew extends IGameCoordinator {
 
     DeployChoiceRisikoNewDTO sendInitialPlacementRequest(DeployRequestRisikoNewDTO request);
 
-    DeployChoiceRisikoNewDTO sendDeploymentChoice(DeployChoiceRisikoNewDTO choice);
+    DeployChoiceRisikoNewDTO sendDeploymentChoice(DeployChoiceRisikoNewDTO choice   );
 
     FortifyChoiceDTO sendFortifyRequest(FortifyRequestDTO request);
 }

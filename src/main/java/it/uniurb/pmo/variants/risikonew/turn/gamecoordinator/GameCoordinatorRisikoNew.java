@@ -1,17 +1,25 @@
 package it.uniurb.pmo.variants.risikonew.turn.gamecoordinator;
 
+import it.uniurb.pmo.framework.turn.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.IGameEvent;
 import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
 
     private IGameEvent lastGameEvent;
+    private List<IGameCommandReceiver> commandReceivers;
+
+    public GameCoordinatorRisikoNew() {
+        this.commandReceivers = new ArrayList<>();
+    }
 
     @Override
     public void onGameEvent(IGameEvent event) {
@@ -62,4 +70,13 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
         return new FortifyChoiceDTO(null, null, 0);
     }
 
+    @Override
+    public void setCommandReceiver(IGameCommandReceiver receiver) {
+        this.commandReceivers.add(receiver);
+    }
+
+    @Override
+    public void removeCommandReceiver(IGameCommandReceiver receiver) {
+        this.commandReceivers.remove(receiver);
+    }
 }

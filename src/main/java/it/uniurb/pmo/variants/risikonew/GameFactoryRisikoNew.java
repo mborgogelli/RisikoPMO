@@ -1,21 +1,16 @@
 package it.uniurb.pmo.variants.risikonew;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import it.uniurb.pmo.framework.management.AbstractMediator;
 import it.uniurb.pmo.framework.management.interfaces.IGameFactory;
 import it.uniurb.pmo.framework.management.interfaces.IManager;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.turn.IGameCoordinator;
-import it.uniurb.pmo.variants.risikonew.management.CardManagerRisikoNew;
-import it.uniurb.pmo.variants.risikonew.management.MapManagerRisikoNew;
-import it.uniurb.pmo.variants.risikonew.management.MediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.management.TankManager;
-import it.uniurb.pmo.variants.risikonew.management.TurnManagerRisikoNew;
+import it.uniurb.pmo.variants.risikonew.management.*;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe factory per la creazione dei manager e del mediatore
@@ -58,6 +53,7 @@ public class GameFactoryRisikoNew implements IGameFactory {
 		this.managers.add(new CardManagerRisikoNew());
 		TurnManagerRisikoNew turnManager = new TurnManagerRisikoNew(this.gameCoordinator);
 		turnManager.addObserver(this.gameCoordinator);
+		this.gameCoordinator.setCommandReceiver(turnManager);
 		this.managers.add(turnManager);
 	}
 	

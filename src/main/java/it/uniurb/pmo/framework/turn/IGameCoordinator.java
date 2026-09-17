@@ -13,7 +13,7 @@ import java.util.Optional;
  * e di raccogliere la risposta, mantenendo il framework agnostico rispetto
  * alla variante di gioco concreta.
  */
-public interface IGameCoordinator extends IGameEventReceiver {
+public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublisher {
 
     /**
      * Chiede al giocatore dove distribuire un certo tipo di token disponibili.
