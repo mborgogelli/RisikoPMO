@@ -5,4 +5,6 @@ public interface IGameCommandPublisher {
     void setCommandReceiver(IGameCommandReceiver receiver);
 
     void removeCommandReceiver(IGameCommandReceiver receiver);
+
+    void submitCommand(IGameCommand command);
 }

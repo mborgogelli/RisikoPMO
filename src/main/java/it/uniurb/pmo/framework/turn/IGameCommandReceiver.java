@@ -3,7 +3,7 @@ package it.uniurb.pmo.framework.turn;
 /**
  * Punto di ingresso dei comandi diretti alla logica di una partita.
  *
- * @param <T> tipo di comando accettato dalla partita o dalla fase corrente
+ * @param <C> tipo di comando accettato dalla partita o dalla fase corrente
  */
 public interface IGameCommandReceiver<C extends IGameCommand> {
 

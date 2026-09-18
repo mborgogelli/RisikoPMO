@@ -16,10 +16,9 @@ import java.util.Optional;
  * Implementa l'interfaccia ITurnManager e fornisce un'implementazione di base per la gestione dei turni,
  * lasciando ai sottotipi la responsabilità di definire l'ordine delle fasi e il reset del contatore delle fasi.
  */
-public abstract class AbstractTurnManager implements ITurnManager, IGameEventPublisher, IGameCommandReceiver {
+public abstract class AbstractTurnManager implements ITurnManager, IGameEventPublisher, IGameCommandReceiver<IGameCommand> {
 
 	private IMediator mediator;
-	private IGameCoordinator gameCoordinator;
 	private IPlayer currentPlayer;
 	private IPhase currentPhase;
 	private int currentTurn;
@@ -163,17 +162,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 
 	@Override
 	public IPhaseResult handleCommand(IGameCommand command) {
-		/*this.validateCommand(command);
-
-		IPhaseResult result = this.currentPhase.handleCommand(command);
-
-		this.notifyObservers(new GameStateChangedEvent(...));
-
-		if (result.isCompleted()) {
-			this.currentPhase.clearPhase();
-			this.nextPhase();
-		}*/
-		return null;
+		return this.currentPhase.handleCommand(command);
 	}
 
 	@Override
@@ -199,10 +188,6 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	 */
 	protected void initPhases() {
 		this.phases = this.createPhases();
-	}
-
-	protected IGameCoordinator getGameCoordinator() {
-		return this.gameCoordinator;
 	}
 
 	protected IMediator getMediator() {

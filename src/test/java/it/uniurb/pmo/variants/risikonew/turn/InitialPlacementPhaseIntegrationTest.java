@@ -1,6 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.turn.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -186,6 +187,16 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         @Override
         public FortifyChoiceDTO sendFortifyRequest(FortifyRequestDTO request) {
             return null;
+        }
+
+        @Override
+        public void setCommandReceiver(IGameCommandReceiver receiver) {
+
+        }
+
+        @Override
+        public void removeCommandReceiver(IGameCommandReceiver receiver) {
+
         }
     }
 }

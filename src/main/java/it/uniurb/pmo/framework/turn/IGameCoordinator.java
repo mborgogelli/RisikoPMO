@@ -25,5 +25,4 @@ public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublis
 
     Optional<IAttackChoiceDTO> sendAttackRequest(IAttackRequestDTO request);
 
-
 }
