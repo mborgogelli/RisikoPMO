@@ -1,9 +1,11 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.turn.IGameCommand;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.IPhaseResult;
+import it.uniurb.pmo.framework.turn.PhaseResult;
+import it.uniurb.pmo.framework.turn.command.DeployCommand;
+import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
@@ -47,12 +49,32 @@ public class InitialPlacementPhase implements IPhase {
 
 	@Override
 	public IPhaseResult handleCommand(IGameCommand command) {
+		if (this.isValidCommand(command)){
+			DeployCommand deployCommand = (DeployCommand) command;
+			this.deployTanks(deployCommand.deployment());
+			return new PhaseResult(true, true, "Comando eseguito");
+		}
 		return null;
 	}
 
 	@Override
 	public boolean isValidCommand(IGameCommand command) {
-		return false;
+		boolean valid = command instanceof DeployCommand;
+		List<String> playerTerritories = this.mediator.getZonesOwnedBy(this.player);
+
+		if (valid) {
+			DeployCommand deployCommand = (DeployCommand) command;
+
+			valid = !deployCommand.deployment().isEmpty()
+					&& deployCommand.deployment().values().stream()
+					.allMatch(tanks -> tanks != null && tanks > 0)
+					&& deployCommand.deployment().keySet().stream()
+					.allMatch(playerTerritories::contains)
+					&& deployCommand.deployment().values().stream()
+					.mapToInt(Integer::intValue)
+					.sum() <= MAX_DEPLOYABLE;
+		}
+		return valid;
 	}
 
 	private void deployTanks(IPlayer player) {

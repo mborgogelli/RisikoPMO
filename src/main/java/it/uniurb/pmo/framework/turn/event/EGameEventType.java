@@ -1,4 +1,4 @@
-package it.uniurb.pmo.framework.turn;
+package it.uniurb.pmo.framework.turn.event;
 
 /**
  * Tipi di cambiamento del flusso di gioco pubblicati dal TurnManager.

@@ -4,7 +4,13 @@ import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.management.interfaces.ITurnManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
-import it.uniurb.pmo.framework.turn.*;
+import it.uniurb.pmo.framework.turn.IPhase;
+import it.uniurb.pmo.framework.turn.IPhaseResult;
+import it.uniurb.pmo.framework.turn.command.IGameCommand;
+import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
+import it.uniurb.pmo.framework.turn.event.IGameEvent;
+import it.uniurb.pmo.framework.turn.event.IGameEventPublisher;
+import it.uniurb.pmo.framework.turn.event.IGameEventReceiver;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +22,7 @@ import java.util.Optional;
  * Implementa l'interfaccia ITurnManager e fornisce un'implementazione di base per la gestione dei turni,
  * lasciando ai sottotipi la responsabilità di definire l'ordine delle fasi e il reset del contatore delle fasi.
  */
-public abstract class AbstractTurnManager implements ITurnManager, IGameEventPublisher, IGameCommandReceiver<IGameCommand> {
+public abstract class AbstractTurnManager implements ITurnManager, IGameEventPublisher, IGameCommandReceiver {
 
 	private IMediator mediator;
 	private IPlayer currentPlayer;

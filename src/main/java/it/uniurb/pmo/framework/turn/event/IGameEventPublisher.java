@@ -1,4 +1,4 @@
-package it.uniurb.pmo.framework.turn;
+package it.uniurb.pmo.framework.turn.event;
 
 /**
  * Interfaccia per gli aggiornamenti sullo stato della partita.

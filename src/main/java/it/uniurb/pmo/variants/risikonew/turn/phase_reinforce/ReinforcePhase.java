@@ -1,9 +1,9 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.turn.IGameCommand;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.IPhaseResult;
+import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;

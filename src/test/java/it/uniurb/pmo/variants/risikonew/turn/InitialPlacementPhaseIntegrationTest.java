@@ -1,7 +1,8 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.turn.IGameCommandReceiver;
+import it.uniurb.pmo.framework.turn.command.IGameCommand;
+import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -196,6 +197,11 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
 
         @Override
         public void removeCommandReceiver(IGameCommandReceiver receiver) {
+
+        }
+
+        @Override
+        public void submitCommand(IGameCommand command) {
 
         }
     }

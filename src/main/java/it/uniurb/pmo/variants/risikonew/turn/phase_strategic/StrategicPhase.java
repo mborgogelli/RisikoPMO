@@ -1,8 +1,8 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_strategic;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.turn.IGameCommand;
 import it.uniurb.pmo.framework.turn.IPhaseResult;
+import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.dto.FortifyChoiceDTO;
 import it.uniurb.pmo.framework.turn.dto.FortifyRequestDTO;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;

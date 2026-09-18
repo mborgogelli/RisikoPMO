@@ -1,11 +1,13 @@
-package it.uniurb.pmo.framework.turn;
+package it.uniurb.pmo.framework.turn.command;
+
+import it.uniurb.pmo.framework.turn.IPhaseResult;
 
 /**
  * Punto di ingresso dei comandi diretti alla logica di una partita.
  *
  * @param <C> tipo di comando accettato dalla partita o dalla fase corrente
  */
-public interface IGameCommandReceiver<C extends IGameCommand> {
+public interface IGameCommandReceiver {
 
     /**
      * Riceve un comando gia' associato alla partita destinataria.
@@ -14,7 +16,7 @@ public interface IGameCommandReceiver<C extends IGameCommand> {
      *
      * @param command comando ricevuto dall'esterno
      */
-    IPhaseResult handleCommand(C command);
+    IPhaseResult handleCommand(IGameCommand command);
 
-    boolean isValidCommand(C command);
+    boolean isValidCommand(IGameCommand command);
 }
