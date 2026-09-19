@@ -1,4 +1,4 @@
-package it.uniurb.pmo.framework.turn.event;
+package it.uniurb.pmo.framework.turn.event.interfaces;
 
 public interface IGameEventReceiver {
 

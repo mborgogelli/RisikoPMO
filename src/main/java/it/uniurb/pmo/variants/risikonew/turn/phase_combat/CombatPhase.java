@@ -2,9 +2,10 @@ package it.uniurb.pmo.variants.risikonew.turn.phase_combat;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
-import it.uniurb.pmo.framework.turn.IPhaseResult;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.dto.IAttackChoiceDTO;
+import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
+import it.uniurb.pmo.framework.turn.event.interfaces.IGameState;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.AttackRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
@@ -30,18 +31,14 @@ public class CombatPhase implements IPhase {
 	}
 
 	@Override
-	public int getPhaseId() {
-		return 0;
-	}
-
-	@Override
-	public void playPhase(IPlayer player) {
+	public IGameEvent<? extends IGameState> playPhase(IPlayer player) {
 		this.attacker = player;
 		this.acquirePlayerTargets(this.attacker);
 		Optional<IAttackChoiceDTO> choice = this.coordinator.sendAttackRequest(this.setAttackRequestDTO());
 		if (choice.isPresent()) {
 			this.attackPlayer(choice);
 		}
+		return null;
 	}
 
 	@Override
@@ -52,7 +49,7 @@ public class CombatPhase implements IPhase {
 	}
 
 	@Override
-	public IPhaseResult handleCommand(IGameCommand command) {
+	public IGameEvent<? extends IGameState> handleCommand(IGameCommand command) {
 		return null;
 	}
 

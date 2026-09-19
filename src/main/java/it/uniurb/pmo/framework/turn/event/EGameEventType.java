@@ -7,5 +7,7 @@ public enum EGameEventType {
     TURN_STARTED,
     PHASE_STARTED,
     CHOICE_REQUIRED,
+    PHASE_COMPLETED,
+    TURN_COMPLETED,
     GAME_ENDED
 }

@@ -2,14 +2,14 @@ package it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
-import it.uniurb.pmo.framework.turn.IPhaseResult;
-import it.uniurb.pmo.framework.turn.PhaseResult;
 import it.uniurb.pmo.framework.turn.command.DeployCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
+import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
+import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
+import it.uniurb.pmo.framework.turn.event.DeployRequestEvent;
+import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 
 import java.util.List;
 import java.util.Map;
@@ -19,27 +19,17 @@ public class InitialPlacementPhase implements IPhase {
 	public final static int MAX_DEPLOYABLE = 3;
 
 	private IPlayer player;
-	private List<String> deployableZones;
-	private final IMediatorRisikoNew mediator;
-	private final IGameCoordinatorRisikoNew coordinator;
-	private final int phaseId;
+    private final IMediatorRisikoNew mediator;
 
-    public InitialPlacementPhase(IMediatorRisikoNew mediator, IGameCoordinatorRisikoNew coordinator) {
-        this.phaseId = 0;
+    public InitialPlacementPhase(IMediatorRisikoNew mediator) {
 		this.mediator = mediator;
-		this.coordinator = coordinator;
     }
 
-    @Override
-	public int getPhaseId() {
-		return this.phaseId;
-	}
 
 	@Override
-	public void playPhase(IPlayer player) {
+	public IGameEvent<IDeployRequestDTO> playPhase(IPlayer player) {
 		this.player = player;
-		this.deployTanks(this.player);
-		this.clearPhase();
+		return new DeployRequestEvent(this.deployRequest());
 	}
 
     @Override
@@ -48,11 +38,11 @@ public class InitialPlacementPhase implements IPhase {
 	}
 
 	@Override
-	public IPhaseResult handleCommand(IGameCommand command) {
+	public IGameEvent<IPlayerStateDTO> handleCommand(IGameCommand command) {
 		if (this.isValidCommand(command)){
 			DeployCommand deployCommand = (DeployCommand) command;
 			this.deployTanks(deployCommand.deployment());
-			return new PhaseResult(true, true, "Comando eseguito");
+			return null;
 		}
 		return null;
 	}
@@ -67,40 +57,29 @@ public class InitialPlacementPhase implements IPhase {
 
 			valid = !deployCommand.deployment().isEmpty()
 					&& deployCommand.deployment().values().stream()
-					.allMatch(tanks -> tanks != null && tanks > 0)
+						.allMatch(tanks -> tanks != null && tanks > 0)
 					&& deployCommand.deployment().keySet().stream()
-					.allMatch(playerTerritories::contains)
+						.allMatch(playerTerritories::contains)
 					&& deployCommand.deployment().values().stream()
-					.mapToInt(Integer::intValue)
-					.sum() <= MAX_DEPLOYABLE;
+						.mapToInt(Integer::intValue)
+						.sum() <= MAX_DEPLOYABLE;
 		}
 		return valid;
 	}
 
-	private void deployTanks(IPlayer player) {
+	private DeployRequestRisikoNewDTO deployRequest() {
 		int remaining = this.mediator.getPlayerTank(this.player);
 		if (remaining > 0) {
 			int tanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
-			this.deployableZones = this.mediator.getZonesOwnedBy(player);
-			DeployChoiceRisikoNewDTO initialDeploy = this.coordinator.sendInitialPlacementRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), deployableZones, tanksToDeploy));
-			this.checkDeploy(initialDeploy.deployment(), tanksToDeploy);
-			this.deployTanks(initialDeploy.deployment());
+            List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
+			return new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), deployableZones, tanksToDeploy);
 		} else {
 			throw new RuntimeException("Not enough tanks to deploy.");
 		}
-	}
+	};
 
 	private void deployTanks(Map<String, Integer> targetZones) {
 		targetZones.forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
 	}
 
-	private void checkDeploy(Map<String, Integer> targetZones, int tanksToDeploy) {
-		int deployed = targetZones.values().stream().reduce(0, Integer::sum);
-		boolean sameTerritories = this.deployableZones.containsAll(targetZones.keySet()) && (this.deployableZones.size() == targetZones.size());
-		boolean cannotDeploy = deployed != tanksToDeploy;// || !sameTerritories;
-		// TODO modificare il metodo di stub per fare ritornare tutta la lista di territory
-		if (cannotDeploy) {
-			throw new RuntimeException("You must deploy " + tanksToDeploy + " tanks.");
-		}
-	}
 }

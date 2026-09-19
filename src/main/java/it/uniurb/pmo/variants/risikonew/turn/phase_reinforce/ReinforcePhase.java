@@ -2,15 +2,15 @@ package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
-import it.uniurb.pmo.framework.turn.IPhaseResult;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
+import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
+import it.uniurb.pmo.framework.turn.event.interfaces.IGameState;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
 
 import java.util.Comparator;
 import java.util.List;
@@ -31,12 +31,7 @@ public class ReinforcePhase implements IPhase {
 	}
 
 	@Override
-	public int getPhaseId() {
-		return ERisikoNewPhase.REINFORCE.getId();
-	}
-
-	@Override
-	public void playPhase(IPlayer player) {
+	public IGameEvent<? extends IGameState> playPhase(IPlayer player) {
 		this.clearPhase();
 		this.player = player;
 		this.playerTerritories = this.mediator.getZonesOwnedBy(player);
@@ -47,6 +42,7 @@ public class ReinforcePhase implements IPhase {
 		this.mediator.reinforcePlayer(this.player, reinforcements);
 		DeployChoiceRisikoNewDTO response = (DeployChoiceRisikoNewDTO) this.coordinator.sendDeployRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), this.playerTerritories, reinforcements));
 		response.deployment().forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
+		return null;
 	}
 
 	@Override
@@ -56,7 +52,7 @@ public class ReinforcePhase implements IPhase {
 	}
 
 	@Override
-	public IPhaseResult handleCommand(IGameCommand command) {
+	public IGameEvent<? extends IGameState> handleCommand(IGameCommand command) {
 		return null;
 	}
 

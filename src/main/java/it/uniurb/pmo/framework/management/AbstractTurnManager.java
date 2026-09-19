@@ -5,12 +5,12 @@ import it.uniurb.pmo.framework.management.interfaces.ITurnManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
 import it.uniurb.pmo.framework.turn.IPhase;
-import it.uniurb.pmo.framework.turn.IPhaseResult;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
-import it.uniurb.pmo.framework.turn.event.IGameEvent;
-import it.uniurb.pmo.framework.turn.event.IGameEventPublisher;
-import it.uniurb.pmo.framework.turn.event.IGameEventReceiver;
+import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
+import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventPublisher;
+import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventReceiver;
+import it.uniurb.pmo.framework.turn.event.interfaces.IGameState;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -167,7 +167,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	}
 
 	@Override
-	public IPhaseResult handleCommand(IGameCommand command) {
+	public IGameEvent<? extends IGameState> handleCommand(IGameCommand command) {
 		return this.currentPhase.handleCommand(command);
 	}
 

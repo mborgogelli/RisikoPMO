@@ -1,4 +1,6 @@
-package it.uniurb.pmo.framework.turn.event;
+package it.uniurb.pmo.framework.turn.event.interfaces;
+
+import it.uniurb.pmo.framework.turn.event.EGameEventType;
 
 /**
  * Un evento di gioco è caratterizzato da un tipo di evento e uno stato di gioco.

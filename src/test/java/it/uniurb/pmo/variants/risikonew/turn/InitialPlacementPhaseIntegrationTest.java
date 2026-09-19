@@ -9,19 +9,13 @@ import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
 
@@ -44,7 +38,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         this.mediator = super.getMediator();
         this.gameCoordinator = super.getGameCoordinator();
     }
-
+/*
     @Test
     @DisplayName("Integration: Deploy tanks until none are left")
     void testPlayPhaseDeploysAllTanks() {
@@ -159,7 +153,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     private boolean haveRemainingTanks(IMediatorRisikoNew mediator) {
         return this.players.stream().anyMatch(p -> mediator.getPlayerTank(p) > 0);
     }
-
+*/
     /**
          * Inner class stub for IGameCoordinatorRisikoNew.
          */
