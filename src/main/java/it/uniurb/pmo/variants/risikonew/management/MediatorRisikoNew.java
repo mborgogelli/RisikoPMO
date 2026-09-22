@@ -97,7 +97,7 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
-	public int getZoneTank(String zone) {
+	public int getZoneToken(String zone, ITokenType tokenType) {
 		return this.tankManager.getZoneTank(zone);
 	}
 

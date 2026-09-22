@@ -83,5 +83,7 @@ public interface IMediator extends IGameConductor {
 	 */
 	<T extends ICard> Stream<List<T>> getCombinationsOf(List<T> playerCards, int k);
 
+	int getZoneToken(String zone, ITokenType tokenType);
+
 	void reinforcePlayer(IPlayer player, ITokenType tokenType, int reinforcements);
 }

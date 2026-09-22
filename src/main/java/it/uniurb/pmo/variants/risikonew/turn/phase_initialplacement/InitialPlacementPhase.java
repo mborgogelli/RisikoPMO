@@ -7,12 +7,16 @@ import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
 import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
 import it.uniurb.pmo.framework.turn.event.DeployRequestEvent;
+import it.uniurb.pmo.framework.turn.event.EGameEventType;
+import it.uniurb.pmo.framework.turn.event.PlayerStateEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.turn.dto.PlayerStateRisikoNewDTO;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class InitialPlacementPhase implements IPhase {
 
@@ -42,9 +46,10 @@ public class InitialPlacementPhase implements IPhase {
 		if (this.isValidCommand(command)){
 			DeployCommand deployCommand = (DeployCommand) command;
 			this.deployTanks(deployCommand.deployment());
-			return null;
+			return new PlayerStateEvent(EGameEventType.PHASE_COMPLETED, this.playerState());
+		} else {
+			throw new RuntimeException("Not valid command.");
 		}
-		return null;
 	}
 
 	@Override
@@ -80,6 +85,13 @@ public class InitialPlacementPhase implements IPhase {
 
 	private void deployTanks(Map<String, Integer> targetZones) {
 		targetZones.forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
+	}
+
+	private IPlayerStateDTO playerState() {
+		Map<String,Integer> playerTerritories = this.mediator.getTerritoriesOwnedBy(this.player)
+														.stream()
+														.collect(Collectors.toMap(t -> t, t -> this.mediator.getZoneTank(t)));
+		return new PlayerStateRisikoNewDTO(this.player, playerTerritories);
 	}
 
 }

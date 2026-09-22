@@ -22,7 +22,9 @@ public interface IMediatorRisikoNew extends IMediator {
 
     int getPlayerTank(IPlayer player);
 
-    int getZoneTank(String zone);
+    default int getZoneTank(String zone){
+        return this.getZoneToken(zone, ERisikoNewToken.TANK);
+    };
 
     void deployTank(IPlayer player, String zone, int tanks);
 
@@ -33,7 +35,7 @@ public interface IMediatorRisikoNew extends IMediator {
     default int getTerritoryValue(String territory) {
         return getZoneValue(territory);
     };
-    
+
 	Stream<List<ITerritoryCard>> getAvailableTris(IPlayer player);
 
     void playTris(IPlayer player, List<? extends ITerritoryCard> cards);
