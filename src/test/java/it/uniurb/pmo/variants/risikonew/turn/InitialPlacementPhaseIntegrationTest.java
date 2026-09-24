@@ -3,12 +3,8 @@ package it.uniurb.pmo.variants.risikonew.turn;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.command.DeployCommand;
 import it.uniurb.pmo.framework.utils.EColors;
-import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
-import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.PlayerStateRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
@@ -24,23 +20,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
 
     private List<IPlayer> players;
-    private IMapManagerRisikoNew mapManager;
-    private ITankManager tankManager;
-    private IMediatorRisikoNew mediator;
-    private IGameCoordinatorRisikoNew gameCoordinator;
 
     @BeforeEach
     public void setUp() {
         super.setUpRisikoNew();
-        this.initManagers();
-    }
-
-    private void initManagers() {
         this.players = super.getPlayers();
-        this.mapManager = getManager(IMapManagerRisikoNew.class);
-        this.tankManager = getManager(ITankManager.class);
-        this.mediator = super.getMediator();
-        this.gameCoordinator = super.getGameCoordinator();
     }
 
     @Test
@@ -50,9 +34,9 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
 
         // Rimuove tutti i tank dai giocatori e assegna 3 tank al giocatore ultimo
         for (IPlayer player : this.players) {
-            this.tankManager.removeTank(player, this.mediator.getPlayerTank(player));
+            tankManager.removeTank(player, this.mediator.getPlayerTank(player));
         }
-        this.tankManager.assignTank(this.players.getLast(), 3);
+            tankManager.assignTank(this.players.getLast(), 3);
 
         InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
 
@@ -111,7 +95,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         // Verifica che i dati della request siano coerenti con i dati attesi
         assertFalse(deployableZones.isEmpty());
         assertTrue(deployableZones.containsAll(deployedChoice));
-        assertFalse(3 == tanksDeployed);
+        assertNotEquals(3, tanksDeployed);
 
         assertFalse(phase.isValidCommand(command));
         assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(command));
