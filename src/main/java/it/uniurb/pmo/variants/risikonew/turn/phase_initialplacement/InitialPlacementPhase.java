@@ -81,16 +81,16 @@ public class InitialPlacementPhase implements IPhase {
 		} else {
 			throw new RuntimeException("Not enough tanks to deploy.");
 		}
-	};
+	}
 
-	private void deployTanks(Map<String, Integer> targetZones) {
+    private void deployTanks(Map<String, Integer> targetZones) {
 		targetZones.forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
 	}
 
 	private IPlayerStateDTO playerState() {
 		Map<String,Integer> playerTerritories = this.mediator.getTerritoriesOwnedBy(this.player)
 														.stream()
-														.collect(Collectors.toMap(t -> t, t -> this.mediator.getZoneTank(t)));
+														.collect(Collectors.toMap(t -> t, this.mediator::getZoneTank));
 		return new PlayerStateRisikoNewDTO(this.player, playerTerritories);
 	}
 

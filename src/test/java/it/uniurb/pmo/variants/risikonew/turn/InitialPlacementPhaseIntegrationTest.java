@@ -2,10 +2,12 @@ package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.command.DeployCommand;
+import it.uniurb.pmo.framework.utils.EColors;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.turn.dto.PlayerStateRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
@@ -117,5 +119,41 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(command));
         assertEquals("Not valid command.", ex.getMessage());
 
+    }
+
+    @Test
+    @DisplayName("Verify Player state after command execution")
+    void testPlayerStateAfterCommandExecution() {
+
+        IPlayer currentPlayer = this.players.getFirst();
+        String playerName = currentPlayer.getName();
+        EColors playerColor = currentPlayer.getColor();
+        int tanksOwned = this.mediator.getPlayerTank(currentPlayer);
+
+        InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
+        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(currentPlayer).getState();
+
+        List<String> deployableZones = request.deployableZones();
+
+        // Situazione attuale sulle zone che verranno rinforzate
+        String firstZone = deployableZones.getFirst();
+        int currentTanksOnFirstZone = this.mediator.getZoneTank(firstZone);
+        String lastZone = deployableZones.getLast();
+        int currentTanksOnLastZone = this.mediator.getZoneTank(lastZone);
+
+        DeployCommand command = new DeployCommand(Map.of(request.deployableZones().getFirst(), 1,
+                                                         request.deployableZones().getLast(), 2));
+
+        // Verifica che il comando sia valido
+        assertTrue(phase.isValidCommand(command));
+
+        PlayerStateRisikoNewDTO playerState = (PlayerStateRisikoNewDTO) phase.handleCommand(command).getState();
+
+        //Nuovo stato del giocatore
+        assertEquals(playerState.playerName(), playerName);
+        assertEquals(playerState.playerColor(), playerColor);
+        assertEquals(this.mediator.getPlayerTank(currentPlayer), tanksOwned - 3);
+        assertEquals(this.mediator.getZoneTank(firstZone), currentTanksOnFirstZone + 1);
+        assertEquals(this.mediator.getZoneTank(lastZone), currentTanksOnLastZone + 2);
     }
 }
