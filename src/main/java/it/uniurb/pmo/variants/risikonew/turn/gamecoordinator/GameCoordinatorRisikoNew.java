@@ -5,8 +5,6 @@ import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,22 +33,6 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
         return this.lastGameEvent;
     }
 
-    @Override
-    public DeployChoiceRisikoNewDTO sendInitialPlacementRequest(DeployRequestRisikoNewDTO request) {
-        if (request == null || request.deployableZones() == null || request.deployableZones().isEmpty()) {
-            return new DeployChoiceRisikoNewDTO(Map.of());
-        }
-        String targetZone = request.deployableZones().stream().sorted().findFirst().orElse(null);
-        if (targetZone == null) {
-            return new DeployChoiceRisikoNewDTO(Map.of());
-        }
-        return new DeployChoiceRisikoNewDTO(Map.of(targetZone, request.tokenToDeploy().get(ERisikoNewToken.TANK)));
-    }
-
-    @Override
-    public DeployChoiceRisikoNewDTO sendDeploymentChoice(DeployChoiceRisikoNewDTO choice) {
-        return null;
-    }
 
     @Override
     public IDeployChoiceDTO sendDeployRequest(IDeployRequestDTO request) {

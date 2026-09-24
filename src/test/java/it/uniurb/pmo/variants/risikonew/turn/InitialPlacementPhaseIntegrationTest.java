@@ -1,21 +1,23 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.turn.command.IGameCommand;
-import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
-import it.uniurb.pmo.framework.turn.dto.*;
+import it.uniurb.pmo.framework.turn.command.DeployCommand;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
-import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
 
@@ -38,165 +40,82 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         this.mediator = super.getMediator();
         this.gameCoordinator = super.getGameCoordinator();
     }
-/*
+
     @Test
-    @DisplayName("Integration: Deploy tanks until none are left")
+    @DisplayName("Verify deployment request data")
     void testPlayPhaseDeploysAllTanks() {
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(this.mediator, this.gameCoordinator);
 
-        while (haveRemainingTanks(mediator)) {
-            for (IPlayer player : this.players) {
-                if (mediator.getPlayerTank(player) > 0) {
-                    phase.playPhase(player);
-                    //System.out.println(player.getName() + ": " + mediator.getPlayerTank(player) + " tanks remaining");
-                }
-            }
-        }
-
+        // Rimuove tutti i tank dai giocatori e assegna 3 tank al giocatore ultimo
         for (IPlayer player : this.players) {
-            assertTrue(this.mediator.getPlayerTank(player) == 0);
-            assertTrue(this.players.size() == 4 && this.tankManager.getTotalDeployed(player) == 30);
+            this.tankManager.removeTank(player, this.mediator.getPlayerTank(player));
         }
+        this.tankManager.assignTank(this.players.getLast(), 3);
 
-    }
+        InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
 
-   @Test
-    @DisplayName("Integration: Deploy less than 3 tanks when fewer available")
-    void testPlayPhasePlayerDeployLessThan3Tanks() {
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> phase.playPhase(this.players.getFirst()));
+        assertEquals("Not enough tanks to deploy.", ex.getMessage());
 
-        IPlayer player = players.getFirst();
-        int remainingBefore = mediator.getPlayerTank(player);
+        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getLast()).getState();
 
-        // Il giocatore ha esattamente 2 tanks residui da assegnare
-        int targetRemaining = 2;
-        if (remainingBefore > targetRemaining) {
-            tankManager.removeTank(player, remainingBefore - targetRemaining);
-        } else if (remainingBefore < targetRemaining) {
-            tankManager.assignTank(player, targetRemaining - remainingBefore);
-        }
+        // Verifica che i dati della request siano coerenti con i dati attesi
+        assertNotNull(request);
+        assertEquals(3, request.tokenToDeploy().get(ERisikoNewToken.TANK));
+        assertEquals(this.players.getLast().getName(), request.playerName());
+        assertEquals(this.players.getLast().getColor(), request.playerColor());
+        assertTrue(this.mediator.getTerritoriesOwnedBy(this.players.getLast()).containsAll(request.deployableZones()));
 
-        int toDeploy = Math.min(3, mediator.getPlayerTank(player));
-
-        List<String> ownedZones = mediator.getTerritoriesOwnedBy(player);
-        // Il giocatore deve assegnare i tanks rimanenti alla zona con il nome "più piccolo"
-        String expectedZone = ownedZones.stream().min(String::compareTo).orElseThrow();
-        // Recupera il numero di tanks nella zona prima del deploy
-        int zoneBefore = mediator.getZoneTank(expectedZone);
-
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediator, new GameCoordinatorRisikoNew());
-        phase.playPhase(player);
-
-        // Verifica che siano stati assegnati meno di 3 tanks
-        assertTrue(toDeploy < 3);
-        // Verifica che il numero di tanks nella zona sia aumentato del numero di tanks assegnati
-        assertEquals(zoneBefore + toDeploy, mediator.getZoneTank(expectedZone));
-        // Verifica che il numero di tanks del giocatore sia diminuito del numero di tanks assegnati
-        assertEquals(targetRemaining - toDeploy, mediator.getPlayerTank(player));
     }
 
     @Test
-    @DisplayName("Should throw RuntimeException when invalid sum is provided")
-    public void testDeployInvalidSumThrows() {
-        IPlayer player = this.players.getFirst();
+    @DisplayName("Verify command execution with invalid territories")
+    void testDeployCommandWithWrongZones() {
 
-        List<String> ownedZones = mediator.getZonesOwnedBy(player);
-        String deployZone = ownedZones.stream().min(String::compareTo).orElseThrow();
+        InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
+        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).getState();
+        DeployCommand command = new DeployCommand(Map.of("Zone A", 2, "Zone B", 1));
 
-        Map<String,Integer> response = Map.of(deployZone, 2);
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediator, new CoordinatorStub(response));
+        List<String> deployableZones = request.deployableZones();
+        List<String> deployedChoice = command.deployment().keySet().stream().toList();
+        int tanksDeployed = command.deployment().values().stream().mapToInt(Integer::intValue).sum();
 
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> phase.playPhase(player));
-        assertEquals("You must deploy 3 tanks.", ex.getMessage());
+        // Verifica che i dati della request siano coerenti con i dati attesi
+        assertFalse(deployableZones.isEmpty());
+        assertFalse(deployableZones.containsAll(deployedChoice));
+        assertEquals(3, tanksDeployed);
+
+        assertFalse(phase.isValidCommand(command));
+        assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(command));
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(command));
+        assertEquals("Not valid command.", ex.getMessage());
+
     }
 
     @Test
-    @DisplayName("Should throw RuntimeException when no tanks available")
-    public void testThrowExceptionWhenNoTanks() {
-        IPlayer player = this.players.get(2);
-        int currentTanks = mediator.getPlayerTank(player);
-        tankManager.removeTank(player, currentTanks);
+    @DisplayName("Verify command execution with invalid tanks number")
+    void testDeployCommandWithWrongTanksNumber() {
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediator, new GameCoordinatorRisikoNew());
+        InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
+        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).getState();
+        DeployCommand command = new DeployCommand(Map.of(request.deployableZones().getFirst(), 2,
+                request.deployableZones().getLast(), 2));
 
-        RuntimeException exception = assertThrows(RuntimeException.class,
-            () -> phase.playPhase(player));
+        List<String> deployableZones = request.deployableZones();
+        List<String> deployedChoice = command.deployment().keySet().stream().toList();
+        int tanksDeployed = command.deployment().values().stream().mapToInt(Integer::intValue).sum();
 
-        assertEquals("Not enough tanks to deploy.", exception.getMessage());
-    }
+        // Verifica che i dati della request siano coerenti con i dati attesi
+        assertFalse(deployableZones.isEmpty());
+        assertTrue(deployableZones.containsAll(deployedChoice));
+        assertFalse(3 == tanksDeployed);
 
-    @Test
-    @DisplayName("Should deploy exactly MAX_DEPLOYABLE when exactly available")
-    public void testDeployExactlyMaxDeployable() {
-        IPlayer player = this.players.get(3);
-        int currentTanks = mediator.getPlayerTank(player);
-        if (currentTanks > 3) {
-            tankManager.removeTank(player, currentTanks - 3);
-        } else if (currentTanks < 3) {
-            tankManager.assignTank(player, 3 - currentTanks);
-        }
+        assertFalse(phase.isValidCommand(command));
+        assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(command));
 
-        List<String> ownedZones = mediator.getZonesOwnedBy(player);
-        String deployZone = ownedZones.stream().min(String::compareTo).orElseThrow();
-        int zonesTanksBefore = mediator.getZoneTank(deployZone);
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(command));
+        assertEquals("Not valid command.", ex.getMessage());
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediator, new GameCoordinatorRisikoNew());
-        phase.playPhase(player);
-
-        int tanksAfter = mediator.getPlayerTank(player);
-        int zonesTanksAfter = mediator.getZoneTank(deployZone);
-
-        assertEquals(0, tanksAfter);
-        assertEquals(zonesTanksBefore + 3, zonesTanksAfter);
-    }
-
-    private boolean haveRemainingTanks(IMediatorRisikoNew mediator) {
-        return this.players.stream().anyMatch(p -> mediator.getPlayerTank(p) > 0);
-    }
-*/
-    /**
-         * Inner class stub for IGameCoordinatorRisikoNew.
-         */
-        private record CoordinatorStub(Map<String, Integer> response) implements IGameCoordinatorRisikoNew {
-
-        @Override
-        public DeployChoiceRisikoNewDTO sendInitialPlacementRequest(DeployRequestRisikoNewDTO request) {
-            return new DeployChoiceRisikoNewDTO(response);
-        }
-
-        @Override
-        public DeployChoiceRisikoNewDTO sendDeploymentChoice(DeployChoiceRisikoNewDTO choice) {
-            return null;
-        }
-
-        @Override
-        public IDeployChoiceDTO sendDeployRequest(IDeployRequestDTO request) {
-            return null;
-        }
-
-        @Override
-        public Optional<IAttackChoiceDTO> sendAttackRequest(IAttackRequestDTO request) {
-            return null;
-        }
-
-        @Override
-        public FortifyChoiceDTO sendFortifyRequest(FortifyRequestDTO request) {
-            return null;
-        }
-
-        @Override
-        public void setCommandReceiver(IGameCommandReceiver receiver) {
-
-        }
-
-        @Override
-        public void removeCommandReceiver(IGameCommandReceiver receiver) {
-
-        }
-
-        @Override
-        public void submitCommand(IGameCommand command) {
-
-        }
     }
 }

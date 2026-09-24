@@ -48,7 +48,7 @@ public class InitialPlacementPhase implements IPhase {
 			this.deployTanks(deployCommand.deployment());
 			return new PlayerStateEvent(EGameEventType.PHASE_COMPLETED, this.playerState());
 		} else {
-			throw new RuntimeException("Not valid command.");
+			throw new IllegalArgumentException("Not valid command.");
 		}
 	}
 
