@@ -1,12 +1,13 @@
 package it.uniurb.pmo.framework.management;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * AbstractTokenManager gestisce i token posseduti dai giocatori.
@@ -28,7 +29,7 @@ public abstract class AbstractTokenManager implements ITokenManager{
 	}
 
 	@Override
-	public int getPlayerToken(IPlayer player, ITokenType type) {
+	public int getPlayerTokenByType(IPlayer player, ITokenType type) {
 		return this.playerTokens.get(player).getOrDefault(type, 0);
 	}
 
@@ -50,6 +51,11 @@ public abstract class AbstractTokenManager implements ITokenManager{
 	public final void resetGame() {
 		this.clearPlayerTokenData();
 		this.resetTokenData();
+	}
+
+	@Override
+	public Map<ITokenType, Integer> getPlayerTokens(IPlayer player) {
+		return this.playerTokens.get(player);
 	}
 
 	protected abstract void resetTokenData();

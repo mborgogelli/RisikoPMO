@@ -21,7 +21,7 @@ public interface ITankManager extends ITokenManager {
 	}
 
 	default int getPlayerTank(IPlayer player) {
-		return getPlayerToken(player, getDefaultTokenType());
+		return getPlayerTokenByType(player, getDefaultTokenType());
 	}
 
 	default int getTerritoryTanks(String zone) {

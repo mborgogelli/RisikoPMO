@@ -1,9 +1,9 @@
 package it.uniurb.pmo.framework.management.interfaces;
 
-import java.util.Map;
-
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
+
+import java.util.Map;
 
 public interface ITokenManager extends IManager {
 
@@ -17,12 +17,20 @@ public interface ITokenManager extends IManager {
 	int getTotalDeployed(IPlayer player, ITokenType type);
 
 	/**
-	 * Ottiene il numero di token di un giocatore
+	 * Ottiene il numero di token di un certo tipo appartenenti a un giocatore
 	 * 
+	 * @param player il giocatore
+	 * @return numero di token del tipo richiesto posseduti
+	 */
+	int getPlayerTokenByType(IPlayer player, ITokenType type);
+
+	/**
+	 * Ottiene il numero di token di un giocatore
+	 *
 	 * @param player il giocatore
 	 * @return numero di token posseduti
 	 */
-	int getPlayerToken(IPlayer player, ITokenType type);
+	Map<ITokenType, Integer> getPlayerTokens(IPlayer player);
 
 	/**
 	 * Ottiene il numero di token in una zona

@@ -2,8 +2,10 @@ package it.uniurb.pmo.framework.management.interfaces;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
+import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface ITurnManager extends IManager, IGameConductor {
@@ -26,6 +28,7 @@ public interface ITurnManager extends IManager, IGameConductor {
 
 	List<IPlayer> getPlayers();
 
-
+	Map<String, IPlayerStateDTO> gameSnapshot();
 
 }
+

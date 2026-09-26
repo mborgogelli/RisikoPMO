@@ -10,7 +10,7 @@ import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public record PlayerStateRisikoNewDTO(IPlayer player, Map<String, Integer> playerTerritories) implements IPlayerStateDTO {
+public record PlayerStateRisikoNewDTO(IPlayer player, Map<String, Integer> playerTerritories, int tanksAvailable) implements IPlayerStateDTO {
 
     @Override
     public String playerName() {
@@ -24,7 +24,7 @@ public record PlayerStateRisikoNewDTO(IPlayer player, Map<String, Integer> playe
 
     @Override
     public PlayerTurnStatus playerTurnStatus() {
-        return player.getPlayerTurnStatus();
+        return player.getTurnStatus();
     }
 
     @Override
@@ -33,5 +33,10 @@ public record PlayerStateRisikoNewDTO(IPlayer player, Map<String, Integer> playe
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         e -> Map.of(ERisikoNewToken.TANK, e.getValue())));
+    }
+
+    @Override
+    public Map<ITokenType, Integer> playerTokens() {
+        return Map.of(ERisikoNewToken.TANK, tanksAvailable);
     }
 }

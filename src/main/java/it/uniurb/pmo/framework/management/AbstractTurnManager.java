@@ -3,19 +3,16 @@ package it.uniurb.pmo.framework.management;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.management.interfaces.ITurnManager;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
+import it.uniurb.pmo.framework.turn.dto.PlayerStateDTO;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
 import it.uniurb.pmo.framework.turn.event.PlayerStateEvent;
-import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
-import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventPublisher;
-import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventReceiver;
-import it.uniurb.pmo.framework.turn.event.interfaces.IGameState;
-import it.uniurb.pmo.variants.risikonew.turn.dto.PlayerStateRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
+import it.uniurb.pmo.framework.turn.event.interfaces.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -93,7 +90,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	public void startTurn(IPlayer player) {
 		this.currentPlayer = player;
 		this.currentPhaseIndex = 0;
-		this.publish(new PlayerStateEvent(EGameEventType.TURN_STARTED, this.playerState()));
+		this.publish(new PlayerStateEvent(EGameEventType.TURN_STARTED, this.playerState(this.currentPlayer)));
 		if (this.phases != null && !this.phases.isEmpty()) {
 			this.startPhase(this.phases.getFirst());
 		}
@@ -121,7 +118,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 
 
 			 // Trova il prossimo giocatore attivo
-			if (candidate.getPlayerTurnStatus() == PlayerTurnStatus.ACTIVE) {
+			if (candidate.getTurnStatus() == PlayerTurnStatus.ACTIVE) {
 				/*
 				 * Se l'indice del prossimo giocatore è uguale a zero e l'indice corrente
 				 * è maggiore o uguale a zero, incrementa il turno corrente.
@@ -182,14 +179,15 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 
 	@Override
 	public IGameEvent<? extends IGameState> handleCommand(IGameCommand command) {
-		IGameEvent<? extends IGameState> event = this.currentPhase.handleCommand(command);
-		this.publish(event);
+		IPhaseResult result = this.currentPhase.handleCommand(command);
+		Optional<IGameEvent<? extends IGameState>> optionalEvent = result.state();
+		optionalEvent.ifPresent(this::publish);
 
-		if (event != null && event.getEventType() == EGameEventType.PHASE_COMPLETED) {
+		if (result.isCompleted()) {
 			this.advanceAfterCompletedPhase();
 		}
 
-		return event;
+		return optionalEvent.orElse(null);
 	}
 
 	@Override
@@ -197,6 +195,11 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		return this.currentPhase.isValidCommand(command);
 	}
 
+	@Override
+	public Map<String, IPlayerStateDTO> gameSnapshot() {
+		return this.players.stream()
+				.collect(Collectors.toUnmodifiableMap(IPlayer::getName, this::playerState));
+	}
 
 	/**
 	 * Metodo astratto che deve restituire la lista delle fasi del gioco per la specializzazione concreta.
@@ -289,11 +292,12 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 			this.observers.forEach(observer -> observer.onGameEvent(event));
 		}
 	}
-// TODO metodo da rimuovere!!!
-	private IPlayerStateDTO playerState() {
-		Map<String,Integer> playerTerritories = this.mediator.getZonesOwnedBy(this.currentPlayer)
+
+	private IPlayerStateDTO playerState(IPlayer player) {
+		Map<String,Map<ITokenType,Integer>> playerTerritories = this.mediator.getZonesOwnedBy(player)
 				.stream()
-				.collect(Collectors.toMap(t -> t, t -> this.mediator.getZoneToken(t, ERisikoNewToken.TANK)));
-		return new PlayerStateRisikoNewDTO(this.currentPlayer, playerTerritories);
+				.collect(Collectors.toMap(t -> t, t -> this.mediator.getZoneTokens(t)));
+		Map<ITokenType,Integer> playerTokens = this.mediator.getTokensOwnedBy(player);
+		return new PlayerStateDTO(player, playerTerritories, playerTokens);
 	}
 }

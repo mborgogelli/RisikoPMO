@@ -86,7 +86,7 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 			int nextIndex = (currentIndex + offset) % players.size();
 			IPlayer candidate = players.get(nextIndex);
 
-			boolean active = candidate.getPlayerTurnStatus() == PlayerTurnStatus.ACTIVE;
+			boolean active = candidate.getTurnStatus() == PlayerTurnStatus.ACTIVE;
 			boolean hasTanksToPlace = this.mediator.getPlayerTank(candidate) > 0;
 
 			if (active && hasTanksToPlace) {

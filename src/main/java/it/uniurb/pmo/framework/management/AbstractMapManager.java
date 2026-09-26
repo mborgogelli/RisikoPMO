@@ -57,20 +57,20 @@ public abstract class AbstractMapManager implements IMapManager {
 		return this.gameBoard.getZoneValue(zone);
 	}
 
+	@Override
+	public List<String> getNeighboursOf(String territoryName) {
+		return this.gameBoard.getNeighbours(territoryName);
+	}
+
 	protected List<String> getParentZones(){
 		return this.gameBoard.getRootZones().stream()
 				.map(IZone::getName)
 				.toList();
 	}
 
-	@Override
-	public List<String> getNeighboursOf(String territoryName) {
-		return this.gameBoard.getNeighbours(territoryName);
-	}
-
 	protected IZone findZoneByName(String territoryName) {
-        return this.gameBoard.findZoneByName(territoryName);
-    }
+		return this.gameBoard.findZoneByName(territoryName);
+	}
 
     protected boolean canMoveBetween(String toTerritory, String fromTerritory) {
         return this.gameBoard.canReach(toTerritory, fromTerritory);

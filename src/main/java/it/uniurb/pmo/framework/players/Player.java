@@ -1,8 +1,8 @@
 package it.uniurb.pmo.framework.players;
 
-import java.util.Objects;
-
 import it.uniurb.pmo.framework.utils.EColors;
+
+import java.util.Objects;
 
 public class Player implements IPlayer {
 
@@ -32,7 +32,7 @@ public class Player implements IPlayer {
 	}
 
 	@Override
-	public PlayerTurnStatus getPlayerTurnStatus() {
+	public PlayerTurnStatus getTurnStatus() {
 		return this.status;
 	}
 

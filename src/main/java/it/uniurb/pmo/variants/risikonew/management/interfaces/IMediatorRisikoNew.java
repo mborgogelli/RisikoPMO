@@ -23,7 +23,7 @@ public interface IMediatorRisikoNew extends IMediator {
     int getPlayerTank(IPlayer player);
 
     default int getZoneTank(String zone){
-        return this.getZoneToken(zone, ERisikoNewToken.TANK);
+        return this.getZoneTokenByType(zone, ERisikoNewToken.TANK);
     };
 
     void deployTank(IPlayer player, String zone, int tanks);

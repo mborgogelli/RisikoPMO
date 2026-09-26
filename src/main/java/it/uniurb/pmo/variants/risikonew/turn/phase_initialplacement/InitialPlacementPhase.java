@@ -7,15 +7,16 @@ import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
 import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
 import it.uniurb.pmo.framework.turn.event.DeployRequestEvent;
-import it.uniurb.pmo.framework.turn.event.EGameEventType;
-import it.uniurb.pmo.framework.turn.event.PlayerStateEvent;
+import it.uniurb.pmo.framework.turn.event.PhaseResult;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
+import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.PlayerStateRisikoNewDTO;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InitialPlacementPhase implements IPhase {
@@ -23,10 +24,12 @@ public class InitialPlacementPhase implements IPhase {
 	public final static int MAX_DEPLOYABLE = 3;
 
 	private IPlayer player;
+	private boolean isCompleted;
     private final IMediatorRisikoNew mediator;
 
     public InitialPlacementPhase(IMediatorRisikoNew mediator) {
 		this.mediator = mediator;
+		this.isCompleted = false;
     }
 
 
@@ -39,14 +42,16 @@ public class InitialPlacementPhase implements IPhase {
     @Override
 	public void clearPhase() {
 		this.player = null;
+		this.isCompleted = false;
 	}
 
 	@Override
-	public IGameEvent<IPlayerStateDTO> handleCommand(IGameCommand command) {
+	public IPhaseResult handleCommand(IGameCommand command) {
 		if (this.isValidCommand(command)){
+			this.isCompleted = true;
 			DeployCommand deployCommand = (DeployCommand) command;
 			this.deployTanks(deployCommand.deployment());
-			return new PlayerStateEvent(EGameEventType.PHASE_COMPLETED, this.playerState());
+			return new PhaseResult(this.isCompleted, this.playerState());
 		} else {
 			throw new IllegalArgumentException("Not valid command.");
 		}
@@ -87,11 +92,12 @@ public class InitialPlacementPhase implements IPhase {
 		targetZones.forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
 	}
 
-	private IPlayerStateDTO playerState() {
+	private Optional<IPlayerStateDTO> playerState() {
 		Map<String,Integer> playerTerritories = this.mediator.getTerritoriesOwnedBy(this.player)
 														.stream()
 														.collect(Collectors.toMap(t -> t, this.mediator::getZoneTank));
-		return new PlayerStateRisikoNewDTO(this.player, playerTerritories);
+		int tanksAvailable = this.mediator.getPlayerTank(this.player);
+		return Optional.of(new PlayerStateRisikoNewDTO(this.player, playerTerritories, tanksAvailable));
 	}
 
 }

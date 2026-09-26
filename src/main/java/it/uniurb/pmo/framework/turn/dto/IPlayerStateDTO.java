@@ -9,14 +9,13 @@ import java.util.Map;
 
 public interface IPlayerStateDTO extends IGameState {
 
-    @Override
     String playerName();
 
-    @Override
     EColors playerColor();
 
     PlayerTurnStatus playerTurnStatus();
 
     Map<String, Map<ITokenType, Integer>> playerZoneStatus();
 
+    Map<ITokenType, Integer> playerTokens();
 }

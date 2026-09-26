@@ -54,7 +54,7 @@ public class TurnManagerIntegrationTest extends RisikoNewTestSetup {
 
         IPlayer skippedCandidate = turnManager.getNextPlayer();
         assertNotEquals(eliminatedPlayer, skippedCandidate, "Il giocatore eliminato deve essere saltato");
-        assertEquals(PlayerTurnStatus.ACTIVE, skippedCandidate.getPlayerTurnStatus());
+        assertEquals(PlayerTurnStatus.ACTIVE, skippedCandidate.getTurnStatus());
 
         turnManager.startTurn(skippedCandidate);
         IPlayer nextPlayer = turnManager.getNextPlayer();

@@ -8,8 +8,10 @@ import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.*;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisikoNew {
@@ -97,8 +99,13 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
-	public int getZoneToken(String zone, ITokenType tokenType) {
+	public int getZoneTokenByType(String zone, ITokenType tokenType) {
 		return this.tankManager.getZoneTank(zone);
+	}
+
+	@Override
+	public Map<ITokenType, Integer> getZoneTokens(String zone) {
+		return Map.of(ERisikoNewToken.TANK,this.getZoneTank(zone));
 	}
 
 	@Override

@@ -54,11 +54,11 @@ public class TankManager extends AbstractTokenManager implements ITankManager {
 	}
 
 	@Override
-	public int getPlayerToken(IPlayer player, ITokenType type) {
+	public int getPlayerTokenByType(IPlayer player, ITokenType type) {
 		if (type != this.defaultTokenType) {
 			throw new IllegalArgumentException("Unsupported token type: " + type);
 		}
-		return super.getPlayerToken(player, type);
+		return super.getPlayerTokenByType(player, type);
 	}
 
 	@Override

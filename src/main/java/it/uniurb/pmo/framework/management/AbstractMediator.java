@@ -3,10 +3,13 @@ package it.uniurb.pmo.framework.management;
 
 import it.uniurb.pmo.framework.management.interfaces.IManager;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
+import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.ITokenType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Classe astratta che implementa
@@ -31,7 +34,26 @@ public abstract class AbstractMediator implements IMediator {
         this.managers.add(manager);
     }
     
-  	protected <T extends IManager> T resolveManager(Class<T> managerType) {
+	public void notifyWinner(IPlayer iPlayer) {
+		//TODO implement notification properly
+	}
+
+	@Override
+	public boolean checkVictory(IPlayer player) {
+		return false;   // To do delegate to MissionManager or CardManager
+	}
+
+	@Override
+	public Map<ITokenType, Integer> getZoneTokens(String zone) {
+		return this.resolveManager(ITokenManager.class).getZoneToken(zone);
+	}
+
+	@Override
+	public Map<ITokenType,Integer> getTokensOwnedBy(IPlayer player) {
+		return this.resolveManager(ITokenManager.class).getPlayerTokens(player);
+	}
+
+	protected <T extends IManager> T resolveManager(Class<T> managerType) {
 		T myManager = null;
 		for (IManager manager : this.managers) {
 			if (managerType.isInstance(manager)) {
@@ -42,15 +64,8 @@ public abstract class AbstractMediator implements IMediator {
 			throw new IllegalArgumentException("Manager of type " + managerType.getName() + " not found.");
 		}
 		return myManager;
-    }
-
-	public void notifyWinner(IPlayer iPlayer) {
-		//TODO implement notification properly
 	}
 
-	@Override
-	public boolean checkVictory(IPlayer player) {
-		return false;   // To do delegate to MissionManager or CardManager
-	}
-	
+
+
 }

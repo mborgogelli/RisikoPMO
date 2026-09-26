@@ -6,6 +6,7 @@ import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -19,7 +20,14 @@ public interface IMediator extends IGameConductor {
 	 * Registra un manager con il mediatore
 	 */
 	void registerManager(IManager manager);
-	
+
+	void notifyWinner(IPlayer iPlayer);
+
+	/**
+	 * Verifica se un giocatore ha soddisfatto le condizioni di vittoria
+	 */
+	boolean checkVictory(IPlayer player);
+
 	/**
 	 * Inizializza tutti i manager registrati
 	 */
@@ -54,13 +62,6 @@ public interface IMediator extends IGameConductor {
 
 	List<String> getNeighboursOf(String zone);
 
-	void notifyWinner(IPlayer iPlayer);
-
-	/**
-	 * Verifica se un giocatore ha soddisfatto le condizioni di vittoria
-	 */
-	boolean checkVictory(IPlayer player);
-
 	/**
 	 * Restituisce le carte possedute da un giocatore.
 	 * @param player il giocatore
@@ -76,14 +77,18 @@ public interface IMediator extends IGameConductor {
 	void playCard(IPlayer player, ICard card);
 	
 	/**
-	 * 
-	 * @param playerCards
-	 * @param k
-	 * @return
+	 * Restituisce tutte le combinazioni di k carte possedute da un giocatore.
+	 * @param playerCards le carte possedute dal giocatore
+	 * @param k il numero di carte da combinare
+	 * @return un flusso di liste di carte
 	 */
 	<T extends ICard> Stream<List<T>> getCombinationsOf(List<T> playerCards, int k);
 
-	int getZoneToken(String zone, ITokenType tokenType);
+	int getZoneTokenByType(String zone, ITokenType tokenType);
+
+	Map<ITokenType, Integer> getZoneTokens(String zone);
+
+	Map<ITokenType,Integer> getTokensOwnedBy(IPlayer player);
 
 	void reinforcePlayer(IPlayer player, ITokenType tokenType, int reinforcements);
 }

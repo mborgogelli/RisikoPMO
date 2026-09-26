@@ -17,7 +17,7 @@ public interface IPlayer {
 
 	void setReady(Boolean ready);
 
-	PlayerTurnStatus getPlayerTurnStatus();
+	PlayerTurnStatus getTurnStatus();
 
 	void setPlayerTurnStatus(PlayerTurnStatus playerTurnStatus);
 }

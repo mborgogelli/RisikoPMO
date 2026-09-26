@@ -5,7 +5,6 @@ import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 
 public record DeployRequestEvent(IDeployRequestDTO state) implements IGameEvent<IDeployRequestDTO> {
 
-
     @Override
     public EGameEventType getEventType() {
         return EGameEventType.CHOICE_REQUIRED;
