@@ -6,6 +6,7 @@ import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.dto.IAttackChoiceDTO;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameState;
+import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.AttackRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
@@ -49,7 +50,7 @@ public class CombatPhase implements IPhase {
 	}
 
 	@Override
-	public IGameEvent<? extends IGameState> handleCommand(IGameCommand command) {
+	public IPhaseResult handleCommand(IGameCommand command) {
 		return null;
 	}
 

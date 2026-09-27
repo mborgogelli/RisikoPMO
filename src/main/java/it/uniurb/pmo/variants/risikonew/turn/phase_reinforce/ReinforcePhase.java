@@ -5,6 +5,7 @@ import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameState;
+import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -52,7 +53,7 @@ public class ReinforcePhase implements IPhase {
 	}
 
 	@Override
-	public IGameEvent<? extends IGameState> handleCommand(IGameCommand command) {
+	public IPhaseResult handleCommand(IGameCommand command) {
 		return null;
 	}
 

@@ -2,9 +2,10 @@ package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.command.DeployCommand;
+import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
+import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.framework.utils.EColors;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.turn.dto.PlayerStateRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
@@ -106,7 +107,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     }
 
     @Test
-    @DisplayName("Verify Player state after command execution")
+    @DisplayName("Verify Player choiceRequired after command execution")
     void testPlayerStateAfterCommandExecution() {
 
         IPlayer currentPlayer = this.players.getFirst();
@@ -130,8 +131,9 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
 
         // Verifica che il comando sia valido
         assertTrue(phase.isValidCommand(command));
+        IPhaseResult result = phase.handleCommand(command);
 
-        PlayerStateRisikoNewDTO playerState = (PlayerStateRisikoNewDTO) phase.handleCommand(command).getState();
+        IPlayerStateDTO playerState = turnManager.gameSnapshot().get(playerName);
 
         //Nuovo stato del giocatore
         assertEquals(playerState.playerName(), playerName);

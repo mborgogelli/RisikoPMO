@@ -42,6 +42,7 @@ public abstract class RisikoNewTestSetup {
 
         mapManager.initializeGame(players);
         tankManager.initializeGame(players);
+        turnManager.initializeGame(players);
     }
 
     protected List<IPlayer> createPlayers(int numberOfPlayers) {

@@ -8,10 +8,11 @@ import it.uniurb.pmo.framework.players.PlayerTurnStatus;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
+import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
 import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
 import it.uniurb.pmo.framework.turn.dto.PlayerStateDTO;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
-import it.uniurb.pmo.framework.turn.event.PlayerStateEvent;
+import it.uniurb.pmo.framework.turn.event.GameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.*;
 
 import java.util.*;
@@ -90,7 +91,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	public void startTurn(IPlayer player) {
 		this.currentPlayer = player;
 		this.currentPhaseIndex = 0;
-		this.publish(new PlayerStateEvent(EGameEventType.TURN_STARTED, this.playerState(this.currentPlayer)));
+		this.publish(updateEvent(EGameEventType.TURN_STARTED));
 		if (this.phases != null && !this.phases.isEmpty()) {
 			this.startPhase(this.phases.getFirst());
 		}
@@ -180,14 +181,22 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	@Override
 	public IGameEvent<? extends IGameState> handleCommand(IGameCommand command) {
 		IPhaseResult result = this.currentPhase.handleCommand(command);
-		Optional<IGameEvent<? extends IGameState>> optionalEvent = result.state();
-		optionalEvent.ifPresent(this::publish);
+		IGameEvent<? extends IGameState> event = null;
+
+		if (result.isCompleted()) {
+			event = updateEvent(EGameEventType.PHASE_COMPLETED);
+		} else if (result.choiceRequired().isPresent()) {
+			event = new GameEvent<>(EGameEventType.CHOICE_REQUIRED,
+					result.choiceRequired().get());
+		}
+
+		this.publish(event);
 
 		if (result.isCompleted()) {
 			this.advanceAfterCompletedPhase();
 		}
 
-		return optionalEvent.orElse(null);
+		return event;
 	}
 
 	@Override
@@ -299,5 +308,9 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 				.collect(Collectors.toMap(t -> t, t -> this.mediator.getZoneTokens(t)));
 		Map<ITokenType,Integer> playerTokens = this.mediator.getTokensOwnedBy(player);
 		return new PlayerStateDTO(player, playerTerritories, playerTokens);
+	}
+
+	private GameEvent<IGameState> updateEvent (EGameEventType eventType) {
+		return new GameEvent<>(eventType, new GameSnapshotDTO(this.gameSnapshot()));
 	}
 }

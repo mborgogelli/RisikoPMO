@@ -15,5 +15,5 @@ public interface IPhaseResult {
     /**
      * Evento opzionale prodotto dalla fase, ad esempio una nuova scelta richiesta.
      */
-    Optional<? extends IGameState> state();
+    Optional<? extends IGameState> choiceRequired();
 }
