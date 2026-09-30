@@ -1,4 +1,4 @@
-package it.uniurb.pmo.framework.turn;
+package it.uniurb.pmo.framework.turn.dto;
 
 import it.uniurb.pmo.framework.utils.EColors;
 

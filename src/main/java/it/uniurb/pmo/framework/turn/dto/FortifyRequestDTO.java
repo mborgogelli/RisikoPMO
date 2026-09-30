@@ -1,7 +1,6 @@
 package it.uniurb.pmo.framework.turn.dto;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.turn.IPlayerDataDTO;
 import it.uniurb.pmo.framework.utils.EColors;
 
 import java.util.List;

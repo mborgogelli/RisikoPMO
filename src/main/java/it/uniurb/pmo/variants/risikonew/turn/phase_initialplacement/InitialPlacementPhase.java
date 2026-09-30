@@ -8,7 +8,6 @@ import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
 import it.uniurb.pmo.framework.turn.event.DeployRequestEvent;
 import it.uniurb.pmo.framework.turn.event.PhaseResult;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
-import it.uniurb.pmo.framework.turn.event.interfaces.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
@@ -57,6 +56,10 @@ public class InitialPlacementPhase implements IPhase {
 
 	@Override
 	public boolean isValidCommand(IGameCommand command) {
+		if(this.player == null) {
+			throw new IllegalArgumentException("Player is null.");
+		}
+
 		boolean valid = command instanceof DeployCommand;
 		List<String> playerTerritories = this.mediator.getZonesOwnedBy(this.player);
 
@@ -84,13 +87,9 @@ public class InitialPlacementPhase implements IPhase {
 		if (remaining > 0) {
 			int tanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
             List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
-			return new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), deployableZones, tanksToDeploy);
+			return new DeployRequestRisikoNewDTO(player, deployableZones, tanksToDeploy);
 		} else {
 			throw new RuntimeException("Not enough tanks to deploy.");
 		}
 	}
-
-    private Optional<? extends IGameState> choiceRequired() {
-        return Optional.of(deployRequest());
-    }
 }

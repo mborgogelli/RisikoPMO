@@ -5,7 +5,6 @@ import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.TerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_reinforce.ReinforcePhase;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,12 +20,10 @@ import static org.mockito.Mockito.spy;
 
 public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
 
-    private IGameCoordinatorRisikoNew gameCoordinator;
 
     @BeforeEach
     public void setUp() {
         super.setUpRisikoNew();
-        this.gameCoordinator = super.getGameCoordinator();
     }
 
     @Test
@@ -67,7 +64,7 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
 
         int tanksBefore = mediator.getPlayerTank(player1);
 
-        ReinforcePhase phase = new ReinforcePhase(phaseMediator, gameCoordinator);
+        ReinforcePhase phase = new ReinforcePhase(phaseMediator);
         phase.playPhase(player1);
         int tanksAfter = mediator.getPlayerTank(player1);
         assertEquals(tanksBefore + 15, tanksAfter);
@@ -93,7 +90,7 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
 
         int tanksBefore = mediator.getPlayerTank(player1);
 
-        ReinforcePhase phase = new ReinforcePhase(phaseMediator, gameCoordinator);
+        ReinforcePhase phase = new ReinforcePhase(phaseMediator);
         phase.playPhase(player1);
         int tanksAfter = mediator.getPlayerTank(player1);
         assertEquals(tanksBefore + 3, tanksAfter);
@@ -125,10 +122,20 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
 
         int tanksBefore = mediator.getPlayerTank(player1);
 
-        ReinforcePhase phase = new ReinforcePhase(phaseMediator, gameCoordinator);
+        ReinforcePhase phase = new ReinforcePhase(phaseMediator);
         phase.playPhase(player1);
         int tanksAfter = mediator.getPlayerTank(player1);
         assertEquals(tanksBefore + 14, tanksAfter);
+    }
+
+    @Test
+    @DisplayName("Il giocatore non dispiega nessun tank.")
+    void testNoTankDeployed() {
+        IPlayer player1 = players.getFirst();
+        IMediatorRisikoNew phaseMediator = spy(mediator);
+
+        ReinforcePhase phase = new ReinforcePhase(phaseMediator);
+        phase.playPhase(player1);
     }
 }
 

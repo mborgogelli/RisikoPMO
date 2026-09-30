@@ -2,33 +2,34 @@ package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
+import it.uniurb.pmo.framework.turn.command.DeployCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
+import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
+import it.uniurb.pmo.framework.turn.event.DeployRequestEvent;
+import it.uniurb.pmo.framework.turn.event.PhaseResult;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class ReinforcePhase implements IPhase {
 
-	private IPlayer player;
+	private boolean isCompleted;
 	private final IMediatorRisikoNew mediator;
-	private final IGameCoordinatorRisikoNew coordinator;
+	private IPlayer player;
 	private List<String> playerTerritories;
-	private Optional<List<ITerritoryCard>> tris;
 
-	public ReinforcePhase(IMediatorRisikoNew mediator, IGameCoordinatorRisikoNew coordinator) {
+	public ReinforcePhase(IMediatorRisikoNew mediator) {
 		this.mediator = mediator;
-		this.coordinator = coordinator;
-
+		this.isCompleted = false;
 	}
 
 	@Override
@@ -36,30 +37,48 @@ public class ReinforcePhase implements IPhase {
 		this.clearPhase();
 		this.player = player;
 		this.playerTerritories = this.mediator.getZonesOwnedBy(player);
-		int reinforcementsFromTerritories = this.reinforceByTerritories();
-		int reinforcementsFromContinents = this.reinforceByContinentBonus();
-		int reinforcementsFromCards = this.reinforceByCards();
-		int reinforcements = reinforcementsFromTerritories + reinforcementsFromContinents + reinforcementsFromCards;
-		this.mediator.reinforcePlayer(this.player, reinforcements);
-		DeployChoiceRisikoNewDTO response = (DeployChoiceRisikoNewDTO) this.coordinator.sendDeployRequest(new DeployRequestRisikoNewDTO(player.getName(), player.getColor(), this.playerTerritories, reinforcements));
-		response.deployment().forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
-		return null;
+		this.reinforcePlayer();
+		return new DeployRequestEvent(this.deployRequest());
 	}
 
 	@Override
 	public void clearPhase() {
 		this.player = null;
 		this.playerTerritories = null;
+		this.isCompleted = false;
 	}
 
 	@Override
 	public IPhaseResult handleCommand(IGameCommand command) {
-		return null;
+		if (this.isValidCommand(command)){
+			DeployCommand deployCommand = (DeployCommand) command;
+			this.isCompleted = true;
+			this.deployTanks(deployCommand.deployment());
+			return new PhaseResult(this.isCompleted, Optional.empty());
+		} else {
+			throw new IllegalArgumentException("Not valid command.");
+		}
 	}
 
 	@Override
 	public boolean isValidCommand(IGameCommand command) {
-		return false;
+		if(this.player == null) {
+			throw new IllegalArgumentException("Player is null.");
+		}
+
+		boolean valid = command instanceof DeployCommand;
+		if (valid) {
+			DeployCommand deployCommand = (DeployCommand) command;
+
+			valid = deployCommand.deployment().values().stream()
+						.allMatch(tanks -> tanks != null && tanks > 0)
+					&& deployCommand.deployment().keySet().stream()
+						.allMatch(playerTerritories::contains)
+					&& deployCommand.deployment().values().stream()
+						.mapToInt(Integer::intValue)
+						.sum() <= mediator.getPlayerTank(player);
+		}
+		return valid;
 	}
 
 	private int reinforceByTerritories() {
@@ -76,11 +95,9 @@ public class ReinforcePhase implements IPhase {
 	}
 
 	private int reinforceByCards() {
-		this.tris = this.findBestCombination();
-		if (this.tris.isPresent()){
-			this.mediator.playTris(this.player, this.tris.get());
-		}
-		return this.tris.map(this::getTrisScore).orElse(0);
+		Optional<List<ITerritoryCard>> tris = this.findBestCombination();
+        tris.ifPresent(iTerritoryCards -> this.mediator.playTris(player, iTerritoryCards));
+		return tris.map(this::getTrisScore).orElse(0);
 	}
 
 	private Optional<List<ITerritoryCard>> findBestCombination() {
@@ -95,7 +112,7 @@ public class ReinforcePhase implements IPhase {
 
 	private int getTrisScore(List<ITerritoryCard> tris) {
 		List<ERisikoNewTerritorySymbols> symbols = tris.stream()
-				.map(card -> (card).symbol())
+				.map(ITerritoryCard::symbol)
 				.toList();
 		int value = 0;
 
@@ -135,7 +152,29 @@ public class ReinforcePhase implements IPhase {
 	private int addBonusForTerritoryOwnership(List<ITerritoryCard> tris) {
 		return Math.toIntExact(tris.stream()
                 .filter(card -> card.symbol() != ERisikoNewTerritorySymbols.JOLLY)
-                .filter(card -> mediator.getTerritoriesOwnedBy(this.player).contains(card.territoryName()))
+                .filter(card -> mediator.getTerritoriesOwnedBy(player).contains(card.territoryName()))
                 .count() * 2);
 	}
+
+	private void reinforcePlayer(){
+		int reinforcementsFromTerritories = this.reinforceByTerritories();
+		int reinforcementsFromContinents = this.reinforceByContinentBonus();
+		int reinforcementsFromCards = this.reinforceByCards();
+		int reinforcements = reinforcementsFromTerritories + reinforcementsFromContinents + reinforcementsFromCards;
+		this.mediator.reinforcePlayer(player, reinforcements);
+	}
+
+	private IDeployRequestDTO deployRequest() {
+		int tanks = this.mediator.getPlayerTank(this.player);
+		if (tanks > 0) {
+			return new DeployRequestRisikoNewDTO(this.player, this.playerTerritories, tanks);
+		} else {
+			throw new RuntimeException("Not enough tanks to deploy.");
+		}
+	}
+
+	private void deployTanks(Map<String, Integer> targetZones) {
+		targetZones.forEach((zone, tanks) -> this.mediator.deployTank(this.player, zone, tanks));
+	}
+
 }
