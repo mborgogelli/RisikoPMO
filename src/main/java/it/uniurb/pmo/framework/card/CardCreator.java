@@ -24,6 +24,13 @@ public abstract class CardCreator implements ICardCreator {
      * @return List<ICard<T, TCardContent>> Il mazzo di carte del gioco
      */
     public List<ICard> getDeck(ICardType cardType) {
+    	if (!isValidCardType(cardType)) {
+			throw new IllegalArgumentException("Invalid card type: " + cardType);
+		}
 		return createDeck(cardType);
 	}
+    
+    protected boolean isValidCardType(ICardType cardType) {
+        return cardType != null;
+    }
 }
