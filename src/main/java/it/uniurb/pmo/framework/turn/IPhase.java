@@ -2,8 +2,8 @@ package it.uniurb.pmo.framework.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
+import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
-import it.uniurb.pmo.framework.turn.event.interfaces.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 
 public interface IPhase {

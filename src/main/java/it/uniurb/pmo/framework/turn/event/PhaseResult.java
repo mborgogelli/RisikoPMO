@@ -1,6 +1,6 @@
 package it.uniurb.pmo.framework.turn.event;
 
-import it.uniurb.pmo.framework.turn.event.interfaces.IGameState;
+import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 
 import java.util.Optional;

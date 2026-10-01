@@ -2,7 +2,7 @@ package it.uniurb.pmo.framework.turn.dto;
 
 import java.util.List;
 
-public interface IAttackRequestDTO extends IPlayerDataDTO {
+public interface IAttackRequestDTO extends IGameState {
 
     List<String> possibleTargets();
 

@@ -9,11 +9,15 @@ import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
+import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
 import it.uniurb.pmo.framework.turn.dto.PlayerStateDTO;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
 import it.uniurb.pmo.framework.turn.event.GameEvent;
-import it.uniurb.pmo.framework.turn.event.interfaces.*;
+import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
+import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventPublisher;
+import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventReceiver;
+import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 
 import java.util.*;
 import java.util.stream.Collectors;

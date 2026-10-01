@@ -36,7 +36,7 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
         this.assignAllTanksToZones(attacker);
 
         List<String> possibleTargetsByModel = this.getAllPossibleTargets(ownedZones);
-        CombatPhase combatPhase = new CombatPhase(mediator,phaseCoordinator);
+        CombatPhase combatPhase = new CombatPhase(mediator);
         combatPhase.playPhase(attacker);
 
         ArgumentCaptor<AttackRequestRisikoNewDTO> captor = ArgumentCaptor.forClass(AttackRequestRisikoNewDTO.class);
@@ -44,8 +44,8 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
 
         AttackRequestRisikoNewDTO request = captor.getValue();
 
-        assertEquals(attacker.getName(), request.playerName());
-        assertEquals(attacker.getColor(), request.playerColor());
+        assertEquals(attacker.getName(), request.player().getName());
+        assertEquals(attacker.getColor(), request.player().getColor());
         assertTrue(possibleTargetsByModel.size() == request.possibleTargets().size() &&
                    possibleTargetsByModel.containsAll(request.possibleTargets()));
         for(String target : possibleTargetsByModel){

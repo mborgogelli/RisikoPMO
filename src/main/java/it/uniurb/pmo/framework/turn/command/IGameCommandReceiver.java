@@ -1,7 +1,7 @@
 package it.uniurb.pmo.framework.turn.command;
 
+import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
-import it.uniurb.pmo.framework.turn.event.interfaces.IGameState;
 
 /**
  * Punto di ingresso dei comandi diretti alla logica di una partita.

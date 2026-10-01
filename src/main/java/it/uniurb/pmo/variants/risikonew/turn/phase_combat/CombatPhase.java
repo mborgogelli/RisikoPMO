@@ -4,12 +4,11 @@ import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.dto.IAttackChoiceDTO;
+import it.uniurb.pmo.framework.turn.dto.IAttackRequestDTO;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
-import it.uniurb.pmo.framework.turn.event.interfaces.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.AttackRequestRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,25 +19,22 @@ import java.util.stream.Stream;
 public class CombatPhase implements IPhase {
 
 	private final IMediatorRisikoNew mediator;
-	private final IGameCoordinatorRisikoNew coordinator;
+
+	private boolean isCompleted;
 	private IPlayer attacker;
 	private IPlayer defender;
 	private Map<String, List<String>> possibleTargets;
 
-	public CombatPhase(IMediatorRisikoNew mediator, IGameCoordinatorRisikoNew coordinator) {
+	public CombatPhase(IMediatorRisikoNew mediator) {
 		this.mediator = mediator;
-		this.coordinator = coordinator;
 		this.possibleTargets = new HashMap<>();
+		this.isCompleted = false;
 	}
 
 	@Override
-	public IGameEvent<? extends IGameState> playPhase(IPlayer player) {
+	public IGameEvent<IAttackRequestDTO> playPhase(IPlayer player) {
 		this.attacker = player;
 		this.acquirePlayerTargets(this.attacker);
-		Optional<IAttackChoiceDTO> choice = this.coordinator.sendAttackRequest(this.setAttackRequestDTO());
-		if (choice.isPresent()) {
-			this.attackPlayer(choice);
-		}
 		return null;
 	}
 
@@ -47,6 +43,7 @@ public class CombatPhase implements IPhase {
 		this.attacker = null;
 		this.defender = null;
 		this.possibleTargets = null;
+		this.isCompleted = false;
 	}
 
 	@Override
@@ -84,7 +81,7 @@ public class CombatPhase implements IPhase {
 	}
 
 	private AttackRequestRisikoNewDTO setAttackRequestDTO() {
-		return new AttackRequestRisikoNewDTO(this.attacker.getName(), this.attacker.getColor(), this.possibleTargets);
+		return new AttackRequestRisikoNewDTO(this.attacker, this.possibleTargets);
 	}
 
 

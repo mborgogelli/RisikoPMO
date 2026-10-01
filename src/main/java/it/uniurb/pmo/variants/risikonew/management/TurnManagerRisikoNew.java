@@ -56,7 +56,7 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	@Override
 	protected List<IPhase> createPhases() {
 		this.initMediatorAndCoordinator();
-		return List.of(new ReinforcePhase(mediator), new CombatPhase(mediator, coordinator), new StrategicPhase(mediator, coordinator));
+		return List.of(new ReinforcePhase(mediator), new CombatPhase(mediator), new StrategicPhase(mediator));
 	}
 
 	protected List<IPhase> createSetupPhases() {

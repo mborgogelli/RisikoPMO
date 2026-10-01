@@ -1,5 +1,6 @@
 package it.uniurb.pmo.framework.turn.event.interfaces;
 
+import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
 
 /**

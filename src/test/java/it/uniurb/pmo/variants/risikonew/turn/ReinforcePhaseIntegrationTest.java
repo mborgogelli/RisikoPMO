@@ -2,6 +2,8 @@ package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.turn.command.DeployCommand;
+import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.TerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -11,10 +13,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
@@ -132,10 +135,28 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
     @DisplayName("Il giocatore non dispiega nessun tank.")
     void testNoTankDeployed() {
         IPlayer player1 = players.getFirst();
-        IMediatorRisikoNew phaseMediator = spy(mediator);
 
-        ReinforcePhase phase = new ReinforcePhase(phaseMediator);
+        ReinforcePhase phase = new ReinforcePhase(mediator);
         phase.playPhase(player1);
+
+        DeployCommand deployCommand = new DeployCommand(new HashMap<>());
+        IPhaseResult result = phase.handleCommand(deployCommand);
+
+        assertTrue(result.isCompleted());
+        assertTrue(result.choiceRequired().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Gestione di un comando su una fase non avviata")
+    void testInvalidPlayer(){
+
+        ReinforcePhase phase = new ReinforcePhase(mediator);
+        DeployCommand deployCommand = new DeployCommand(new HashMap<>());
+
+        assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(deployCommand));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(deployCommand));
+        assertEquals("Player is null.", ex.getMessage());
+
     }
 }
 

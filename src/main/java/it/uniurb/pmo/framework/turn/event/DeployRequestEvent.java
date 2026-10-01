@@ -3,7 +3,7 @@ package it.uniurb.pmo.framework.turn.event;
 import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 
-public record DeployRequestEvent(IDeployRequestDTO state) implements IGameEvent<IDeployRequestDTO> {
+public record DeployRequestEvent(IDeployRequestDTO deployRequest) implements IGameEvent<IDeployRequestDTO> {
 
     @Override
     public EGameEventType getEventType() {
@@ -12,6 +12,6 @@ public record DeployRequestEvent(IDeployRequestDTO state) implements IGameEvent<
 
     @Override
     public IDeployRequestDTO getState() {
-        return state;
+        return deployRequest;
     }
 }
