@@ -100,6 +100,10 @@ public class Room implements IRoom {
 		return Collections.unmodifiableList(this.players);
 	}
 
+	/**
+	 * Rimuove un giocatore dalla stanza e restituisce il colore assegnato al giocatore rimosso.
+	 * @param playerName il nome del giocatore da rimuovere
+	 */
 	private void removePlayer(String playerName){
 		IPlayer p = this.getPlayer(playerName);
 		this.availableColors.add(p.getColor());
@@ -113,6 +117,10 @@ public class Room implements IRoom {
 		}
 	}
 
+	/**
+	 * Aggiunge un giocatore alla stanza e assegna un colore casuale al giocatore.
+	 * @param playerName il nome del giocatore da aggiungere
+	 */
 	private void addPlayer(String playerName){
 		this.players.add(new Player(playerName));
 		this.getPlayer(playerName).setColor(this.pickRandomColor());
@@ -124,6 +132,10 @@ public class Room implements IRoom {
 		}
 	}
 
+	/**
+	 * Seleziona un colore casuale dalla lista dei colori disponibili e lo rimuove dalla lista.
+	 * @return il colore selezionato
+	 */
 	private EColors pickRandomColor() {
 		int index = (int) (Math.random() * this.availableColors.size());
 		EColors color = this.availableColors.get(index);
@@ -131,6 +143,12 @@ public class Room implements IRoom {
 		return color;
 	}
 
+	/**
+	 * Restituisce il giocatore con il nome specificato.
+	 * @param playerName il nome del giocatore da cercare
+	 * @return il giocatore trovato
+	 * @throws NoSuchElementException se il giocatore non esiste nella stanza
+	 */
 	private IPlayer getPlayer(String playerName){
 		return this.players.stream()
 				.filter(p -> p.getName().equals(playerName))
