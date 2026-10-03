@@ -17,7 +17,7 @@ public interface ICardManager extends IManager{
 	/**
 	 * Gioca una carta
 	 *
-	 * @param player     il giocatore che riceve le carte
+	 * @param player     il giocatore che gioca la carta
 	 * @param cardToPlay la carta da giocare
 	 */
 	void playCard(IPlayer player, ICard cardToPlay);

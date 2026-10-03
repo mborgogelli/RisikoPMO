@@ -86,6 +86,9 @@ public abstract class AbstractCardManager implements ICardManager {
 	 * @param cards
 	 */
 	protected  void shuffleCards(List<ICard> cards){
+		if (cards == null) {
+			throw new IllegalArgumentException("Deck is null");
+		}
 		Collections.shuffle(cards);
 	}
 
