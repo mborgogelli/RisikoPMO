@@ -14,7 +14,7 @@ public class RoomResponseDTO {
 
     private final String roomId;
     private final Map<String, EColors> players;
-    private final Map<String, Boolean> readyStates;
+    private final Map<String, Boolean> readyStates; // Stato di prontezza dei giocatori
     private final String gameVersion;
     private final int currentPlayers;
     private final int maxPlayers;

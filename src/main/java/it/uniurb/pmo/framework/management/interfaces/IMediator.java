@@ -60,6 +60,11 @@ public interface IMediator extends IGameConductor {
 	 */
 	boolean canMoveBetween(IPlayer player, String toZone, String fromZone);
 
+	/**
+	 * Restituisce le zone confinanti di una zona.
+	 * @param zone la zona
+	 * @return le zone confinanti
+	 */
 	List<String> getNeighboursOf(String zone);
 
 	/**
@@ -80,15 +85,37 @@ public interface IMediator extends IGameConductor {
 	 * Restituisce tutte le combinazioni di k carte possedute da un giocatore.
 	 * @param playerCards le carte possedute dal giocatore
 	 * @param k il numero di carte da combinare
-	 * @return un flusso di liste di carte
+	 * @return uno stream (flusso) di liste di carte
 	 */
 	<T extends ICard> Stream<List<T>> getCombinationsOf(List<T> playerCards, int k);
 
+	/**
+	 * Restituisce il numero di token di un certo tipo in una zona.
+	 * @param zone la zona
+	 * @param tokenType il tipo di token
+	 * @return il numero di token di quel tipo nella zona
+	 */
 	int getZoneTokenByType(String zone, ITokenType tokenType);
 
+	/**
+	 * Restituisce la mappa dei token presenti in una zona.
+	 * @param zone la zona
+	 * @return una mappa che associa ogni tipo di token al numero di token presenti nella zona
+	 */
 	Map<ITokenType, Integer> getZoneTokens(String zone);
 
+	/**
+	 * Restituisce la mappa dei token posseduti da un giocatore.
+	 * @param player il giocatore
+	 * @return una mappa che associa ogni tipo di token al numero di token posseduti dal giocatore
+	 */
 	Map<ITokenType,Integer> getTokensOwnedBy(IPlayer player);
 
+	/**
+	 * Metodo di rinforzo per un giocatore con un certo numero di token di un certo tipo.
+	 * @param player il giocatore da rinforzare
+	 * @param tokenType il tipo di token
+	 * @param reinforcements il numero di token da aggiungere
+	 */
 	void reinforcePlayer(IPlayer player, ITokenType tokenType, int reinforcements);
 }

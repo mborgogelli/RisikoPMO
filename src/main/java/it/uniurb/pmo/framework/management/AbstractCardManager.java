@@ -29,7 +29,10 @@ public abstract class AbstractCardManager implements ICardManager {
 	 */
 	@Override
 	public <T extends ICard> Stream<List<T>> getCombinationsOf(List<T> playerCards, int k) {
-
+		if (playerCards == null) {
+		    throw new IllegalArgumentException("Player cards list is null");
+		}
+		
 		// caso base
 		if (k <= 0 || k > playerCards.size()) {
 			return Stream.empty();
@@ -83,6 +86,9 @@ public abstract class AbstractCardManager implements ICardManager {
 	 * @param cards
 	 */
 	protected  void shuffleCards(List<ICard> cards){
+		if (cards == null) {
+			throw new IllegalArgumentException("Deck is null");
+		}
 		Collections.shuffle(cards);
 	}
 
