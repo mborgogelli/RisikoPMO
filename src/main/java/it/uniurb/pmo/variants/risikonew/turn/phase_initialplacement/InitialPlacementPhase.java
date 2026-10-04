@@ -11,6 +11,7 @@ import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
 
 import java.util.List;
 import java.util.Map;
@@ -24,10 +25,15 @@ public class InitialPlacementPhase implements IPhase {
 	private boolean isCompleted;
     private final IMediatorRisikoNew mediator;
 
-    public InitialPlacementPhase(IMediatorRisikoNew mediator) {
+	public InitialPlacementPhase(IMediatorRisikoNew mediator) {
 		this.mediator = mediator;
 		this.isCompleted = false;
     }
+
+	@Override
+	public ERisikoNewPhase getPhaseType() {
+		return ERisikoNewPhase.INITIAL_PLACEMENT;
+	}
 
 
 	@Override

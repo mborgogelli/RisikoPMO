@@ -1,7 +1,10 @@
 package it.uniurb.pmo.framework.turn.event.interfaces;
 
 import it.uniurb.pmo.framework.turn.dto.IGameState;
+import it.uniurb.pmo.framework.turn.IPhaseType;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
+
+import java.util.Optional;
 
 /**
  * Un evento di gioco è caratterizzato da un tipo di evento e uno stato di gioco.
@@ -11,6 +14,10 @@ import it.uniurb.pmo.framework.turn.event.EGameEventType;
 public interface IGameEvent<E extends IGameState> {
 
     EGameEventType getEventType();
+
+    default Optional<IPhaseType> getPhaseType() {
+        return Optional.empty();
+    }
 
     E getState();
 

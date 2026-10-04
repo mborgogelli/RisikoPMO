@@ -9,6 +9,7 @@ import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.AttackRequestRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,11 @@ public class CombatPhase implements IPhase {
 		this.mediator = mediator;
 		this.possibleTargets = new HashMap<>();
 		this.isCompleted = false;
+	}
+
+	@Override
+	public ERisikoNewPhase getPhaseType() {
+		return ERisikoNewPhase.ATTACK;
 	}
 
 	@Override

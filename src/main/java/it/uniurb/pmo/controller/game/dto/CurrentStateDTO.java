@@ -1,168 +1,51 @@
 package it.uniurb.pmo.controller.game.dto;
 
+import it.uniurb.pmo.framework.turn.event.EGameEventType;
 import it.uniurb.pmo.framework.utils.EColors;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class CurrentStateDTO {
-    private final String currentPlayerName;
-    private final EColors currentPlayerColor;
-    private final String nextPlayerName;
-    private final EColors nextPlayerColor;
-    private final Map<EColors, String> players;
-    private final Map<String, Map<String, Integer>> deployedTokensByTerritory;
-    private final Map<String, Integer> availableTokens;
-    private final Map<String, List<String>> playerTerritories;
-    private final Integer currentPhaseId;
-    private final Integer currentStepId;
-    private final Integer nextPhaseId;
-    private final Integer nextStepId;
+/**
+ * Stato della partita proiettato per il client web.
+ */
+public record CurrentStateDTO(
+        String roomId,
+        EGameEventType eventType,
+        String phaseId,
+        String currentPlayerName,
+        EColors currentPlayerColor,
+        Map<String, PlayerStateDTO> players,
+        PendingActionDTO pendingAction) {
 
-    private CurrentStateDTO(Builder builder) {
-        this.currentPlayerName = builder.currentPlayerName;
-        this.currentPlayerColor = builder.currentPlayerColor;
-        this.nextPlayerName = builder.nextPlayerName;
-        this.nextPlayerColor = builder.nextPlayerColor;
-        this.players = builder.players;
-        this.deployedTokensByTerritory = builder.deployedTokensByTerritory;
-        this.availableTokens = builder.availableTokens;
-        this.playerTerritories = builder.playerTerritories;
-        this.currentPhaseId = builder.currentPhaseId;
-        this.currentStepId = builder.currentStepId;
-        this.nextPhaseId = builder.nextPhaseId;
-        this.nextStepId = builder.nextStepId;
+    public CurrentStateDTO {
+        players = Map.copyOf(players);
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
+    public record PlayerStateDTO(
+            EColors color,
+            String turnStatus,
+            Map<String, Map<String, Integer>> deployedTokensByTerritory,
+            Map<String, Integer> availableTokens) {
 
-    public String getCurrentPlayerName() {
-        return currentPlayerName;
-    }
-
-    public EColors getCurrentPlayerColor() {
-        return currentPlayerColor;
-    }
-
-    public String getNextPlayerName() {
-        return nextPlayerName;
-    }
-
-    public EColors getNextPlayerColor() {
-        return nextPlayerColor;
-    }
-
-    public Map<EColors, String> getPlayers() {
-        return players;
-    }
-
-    public Map<String, Map<String, Integer>> getDeployedTokensByTerritory() {
-        return deployedTokensByTerritory;
-    }
-
-    public Map<String, Integer> getAvailableTokens() {
-        return availableTokens;
-    }
-
-    public Map<String, List<String>> getPlayerTerritories() {
-        return playerTerritories;
-    }
-
-    public Integer getCurrentPhaseId() {
-        return currentPhaseId;
-    }
-
-    public Integer getCurrentStepId() {
-        return currentStepId;
-    }
-
-    public Integer getNextPhaseId() {
-        return nextPhaseId;
-    }
-
-    public Integer getNextStepId() {
-        return nextStepId;
-    }
-
-    public static class Builder {
-
-        private String currentPlayerName;
-        private EColors currentPlayerColor;
-        private String nextPlayerName;
-        private EColors nextPlayerColor;
-        private Map<EColors, String> players;
-        private Map<String, Map<String, Integer>> deployedTokensByTerritory;
-        private Map<String, Integer> availableTokens;
-        private Map<String, List<String>> playerTerritories;
-        private Integer currentPhaseId;
-        private Integer currentStepId;
-        private Integer nextPhaseId;
-        private Integer nextStepId;
-
-        public Builder currentPlayerName(String currentPlayerName) {
-            this.currentPlayerName = currentPlayerName;
-            return this;
+        public PlayerStateDTO {
+            deployedTokensByTerritory = deployedTokensByTerritory.entrySet().stream()
+                    .collect(Collectors.toUnmodifiableMap(
+                            Map.Entry::getKey,
+                            entry -> Map.copyOf(entry.getValue())));
+            availableTokens = Map.copyOf(availableTokens);
         }
+    }
 
-        public Builder currentPlayerColor(EColors currentPlayerColor) {
-            this.currentPlayerColor = currentPlayerColor;
-            return this;
-        }
+    public record PendingActionDTO(
+            String type,
+            List<String> deployableTerritories,
+            Map<String, Integer> tokensToDeploy) {
 
-        public Builder nextPlayerName(String nextPlayerName) {
-            this.nextPlayerName = nextPlayerName;
-            return this;
-        }
-
-        public Builder nextPlayerColor(EColors nextPlayerColor) {
-            this.nextPlayerColor = nextPlayerColor;
-            return this;
-        }
-
-        public Builder players(Map<EColors, String> players) {
-            this.players = players;
-            return this;
-        }
-
-        public Builder deployedTokensByTerritory(Map<String, Map<String, Integer>> deployedTokensByTerritory) {
-            this.deployedTokensByTerritory = deployedTokensByTerritory;
-            return this;
-        }
-
-        public Builder availableTokens(Map<String, Integer> availableTokens) {
-            this.availableTokens = availableTokens;
-            return this;
-        }
-
-        public Builder playerTerritories(Map<String, List<String>> playerTerritories) {
-            this.playerTerritories = playerTerritories;
-            return this;
-        }
-
-        public Builder currentPhaseId(Integer currentPhaseId) {
-            this.currentPhaseId = currentPhaseId;
-            return this;
-        }
-
-        public Builder currentStepId(Integer currentStepId) {
-            this.currentStepId = currentStepId;
-            return this;
-        }
-
-        public Builder nextPhaseId(Integer nextPhaseId) {
-            this.nextPhaseId = nextPhaseId;
-            return this;
-        }
-
-        public Builder nextStepId(Integer nextStepId) {
-            this.nextStepId = nextStepId;
-            return this;
-        }
-
-        public CurrentStateDTO build() {
-            return new CurrentStateDTO(this);
+        public PendingActionDTO {
+            deployableTerritories = List.copyOf(deployableTerritories);
+            tokensToDeploy = Map.copyOf(tokensToDeploy);
         }
     }
 }

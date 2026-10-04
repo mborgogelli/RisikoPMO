@@ -13,7 +13,8 @@ import java.util.Optional;
 
 public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
 
-    private IGameEvent lastGameEvent;
+    private volatile IGameEvent<? extends IGameState> lastGameEvent;
+    private volatile GameSnapshotDTO latestGameSnapshot;
     private List<IGameCommandReceiver> commandReceivers;
 
     public GameCoordinatorRisikoNew() {
@@ -21,7 +22,10 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
     }
 
     @Override
-    public void onGameEvent(IGameEvent event) {
+    public void onGameEvent(IGameEvent<? extends IGameState> event) {
+        if (event.getState() instanceof GameSnapshotDTO snapshot) {
+            this.latestGameSnapshot = snapshot;
+        }
         this.lastGameEvent = event;
     }
 
@@ -29,8 +33,14 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
      * Restituisce l'ultimo aggiornamento ricevuto dal TurnManager.
      * Sara' usato dal controller per esporre lo stato della partita.
      */
-    public IGameEvent getLastGameEvent() {
-        return this.lastGameEvent;
+    @Override
+    public Optional<IGameEvent<? extends IGameState>> getLastGameEvent() {
+        return Optional.ofNullable(this.lastGameEvent);
+    }
+
+    @Override
+    public Optional<GameSnapshotDTO> getLatestGameSnapshot() {
+        return Optional.ofNullable(this.latestGameSnapshot);
     }
 
 

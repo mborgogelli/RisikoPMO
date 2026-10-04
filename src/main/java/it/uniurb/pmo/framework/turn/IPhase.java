@@ -7,6 +7,8 @@ import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 
 public interface IPhase {
+
+	IPhaseType getPhaseType();
 	
 	IGameEvent<? extends IGameState> playPhase(IPlayer player);
 

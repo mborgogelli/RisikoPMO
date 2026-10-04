@@ -13,6 +13,7 @@ import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
 
 import java.util.Comparator;
 import java.util.List;
@@ -29,6 +30,11 @@ public class ReinforcePhase implements IPhase {
 	public ReinforcePhase(IMediatorRisikoNew mediator) {
 		this.mediator = mediator;
 		this.isCompleted = false;
+	}
+
+	@Override
+	public ERisikoNewPhase getPhaseType() {
+		return ERisikoNewPhase.REINFORCE;
 	}
 
 	@Override

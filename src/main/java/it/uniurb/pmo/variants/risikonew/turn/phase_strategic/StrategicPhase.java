@@ -6,6 +6,7 @@ import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
 
 import java.util.List;
 
@@ -16,6 +17,11 @@ public class StrategicPhase implements IStrategicPhase {
 
 	public StrategicPhase(IMediatorRisikoNew mediator) {
 		this.mediator = mediator;
+	}
+
+	@Override
+	public ERisikoNewPhase getPhaseType() {
+		return ERisikoNewPhase.STRATEGIC;
 	}
 
 	@Override
