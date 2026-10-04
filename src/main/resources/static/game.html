@@ -3,48 +3,109 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RISIKO Online — Partita</title>
+  <title>Risiko New — Partita</title>
   <link rel="stylesheet" href="game.css" />
 </head>
 <body>
-  <div class="game-layout" role="main">
-    <header class="game-header">
-      <h1>RISIKO Online — Partita</h1>
-      <div class="game-meta">
-        <span>Stanza: <strong id="roomIdLabel">-</strong></span>
-        <span>Giocatore: <strong id="playerNameLabel">-</strong></span>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <div>
+          <p class="eyebrow">RISIKO NEW</p>
+          <h1>La partita</h1>
+        </div>
+      </div>
+      <div class="session-meta">
+        <div><span>Stanza</span><strong id="roomIdLabel">—</strong></div>
+        <div><span>Tu giochi come</span><strong id="playerNameLabel">—</strong></div>
+        <div id="connectionStatus" class="connection-status" role="status">
+          <span class="connection-dot" aria-hidden="true"></span>
+          <span id="connectionLabel">Connessione in corso</span>
+        </div>
       </div>
     </header>
 
-    <section class="main-panel" aria-label="Mappa e eventi di gioco">
-      <div class="map-wrapper">
-        <img src="images/risikonew_board.svg" alt="Mappa Risiko New" class="board-map" />
-      </div>
-      <div class="events-panel">
-        <h2>Eventi di gioco</h2>
-        <div id="eventsList" class="events-list" aria-live="polite">
-          <p>In attesa degli eventi della partita...</p>
+    <main class="game-grid">
+      <section class="board-panel panel" aria-labelledby="mapTitle">
+        <div class="panel-heading board-heading">
+          <div>
+            <p class="eyebrow">IL MONDO</p>
+            <h2 id="mapTitle">Mappa e territori</h2>
+          </div>
+          <div id="mapSummary" class="map-summary">Caricamento mappa…</div>
         </div>
-      </div>
-    </section>
 
-    <aside class="phase-panel" aria-label="Fase corrente">
-      <h2>Fase corrente</h2>
-      <p id="phaseName">Preparazione</p>
-      <p id="phaseInstruction">Attendi l'inizio del turno per eseguire le azioni richieste.</p>
-    </aside>
+        <div class="board-visual">
+          <div id="boardMap" class="board-map" role="img" aria-label="Mappa del mondo di Risiko New"></div>
+          <div class="map-key">
+            <span class="key-dot key-owned"></span> Territorio occupato
+            <span class="key-dot key-selectable"></span> Selezionabile
+          </div>
+        </div>
 
-    <aside class="stats-panel" aria-label="Statistiche">
-      <h2>Statistiche</h2>
-      <div class="stats-grid">
-        <div class="stat-item"><span>Territori</span><strong id="statTerritories">0</strong></div>
-        <div class="stat-item"><span>Truppe</span><strong id="statTroops">0</strong></div>
-        <div class="stat-item"><span>Carte</span><strong id="statCards">0</strong></div>
-      </div>
-    </aside>
+        <div id="territoryGroups" class="territory-groups" aria-live="polite">
+          <p class="empty-state">Caricamento dei territori…</p>
+        </div>
+      </section>
+
+      <aside class="game-sidebar">
+        <section class="phase-panel panel" aria-labelledby="phaseTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">STATO DELLA PARTITA</p>
+              <h2 id="phaseTitle">Fase corrente</h2>
+            </div>
+            <span id="eventBadge" class="event-badge">IN ATTESA</span>
+          </div>
+          <p id="phaseName" class="phase-name">Preparazione</p>
+          <p id="phaseInstruction" class="muted-copy">Sto recuperando lo stato della partita.</p>
+          <div id="currentPlayerBanner" class="current-player-banner" hidden></div>
+        </section>
+
+        <section class="players-panel panel" aria-labelledby="playersTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">AL TAVOLO</p>
+              <h2 id="playersTitle">Giocatori</h2>
+            </div>
+            <span id="playersCount" class="count-pill">0</span>
+          </div>
+          <div id="playersList" class="players-list">
+            <p class="empty-state">In attesa dei giocatori…</p>
+          </div>
+        </section>
+
+        <section id="actionPanel" class="action-panel panel" aria-labelledby="actionTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">LA TUA MOSSA</p>
+              <h2 id="actionTitle">Piazzamento iniziale</h2>
+            </div>
+            <span id="deploymentBudget" class="budget-pill">0 / 0</span>
+          </div>
+          <p id="actionInstruction" class="muted-copy action-instruction">Quando è il tuo turno potrai scegliere dove schierare i carri.</p>
+          <div class="budget-track" aria-hidden="true"><span id="budgetFill"></span></div>
+          <div id="selectionList" class="selection-list">
+            <p class="empty-state">Nessun carro selezionato.</p>
+          </div>
+          <p id="actionError" class="action-error" role="alert" hidden></p>
+          <button id="submitDeployment" class="primary-button" type="button" disabled>Conferma piazzamento</button>
+        </section>
+
+        <section class="log-panel panel" aria-labelledby="logTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">ULTIMO AGGIORNAMENTO</p>
+              <h2 id="logTitle">Cronologia</h2>
+            </div>
+          </div>
+          <p id="latestEvent" class="muted-copy">La partita non è ancora iniziata.</p>
+        </section>
+      </aside>
+    </main>
   </div>
 
   <script src="game.js"></script>
 </body>
 </html>
-

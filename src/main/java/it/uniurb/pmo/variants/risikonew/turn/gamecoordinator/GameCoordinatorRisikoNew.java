@@ -6,10 +6,10 @@ import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
 
@@ -18,7 +18,7 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
     private List<IGameCommandReceiver> commandReceivers;
 
     public GameCoordinatorRisikoNew() {
-        this.commandReceivers = new ArrayList<>();
+        this.commandReceivers = new CopyOnWriteArrayList<>();
     }
 
     @Override
@@ -75,6 +75,18 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
 
     @Override
     public void submitCommand(IGameCommand command) {
+        if (command == null) {
+            throw new IllegalArgumentException("Game command is required");
+        }
+        if (this.commandReceivers.size() != 1) {
+            throw new IllegalStateException("Exactly one game command receiver must be registered");
+        }
 
+        IGameCommandReceiver receiver = this.commandReceivers.getFirst();
+        if (receiver.isValidCommand(command)) {
+            receiver.handleCommand(command);
+        } else {
+            throw new IllegalArgumentException("Not valid command.");
+        }
     }
 }

@@ -23,6 +23,7 @@ public class InitialPlacementPhase implements IPhase {
 
 	private IPlayer player;
 	private boolean isCompleted;
+    private int maxTanksToDeploy;
     private final IMediatorRisikoNew mediator;
 
 	public InitialPlacementPhase(IMediatorRisikoNew mediator) {
@@ -38,6 +39,7 @@ public class InitialPlacementPhase implements IPhase {
 
 	@Override
 	public IGameEvent<IDeployRequestDTO> playPhase(IPlayer player) {
+		this.clearPhase();
 		this.player = player;
 		return new DeployRequestEvent(this.deployRequest());
 	}
@@ -46,6 +48,7 @@ public class InitialPlacementPhase implements IPhase {
 	public void clearPhase() {
 		this.player = null;
 		this.isCompleted = false;
+        this.maxTanksToDeploy = 0;
 	}
 
 	@Override
@@ -79,7 +82,7 @@ public class InitialPlacementPhase implements IPhase {
 						.allMatch(playerTerritories::contains)
 					&& deployCommand.deployment().values().stream()
 						.mapToInt(Integer::intValue)
-						.sum() <= MAX_DEPLOYABLE;
+						.sum() <= this.maxTanksToDeploy;
 		}
 		return valid;
 	}
@@ -91,9 +94,9 @@ public class InitialPlacementPhase implements IPhase {
 	private DeployRequestRisikoNewDTO deployRequest() {
 		int remaining = this.mediator.getPlayerTank(this.player);
 		if (remaining > 0) {
-			int tanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
+            this.maxTanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
             List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
-			return new DeployRequestRisikoNewDTO(player, deployableZones, tanksToDeploy);
+			return new DeployRequestRisikoNewDTO(player, deployableZones, this.maxTanksToDeploy);
 		} else {
 			throw new RuntimeException("Not enough tanks to deploy.");
 		}

@@ -19,7 +19,6 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	IMediatorRisikoNew mediator;
 	IGameCoordinatorRisikoNew coordinator;
 
-	//TODO dove passa a true?
 	private boolean isReady;
 
 	public TurnManagerRisikoNew(IGameCoordinatorRisikoNew gameCoordinator) {
@@ -31,6 +30,12 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	@Override
 	public Boolean isReady() {
 		return this.isReady;
+	}
+
+	@Override
+	public void initializeGame(List<IPlayer> players) {
+		super.initializeGame(players);
+		this.isReady = true;
 	}
 
 	@Override
