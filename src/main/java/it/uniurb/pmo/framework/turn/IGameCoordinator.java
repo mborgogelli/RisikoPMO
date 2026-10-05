@@ -1,12 +1,7 @@
 package it.uniurb.pmo.framework.turn;
 
 import it.uniurb.pmo.framework.turn.command.IGameCommandPublisher;
-import it.uniurb.pmo.framework.turn.dto.IAttackChoiceDTO;
-import it.uniurb.pmo.framework.turn.dto.IAttackRequestDTO;
-import it.uniurb.pmo.framework.turn.dto.IDeployChoiceDTO;
-import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
-import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
-import it.uniurb.pmo.framework.turn.dto.IGameState;
+import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventReceiver;
 
@@ -30,7 +25,7 @@ public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublis
 
     Optional<IAttackChoiceDTO> sendAttackRequest(IAttackRequestDTO request);
 
-    Optional<IGameEvent<? extends IGameState>> getLastGameEvent();
+    Optional<IGameEvent<? extends IGameState>> lastGameEvent();
 
     Optional<GameSnapshotDTO> getLatestGameSnapshot();
 

@@ -34,7 +34,7 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
      * Sara' usato dal controller per esporre lo stato della partita.
      */
     @Override
-    public Optional<IGameEvent<? extends IGameState>> getLastGameEvent() {
+    public Optional<IGameEvent<? extends IGameState>> lastGameEvent() {
         return Optional.ofNullable(this.lastGameEvent);
     }
 

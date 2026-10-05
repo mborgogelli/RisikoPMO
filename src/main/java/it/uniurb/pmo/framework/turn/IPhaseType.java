@@ -8,5 +8,5 @@ public interface IPhaseType {
     /**
      * Codice stabile da esporre nei messaggi destinati ai client.
      */
-    String code();
+    String phaseCode();
 }

@@ -23,7 +23,7 @@ public enum ERisikoNewPhase implements IPhaseType {
     }
 
 	@Override
-	public String code() {
+	public String phaseCode() {
 		return this.code;
 	}
 

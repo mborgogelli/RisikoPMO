@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const updatedState = await requestJson(`/api/game/${encodeURIComponent(roomId)}/deploy`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerName, deployment: deploymentSelection })
+        body: JSON.stringify({ playerName, tokenType: deploymentTokenType(), deployment: deploymentSelection })
       });
       deploymentSelection = {};
       currentState = updatedState;
@@ -380,6 +380,11 @@ document.addEventListener('DOMContentLoaded', () => {
       renderDeployment();
       renderTerritories();
     }
+  }
+
+  function deploymentTokenType() {
+    const tokenNames = Object.keys(currentState.pendingAction?.tokensToDeploy || {});
+    return tokenNames.length === 1 ? tokenNames[0] : null;
   }
 
   function renderLatestEvent() {

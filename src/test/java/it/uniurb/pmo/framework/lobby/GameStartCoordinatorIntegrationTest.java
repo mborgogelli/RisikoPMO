@@ -1,13 +1,10 @@
 package it.uniurb.pmo.framework.lobby;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import it.uniurb.pmo.framework.utils.EGameVersion;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import it.uniurb.pmo.framework.utils.EGameVersion;
+import static org.junit.jupiter.api.Assertions.*;
 
 class GameStartCoordinatorTest {
 
@@ -48,7 +45,6 @@ class GameStartCoordinatorTest {
         this.roomId = this.roomManager.createRoom("Alice", 3, EGameVersion.RISIKONEW);
         this.roomManager.enterRoom(this.roomId, "Bob");
         this.roomManager.enterRoom(this.roomId, "Charlie");
-
         new GameStartCoordinator(gameSessions).startGame(this.roomId);
 
         assertTrue(gameSessions.getGameCoordinator(this.roomId).isPresent());

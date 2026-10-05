@@ -6,23 +6,16 @@ import it.uniurb.pmo.framework.lobby.GameSessionRegistry;
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.framework.turn.IPhaseType;
-import it.uniurb.pmo.framework.turn.command.DeployCommand;
-import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
-import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
-import it.uniurb.pmo.framework.turn.dto.IGameState;
-import it.uniurb.pmo.framework.turn.dto.IPlayerDataDTO;
-import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
+import it.uniurb.pmo.framework.turn.command.IDeployCommand;
+import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.utils.EColors;
+import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Objects;
@@ -44,7 +37,7 @@ public class GameController {
         Optional<IGameCoordinator> coordinator = this.gameSessions.getGameCoordinator(roomId);
         ResponseEntity<CurrentStateDTO> response;
         if (coordinator.isPresent()) {
-            Optional<IGameEvent<? extends IGameState>> event = coordinator.get().getLastGameEvent();
+            Optional<IGameEvent<? extends IGameState>> event = coordinator.get().lastGameEvent();
             if (event.isPresent()) {
                 response = ResponseEntity.ok(this.toCurrentState(roomId, coordinator.get(), event.get()));
             } else {
@@ -63,7 +56,7 @@ public class GameController {
         if (coordinator.isEmpty()) {
             response = ResponseEntity.notFound().build();
         } else {
-            Optional<IGameEvent<? extends IGameState>> currentEvent = coordinator.get().getLastGameEvent();
+            Optional<IGameEvent<? extends IGameState>> currentEvent = coordinator.get().lastGameEvent();
             if (currentEvent.isEmpty()) {
                 response = ResponseEntity.notFound().build();
             } else if (!(currentEvent.get().getState() instanceof IDeployRequestDTO)) {
@@ -94,7 +87,7 @@ public class GameController {
             currentPlayerColor = playerData.playerColor();
         }
 
-        String phaseId = event.getPhaseType().map(IPhaseType::code).orElse(null);
+        String phaseId = event.getPhaseType().map(IPhaseType::phaseCode).orElse(null);
         CurrentStateDTO.PendingActionDTO pendingAction = null;
         if (event.getState() instanceof IDeployRequestDTO deployRequest) {
             pendingAction = new CurrentStateDTO.PendingActionDTO(
@@ -136,11 +129,16 @@ public class GameController {
         boolean valid = request != null
                 && request.playerName() != null
                 && !request.playerName().isBlank()
+                && request.tokenType() != null
+                && !request.tokenType().isBlank()
                 && request.deployment() != null
                 && !request.deployment().isEmpty();
         if (valid) {
             valid = request.deployment().entrySet().stream()
-                    .allMatch(entry -> entry.getKey() != null && entry.getValue() != null && entry.getValue() > 0);
+                    .allMatch(entry -> entry.getKey() != null
+                            && !entry.getKey().isBlank()
+                            && entry.getValue() != null
+                            && entry.getValue() > 0);
         }
         return valid;
     }
@@ -150,8 +148,8 @@ public class GameController {
                                                DeployCommandRequestDTO request) {
         ResponseEntity<?> response;
         try {
-            coordinator.submitCommand(new DeployCommand(request.deployment()));
-            Optional<IGameEvent<? extends IGameState>> updatedEvent = coordinator.getLastGameEvent();
+            coordinator.submitCommand(this.toDeployCommand(request));
+            Optional<IGameEvent<? extends IGameState>> updatedEvent = coordinator.lastGameEvent();
             if (updatedEvent.isPresent()) {
                 response = ResponseEntity.ok(this.toCurrentState(roomId, coordinator, updatedEvent.get()));
             } else {
@@ -163,5 +161,16 @@ public class GameController {
             response = ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", ex.getMessage()));
         }
         return response;
+    }
+
+    private IDeployCommand<ERisikoNewToken> toDeployCommand(DeployCommandRequestDTO request) {
+        return new DeployCommandRisikoNew(this.toRisikoNewToken(request.tokenType()), request.deployment());
+    }
+
+    private ERisikoNewToken toRisikoNewToken(String tokenName) {
+        return java.util.Arrays.stream(ERisikoNewToken.values())
+                .filter(token -> token.name().equals(tokenName) || token.getName().equals(tokenName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unknown token type: " + tokenName));
     }
 }

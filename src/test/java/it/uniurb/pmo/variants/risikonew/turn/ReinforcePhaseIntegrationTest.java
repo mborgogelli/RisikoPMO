@@ -2,19 +2,20 @@ package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.turn.command.DeployCommand;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.TerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_reinforce.ReinforcePhase;
+import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -139,7 +140,7 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
         ReinforcePhase phase = new ReinforcePhase(mediator);
         phase.playPhase(player1);
 
-        DeployCommand deployCommand = new DeployCommand(new HashMap<>());
+        DeployCommandRisikoNew deployCommand = new DeployCommandRisikoNew(ERisikoNewToken.TANK, Map.of());
         IPhaseResult result = phase.handleCommand(deployCommand);
 
         assertTrue(result.isCompleted());
@@ -151,7 +152,7 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
     void testInvalidPlayer(){
 
         ReinforcePhase phase = new ReinforcePhase(mediator);
-        DeployCommand deployCommand = new DeployCommand(new HashMap<>());
+        DeployCommandRisikoNew deployCommand = new DeployCommandRisikoNew(ERisikoNewToken.TANK, Map.of());
 
         assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(deployCommand));
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(deployCommand));
@@ -159,5 +160,3 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
 
     }
 }
-
-

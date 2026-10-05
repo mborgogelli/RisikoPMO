@@ -3,8 +3,10 @@ package it.uniurb.pmo.variants.risikonew.turn.phase_combat;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
+import it.uniurb.pmo.framework.turn.command.attackCommand;
 import it.uniurb.pmo.framework.turn.dto.IAttackChoiceDTO;
 import it.uniurb.pmo.framework.turn.dto.IAttackRequestDTO;
+import it.uniurb.pmo.framework.turn.event.AttackRequestEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -20,7 +22,7 @@ import java.util.stream.Stream;
 public class CombatPhase implements IPhase {
 
 	private final IMediatorRisikoNew mediator;
-
+	private final ERisikoNewPhase phaseType;
 	private boolean isCompleted;
 	private IPlayer attacker;
 	private IPlayer defender;
@@ -30,18 +32,19 @@ public class CombatPhase implements IPhase {
 		this.mediator = mediator;
 		this.possibleTargets = new HashMap<>();
 		this.isCompleted = false;
+		this.phaseType = ERisikoNewPhase.ATTACK;
 	}
 
 	@Override
 	public ERisikoNewPhase getPhaseType() {
-		return ERisikoNewPhase.ATTACK;
+		return this.phaseType;
 	}
 
 	@Override
 	public IGameEvent<IAttackRequestDTO> playPhase(IPlayer player) {
 		this.attacker = player;
 		this.acquirePlayerTargets(this.attacker);
-		return null;
+		return new AttackRequestEvent(this.attackRequestDTO());
 	}
 
 	@Override
@@ -59,7 +62,11 @@ public class CombatPhase implements IPhase {
 
 	@Override
 	public boolean isValidCommand(IGameCommand command) {
-		return false;
+		if(this.attacker == null) {
+			throw new IllegalArgumentException("Player is null.");
+		}
+
+		return command instanceof attackCommand;
 	}
 
 	private void acquirePlayerTargets (IPlayer attacker){
@@ -86,7 +93,7 @@ public class CombatPhase implements IPhase {
 	private void attackPlayer(Optional<IAttackChoiceDTO> choice) {
 	}
 
-	private AttackRequestRisikoNewDTO setAttackRequestDTO() {
+	private IAttackRequestDTO attackRequestDTO() {
 		return new AttackRequestRisikoNewDTO(this.attacker, this.possibleTargets);
 	}
 

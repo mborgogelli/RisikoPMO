@@ -1,8 +1,8 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.turn.command.DeployCommand;
 import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
+import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.framework.utils.EColors;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
@@ -61,7 +61,8 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
 
         InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
         DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).getState();
-        DeployCommand command = new DeployCommand(Map.of("Zone A", 2, "Zone B", 1));
+        DeployCommandRisikoNew command = new DeployCommandRisikoNew(ERisikoNewToken.TANK,
+                Map.of("Zone A", 2, "Zone B", 1));
 
         List<String> deployableZones = request.deployableZones();
         List<String> deployedChoice = command.deployment().keySet().stream().toList();
@@ -86,7 +87,8 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
 
         InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
         DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).getState();
-        DeployCommand command = new DeployCommand(Map.of(request.deployableZones().getFirst(), 2,
+        DeployCommandRisikoNew command = new DeployCommandRisikoNew(ERisikoNewToken.TANK, Map.of(
+                request.deployableZones().getFirst(), 2,
                 request.deployableZones().getLast(), 2));
 
         List<String> deployableZones = request.deployableZones();
@@ -104,6 +106,17 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(command));
         assertEquals("Not valid command.", ex.getMessage());
 
+    }
+
+    @Test
+    @DisplayName("Reject a deployment command without a token type")
+    void testDeployCommandWithoutTokenType() {
+        InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
+        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).getState();
+        DeployCommandRisikoNew command = new DeployCommandRisikoNew(null,
+                Map.of(request.deployableZones().getFirst(), 1));
+
+        assertFalse(phase.isValidCommand(command));
     }
 
     @Test
@@ -126,8 +139,11 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         String lastZone = deployableZones.getLast();
         int currentTanksOnLastZone = this.mediator.getZoneTank(lastZone);
 
-        DeployCommand command = new DeployCommand(Map.of(request.deployableZones().getFirst(), 1,
-                                                         request.deployableZones().getLast(), 2));
+        DeployCommandRisikoNew command = new DeployCommandRisikoNew(ERisikoNewToken.TANK, Map.of(
+                request.deployableZones().getFirst(), 1,
+                request.deployableZones().getLast(), 2));
+
+        assertEquals(ERisikoNewToken.TANK, command.tokenType());
 
         // Verifica che il comando sia valido
         assertTrue(phase.isValidCommand(command));

@@ -1,16 +1,12 @@
 package it.uniurb.pmo.framework.turn.event;
 
-import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.IPhaseType;
+import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 
 import java.util.Optional;
 
 public record GameEvent<E extends IGameState>(EGameEventType type, IPhaseType phaseType, E state) implements IGameEvent<E> {
-
-    public GameEvent(EGameEventType type, E state) {
-        this(type, null, state);
-    }
 
     @Override
     public EGameEventType getEventType() {

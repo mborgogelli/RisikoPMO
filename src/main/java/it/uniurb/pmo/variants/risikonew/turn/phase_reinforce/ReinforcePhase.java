@@ -2,7 +2,6 @@ package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
-import it.uniurb.pmo.framework.turn.command.DeployCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
 import it.uniurb.pmo.framework.turn.event.DeployRequestEvent;
@@ -12,8 +11,10 @@ import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
 import java.util.Comparator;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 public class ReinforcePhase implements IPhase {
 
+	private final ERisikoNewPhase phaseType;
 	private boolean isCompleted;
 	private final IMediatorRisikoNew mediator;
 	private IPlayer player;
@@ -30,11 +32,12 @@ public class ReinforcePhase implements IPhase {
 	public ReinforcePhase(IMediatorRisikoNew mediator) {
 		this.mediator = mediator;
 		this.isCompleted = false;
+		this.phaseType = ERisikoNewPhase.REINFORCE;
 	}
 
 	@Override
 	public ERisikoNewPhase getPhaseType() {
-		return ERisikoNewPhase.REINFORCE;
+		return this.phaseType;
 	}
 
 	@Override
@@ -56,7 +59,7 @@ public class ReinforcePhase implements IPhase {
 	@Override
 	public IPhaseResult handleCommand(IGameCommand command) {
 		if (this.isValidCommand(command)){
-			DeployCommand deployCommand = (DeployCommand) command;
+			DeployCommandRisikoNew deployCommand = (DeployCommandRisikoNew) command;
 			this.isCompleted = true;
 			this.deployTanks(deployCommand.deployment());
 			return new PhaseResult(this.isCompleted, Optional.empty());
@@ -71,12 +74,12 @@ public class ReinforcePhase implements IPhase {
 			throw new IllegalArgumentException("Player is null.");
 		}
 
-		boolean valid = command instanceof DeployCommand;
+		boolean valid = command instanceof DeployCommandRisikoNew;
 		if (valid) {
-			DeployCommand deployCommand = (DeployCommand) command;
+			DeployCommandRisikoNew deployCommand = (DeployCommandRisikoNew) command;
 
-			valid = deployCommand.deployment().values().stream()
-						.allMatch(tanks -> tanks != null && tanks > 0)
+			valid = deployCommand.tokenType() == ERisikoNewToken.TANK
+					&& deployCommand.deployment().values().stream().allMatch(tanks -> tanks > 0)
 					&& deployCommand.deployment().keySet().stream()
 						.allMatch(playerTerritories::contains)
 					&& deployCommand.deployment().values().stream()

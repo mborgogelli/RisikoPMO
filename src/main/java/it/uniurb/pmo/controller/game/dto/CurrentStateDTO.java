@@ -38,6 +38,7 @@ public record CurrentStateDTO(
         }
     }
 
+    // TODO Valutare un record separato per PendingActionDTO
     public record PendingActionDTO(
             String type,
             List<String> deployableTerritories,
