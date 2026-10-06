@@ -1,7 +1,8 @@
 package it.uniurb.pmo.framework.turn;
 
 import it.uniurb.pmo.framework.turn.command.IGameCommandPublisher;
-import it.uniurb.pmo.framework.turn.dto.*;
+import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
+import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventReceiver;
 
@@ -14,16 +15,6 @@ import java.util.Optional;
  * alla variante di gioco concreta.
  */
 public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublisher {
-
-    /**
-     * Chiede al giocatore dove distribuire un certo tipo di token disponibili.
-     *
-     * @param request il DTO contenente le informazioni sulla distribuzione
-     * @return la scelta di distribuzione del giocatore
-     */
-    IDeployChoiceDTO sendDeployRequest(IDeployRequestDTO request);
-
-    Optional<IAttackChoiceDTO> sendAttackRequest(IAttackRequestDTO request);
 
     Optional<IGameEvent<? extends IGameState>> lastGameEvent();
 

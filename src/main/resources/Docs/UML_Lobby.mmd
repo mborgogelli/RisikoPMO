@@ -1,0 +1,71 @@
+classDiagram
+    class RoomController {
+        -IRoomManager roomManager
+        -GameStartCoordinator gameStartCoordinator
+        +createRoom(CreateRoomDTO) ResponseEntity
+        +joinRoom(String roomId, PlayerDTO) ResponseEntity
+        +startGame(String roomId) ResponseEntity
+    }
+
+    class IRoomManager {
+        <>
+        +createRoom(String name, IPlayer host, int maxPlayers, EGameVersion v) IRoom
+        +joinRoom(String roomId, IPlayer player) IRoom
+        +getRoom(String roomId) IRoom
+        +removeRoom(String roomId) void
+    }
+
+    class RoomManager {
+        -Map~String, IRoom~ rooms
+        +createRoom(...) IRoom
+        +joinRoom(...) IRoom
+        +getRoom(...) IRoom
+    }
+
+    class IRoom {
+        <>
+        +getId() String
+        +addPlayer(IPlayer player) boolean
+        +canStart() boolean
+        +startGame() void
+        +getStatus() ERoomStatus
+    }
+
+    class Room {
+        -String id
+        -IPlayer hostPlayer
+        -List~IPlayer~ players
+        -int maxPlayers
+        -ERoomStatus status
+        +addPlayer(IPlayer player) boolean
+        +canStart() boolean
+        +startGame() void
+    }
+
+    class GameStartCoordinator {
+        -IRoomManager roomManager
+        -GameSessionRegistry sessionRegistry
+        +startGame(String roomId) GameStartResult
+    }
+
+    class GameSessionRegistry {
+        -Map~String, IGameCoordinator~ activeSessions
+        +registerSession(String roomId, IGameCoordinator coordinator) void
+        +getCoordinator(String roomId) IGameCoordinator
+        +removeSession(String roomId) void
+    }
+
+    class IGameCoordinator {
+        <>
+        +handleCommand(IGameCommand cmd) void
+        +getCurrentState() IGameState
+    }
+
+    RoomController --> IRoomManager
+    RoomController --> GameStartCoordinator
+    RoomManager ..|> IRoomManager
+    RoomManager o-- IRoom : gestisce
+    Room ..|> IRoom
+    GameStartCoordinator --> IRoomManager
+    GameStartCoordinator --> GameSessionRegistry
+    GameSessionRegistry o-- IGameCoordinator : mappa roomId -> Coordinatore

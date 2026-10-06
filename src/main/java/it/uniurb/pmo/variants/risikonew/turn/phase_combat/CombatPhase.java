@@ -3,15 +3,16 @@ package it.uniurb.pmo.variants.risikonew.turn.phase_combat;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
-import it.uniurb.pmo.framework.turn.command.attackCommand;
 import it.uniurb.pmo.framework.turn.dto.IAttackChoiceDTO;
 import it.uniurb.pmo.framework.turn.dto.IAttackRequestDTO;
 import it.uniurb.pmo.framework.turn.event.AttackRequestEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.command.AttackCommandRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.AttackRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
 import java.util.HashMap;
 import java.util.List;
@@ -65,8 +66,16 @@ public class CombatPhase implements IPhase {
 		if(this.attacker == null) {
 			throw new IllegalArgumentException("Player is null.");
 		}
-
-		return command instanceof attackCommand;
+		boolean valid = false;
+		if (command instanceof AttackCommandRisikoNew attackCommand) {
+			valid = attackCommand.tokenType() == ERisikoNewToken.TANK
+					&& this.possibleTargets.keySet().contains(attackCommand.attackerZone())
+					&& this.possibleTargets.get(attackCommand.attackerZone()).contains(attackCommand.defenderZone())
+					&& this.mediator.getZoneTank(attackCommand.attackerZone()) >= attackCommand.tanks()
+					&& attackCommand.numberOfDice() > 0
+					&& attackCommand.numberOfDice() <= 3;
+		}
+		return valid;
 	}
 
 	private void acquirePlayerTargets (IPlayer attacker){

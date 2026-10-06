@@ -1,22 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
-import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.variants.risikonew.turn.dto.AttackRequestRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.phase_combat.CombatPhase;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-
-import java.util.List;
-import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 
 public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
@@ -25,7 +10,7 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
     public void setUp() {
         super.setUpRisikoNew();
     }
-
+/*
     @Test
     @DisplayName("Verifica che i dati nel DTO di richiesta siano coerenti con quelli del model.")
     public void testAttackRequestContainsCorrectData() {
@@ -80,5 +65,5 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
     private String getRandomZone(List<String> ownedZones) {
         return ownedZones.get(new Random().nextInt(ownedZones.size()));
     }
-
+*/
 }

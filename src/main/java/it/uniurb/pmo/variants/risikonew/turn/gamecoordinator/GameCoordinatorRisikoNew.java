@@ -2,12 +2,13 @@ package it.uniurb.pmo.variants.risikonew.turn.gamecoordinator;
 
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
-import it.uniurb.pmo.framework.turn.dto.*;
+import it.uniurb.pmo.framework.turn.dto.FortifyChoiceDTO;
+import it.uniurb.pmo.framework.turn.dto.FortifyRequestDTO;
+import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
+import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
-import it.uniurb.pmo.variants.risikonew.turn.dto.DeployChoiceRisikoNewDTO;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -41,21 +42,6 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
     @Override
     public Optional<GameSnapshotDTO> getLatestGameSnapshot() {
         return Optional.ofNullable(this.latestGameSnapshot);
-    }
-
-
-    @Override
-    public IDeployChoiceDTO sendDeployRequest(IDeployRequestDTO request) {
-        if (request == null || request.deployableZones() == null || request.deployableZones().isEmpty()) {
-            return new DeployChoiceRisikoNewDTO(Map.of());
-        }
-        String targetZone = request.deployableZones().stream().sorted().findFirst().orElse(null);
-        return new DeployChoiceRisikoNewDTO(Map.of());
-    }
-
-    @Override
-    public Optional<IAttackChoiceDTO> sendAttackRequest(IAttackRequestDTO request) {
-        return Optional.empty();
     }
 
     @Override
