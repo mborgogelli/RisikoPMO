@@ -6,9 +6,7 @@ public interface IAttackCommand <T extends ITokenType> extends IGameCommand {
 
     T tokenType();
 
-    int tokenAmount();
-
-    int numberOfDice();
+    int attackerTokens();
 
     String attackerZone();
 

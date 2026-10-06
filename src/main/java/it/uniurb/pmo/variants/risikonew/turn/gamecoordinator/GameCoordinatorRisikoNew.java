@@ -2,8 +2,6 @@ package it.uniurb.pmo.variants.risikonew.turn.gamecoordinator;
 
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
-import it.uniurb.pmo.framework.turn.dto.FortifyChoiceDTO;
-import it.uniurb.pmo.framework.turn.dto.FortifyRequestDTO;
 import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
 import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
@@ -42,11 +40,6 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
     @Override
     public Optional<GameSnapshotDTO> getLatestGameSnapshot() {
         return Optional.ofNullable(this.latestGameSnapshot);
-    }
-
-    @Override
-    public FortifyChoiceDTO sendFortifyRequest(FortifyRequestDTO request) {
-        return new FortifyChoiceDTO(null, null, 0);
     }
 
     @Override

@@ -105,6 +105,13 @@ public interface IMediator extends IGameConductor {
 	Map<ITokenType, Integer> getZoneTokens(String zone);
 
 	/**
+	 * Restituisce il proprietario di una zona.
+	 * @param zone la zona
+	 * @return il proprietario della zona
+	 */
+	IPlayer getZoneOwner(String zone);
+
+	/**
 	 * Restituisce la mappa dei token posseduti da un giocatore.
 	 * @param player il giocatore
 	 * @return una mappa che associa ogni tipo di token al numero di token posseduti dal giocatore

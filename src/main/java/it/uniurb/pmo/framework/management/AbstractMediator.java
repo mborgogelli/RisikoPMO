@@ -2,6 +2,7 @@ package it.uniurb.pmo.framework.management;
 
 
 import it.uniurb.pmo.framework.management.interfaces.IManager;
+import it.uniurb.pmo.framework.management.interfaces.IMapManager;
 import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
 import it.uniurb.pmo.framework.players.IPlayer;
@@ -46,6 +47,11 @@ public abstract class AbstractMediator implements IMediator {
 	@Override
 	public Map<ITokenType, Integer> getZoneTokens(String zone) {
 		return this.resolveManager(ITokenManager.class).getZoneToken(zone);
+	}
+
+	@Override
+	public IPlayer getZoneOwner(String zone) {
+		return this.resolveManager(IMapManager.class).getOwner(zone);
 	}
 
 	@Override

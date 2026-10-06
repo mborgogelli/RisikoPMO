@@ -3,7 +3,7 @@ package it.uniurb.pmo.variants.risikonew.turn.command;
 import it.uniurb.pmo.framework.turn.command.IAttackCommand;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
-public record AttackCommandRisikoNew(String attackerZone, String defenderZone, int tanks, int numberOfDice) implements IAttackCommand<ERisikoNewToken> {
+public record AttackCommandRisikoNew(String attackerZone, String defenderZone, int tanks) implements IAttackCommand<ERisikoNewToken> {
 
     @Override
     public ERisikoNewToken tokenType() {
@@ -11,7 +11,7 @@ public record AttackCommandRisikoNew(String attackerZone, String defenderZone, i
     }
 
     @Override
-    public int tokenAmount() {
+    public int attackerTokens() {
         return tanks;
     }
 }
