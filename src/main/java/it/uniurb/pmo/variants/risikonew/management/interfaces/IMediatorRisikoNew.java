@@ -10,6 +10,16 @@ import java.util.stream.Stream;
 
 public interface IMediatorRisikoNew extends IMediator {
 
+    List<String> getCompletedContinents(IPlayer player);
+
+    int getPlayerTank(IPlayer player);
+
+    void deployTank(IPlayer player, String zone, int tanks);
+
+	Stream<List<ITerritoryCard>> getAvailableTris(IPlayer player);
+
+    void playTris(IPlayer player, List<? extends ITerritoryCard> cards);
+
     default List<String> getTerritoriesOwnedBy(IPlayer player){
         return this.getZonesOwnedBy(player);
     }
@@ -18,15 +28,9 @@ public interface IMediatorRisikoNew extends IMediator {
         return getAllZones();
     }
 
-    List<String> getCompletedContinents(IPlayer player);
-
-    int getPlayerTank(IPlayer player);
-
     default int getZoneTank(String zone){
         return this.getZoneTokenByType(zone, ERisikoNewToken.TANK);
     };
-
-    void deployTank(IPlayer player, String zone, int tanks);
 
     default int getContinentArmyBonus(String continent) {
         return getZoneValue(continent);
@@ -36,11 +40,20 @@ public interface IMediatorRisikoNew extends IMediator {
         return getZoneValue(territory);
     };
 
-	Stream<List<ITerritoryCard>> getAvailableTris(IPlayer player);
-
-    void playTris(IPlayer player, List<? extends ITerritoryCard> cards);
-
     default void reinforcePlayer(IPlayer player, int reinforcements) {
-        this.reinforcePlayer(player, ERisikoNewToken.TANK, reinforcements);
+        this.addTokens(player, ERisikoNewToken.TANK, reinforcements);
+    };
+
+    default void applyLosses(String zone, int losses) {
+        this.removeTokensFromZone(zone, ERisikoNewToken.TANK, losses);
+    };
+
+    default void conquerTerritory(String territory, IPlayer newOwner) {
+        this.changeZoneOwnership(territory,newOwner);
+    };
+
+    default void transferTokens(String fromZone, String toZone, int tokens) {
+        this.removeTokensFromZone(fromZone, ERisikoNewToken.TANK, tokens);
+        this.addTokensToZone(toZone, ERisikoNewToken.TANK, tokens);
     };
 }

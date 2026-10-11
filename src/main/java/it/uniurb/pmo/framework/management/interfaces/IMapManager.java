@@ -38,7 +38,7 @@ public interface IMapManager extends IManager {
 	/**
 	 * Restituisce il proprietario di un territorio.
 	 * 
-	 * @param territory il territorio
+	 * @param zone il territorio
 	 * @return il proprietario del territorio
 	 */
     IPlayer getOwner(String zone);

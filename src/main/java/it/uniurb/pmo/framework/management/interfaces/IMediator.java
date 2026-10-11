@@ -21,22 +21,36 @@ public interface IMediator extends IGameConductor {
 	 */
 	void registerManager(IManager manager);
 
-	void notifyWinner(IPlayer iPlayer);
-
-	/**
-	 * Verifica se un giocatore ha soddisfatto le condizioni di vittoria
-	 */
-	boolean checkVictory(IPlayer player);
-
 	/**
 	 * Inizializza tutti i manager registrati
 	 */
 	void initManagers();
 
 	/**
+	 * Verifica se un giocatore ha soddisfatto le condizioni di vittoria
+	 */
+	boolean checkVictory(IPlayer player);
+
+	void notifyWinner(IPlayer iPlayer);
+
+	/**
 	 * Restituisce tutte le zone di gioco.
 	 */
 	List<String> getAllZones();
+
+	/**
+	 * Restituisce le zone confinanti di una zona.
+	 * @param zone la zona
+	 * @return le zone confinanti
+	 */
+	List<String> getNeighboursOf(String zone);
+
+	/**
+	 * Restituisce il proprietario di una zona.
+	 * @param zone la zona
+	 * @return il proprietario della zona
+	 */
+	IPlayer getZoneOwner(String zone);
 
 	/**
 	 * Restituisce le zone possedute da un giocatore.
@@ -61,13 +75,6 @@ public interface IMediator extends IGameConductor {
 	boolean canMoveBetween(IPlayer player, String toZone, String fromZone);
 
 	/**
-	 * Restituisce le zone confinanti di una zona.
-	 * @param zone la zona
-	 * @return le zone confinanti
-	 */
-	List<String> getNeighboursOf(String zone);
-
-	/**
 	 * Restituisce le carte possedute da un giocatore.
 	 * @param player il giocatore
 	 * @param cardType il tipo di carta
@@ -80,7 +87,7 @@ public interface IMediator extends IGameConductor {
 	 * @param card la carta da giocare
 	 */
 	void playCard(IPlayer player, ICard card);
-	
+
 	/**
 	 * Restituisce tutte le combinazioni di k carte possedute da un giocatore.
 	 * @param playerCards le carte possedute dal giocatore
@@ -105,13 +112,6 @@ public interface IMediator extends IGameConductor {
 	Map<ITokenType, Integer> getZoneTokens(String zone);
 
 	/**
-	 * Restituisce il proprietario di una zona.
-	 * @param zone la zona
-	 * @return il proprietario della zona
-	 */
-	IPlayer getZoneOwner(String zone);
-
-	/**
 	 * Restituisce la mappa dei token posseduti da un giocatore.
 	 * @param player il giocatore
 	 * @return una mappa che associa ogni tipo di token al numero di token posseduti dal giocatore
@@ -119,10 +119,38 @@ public interface IMediator extends IGameConductor {
 	Map<ITokenType,Integer> getTokensOwnedBy(IPlayer player);
 
 	/**
+	 * Rimuove un certo numero di token di un certo tipo da un giocatore.
+	 * @param player il giocatore
+	 * @param tokenType il tipo di token
+	 * @param tokens il numero di token da rimuovere
+	 */
+	void removeTokens(IPlayer player, ITokenType tokenType, int tokens);
+
+	/**
 	 * Metodo di rinforzo per un giocatore con un certo numero di token di un certo tipo.
 	 * @param player il giocatore da rinforzare
 	 * @param tokenType il tipo di token
-	 * @param reinforcements il numero di token da aggiungere
+	 * @param tokens il numero di token da aggiungere
 	 */
-	void reinforcePlayer(IPlayer player, ITokenType tokenType, int reinforcements);
+	void addTokens(IPlayer player, ITokenType tokenType, int tokens);
+
+	void removeTokensFromZone(String zone, ITokenType tokenType, int tokens);
+
+	void addTokensToZone(String zone, ITokenType tokenType, int tokens);
+
+	/**
+	 * Trasferisce un certo numero di token di un certo tipo da una zona a un'altra.
+	 * @param fromZone la zona di provenienza
+	 * @param toZone la zona di destinazione
+	 * @param tokenType il tipo di token
+	 * @param tokens il numero di token da trasferire
+	 */
+	void transferTokens(String fromZone, String toZone, ITokenType tokenType, int tokens);
+
+	/**
+	 * Cambia il proprietario di una zona.
+	 * @param zone la zona da cambiare
+	 * @param newOwner il nuovo proprietario della zona
+	 */
+	void changeZoneOwnership(String zone, IPlayer newOwner);
 }

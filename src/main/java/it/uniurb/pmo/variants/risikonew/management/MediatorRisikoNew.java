@@ -21,8 +21,37 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	private ITankManager tankManager;
 	private ITurnManagerRisikoNew turnManager;
 	private IDirector director;
-	
-	
+
+
+	@Override
+	public void initManagers() {
+		this.mapManager = super.resolveManager(MapManagerRisikoNew.class);
+		this.tankManager = super.resolveManager(TankManager.class);
+		this.cardManager = super.resolveManager(CardManagerRisikoNew.class);
+		this.turnManager = super.resolveManager(TurnManagerRisikoNew.class);
+	}
+
+	@Override
+	public void startGame() {
+		this.turnManager.startGame();
+	}
+
+	@Override
+	public void stopGame() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void resetGame() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void notifyWinner(IPlayer player) {
+		this.director.declareWinner(player);
+	}
+
 	@Override
 	public List<String> getAllZones() {
 		return mapManager.getAllZones();
@@ -54,11 +83,6 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
-	public void notifyWinner(IPlayer player) {
-		this.director.declareWinner(player);
-	}
-
-	@Override
 	public List<ICard> getPlayerCardsByType(IPlayer player, ICardType cardType) {
 		return List.of();
 	}
@@ -66,31 +90,6 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	@Override
 	public void playCard(IPlayer player, ICard card) {
 		this.cardManager.playCard(player, card);
-	}
-
-	@Override
-	public void initManagers() {
-		this.mapManager = super.resolveManager(MapManagerRisikoNew.class);
-		this.tankManager = super.resolveManager(TankManager.class);
-		this.cardManager = super.resolveManager(CardManagerRisikoNew.class);
-		this.turnManager = super.resolveManager(TurnManagerRisikoNew.class);
-	}
-
-	@Override
-	public void startGame() {
-		this.turnManager.startGame();
-	}
-
-	@Override
-	public void stopGame() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resetGame() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -109,6 +108,11 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
+	public void removeTokens(IPlayer player, ITokenType tokenType, int tokens) {
+		this.tankManager.removeTank(player, tokens);
+	}
+
+	@Override
 	public void deployTank(IPlayer player, String zone, int tanks) {
 		this.tankManager.deployTank(player, zone, tanks);
 	}
@@ -119,8 +123,28 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
-	public void reinforcePlayer(IPlayer player, ITokenType tokenType, int reinforcements) {
+	public void addTokens(IPlayer player, ITokenType tokenType, int reinforcements) {
 		this.tankManager.assignTank(player, reinforcements);
+	}
+
+	@Override
+	public void removeTokensFromZone(String zone, ITokenType tokenType, int tokens) {
+
+	}
+
+	@Override
+	public void addTokensToZone(String zone, ITokenType tokenType, int tokens) {
+
+	}
+
+	@Override
+	public void transferTokens(String fromZone, String toZone, ITokenType tokenType, int tokens) {
+
+	}
+
+	@Override
+	public void changeZoneOwnership(String zone, IPlayer newOwner) {
+
 	}
 
 	@Override
@@ -132,5 +156,7 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	public void playTris(IPlayer player, List<? extends ITerritoryCard> cards) {
 		this.cardManager.playTris(player, cards);
 	}
+
+
 
 }
