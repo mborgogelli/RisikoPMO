@@ -30,14 +30,14 @@ public class CombatPhase implements IPhase {
 	private boolean isCompleted;
 
 	private IPlayer attacker;
-	String attackerTerritory;
-	int attackerTanks;
+	private String attackerTerritory;
+	private int attackerTanks;
 	private int attackerLosses;
 	private Map<String, List<String>> possibleTargets;
 
 	private IPlayer defender;
-	String defenderTerritory;
-	int defenderTanks;
+	private String defenderTerritory;
+	private int defenderTanks;
 	private int defenderLosses;
 
 	public CombatPhase(IMediatorRisikoNew mediator) {
@@ -55,7 +55,11 @@ public class CombatPhase implements IPhase {
 	@Override
 	public IGameEvent<IAttackRequestDTO> playPhase(IPlayer player) {
 		this.attacker = player;
-		this.acquirePlayerTargets(this.attacker);
+		this.acquirePlayerTargets();
+		if(this.possibleTargets.isEmpty()){
+			this.isCompleted = true;
+			return new AttackRequestEvent(this.attackRequestDTO());
+		}
 		return new AttackRequestEvent(this.attackRequestDTO());
 	}
 
@@ -78,6 +82,7 @@ public class CombatPhase implements IPhase {
 	@Override
 	public IPhaseResult handleCommand(IGameCommand command) {
 		if (command instanceof PassCommand) {
+			this.isCompleted = true;
 			return new PhaseResult(true, Optional.empty());
 		} else {
 			boolean valid = this.isValidCommand(command);
@@ -90,10 +95,10 @@ public class CombatPhase implements IPhase {
 			}
 			if (valid && command instanceof DefendCommandRisikoNew(int tanks)) {
 				this.defenderTanks = tanks;
-				return new PhaseResult(true, Optional.ofNullable(this.combatResultDTO()));
+				return new PhaseResult(true, Optional.of(this.combatResultDTO()));
 			}
 		}
-		return null;
+		throw new IllegalArgumentException("Invalid command.");
 	}
 
 	@Override
@@ -112,7 +117,7 @@ public class CombatPhase implements IPhase {
 		return valid;
 	}
 
-	private void acquirePlayerTargets (IPlayer attacker){
+	private void acquirePlayerTargets (){
 		List<String> ownedZones = this.mediator.getTerritoriesOwnedBy(this.attacker);
 		 this.getAllPossibleTargets(ownedZones)
 				.forEach(target -> this.possibleTargets.put(target, this.getStartingZones(target, ownedZones)));
@@ -128,7 +133,7 @@ public class CombatPhase implements IPhase {
 
 	private List<String> getStartingZones(String target, List<String> ownedZones) {
 		return this.mediator.getNeighboursOf(target).stream()
-				.filter(neighbour -> ownedZones.contains(neighbour))
+				.filter(ownedZones::contains)
 				.filter(territory -> this.mediator.getZoneTank(territory) > 1)
 				.toList();
 	}
@@ -189,17 +194,17 @@ public class CombatPhase implements IPhase {
 		this.mediator.applyLosses(this.attackerTerritory, attackerLosses);
 		this.mediator.applyLosses(this.defenderTerritory, defenderLosses);
 
+		// In caso di vittoria dell'attaccante le armate restanti nell'ultimo scontro devono occupare il territorio conquistato
 		boolean defenderIsDefeated = this.mediator.getZoneTank(this.defenderTerritory) == 0;
 		if (defenderIsDefeated) {
-			this.occupyTerritory();
-
+			int attackerRemainingTanks = this.attackerTanks - attackerLosses;
+			this.mediator.occupyTerritoryWithTanks(this.attacker, this.attackerTerritory, this.defenderTerritory, attackerRemainingTanks);
 		}
-		return null;
+		return new CombatResultRisikoNewDTO(this.attackerTerritory,this.defenderTerritory,
+											attackRolls,defenseRolls,
+											attackerLosses,defenderLosses,
+											defenderIsDefeated);
 
 	}
 
-	private void occupyTerritory() {
-		this.mediator.conquerTerritory(this.defenderTerritory, this.attacker);
-		this.mediator.transferTokens(this.attackerTerritory, this.defenderTerritory, this.attackerTanks);
-	}
 }
