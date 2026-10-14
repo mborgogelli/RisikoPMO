@@ -5,9 +5,9 @@ import it.uniurb.pmo.framework.turn.dto.IGameState;
 import java.util.Optional;
 
 /**
- * Esito dell'elaborazione di un comando da parte di una fase.
+ * Esito prodotto da una fase all'avvio o dopo l'elaborazione di un comando.
  */
-public interface IPhaseResult {
+public interface IPhaseResult<S extends IGameState> {
 
     /**
      * Indica se la fase è stata completata.
@@ -15,7 +15,7 @@ public interface IPhaseResult {
     boolean isCompleted();
 
     /**
-     * Evento opzionale prodotto dalla fase, ad esempio una nuova scelta richiesta.
+     * Stato opzionale da presentare al client; la fase non crea eventi di gioco.
      */
-    Optional<? extends IGameState> choiceRequired();
+    Optional<S> state();
 }

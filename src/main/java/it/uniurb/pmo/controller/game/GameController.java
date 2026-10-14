@@ -93,11 +93,24 @@ public class GameController {
             pendingAction = new CurrentStateDTO.PendingActionDTO(
                     "DEPLOY",
                     deployRequest.deployableZones(),
-                    this.toTokenMap(deployRequest.tokenToDeploy()));
+                    this.toTokenMap(deployRequest.tokenToDeploy()),
+                    java.util.List.of(),
+                    Map.of());
+        } else if (event.getState() instanceof IAttackRequestDTO attackRequest
+                && !attackRequest.possibleTargets().isEmpty()) {
+            Map<String, java.util.List<String>> startingZones = attackRequest.possibleTargets().stream()
+                    .collect(Collectors.toUnmodifiableMap(
+                            target -> target,
+                            attackRequest::possibleStartingZones));
+            pendingAction = new CurrentStateDTO.PendingActionDTO(
+                    "ATTACK", java.util.List.of(), Map.of(),
+                    attackRequest.possibleTargets(), startingZones);
         }
 
         EGameEventType eventType = event.getEventType();
-        return new CurrentStateDTO(roomId, eventType, phaseId, currentPlayerName, currentPlayerColor, players, pendingAction);
+        ICombatResultDTO combatResult = event.getState() instanceof ICombatResultDTO result ? result : null;
+        return new CurrentStateDTO(roomId, eventType, phaseId, currentPlayerName, currentPlayerColor,
+                players, pendingAction, combatResult);
     }
 
     private CurrentStateDTO.PlayerStateDTO toPlayerState(IPlayerStateDTO playerState) {

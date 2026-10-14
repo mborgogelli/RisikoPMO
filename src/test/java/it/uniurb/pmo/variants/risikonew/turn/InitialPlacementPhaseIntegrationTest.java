@@ -2,9 +2,9 @@ package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
-import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.framework.utils.EColors;
+import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
@@ -44,7 +44,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         RuntimeException ex = assertThrows(RuntimeException.class, () -> phase.playPhase(this.players.getFirst()));
         assertEquals("Not enough tanks to deploy.", ex.getMessage());
 
-        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getLast()).getState();
+        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getLast()).state().orElseThrow();
 
         // Verifica che i dati della request siano coerenti con i dati attesi
         assertNotNull(request);
@@ -60,7 +60,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     void testDeployCommandWithWrongZones() {
 
         InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
-        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).getState();
+        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).state().orElseThrow();
         DeployCommandRisikoNew command = new DeployCommandRisikoNew(ERisikoNewToken.TANK,
                 Map.of("Zone A", 2, "Zone B", 1));
 
@@ -86,7 +86,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     void testDeployCommandWithWrongTanksNumber() {
 
         InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
-        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).getState();
+        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).state().orElseThrow();
         DeployCommandRisikoNew command = new DeployCommandRisikoNew(ERisikoNewToken.TANK, Map.of(
                 request.deployableZones().getFirst(), 2,
                 request.deployableZones().getLast(), 2));
@@ -112,7 +112,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     @DisplayName("Reject a deployment command without a token type")
     void testDeployCommandWithoutTokenType() {
         InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
-        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).getState();
+        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).state().orElseThrow();
         DeployCommandRisikoNew command = new DeployCommandRisikoNew(null,
                 Map.of(request.deployableZones().getFirst(), 1));
 
@@ -120,7 +120,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     }
 
     @Test
-    @DisplayName("Verify Player choiceRequired after command execution")
+    @DisplayName("Verify Player state after command execution")
     void testPlayerStateAfterCommandExecution() {
 
         IPlayer currentPlayer = this.players.getFirst();
@@ -129,7 +129,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         int tanksOwned = this.mediator.getPlayerTank(currentPlayer);
 
         InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
-        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(currentPlayer).getState();
+        DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(currentPlayer).state().orElseThrow();
 
         List<String> deployableZones = request.deployableZones();
 

@@ -1,6 +1,7 @@
 package it.uniurb.pmo.controller.game.dto;
 
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
+import it.uniurb.pmo.framework.turn.dto.ICombatResultDTO;
 import it.uniurb.pmo.framework.utils.EColors;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public record CurrentStateDTO(
         String currentPlayerName,
         EColors currentPlayerColor,
         Map<String, PlayerStateDTO> players,
-        PendingActionDTO pendingAction) {
+        PendingActionDTO pendingAction,
+        ICombatResultDTO combatResult) {
 
     public CurrentStateDTO {
         players = Map.copyOf(players);
@@ -42,11 +44,16 @@ public record CurrentStateDTO(
     public record PendingActionDTO(
             String type,
             List<String> deployableTerritories,
-            Map<String, Integer> tokensToDeploy) {
+            Map<String, Integer> tokensToDeploy,
+            List<String> possibleTargets,
+            Map<String, List<String>> possibleStartingZones) {
 
         public PendingActionDTO {
             deployableTerritories = List.copyOf(deployableTerritories);
             tokensToDeploy = Map.copyOf(tokensToDeploy);
+            possibleTargets = List.copyOf(possibleTargets);
+            possibleStartingZones = possibleStartingZones.entrySet().stream()
+                    .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, entry -> List.copyOf(entry.getValue())));
         }
     }
 }

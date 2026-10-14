@@ -3,10 +3,8 @@ package it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
-import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
-import it.uniurb.pmo.framework.turn.event.DeployRequestEvent;
+import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.PhaseResult;
-import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
@@ -41,10 +39,10 @@ public class InitialPlacementPhase implements IPhase {
 
 
 	@Override
-	public IGameEvent<IDeployRequestDTO> playPhase(IPlayer player) {
+	public IPhaseResult<? extends IGameState> playPhase(IPlayer player) {
 		this.clearPhase();
 		this.player = player;
-		return new DeployRequestEvent(this.deployRequest());
+		return new PhaseResult<>(false, Optional.of(this.deployRequest()));
 	}
 
     @Override
@@ -55,12 +53,12 @@ public class InitialPlacementPhase implements IPhase {
 	}
 
 	@Override
-	public IPhaseResult handleCommand(IGameCommand command) {
+	public IPhaseResult<IGameState> handleCommand(IGameCommand command) {
 		if (this.isValidCommand(command)){
 			this.isCompleted = true;
 			DeployCommandRisikoNew deployCommand = (DeployCommandRisikoNew) command;
 			this.deployTanks(deployCommand.deployment());
-			return new PhaseResult(this.isCompleted, Optional.empty());
+			return new PhaseResult<>(this.isCompleted, Optional.empty());
 		} else {
 			throw new IllegalArgumentException("Not valid command.");
 		}

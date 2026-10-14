@@ -10,6 +10,7 @@ import it.uniurb.pmo.framework.turn.IPhaseType;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
+import it.uniurb.pmo.framework.turn.dto.ICombatResultDTO;
 import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
 import it.uniurb.pmo.framework.turn.dto.PlayerStateDTO;
@@ -151,8 +152,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	@Override
 	public void startPhase(IPhase currentPhase){
 		this.currentPhase = currentPhase;
-		IGameEvent<? extends IGameState> event = currentPhase.playPhase(this.currentPlayer);
-		this.publish(this.withCurrentPhase(event));
+		this.processPhaseResult(currentPhase.playPhase(this.currentPlayer));
 	}
 
 	@Override
@@ -189,23 +189,8 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 
 	@Override
 	public IGameEvent<? extends IGameState> handleCommand(IGameCommand command) {
-		IPhaseResult result = this.currentPhase.handleCommand(command);
-		IGameEvent<? extends IGameState> event = null;
-
-		if (result.isCompleted()) {
-			event = updateEvent(EGameEventType.PHASE_COMPLETED);
-		} else if (result.choiceRequired().isPresent()) {
-			event = new GameEvent<>(EGameEventType.CHOICE_REQUIRED,
-					this.currentPhase.getPhaseType(), result.choiceRequired().get());
-		}
-
-		this.publish(event);
-
-		if (result.isCompleted()) {
-			this.advanceAfterCompletedPhase();
-		}
-
-		return event;
+		IPhaseResult<? extends IGameState> result = this.currentPhase.handleCommand(command);
+		return this.processPhaseResult(result);
 	}
 
 	@Override
@@ -276,8 +261,26 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		this.currentPlayer = this.getNextSetupPlayer();
 		this.currentPhase = this.setupPhases.get(this.currentSetupPhaseIndex);
 		this.publish(updateEvent(EGameEventType.PHASE_STARTED));
-		IGameEvent<? extends IGameState> event = this.currentPhase.playPhase(this.currentPlayer);
-		this.publish(this.withCurrentPhase(event));
+		this.processPhaseResult(this.currentPhase.playPhase(this.currentPlayer));
+	}
+
+	private IGameEvent<? extends IGameState> processPhaseResult(IPhaseResult<? extends IGameState> result) {
+		IGameEvent<? extends IGameState> event = null;
+		if (result.state().isPresent()) {
+			IGameState state = result.state().get();
+			EGameEventType eventType = state instanceof ICombatResultDTO
+					? EGameEventType.COMBAT_RESOLVED
+					: EGameEventType.CHOICE_REQUIRED;
+			event = new GameEvent<>(eventType, this.currentPhase.getPhaseType(), state);
+		} else if (result.isCompleted()) {
+			event = updateEvent(EGameEventType.PHASE_COMPLETED);
+		}
+
+		this.publish(event);
+		if (result.isCompleted()) {
+			this.advanceAfterCompletedPhase();
+		}
+		return event;
 	}
 
 	private void advanceAfterCompletedPhase() {
@@ -325,11 +328,4 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		return new GameEvent<>(eventType, phaseType, new GameSnapshotDTO(this.gameSnapshot()));
 	}
 
-	private IGameEvent<? extends IGameState> withCurrentPhase(IGameEvent<? extends IGameState> event) {
-		IGameEvent<? extends IGameState> eventWithPhase = null;
-		if (event != null) {
-			eventWithPhase = new GameEvent<>(event.getEventType(), this.currentPhase.getPhaseType(), event.getState());
-		}
-		return eventWithPhase;
-	}
 }

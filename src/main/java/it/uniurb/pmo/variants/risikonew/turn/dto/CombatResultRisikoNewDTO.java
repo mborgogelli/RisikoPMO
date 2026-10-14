@@ -3,6 +3,7 @@ package it.uniurb.pmo.variants.risikonew.turn.dto;
 import it.uniurb.pmo.framework.turn.dto.ICombatResultDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public record CombatResultRisikoNewDTO(String attackerTerritory,
                                        String defenderTerritory,
@@ -10,7 +11,8 @@ public record CombatResultRisikoNewDTO(String attackerTerritory,
                                        List<Integer> defenderRolls,
                                        int attackerLosses,
                                        int defenderLosses,
-                                       boolean territoryConquered
+                                       boolean territoryConquered,
+                                       Map<String, List<String>> possiblePlayerTargets
 ) implements ICombatResultDTO {
 
     // Per validazione
@@ -30,6 +32,10 @@ public record CombatResultRisikoNewDTO(String attackerTerritory,
 
         attackerRolls = List.copyOf(attackerRolls);
         defenderRolls = List.copyOf(defenderRolls);
+        possiblePlayerTargets = possiblePlayerTargets.entrySet().stream()
+                .collect(java.util.stream.Collectors.toUnmodifiableMap(
+                        Map.Entry::getKey,
+                        entry -> List.copyOf(entry.getValue())));
     }
 
     @Override

@@ -6,8 +6,8 @@ import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.TerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.phase_reinforce.ReinforcePhase;
 import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.phase_reinforce.ReinforcePhase;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
@@ -144,7 +144,7 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
         IPhaseResult result = phase.handleCommand(deployCommand);
 
         assertTrue(result.isCompleted());
-        assertTrue(result.choiceRequired().isEmpty());
+        assertTrue(result.state().isEmpty());
     }
 
     @Test
