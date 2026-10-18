@@ -1,12 +1,22 @@
 package it.uniurb.pmo.framework.turn.event;
 
 import it.uniurb.pmo.framework.turn.IPhaseType;
+import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
 import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 
 import java.util.Optional;
 
-public record GameEvent<E extends IGameState>(EGameEventType type, IPhaseType phaseType, E state) implements IGameEvent<E> {
+public record GameEvent<E extends IGameState>(EGameEventType type, IPhaseType phaseType, E state,
+                                               Optional<GameSnapshotDTO> snapshot) implements IGameEvent<E> {
+
+    public GameEvent(EGameEventType type, IPhaseType phaseType, E state) {
+        this(type, phaseType, state, Optional.empty());
+    }
+
+    public GameEvent {
+        snapshot = snapshot == null ? Optional.empty() : snapshot;
+    }
 
     @Override
     public EGameEventType getEventType() {
@@ -21,5 +31,10 @@ public record GameEvent<E extends IGameState>(EGameEventType type, IPhaseType ph
     @Override
     public E getState() {
         return this.state;
+    }
+
+    @Override
+    public Optional<GameSnapshotDTO> getSnapshot() {
+        return this.snapshot;
     }
 }

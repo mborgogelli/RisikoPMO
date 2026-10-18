@@ -271,7 +271,8 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 			EGameEventType eventType = state instanceof ICombatResultDTO
 					? EGameEventType.COMBAT_RESOLVED
 					: EGameEventType.CHOICE_REQUIRED;
-			event = new GameEvent<>(eventType, this.currentPhase.getPhaseType(), state);
+			event = new GameEvent<>(eventType, this.currentPhase.getPhaseType(), state,
+					Optional.of(new GameSnapshotDTO(this.gameSnapshot())));
 		} else if (result.isCompleted()) {
 			event = updateEvent(EGameEventType.PHASE_COMPLETED);
 		}

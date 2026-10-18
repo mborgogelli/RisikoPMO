@@ -22,9 +22,11 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
 
     @Override
     public void onGameEvent(IGameEvent<? extends IGameState> event) {
-        if (event.getState() instanceof GameSnapshotDTO snapshot) {
-            this.latestGameSnapshot = snapshot;
-        }
+        this.latestGameSnapshot = event.getSnapshot()
+                .or(() -> event.getState() instanceof GameSnapshotDTO snapshot
+                        ? Optional.of(snapshot)
+                        : Optional.empty())
+                .orElse(this.latestGameSnapshot);
         this.lastGameEvent = event;
     }
 

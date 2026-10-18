@@ -1,6 +1,7 @@
 package it.uniurb.pmo.framework.turn.event.interfaces;
 
 import it.uniurb.pmo.framework.turn.dto.IGameState;
+import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
 import it.uniurb.pmo.framework.turn.IPhaseType;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
 
@@ -20,5 +21,10 @@ public interface IGameEvent<E extends IGameState> {
     }
 
     E getState();
+
+    /** Snapshot aggiornato associato all'evento, quando disponibile. */
+    default Optional<GameSnapshotDTO> getSnapshot() {
+        return Optional.empty();
+    }
 
 }
