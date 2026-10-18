@@ -3,7 +3,7 @@ package it.uniurb.pmo.variants.risikonew.turn;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
-import it.uniurb.pmo.framework.turn.dto.IGameState;
+import it.uniurb.pmo.framework.turn.dto.IPhasePayload;
 import it.uniurb.pmo.framework.turn.event.PhaseResult;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -39,7 +39,7 @@ public class PhaseInitialPlacement implements IPhase {
 
 
 	@Override
-	public IPhaseResult<? extends IGameState> playPhase(IPlayer player) {
+	public IPhaseResult<? extends IPhasePayload> playPhase(IPlayer player) {
 		this.clearPhase();
 		this.player = player;
 		return new PhaseResult<>(false, Optional.of(this.deployRequest()));
@@ -53,7 +53,7 @@ public class PhaseInitialPlacement implements IPhase {
 	}
 
 	@Override
-	public IPhaseResult<IGameState> handleCommand(IGameCommand command) {
+	public IPhaseResult<? extends IPhasePayload> handleCommand(IGameCommand command) {
 		if (this.isValidCommand(command)){
 			this.isCompleted = true;
 			DeployCommandRisikoNew deployCommand = (DeployCommandRisikoNew) command;

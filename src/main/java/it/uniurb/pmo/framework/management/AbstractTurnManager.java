@@ -9,11 +9,7 @@ import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.IPhaseType;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
-import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
-import it.uniurb.pmo.framework.turn.dto.ICombatResultDTO;
-import it.uniurb.pmo.framework.turn.dto.IGameState;
-import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
-import it.uniurb.pmo.framework.turn.dto.PlayerStateDTO;
+import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
 import it.uniurb.pmo.framework.turn.event.GameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
@@ -188,8 +184,8 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	}
 
 	@Override
-	public IGameEvent<? extends IGameState> handleCommand(IGameCommand command) {
-		IPhaseResult<? extends IGameState> result = this.currentPhase.handleCommand(command);
+	public IGameEvent handleCommand(IGameCommand command) {
+		IPhaseResult<? extends IPhasePayload> result = this.currentPhase.handleCommand(command);
 		return this.processPhaseResult(result);
 	}
 
@@ -264,15 +260,14 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		this.processPhaseResult(this.currentPhase.playPhase(this.currentPlayer));
 	}
 
-	private IGameEvent<? extends IGameState> processPhaseResult(IPhaseResult<? extends IGameState> result) {
-		IGameEvent<? extends IGameState> event = null;
+	private IGameEvent processPhaseResult(IPhaseResult<? extends IPhasePayload> result) {
+		IGameEvent event = null;
 		if (result.state().isPresent()) {
-			IGameState state = result.state().get();
+			IPhasePayload state = result.state().get();
 			EGameEventType eventType = state instanceof ICombatResultDTO
 					? EGameEventType.COMBAT_RESOLVED
 					: EGameEventType.CHOICE_REQUIRED;
-			event = new GameEvent<>(eventType, this.currentPhase.getPhaseType(), state,
-					Optional.of(new GameSnapshotDTO(this.gameSnapshot())));
+			event = new GameEvent(eventType, this.currentPhase.getPhaseType(), this.createGameSnapshot(state));
 		} else if (result.isCompleted()) {
 			event = updateEvent(EGameEventType.PHASE_COMPLETED);
 		}
@@ -310,7 +305,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		}
 	}
 
-	private void publish(IGameEvent<? extends IGameState> event) {
+	private void publish(IGameEvent event) {
 		if (event != null) {
 			this.observers.forEach(observer -> observer.onGameEvent(event));
 		}
@@ -321,12 +316,37 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 				.stream()
 				.collect(Collectors.toMap(t -> t, t -> this.mediator.getZoneTokens(t)));
 		Map<ITokenType,Integer> playerTokens = this.mediator.getTokensOwnedBy(player);
-		return new PlayerStateDTO(player, playerTerritories, playerTokens);
+		return new PlayerStateDTO(
+				player.getName(),
+				player.getColor(),
+				player.getTurnStatus(),
+				playerTerritories,
+				playerTokens);
 	}
 
-	private GameEvent<IGameState> updateEvent (EGameEventType eventType) {
+	//TODO Semplificare metodo
+	private GameEvent updateEvent (EGameEventType eventType) {
 		IPhaseType phaseType = (this.currentPhase == null) ? null : this.currentPhase.getPhaseType();
-		return new GameEvent<>(eventType, phaseType, new GameSnapshotDTO(this.gameSnapshot()));
+		return new GameEvent(eventType, phaseType, this.createGameSnapshot(null));
+	}
+
+	private IGameSnapshot createGameSnapshot(IPhasePayload phasePayload) {
+		Optional<String> phaseId = Optional.ofNullable(this.currentPhase)
+				.map(phase -> phase.getPhaseType().phaseCode());
+		Optional<String> currentPlayerName = Optional.ofNullable(this.currentPlayer).map(IPlayer::getName);
+		Optional<String> winnerName = this.checkWinner().map(IPlayer::getName);
+		Optional<IGameActionDTO> pendingAction = phasePayload instanceof IGameActionDTO action
+				&& !(phasePayload instanceof ICombatResultDTO)
+				? Optional.of(action)
+				: Optional.empty();
+		GameSnapshotDTO commonSnapshot = new GameSnapshotDTO(
+				this.currentTurn, phaseId, currentPlayerName, this.gameSnapshot(), pendingAction, winnerName);
+		return this.createVariantSnapshot(commonSnapshot, phasePayload);
+	}
+
+	/** Punto di estensione per i dati di snapshot specifici della variante. */
+	protected IGameSnapshot createVariantSnapshot(GameSnapshotDTO commonSnapshot, IPhasePayload phasePayload) {
+		return commonSnapshot;
 	}
 
 }

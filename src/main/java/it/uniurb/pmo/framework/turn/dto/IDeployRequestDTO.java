@@ -5,7 +5,7 @@ import it.uniurb.pmo.framework.players.ITokenType;
 import java.util.List;
 import java.util.Map;
 
-public interface IDeployRequestDTO extends IGameState {
+public interface IDeployRequestDTO extends IGameActionDTO {
 
     List<String> deployableZones();
 

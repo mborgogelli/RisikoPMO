@@ -1,7 +1,5 @@
 package it.uniurb.pmo.framework.turn.event.interfaces;
 
-import it.uniurb.pmo.framework.turn.dto.IGameState;
-
 public interface IGameEventReceiver {
 
     /**
@@ -9,6 +7,6 @@ public interface IGameEventReceiver {
      *
      * @param event aggiornamento pubblicato dal TurnManager
      */
-    default void onGameEvent(IGameEvent<? extends IGameState> event) {
+    default void onGameEvent(IGameEvent event) {
     }
 }

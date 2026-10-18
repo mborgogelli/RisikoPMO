@@ -4,15 +4,21 @@ import it.uniurb.pmo.framework.management.AbstractTurnManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
 import it.uniurb.pmo.framework.turn.IPhase;
+import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
+import it.uniurb.pmo.framework.turn.dto.ICombatResultDTO;
+import it.uniurb.pmo.framework.turn.dto.IGameSnapshot;
+import it.uniurb.pmo.framework.turn.dto.IPhasePayload;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITurnManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.PhaseCombat;
 import it.uniurb.pmo.variants.risikonew.turn.PhaseInitialPlacement;
 import it.uniurb.pmo.variants.risikonew.turn.PhaseReinforce;
+import it.uniurb.pmo.variants.risikonew.turn.dto.RisikoGameSnapshotDTO;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase_strategic.StrategicPhase;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnManagerRisikoNew {
 
@@ -20,6 +26,7 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	IGameCoordinatorRisikoNew coordinator;
 
 	private boolean isReady;
+	private ICombatResultDTO lastCombatResult;
 
 	public TurnManagerRisikoNew(IGameCoordinatorRisikoNew gameCoordinator) {
 		super();
@@ -71,6 +78,21 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	@Override
 	protected List<IPlayer> shufflePlayers(List<IPlayer> players){
 		return super.shufflePlayers(players);
+	}
+
+	@Override
+	protected IGameSnapshot createVariantSnapshot(GameSnapshotDTO commonSnapshot, IPhasePayload phasePayload) {
+		if (phasePayload instanceof ICombatResultDTO combatResult) {
+			this.lastCombatResult = combatResult;
+		}
+		return new RisikoGameSnapshotDTO(
+				commonSnapshot.turnNumber(),
+				commonSnapshot.phaseId(),
+				commonSnapshot.currentPlayerName(),
+				commonSnapshot.players(),
+				commonSnapshot.pendingAction(),
+				commonSnapshot.winnerName(),
+				Optional.ofNullable(this.lastCombatResult));
 	}
 
 	@Override

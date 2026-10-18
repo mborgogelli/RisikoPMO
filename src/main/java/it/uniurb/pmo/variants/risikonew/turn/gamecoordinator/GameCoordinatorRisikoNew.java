@@ -2,8 +2,7 @@ package it.uniurb.pmo.variants.risikonew.turn.gamecoordinator;
 
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
-import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
-import it.uniurb.pmo.framework.turn.dto.IGameState;
+import it.uniurb.pmo.framework.turn.dto.IGameSnapshot;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 
 import java.util.List;
@@ -12,8 +11,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
 
-    private volatile IGameEvent<? extends IGameState> lastGameEvent;
-    private volatile GameSnapshotDTO latestGameSnapshot;
+    private volatile IGameEvent lastGameEvent;
+    private volatile IGameSnapshot latestGameSnapshot;
     private List<IGameCommandReceiver> commandReceivers;
 
     public GameCoordinatorRisikoNew() {
@@ -21,12 +20,8 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
     }
 
     @Override
-    public void onGameEvent(IGameEvent<? extends IGameState> event) {
-        this.latestGameSnapshot = event.getSnapshot()
-                .or(() -> event.getState() instanceof GameSnapshotDTO snapshot
-                        ? Optional.of(snapshot)
-                        : Optional.empty())
-                .orElse(this.latestGameSnapshot);
+    public void onGameEvent(IGameEvent event) {
+        this.latestGameSnapshot = event.getSnapshot();
         this.lastGameEvent = event;
     }
 
@@ -35,12 +30,12 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
      * Sara' usato dal controller per esporre lo stato della partita.
      */
     @Override
-    public Optional<IGameEvent<? extends IGameState>> lastGameEvent() {
+    public Optional<IGameEvent> lastGameEvent() {
         return Optional.ofNullable(this.lastGameEvent);
     }
 
     @Override
-    public Optional<GameSnapshotDTO> getLatestGameSnapshot() {
+    public Optional<IGameSnapshot> getLatestGameSnapshot() {
         return Optional.ofNullable(this.latestGameSnapshot);
     }
 

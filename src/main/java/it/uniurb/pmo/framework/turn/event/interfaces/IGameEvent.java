@@ -1,18 +1,15 @@
 package it.uniurb.pmo.framework.turn.event.interfaces;
 
-import it.uniurb.pmo.framework.turn.dto.IGameState;
-import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
+import it.uniurb.pmo.framework.turn.dto.IGameSnapshot;
 import it.uniurb.pmo.framework.turn.IPhaseType;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
 
 import java.util.Optional;
 
 /**
- * Un evento di gioco è caratterizzato da un tipo di evento e uno stato di gioco.
- * Lo stato di gioco è il risultato dell'evento.
- * @param <E>
+ * Evento di gioco associato allo snapshot completo successivo alla transizione.
  */
-public interface IGameEvent<E extends IGameState> {
+public interface IGameEvent {
 
     EGameEventType getEventType();
 
@@ -20,11 +17,7 @@ public interface IGameEvent<E extends IGameState> {
         return Optional.empty();
     }
 
-    E getState();
-
-    /** Snapshot aggiornato associato all'evento, quando disponibile. */
-    default Optional<GameSnapshotDTO> getSnapshot() {
-        return Optional.empty();
-    }
+    /** Snapshot completo e aggiornato associato all'evento. */
+    IGameSnapshot getSnapshot();
 
 }

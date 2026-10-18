@@ -4,7 +4,7 @@ import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.dto.IDeployRequestDTO;
-import it.uniurb.pmo.framework.turn.dto.IGameState;
+import it.uniurb.pmo.framework.turn.dto.IPhasePayload;
 import it.uniurb.pmo.framework.turn.event.PhaseResult;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
@@ -40,7 +40,7 @@ public class PhaseReinforce implements IPhase {
 	}
 
 	@Override
-	public IPhaseResult<? extends IGameState> playPhase(IPlayer player) {
+	public IPhaseResult<? extends IPhasePayload> playPhase(IPlayer player) {
 		this.clearPhase();
 		this.player = player;
 		this.playerTerritories = this.mediator.getZonesOwnedBy(player);
@@ -56,7 +56,7 @@ public class PhaseReinforce implements IPhase {
 	}
 
 	@Override
-	public IPhaseResult<IGameState> handleCommand(IGameCommand command) {
+	public IPhaseResult<? extends IPhasePayload> handleCommand(IGameCommand command) {
 		if (this.isValidCommand(command)){
 			DeployCommandRisikoNew deployCommand = (DeployCommandRisikoNew) command;
 			this.isCompleted = true;

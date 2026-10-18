@@ -1,6 +1,5 @@
 package it.uniurb.pmo.framework.turn.command;
 
-import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 
 /**
@@ -16,7 +15,7 @@ public interface IGameCommandReceiver {
      *
      * @param command comando ricevuto dall'esterno
      */
-    IGameEvent<? extends IGameState> handleCommand(IGameCommand command);
+    IGameEvent handleCommand(IGameCommand command);
 
     boolean isValidCommand(IGameCommand command);
 }

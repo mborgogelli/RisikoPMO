@@ -1,8 +1,7 @@
 package it.uniurb.pmo.framework.turn;
 
 import it.uniurb.pmo.framework.turn.command.IGameCommandPublisher;
-import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
-import it.uniurb.pmo.framework.turn.dto.IGameState;
+import it.uniurb.pmo.framework.turn.dto.IGameSnapshot;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventReceiver;
 
@@ -16,8 +15,8 @@ import java.util.Optional;
  */
 public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublisher {
 
-    Optional<IGameEvent<? extends IGameState>> lastGameEvent();
+    Optional<IGameEvent> lastGameEvent();
 
-    Optional<GameSnapshotDTO> getLatestGameSnapshot();
+    Optional<IGameSnapshot> getLatestGameSnapshot();
 
 }

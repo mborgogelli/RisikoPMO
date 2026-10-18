@@ -2,7 +2,7 @@ package it.uniurb.pmo.framework.turn.dto;
 
 import it.uniurb.pmo.framework.players.ITokenType;
 
-public interface IAttackChoiceDTO extends IPlayerDataDTO {
+public interface IAttackChoiceDTO extends IPlayerIdentityDTO {
 
     String getAttackerZone();
 

@@ -6,7 +6,7 @@ import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.PassCommand;
 import it.uniurb.pmo.framework.turn.dto.IAttackRequestDTO;
 import it.uniurb.pmo.framework.turn.dto.IDefendRequestDTO;
-import it.uniurb.pmo.framework.turn.dto.IGameState;
+import it.uniurb.pmo.framework.turn.dto.IPhasePayload;
 import it.uniurb.pmo.framework.turn.event.PhaseResult;
 import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.framework.utils.DiceRoller;
@@ -50,7 +50,7 @@ public class PhaseCombat implements IPhase {
 	}
 
 	@Override
-	public IPhaseResult<? extends IGameState> playPhase(IPlayer player) {
+	public IPhaseResult<? extends IPhasePayload> playPhase(IPlayer player) {
 		this.clearPhase();
 		this.attacker = player;
 		this.acquirePlayerTargets();
@@ -74,7 +74,7 @@ public class PhaseCombat implements IPhase {
 	}
 
 	@Override
-	public IPhaseResult<? extends IGameState> handleCommand(IGameCommand command) {
+	public IPhaseResult<? extends IPhasePayload> handleCommand(IGameCommand command) {
 		if (command instanceof PassCommand) {
 			this.isCompleted = true;
 			return new PhaseResult<>(this.isCompleted, Optional.empty());
