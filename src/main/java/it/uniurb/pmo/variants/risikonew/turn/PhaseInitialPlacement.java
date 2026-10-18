@@ -1,4 +1,4 @@
-package it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement;
+package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class InitialPlacementPhase implements IPhase {
+public class PhaseInitialPlacement implements IPhase {
 
 	public final static int MAX_DEPLOYABLE = 3;
 
@@ -26,7 +26,7 @@ public class InitialPlacementPhase implements IPhase {
     private int maxTanksToDeploy;
     private final IMediatorRisikoNew mediator;
 
-	public InitialPlacementPhase(IMediatorRisikoNew mediator) {
+	public PhaseInitialPlacement(IMediatorRisikoNew mediator) {
 		this.mediator = mediator;
 		this.isCompleted = false;
 		this.phaseType = ERisikoNewPhase.INITIAL_PLACEMENT;

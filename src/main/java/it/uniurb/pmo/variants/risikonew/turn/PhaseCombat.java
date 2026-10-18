@@ -1,4 +1,4 @@
-package it.uniurb.pmo.variants.risikonew.turn.phase_combat;
+package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
@@ -22,7 +22,7 @@ import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class CombatPhase implements IPhase {
+public class PhaseCombat implements IPhase {
 
 	private final IMediatorRisikoNew mediator;
 	private final ERisikoNewPhase phaseType;
@@ -31,15 +31,13 @@ public class CombatPhase implements IPhase {
 	private IPlayer attacker;
 	private String attackerTerritory;
 	private int attackerTanks;
-	private int attackerLosses;
 	private Map<String, List<String>> possibleTargets;
 
 	private IPlayer defender;
 	private String defenderTerritory;
 	private int defenderTanks;
-	private int defenderLosses;
 
-	public CombatPhase(IMediatorRisikoNew mediator) {
+	public PhaseCombat(IMediatorRisikoNew mediator) {
 		this.mediator = mediator;
 		this.possibleTargets = new HashMap<>();
 		this.isCompleted = false;
@@ -66,13 +64,11 @@ public class CombatPhase implements IPhase {
 		this.attacker = null;
 		this.attackerTerritory = null;
 		this.attackerTanks = 0;
-		this.attackerLosses = 0;
 		this.possibleTargets = new HashMap<>();
 
 		this.defender = null;
 		this.defenderTerritory = null;
 		this.defenderTanks = 0;
-		this.defenderLosses = 0;
 
 		this.isCompleted = false;
 	}
@@ -93,8 +89,6 @@ public class CombatPhase implements IPhase {
 			}
 			if (valid && command instanceof DefendCommandRisikoNew(int tanks)) {
 				this.defenderTanks = tanks;
-				this.attackerLosses = 0;
-				this.defenderLosses = 0;
 				CombatResultData combatData = this.combatResultData();
 				this.acquirePlayerTargets();
 				this.isCompleted = this.possibleTargets.isEmpty();
@@ -185,6 +179,9 @@ public class CombatPhase implements IPhase {
 		attackRolls.sort(Collections.reverseOrder());
 		defenseRolls.sort(Collections.reverseOrder());
 
+		int attackerLosses = 0;
+		int defenderLosses = 0;
+
 		// Verifica perdite: iterazione in base al numero minore di dadi lanciati (tanks dispiegati)
 		int comparisons = Math.min(this.attackerTanks, this.defenderTanks);
 		for (int i = 0; i < comparisons; i++) {
@@ -205,17 +202,18 @@ public class CombatPhase implements IPhase {
 			int attackerRemainingTanks = this.attackerTanks - attackerLosses;
 			this.mediator.occupyTerritoryWithTanks(this.attacker, this.attackerTerritory, this.defenderTerritory, attackerRemainingTanks);
 		}
-		return new CombatResultData(attackRolls, defenseRolls, defenderIsDefeated);
+		return new CombatResultData(attackRolls, defenseRolls, attackerLosses, defenderLosses, defenderIsDefeated);
 
 	}
 
 	private CombatResultRisikoNewDTO combatResultDTO(CombatResultData result) {
 		return new CombatResultRisikoNewDTO(this.attackerTerritory, this.defenderTerritory,
-				result.attackRolls(), result.defenseRolls(), this.attackerLosses, this.defenderLosses,
+				result.attackRolls(), result.defenseRolls(), result.attackerLosses, result.defenderLosses,
 				result.defenderIsDefeated(), this.possibleTargets);
 	}
 
 	private record CombatResultData(List<Integer> attackRolls, List<Integer> defenseRolls,
+								int attackerLosses, int defenderLosses,
 								boolean defenderIsDefeated) {
 	}
 

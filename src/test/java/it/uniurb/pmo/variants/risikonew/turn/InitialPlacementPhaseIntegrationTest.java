@@ -6,7 +6,6 @@ import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 import it.uniurb.pmo.framework.utils.EColors;
 import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
-import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +38,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         }
             tankManager.assignTank(this.players.getLast(), 3);
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
+        PhaseInitialPlacement phase = new PhaseInitialPlacement(mediator);
 
         RuntimeException ex = assertThrows(RuntimeException.class, () -> phase.playPhase(this.players.getFirst()));
         assertEquals("Not enough tanks to deploy.", ex.getMessage());
@@ -59,7 +58,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     @DisplayName("Verify command execution with invalid territories")
     void testDeployCommandWithWrongZones() {
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
+        PhaseInitialPlacement phase = new PhaseInitialPlacement(mediator);
         DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).state().orElseThrow();
         DeployCommandRisikoNew command = new DeployCommandRisikoNew(ERisikoNewToken.TANK,
                 Map.of("Zone A", 2, "Zone B", 1));
@@ -85,7 +84,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     @DisplayName("Verify command execution with invalid tanks number")
     void testDeployCommandWithWrongTanksNumber() {
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
+        PhaseInitialPlacement phase = new PhaseInitialPlacement(mediator);
         DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).state().orElseThrow();
         DeployCommandRisikoNew command = new DeployCommandRisikoNew(ERisikoNewToken.TANK, Map.of(
                 request.deployableZones().getFirst(), 2,
@@ -111,7 +110,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     @Test
     @DisplayName("Reject a deployment command without a token type")
     void testDeployCommandWithoutTokenType() {
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
+        PhaseInitialPlacement phase = new PhaseInitialPlacement(mediator);
         DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).state().orElseThrow();
         DeployCommandRisikoNew command = new DeployCommandRisikoNew(null,
                 Map.of(request.deployableZones().getFirst(), 1));
@@ -128,7 +127,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         EColors playerColor = currentPlayer.getColor();
         int tanksOwned = this.mediator.getPlayerTank(currentPlayer);
 
-        InitialPlacementPhase phase = new InitialPlacementPhase(mediator);
+        PhaseInitialPlacement phase = new PhaseInitialPlacement(mediator);
         DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(currentPlayer).state().orElseThrow();
 
         List<String> deployableZones = request.deployableZones();

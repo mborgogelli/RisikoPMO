@@ -1,6 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.turn.phase_strategic;
 
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.dto.IGameState;
 import it.uniurb.pmo.framework.turn.event.PhaseResult;
@@ -10,7 +11,7 @@ import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
 
 import java.util.List;
 
-public class StrategicPhase implements IStrategicPhase {
+public class StrategicPhase implements IPhase {
 
 	private IPlayer player;
 	private final IMediatorRisikoNew mediator;

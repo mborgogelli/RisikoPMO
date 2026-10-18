@@ -21,7 +21,7 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
         this.assignAllTanksToZones(attacker);
 
         List<String> possibleTargetsByModel = this.getAllPossibleTargets(ownedZones);
-        CombatPhase combatPhase = new CombatPhase(mediator);
+        PhaseCombat combatPhase = new PhaseCombat(mediator);
         combatPhase.playPhase(attacker);
 
         ArgumentCaptor<AttackRequestRisikoNewDTO> captor = ArgumentCaptor.forClass(AttackRequestRisikoNewDTO.class);

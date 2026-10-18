@@ -7,7 +7,6 @@ import it.uniurb.pmo.variants.risikonew.card.ERisikoNewTerritorySymbols;
 import it.uniurb.pmo.variants.risikonew.card.TerritoryCard;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.phase_reinforce.ReinforcePhase;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,7 +67,7 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
 
         int tanksBefore = mediator.getPlayerTank(player1);
 
-        ReinforcePhase phase = new ReinforcePhase(phaseMediator);
+        PhaseReinforce phase = new PhaseReinforce(phaseMediator);
         phase.playPhase(player1);
         int tanksAfter = mediator.getPlayerTank(player1);
         assertEquals(tanksBefore + 15, tanksAfter);
@@ -94,7 +93,7 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
 
         int tanksBefore = mediator.getPlayerTank(player1);
 
-        ReinforcePhase phase = new ReinforcePhase(phaseMediator);
+        PhaseReinforce phase = new PhaseReinforce(phaseMediator);
         phase.playPhase(player1);
         int tanksAfter = mediator.getPlayerTank(player1);
         assertEquals(tanksBefore + 3, tanksAfter);
@@ -126,7 +125,7 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
 
         int tanksBefore = mediator.getPlayerTank(player1);
 
-        ReinforcePhase phase = new ReinforcePhase(phaseMediator);
+        PhaseReinforce phase = new PhaseReinforce(phaseMediator);
         phase.playPhase(player1);
         int tanksAfter = mediator.getPlayerTank(player1);
         assertEquals(tanksBefore + 14, tanksAfter);
@@ -137,7 +136,7 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
     void testNoTankDeployed() {
         IPlayer player1 = players.getFirst();
 
-        ReinforcePhase phase = new ReinforcePhase(mediator);
+        PhaseReinforce phase = new PhaseReinforce(mediator);
         phase.playPhase(player1);
 
         DeployCommandRisikoNew deployCommand = new DeployCommandRisikoNew(ERisikoNewToken.TANK, Map.of());
@@ -151,7 +150,7 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
     @DisplayName("Gestione di un comando su una fase non avviata")
     void testInvalidPlayer(){
 
-        ReinforcePhase phase = new ReinforcePhase(mediator);
+        PhaseReinforce phase = new PhaseReinforce(mediator);
         DeployCommandRisikoNew deployCommand = new DeployCommandRisikoNew(ERisikoNewToken.TANK, Map.of());
 
         assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(deployCommand));

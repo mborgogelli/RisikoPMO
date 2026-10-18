@@ -6,10 +6,10 @@ import it.uniurb.pmo.framework.players.PlayerTurnStatus;
 import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITurnManagerRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.PhaseCombat;
+import it.uniurb.pmo.variants.risikonew.turn.PhaseInitialPlacement;
+import it.uniurb.pmo.variants.risikonew.turn.PhaseReinforce;
 import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.phase_combat.CombatPhase;
-import it.uniurb.pmo.variants.risikonew.turn.phase_initialplacement.InitialPlacementPhase;
-import it.uniurb.pmo.variants.risikonew.turn.phase_reinforce.ReinforcePhase;
 import it.uniurb.pmo.variants.risikonew.turn.phase_strategic.StrategicPhase;
 
 import java.util.List;
@@ -61,11 +61,11 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	@Override
 	protected List<IPhase> createPhases() {
 		this.initMediatorAndCoordinator();
-		return List.of(new ReinforcePhase(mediator), new CombatPhase(mediator), new StrategicPhase(mediator));
+		return List.of(new PhaseReinforce(mediator), new PhaseCombat(mediator), new StrategicPhase(mediator));
 	}
 
 	protected List<IPhase> createSetupPhases() {
-		return List.of(new InitialPlacementPhase(mediator) );
+		return List.of(new PhaseInitialPlacement(mediator) );
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 
 
 	/*private void runInitialPlacement() {
-		InitialPlacementPhase initialPlacement = new InitialPlacementPhase(mediator);
+		PhaseInitialPlacement initialPlacement = new PhaseInitialPlacement(mediator);
 		while (haveRemainingTanks(mediator)) {
 			for (IPlayer player : super.getPlayers()) {
 				if (mediator.getPlayerTank(player) > 0) {

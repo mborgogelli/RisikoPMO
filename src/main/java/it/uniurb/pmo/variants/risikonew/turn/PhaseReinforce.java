@@ -1,4 +1,4 @@
-package it.uniurb.pmo.variants.risikonew.turn.phase_reinforce;
+package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.IPhase;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class ReinforcePhase implements IPhase {
+public class PhaseReinforce implements IPhase {
 
 	private final ERisikoNewPhase phaseType;
 	private boolean isCompleted;
@@ -28,7 +28,7 @@ public class ReinforcePhase implements IPhase {
 	private IPlayer player;
 	private List<String> playerTerritories;
 
-	public ReinforcePhase(IMediatorRisikoNew mediator) {
+	public PhaseReinforce(IMediatorRisikoNew mediator) {
 		this.mediator = mediator;
 		this.isCompleted = false;
 		this.phaseType = ERisikoNewPhase.REINFORCE;
