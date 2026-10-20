@@ -154,7 +154,7 @@ public class PhaseCombat implements IPhase {
 	}
 
 	private IAttackRequestDTO attackRequestDTO() {
-		return new AttackRequestRisikoNewDTO(this.attacker, this.possibleTargets);
+		return new AttackRequestRisikoNewDTO(this.possibleTargets);
 	}
 
 	private IDefendRequestDTO defendRequestDTO() {

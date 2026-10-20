@@ -174,7 +174,7 @@ public class PhaseReinforce implements IPhase {
 	private IDeployRequestDTO deployRequest() {
 		int tanks = this.mediator.getPlayerTank(this.player);
 		if (tanks > 0) {
-			return new DeployRequestRisikoNewDTO(this.player, this.playerTerritories, tanks);
+			return new DeployRequestRisikoNewDTO(this.playerTerritories, tanks);
 		} else {
 			throw new RuntimeException("Not enough tanks to deploy.");
 		}

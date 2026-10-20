@@ -97,7 +97,7 @@ public class PhaseInitialPlacement implements IPhase {
 		if (remaining > 0) {
             this.maxTanksToDeploy = Math.min(MAX_DEPLOYABLE, remaining);
             List<String> deployableZones = this.mediator.getZonesOwnedBy(player);
-			return new DeployRequestRisikoNewDTO(player, deployableZones, this.maxTanksToDeploy);
+			return new DeployRequestRisikoNewDTO(deployableZones, this.maxTanksToDeploy);
 		} else {
 			throw new RuntimeException("Not enough tanks to deploy.");
 		}

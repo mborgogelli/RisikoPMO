@@ -48,8 +48,6 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         // Verifica che i dati della request siano coerenti con i dati attesi
         assertNotNull(request);
         assertEquals(3, request.tokenToDeploy().get(ERisikoNewToken.TANK));
-        assertEquals(this.players.getLast().getName(), request.playerName());
-        assertEquals(this.players.getLast().getColor(), request.playerColor());
         assertTrue(this.mediator.getTerritoriesOwnedBy(this.players.getLast()).containsAll(request.deployableZones()));
 
     }

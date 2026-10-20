@@ -29,8 +29,6 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
 
         AttackRequestRisikoNewDTO request = captor.getValue();
 
-        assertEquals(attacker.getName(), request.player().getName());
-        assertEquals(attacker.getColor(), request.player().getColor());
         assertTrue(possibleTargetsByModel.size() == request.possibleTargets().size() &&
                    possibleTargetsByModel.containsAll(request.possibleTargets()));
         for(String target : possibleTargetsByModel){
