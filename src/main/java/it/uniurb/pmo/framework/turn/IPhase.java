@@ -8,12 +8,12 @@ import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
 public interface IPhase {
 
 	IPhaseType getPhaseType();
-	
-	IPhaseResult<? extends IPhasePayload> playPhase(IPlayer player);
 
 	void clearPhase();
 
-	IPhaseResult<? extends IPhasePayload> handleCommand(IGameCommand command);
-
 	boolean isValidCommand(IGameCommand command);
+
+	IPhaseResult<? extends IPhasePayload> playPhase(IPlayer player);
+
+	IPhaseResult<? extends IPhasePayload> handleCommand(IGameCommand command);
 }

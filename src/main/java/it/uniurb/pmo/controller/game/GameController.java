@@ -5,7 +5,6 @@ import it.uniurb.pmo.controller.game.dto.DeployCommandRequestDTO;
 import it.uniurb.pmo.framework.lobby.GameSessionRegistry;
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.turn.IGameCoordinator;
-import it.uniurb.pmo.framework.turn.IPhaseType;
 import it.uniurb.pmo.framework.turn.command.IDeployCommand;
 import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
@@ -87,7 +86,7 @@ public class GameController {
         String currentPlayerName = currentPlayer == null ? null : currentPlayer.playerName();
         EColors currentPlayerColor = currentPlayer == null ? null : currentPlayer.playerColor();
 
-        String phaseId = event.getPhaseType().map(IPhaseType::phaseCode).orElse(null);
+        String phaseId = snapshot.phaseId().orElse(null);
         CurrentStateDTO.PendingActionDTO pendingAction = null;
         IGameActionDTO action = snapshot.pendingAction().orElse(null);
         if (action instanceof IDeployRequestDTO deployRequest) {

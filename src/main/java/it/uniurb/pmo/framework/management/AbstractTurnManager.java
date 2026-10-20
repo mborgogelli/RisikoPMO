@@ -6,7 +6,6 @@ import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
 import it.uniurb.pmo.framework.turn.IPhase;
-import it.uniurb.pmo.framework.turn.IPhaseType;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.dto.*;
@@ -247,6 +246,10 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		return this.mediator;
 	}
 
+	protected IGameSnapshot createVariantSnapshot(GameSnapshotDTO commonSnapshot, IPhasePayload phasePayload) {
+		return commonSnapshot;
+	}
+
 	private void startSetupPhases() {
 		this.setupInProgress = true;
 		this.currentSetupPhaseIndex = 0;
@@ -262,12 +265,12 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 
 	private IGameEvent processPhaseResult(IPhaseResult<? extends IPhasePayload> result) {
 		IGameEvent event = null;
-		if (result.state().isPresent()) {
-			IPhasePayload state = result.state().get();
+		if (result.phasePayload().isPresent()) {
+			IPhasePayload state = result.phasePayload().get();
 			EGameEventType eventType = state instanceof ICombatResultDTO
 					? EGameEventType.COMBAT_RESOLVED
 					: EGameEventType.CHOICE_REQUIRED;
-			event = new GameEvent(eventType, this.currentPhase.getPhaseType(), this.createGameSnapshot(state));
+			event = new GameEvent(eventType, this.createGameSnapshot(state));
 		} else if (result.isCompleted()) {
 			event = updateEvent(EGameEventType.PHASE_COMPLETED);
 		}
@@ -323,11 +326,10 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 				playerTerritories,
 				playerTokens);
 	}
-
 	//TODO Semplificare metodo
+
 	private GameEvent updateEvent (EGameEventType eventType) {
-		IPhaseType phaseType = (this.currentPhase == null) ? null : this.currentPhase.getPhaseType();
-		return new GameEvent(eventType, phaseType, this.createGameSnapshot(null));
+		return new GameEvent(eventType, this.createGameSnapshot(null));
 	}
 
 	private IGameSnapshot createGameSnapshot(IPhasePayload phasePayload) {
@@ -342,11 +344,6 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		GameSnapshotDTO commonSnapshot = new GameSnapshotDTO(
 				this.currentTurn, phaseId, currentPlayerName, this.gameSnapshot(), pendingAction, winnerName);
 		return this.createVariantSnapshot(commonSnapshot, phasePayload);
-	}
-
-	/** Punto di estensione per i dati di snapshot specifici della variante. */
-	protected IGameSnapshot createVariantSnapshot(GameSnapshotDTO commonSnapshot, IPhasePayload phasePayload) {
-		return commonSnapshot;
 	}
 
 }

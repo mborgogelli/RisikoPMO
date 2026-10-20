@@ -15,7 +15,7 @@ public interface IPhaseResult<S extends IPhasePayload> {
     boolean isCompleted();
 
     /**
-     * Stato opzionale da presentare al client; la fase non crea eventi di gioco.
+     * Informazioni opzionali da presentare al client.
      */
-    Optional<S> state();
+    Optional<S> phasePayload();
 }

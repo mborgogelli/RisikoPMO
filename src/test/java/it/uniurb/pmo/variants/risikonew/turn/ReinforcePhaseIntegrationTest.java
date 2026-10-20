@@ -143,7 +143,7 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
         IPhaseResult result = phase.handleCommand(deployCommand);
 
         assertTrue(result.isCompleted());
-        assertTrue(result.state().isEmpty());
+        assertTrue(result.phasePayload().isEmpty());
     }
 
     @Test
