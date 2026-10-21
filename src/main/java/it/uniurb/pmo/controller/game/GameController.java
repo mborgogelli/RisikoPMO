@@ -6,12 +6,17 @@ import it.uniurb.pmo.framework.lobby.GameSessionRegistry;
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.framework.turn.command.IDeployCommand;
-import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
+import it.uniurb.pmo.framework.turn.phase.request.IAttackRequestDTO;
+import it.uniurb.pmo.framework.turn.phase.request.IDeployRequestDTO;
+import it.uniurb.pmo.framework.turn.phase.request.IGameRequest;
+import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
+import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
+import it.uniurb.pmo.framework.turn.snapshot.IPlayerStateDTO;
 import it.uniurb.pmo.framework.utils.EColors;
 import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.dto.IRisikoGameSnapshot;
+import it.uniurb.pmo.variants.risikonew.turn.snapshot.IRisikoGameSnapshot;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,7 +93,7 @@ public class GameController {
 
         String phaseId = snapshot.phaseId().orElse(null);
         CurrentStateDTO.PendingActionDTO pendingAction = null;
-        IGameActionDTO action = snapshot.pendingAction().orElse(null);
+        IGameRequest action = snapshot.pendingAction().orElse(null);
         if (action instanceof IDeployRequestDTO deployRequest) {
             pendingAction = new CurrentStateDTO.PendingActionDTO(
                     "DEPLOY",

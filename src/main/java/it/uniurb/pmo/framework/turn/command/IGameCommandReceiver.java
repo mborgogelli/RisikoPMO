@@ -10,7 +10,7 @@ public interface IGameCommandReceiver {
 
     /**
      * Riceve un comando gia' associato alla partita destinataria.
-     * La sua validazione e la sua applicazione sono responsabilita'
+     * La sua validazione e la sua applicazione sono responsabilità
      * dell'implementazione.
      *
      * @param command comando ricevuto dall'esterno

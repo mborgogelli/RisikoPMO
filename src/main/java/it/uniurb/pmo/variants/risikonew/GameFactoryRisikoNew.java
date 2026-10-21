@@ -6,8 +6,8 @@ import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.variants.risikonew.management.*;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.GameCoordinatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.GameCoordinatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.IGameCoordinatorRisikoNew;
 
 import java.util.ArrayList;
 import java.util.List;

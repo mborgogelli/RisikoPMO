@@ -1,6 +1,6 @@
 package it.uniurb.pmo.variants.risikonew.utils;
 
-import it.uniurb.pmo.framework.turn.IPhaseType;
+import it.uniurb.pmo.framework.turn.phase.IPhaseType;
 
 public enum ERisikoNewPhase implements IPhaseType {
 	

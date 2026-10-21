@@ -1,7 +1,7 @@
 package it.uniurb.pmo.controller.game.dto;
 
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
-import it.uniurb.pmo.framework.turn.dto.ICombatResultDTO;
+import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
 import it.uniurb.pmo.framework.utils.EColors;
 
 import java.util.List;

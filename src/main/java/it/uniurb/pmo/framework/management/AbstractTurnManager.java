@@ -5,16 +5,22 @@ import it.uniurb.pmo.framework.management.interfaces.ITurnManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
-import it.uniurb.pmo.framework.turn.IPhase;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
-import it.uniurb.pmo.framework.turn.dto.*;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
 import it.uniurb.pmo.framework.turn.event.GameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventPublisher;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventReceiver;
-import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
+import it.uniurb.pmo.framework.turn.phase.IPhase;
+import it.uniurb.pmo.framework.turn.phase.IPhasePayload;
+import it.uniurb.pmo.framework.turn.phase.request.IGameRequest;
+import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
+import it.uniurb.pmo.framework.turn.phase.result.IPhaseResult;
+import it.uniurb.pmo.framework.turn.snapshot.GameSnapshotDTO;
+import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
+import it.uniurb.pmo.framework.turn.snapshot.IPlayerStateDTO;
+import it.uniurb.pmo.framework.turn.snapshot.PlayerStateDTO;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -263,6 +269,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		this.processPhaseResult(this.currentPhase.playPhase(this.currentPlayer));
 	}
 
+	//TODO Non abbastanza generica
 	private IGameEvent processPhaseResult(IPhaseResult<? extends IPhasePayload> result) {
 		IGameEvent event = null;
 		if (result.phasePayload().isPresent()) {
@@ -337,7 +344,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 				.map(phase -> phase.getPhaseType().phaseCode());
 		Optional<String> currentPlayerName = Optional.ofNullable(this.currentPlayer).map(IPlayer::getName);
 		Optional<String> winnerName = this.checkWinner().map(IPlayer::getName);
-		Optional<IGameActionDTO> pendingAction = phasePayload instanceof IGameActionDTO action
+		Optional<IGameRequest> pendingAction = phasePayload instanceof IGameRequest action
 				&& !(phasePayload instanceof ICombatResultDTO)
 				? Optional.of(action)
 				: Optional.empty();

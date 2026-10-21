@@ -8,7 +8,7 @@ import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoN
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITurnManagerRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.IGameCoordinatorRisikoNew;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;

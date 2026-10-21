@@ -3,19 +3,19 @@ package it.uniurb.pmo.variants.risikonew.management;
 import it.uniurb.pmo.framework.management.AbstractTurnManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
-import it.uniurb.pmo.framework.turn.IPhase;
-import it.uniurb.pmo.framework.turn.dto.GameSnapshotDTO;
-import it.uniurb.pmo.framework.turn.dto.ICombatResultDTO;
-import it.uniurb.pmo.framework.turn.dto.IGameSnapshot;
-import it.uniurb.pmo.framework.turn.dto.IPhasePayload;
+import it.uniurb.pmo.framework.turn.phase.IPhase;
+import it.uniurb.pmo.framework.turn.phase.IPhasePayload;
+import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
+import it.uniurb.pmo.framework.turn.snapshot.GameSnapshotDTO;
+import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITurnManagerRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.PhaseCombat;
-import it.uniurb.pmo.variants.risikonew.turn.PhaseInitialPlacement;
-import it.uniurb.pmo.variants.risikonew.turn.PhaseReinforce;
-import it.uniurb.pmo.variants.risikonew.turn.dto.RisikoGameSnapshotDTO;
-import it.uniurb.pmo.variants.risikonew.turn.gamecoordinator.IGameCoordinatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.phase_strategic.StrategicPhase;
+import it.uniurb.pmo.variants.risikonew.turn.IGameCoordinatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.phase.PhaseCombat;
+import it.uniurb.pmo.variants.risikonew.turn.phase.PhaseInitialPlacement;
+import it.uniurb.pmo.variants.risikonew.turn.phase.PhaseReinforce;
+import it.uniurb.pmo.variants.risikonew.turn.phase.PhaseStrategic;
+import it.uniurb.pmo.variants.risikonew.turn.snapshot.RisikoGameSnapshotDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -68,7 +68,7 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	@Override
 	protected List<IPhase> createPhases() {
 		this.initMediatorAndCoordinator();
-		return List.of(new PhaseReinforce(mediator), new PhaseCombat(mediator), new StrategicPhase(mediator));
+		return List.of(new PhaseReinforce(mediator), new PhaseCombat(mediator), new PhaseStrategic(mediator));
 	}
 
 	protected List<IPhase> createSetupPhases() {

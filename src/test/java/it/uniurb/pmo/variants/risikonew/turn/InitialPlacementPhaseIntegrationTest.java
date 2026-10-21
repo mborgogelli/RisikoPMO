@@ -1,11 +1,12 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.turn.dto.IPlayerStateDTO;
-import it.uniurb.pmo.framework.turn.event.interfaces.IPhaseResult;
+import it.uniurb.pmo.framework.turn.phase.result.IPhaseResult;
+import it.uniurb.pmo.framework.turn.snapshot.IPlayerStateDTO;
 import it.uniurb.pmo.framework.utils.EColors;
 import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.dto.DeployRequestRisikoNewDTO;
+import it.uniurb.pmo.variants.risikonew.turn.phase.PhaseInitialPlacement;
+import it.uniurb.pmo.variants.risikonew.turn.phase.request.DeployRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
