@@ -1,67 +1,84 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
+import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.turn.phase.request.IGameRequest;
+import it.uniurb.pmo.framework.turn.phase.result.IPhaseResult;
+import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.command.AttackCommandRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.phase.PhaseCombat;
+import it.uniurb.pmo.variants.risikonew.turn.phase.request.AttackRequestRisikoNewDTO;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 
 public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
 
+    private IMediatorRisikoNew phaseMediator;
+    private IPlayer attacker;
+    private IPhaseResult<IGameRequest> result;
+
     @BeforeEach
     public void setUp() {
         super.setUpRisikoNew();
+        this.attacker = players.getFirst();
+        this.phaseMediator = spy(this.mediator);
+
+        //Costruzione dei territori posseduti dall'attaccante e dei loro vicini
+        doReturn(List.of("topolinia", "paperopoli", "centinarola"))
+                .when(phaseMediator).getTerritoriesOwnedBy(attacker);
+
+        doReturn(List.of("gondor","contea","valinor","paperopoli"))
+                .when(phaseMediator).getNeighboursOf("topolinia");
+        doReturn(List.of("centinarola","topolinia","valinor"))
+                .when(phaseMediator).getNeighboursOf("paperopoli");
+        doReturn(List.of("paperopoli","contea"))
+                .when(phaseMediator).getNeighboursOf("centinarola");
+
+        doReturn(List.of("topolinia")).when(phaseMediator).getNeighboursOf("gondor");
+        doReturn(List.of("topolinia", "centinarola")).when(phaseMediator).getNeighboursOf("contea");
+        doReturn(List.of("topolinia")).when(phaseMediator).getNeighboursOf("valinor");
+
+        doReturn(1).when(phaseMediator).getZoneTank("paperopoli");
+        doReturn(3).when(phaseMediator).getZoneTank("topolinia");
+        doReturn(2).when(phaseMediator).getZoneTank("centinarola");
+
+        PhaseCombat phaseCombat = new PhaseCombat(phaseMediator);
+        this.result = phaseCombat.playPhase(attacker);
     }
-/*
+
     @Test
-    @DisplayName("Verifica che i dati nel DTO di richiesta siano coerenti con quelli del model.")
-    public void testAttackRequestContainsCorrectData() {
-        IPlayer attacker = players.getFirst();
-        IGameCoordinatorRisikoNew phaseCoordinator = spy(super.gameCoordinator);
-        List<String> ownedZones = mediator.getZonesOwnedBy(attacker);
+    @DisplayName("Verifica che la lista dei target sia corretta.")
+    public void testPossibleTargets() {
 
-        this.assignAllTanksToZones(attacker);
+        assertTrue(result.phasePayload().isPresent());
 
-        List<String> possibleTargetsByModel = this.getAllPossibleTargets(ownedZones);
-        PhaseCombat combatPhase = new PhaseCombat(mediator);
-        combatPhase.playPhase(attacker);
+        AttackRequestRisikoNewDTO attackRequest = (AttackRequestRisikoNewDTO) result.phasePayload().get();
+        List<String> targets = attackRequest.possibleTargets();
 
-        ArgumentCaptor<AttackRequestRisikoNewDTO> captor = ArgumentCaptor.forClass(AttackRequestRisikoNewDTO.class);
-        verify(phaseCoordinator).sendAttackRequest(captor.capture());
-
-        AttackRequestRisikoNewDTO request = captor.getValue();
-
-        assertTrue(possibleTargetsByModel.size() == request.possibleTargets().size() &&
-                   possibleTargetsByModel.containsAll(request.possibleTargets()));
-        for(String target : possibleTargetsByModel){
-            List<String> possibleStartingZonesByModel = this.getPossibleStartingZones(target, ownedZones);
-            assertEquals(possibleStartingZonesByModel, request.possibleStartingZones(target));
-        }
+        assertEquals(3, targets.size());
+        assertTrue(targets.containsAll(List.of("gondor", "contea", "valinor")));
+        assertFalse(attackRequest.possibleStartingZones("valinor").contains("paperopoli"));
+        assertEquals(2, attackRequest.maxDeployableTanks("topolinia"));
+        assertEquals(1, attackRequest.maxDeployableTanks("centinarola"));
     }
 
-    private void assignAllTanksToZones(IPlayer player) {
-        List<String> playerTerritories = mediator.getZonesOwnedBy(player);
-        while(mediator.getPlayerTank(player) > 0) {
-            mediator.deployTank(player,this.getRandomZone(playerTerritories),1);
-        }
+    @Test
+    @DisplayName("Verifica il comando di attacco")
+    void testAttackCommand() {
+
+        AttackRequestRisikoNewDTO attackRequest = (AttackRequestRisikoNewDTO) result.phasePayload().get();
+        List<String> targets = attackRequest.possibleTargets();
+
+        AttackCommandRisikoNew attackCommand = new AttackCommandRisikoNew(attacker, "topolinia", "gondor", 2);
+
     }
 
-    private List<String> getAllPossibleTargets(List<String> ownedZones) {
-        return ownedZones.stream()
-                .filter(territory -> this.mediator.getZoneTank(territory) > 1)
-                .flatMap(territory -> this.mediator.getNeighboursOf(territory).stream())
-                .distinct()
-                .filter(territory -> !ownedZones.contains(territory))
-                .toList();
-    }
-
-    private List<String> getPossibleStartingZones(String target, List<String> ownedZones) {
-        return this.mediator.getNeighboursOf(target).stream()
-                .filter(neighbour -> ownedZones.contains(neighbour))
-                .filter(territory -> this.mediator.getZoneTank(territory) > 1)
-                .toList();
-    }
-
-    private String getRandomZone(List<String> ownedZones) {
-        return ownedZones.get(new Random().nextInt(ownedZones.size()));
-    }
-*/
 }

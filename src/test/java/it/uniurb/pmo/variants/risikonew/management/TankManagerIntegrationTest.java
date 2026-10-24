@@ -54,10 +54,10 @@ public class TankManagerIntegrationTest extends RisikoNewTestSetup {
     
     @Test
     void testTanksAssignment() {
-        var myAvailableTanks = tankManager.getPlayerTank(players.get(0));
-        var myTerritoriesCount = mapManager.getTerritoriesOwnedBy(players.get(0)).size();
+        var myAvailableTanks = tankManager.getPlayerTank(players.getFirst());
+        var myTerritoriesCount = mapManager.getTerritoriesOwnedBy(players.getFirst()).size();
         //var myTerritories = mapManager.getTerritoriesOwnedBy(players.get(0));
-        var totalDeployed = tankManager.getTotalDeployed(players.get(0));
+        var totalDeployed = tankManager.getTotalDeployed(players.getFirst());
         //var deployedPerZone = tokenManager.getDeployedPerZone(players.get(0));
         
         assertEquals(myAvailableTanks + myTerritoriesCount, 30); // 30 tank totali per 4 giocatori

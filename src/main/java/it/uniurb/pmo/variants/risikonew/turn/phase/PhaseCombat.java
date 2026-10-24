@@ -7,6 +7,7 @@ import it.uniurb.pmo.framework.turn.phase.IPhase;
 import it.uniurb.pmo.framework.turn.phase.IPhasePayload;
 import it.uniurb.pmo.framework.turn.phase.request.IAttackRequestDTO;
 import it.uniurb.pmo.framework.turn.phase.request.IDefendRequestDTO;
+import it.uniurb.pmo.framework.turn.phase.request.IGameRequest;
 import it.uniurb.pmo.framework.turn.phase.result.IPhaseResult;
 import it.uniurb.pmo.framework.turn.phase.result.PhaseResult;
 import it.uniurb.pmo.framework.utils.DiceRoller;
@@ -20,10 +21,12 @@ import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewPhase;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PhaseCombat implements IPhase {
 
+	private static final int MAX_DEPLOYABLE = 3;
 	private final IMediatorRisikoNew mediator;
 	private final ERisikoNewPhase phaseType;
 	private boolean isCompleted;
@@ -31,7 +34,7 @@ public class PhaseCombat implements IPhase {
 	private IPlayer attacker;
 	private String attackerTerritory;
 	private int attackerTanks;
-	private Map<String, List<String>> possibleTargets;
+	private Map<String, Map<String,Integer>> possibleTargets;
 
 	private IPlayer defender;
 	private String defenderTerritory;
@@ -50,7 +53,7 @@ public class PhaseCombat implements IPhase {
 	}
 
 	@Override
-	public IPhaseResult<? extends IPhasePayload> playPhase(IPlayer player) {
+	public IPhaseResult<IGameRequest> playPhase(IPlayer player) {
 		this.clearPhase();
 		this.attacker = player;
 		this.acquirePlayerTargets();
@@ -80,7 +83,7 @@ public class PhaseCombat implements IPhase {
 			return new PhaseResult<>(this.isCompleted, Optional.empty());
 		} else {
 			boolean valid = this.isValidCommand(command);
-			if (valid && command instanceof AttackCommandRisikoNew(String attackerZone, String defenderZone, int tanks)) {
+			if (valid && command instanceof AttackCommandRisikoNew(IPlayer attacker, String attackerZone, String defenderZone, int tanks)) {
 				this.defender = this.mediator.getZoneOwner(defenderZone);
 				this.attackerTerritory = attackerZone;
 				this.attackerTanks = tanks;
@@ -118,7 +121,7 @@ public class PhaseCombat implements IPhase {
 	private void acquirePlayerTargets (){
 		this.possibleTargets.clear();
 		List<String> ownedZones = this.mediator.getTerritoriesOwnedBy(this.attacker);
-		 this.getAllPossibleTargets(ownedZones)
+		this.getAllPossibleTargets(ownedZones)
 				.forEach(target -> this.possibleTargets.put(target, this.getStartingZones(target, ownedZones)));
 	}
 
@@ -130,22 +133,34 @@ public class PhaseCombat implements IPhase {
 				.filter(territory -> !ownedZones.contains(territory));
 	}
 
-	private List<String> getStartingZones(String target, List<String> ownedZones) {
+	private Map<String,Integer> getStartingZones(String target, List<String> ownedZones) {
 		return this.mediator.getNeighboursOf(target).stream()
 				.filter(ownedZones::contains)
 				.filter(territory -> this.mediator.getZoneTank(territory) > 1)
-				.toList();
+				.collect(Collectors.toMap(startingZone -> startingZone,
+						this::maxDeployableTanks));
+	}
+
+	private int maxDeployableTanks(String attackerZone) {
+		return Math.min(this.mediator.getZoneTank(attackerZone) - 1, MAX_DEPLOYABLE);
 	}
 
 	private boolean checkAttackCommand(AttackCommandRisikoNew attackCommand) {
 		boolean	valid = attackCommand.tokenType() == ERisikoNewToken.TANK
-					&& this.possibleTargets.containsKey(attackCommand.attackerZone())
-					&& this.possibleTargets.get(attackCommand.attackerZone()).contains(attackCommand.defenderZone())
+					&& this.possibleTargets.containsKey(attackCommand.defenderZone())
+					&& this.possibleTargets.get(attackCommand.defenderZone()).containsKey(attackCommand.attackerZone())
 					&& this.mediator.getZoneTank(attackCommand.attackerZone()) > attackCommand.tanks()
 					&& attackCommand.tanks() > 0
-					&& attackCommand.tanks() <= 3;
+					&& attackCommand.tanks() <= this.possibleTargets.get(attackCommand.defenderZone())
+							.get(attackCommand.attackerZone());
 		return valid;
 	}
+
+	private IAttackRequestDTO attackRequestDTO() {
+		return new AttackRequestRisikoNewDTO(this.possibleTargets);
+	}
+
+	// Defend section
 
 	private boolean checkDefendCommand(DefendCommandRisikoNew defendCommand) {
 		return defendCommand.defenderTokens() > 0
@@ -153,13 +168,18 @@ public class PhaseCombat implements IPhase {
 				&& defendCommand.defenderTokens() <= this.mediator.getZoneTank(this.defenderTerritory);
 	}
 
-	private IAttackRequestDTO attackRequestDTO() {
-		return new AttackRequestRisikoNewDTO(this.possibleTargets);
-	}
-
 	private IDefendRequestDTO defendRequestDTO() {
 		int maxDefenderTanks = Math.min(this.mediator.getZoneTank(this.defenderTerritory), 3);
 		return new DefendRequestRisikoNewDTO(this.defender, maxDefenderTanks);
+	}
+
+	private CombatResultRisikoNewDTO combatResultDTO(CombatResultData result) {
+		Map<String, List<String>> possiblePlayerTargets = this.possibleTargets.entrySet().stream()
+				.collect(Collectors.toMap(Map.Entry::getKey,
+						entry -> entry.getValue().keySet().stream().sorted().toList()));
+		return new CombatResultRisikoNewDTO(this.attackerTerritory, this.defenderTerritory,
+				result.attackRolls(), result.defenseRolls(), result.attackerLosses, result.defenderLosses,
+				result.defenderIsDefeated(), possiblePlayerTargets);
 	}
 
 	private CombatResultData combatResultData() {
@@ -204,12 +224,6 @@ public class PhaseCombat implements IPhase {
 		}
 		return new CombatResultData(attackRolls, defenseRolls, attackerLosses, defenderLosses, defenderIsDefeated);
 
-	}
-
-	private CombatResultRisikoNewDTO combatResultDTO(CombatResultData result) {
-		return new CombatResultRisikoNewDTO(this.attackerTerritory, this.defenderTerritory,
-				result.attackRolls(), result.defenseRolls(), result.attackerLosses, result.defenderLosses,
-				result.defenderIsDefeated(), this.possibleTargets);
 	}
 
 	private record CombatResultData(List<Integer> attackRolls, List<Integer> defenseRolls,
