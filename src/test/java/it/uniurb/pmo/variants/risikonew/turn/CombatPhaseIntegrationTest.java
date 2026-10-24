@@ -24,6 +24,7 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
     private IMediatorRisikoNew phaseMediator;
     private IPlayer attacker;
     private IPhaseResult<IGameRequest> result;
+    private PhaseCombat phaseCombat;
 
     @BeforeEach
     public void setUp() {
@@ -50,7 +51,7 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
         doReturn(3).when(phaseMediator).getZoneTank("topolinia");
         doReturn(2).when(phaseMediator).getZoneTank("centinarola");
 
-        PhaseCombat phaseCombat = new PhaseCombat(phaseMediator);
+        this.phaseCombat = new PhaseCombat(phaseMediator);
         this.result = phaseCombat.playPhase(attacker);
     }
 
@@ -77,8 +78,9 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
         AttackRequestRisikoNewDTO attackRequest = (AttackRequestRisikoNewDTO) result.phasePayload().get();
         List<String> targets = attackRequest.possibleTargets();
 
-        AttackCommandRisikoNew attackCommand = new AttackCommandRisikoNew(attacker, "topolinia", "gondor", 2);
+        AttackCommandRisikoNew attackCommand = new AttackCommandRisikoNew(attacker, "topolinia", "gondor", 3);
 
+        assertFalse(phaseCombat.isValidCommand(attackCommand));
     }
 
 }
