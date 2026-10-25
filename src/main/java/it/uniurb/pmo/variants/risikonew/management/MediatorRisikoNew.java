@@ -129,22 +129,23 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 
 	@Override
 	public void removeTokensFromZone(String zone, ITokenType tokenType, int tokens) {
-
+		this.tankManager.removeTanksFromZone(zone, tokens);
 	}
 
 	@Override
 	public void addTokensToZone(String zone, ITokenType tokenType, int tokens) {
-
+		this.tankManager.addTanksToZone(zone, tokens);
 	}
 
 	@Override
 	public void transferTokens(String fromZone, String toZone, ITokenType tokenType, int tokens) {
-
+		this.tankManager.removeTanksFromZone(fromZone, tokens);
+		this.tankManager.addTanksToZone(toZone, tokens);
 	}
 
 	@Override
 	public void changeZoneOwnership(String zone, IPlayer newOwner) {
-
+		this.mapManager.updateOwnership(newOwner, zone);
 	}
 
 	@Override

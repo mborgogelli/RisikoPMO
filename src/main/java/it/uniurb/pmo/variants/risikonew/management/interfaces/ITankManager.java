@@ -45,6 +45,16 @@ public interface ITankManager extends ITokenManager {
 		assignToken(player, getDefaultTokenType(), tanks);
 	}
 
+	/**
+	 * Rimuove carri da una zona (senza scendere sotto zero).
+	 */
+	void removeTanksFromZone(String zone, int tanks);
+
+	/**
+	 * Aggiunge carri a una zona.
+	 */
+	void addTanksToZone(String zone, int tanks);
+
 	default void removeTank(IPlayer player, int tanks) {
 		removeToken(player, getDefaultTokenType(), tanks);
 	}

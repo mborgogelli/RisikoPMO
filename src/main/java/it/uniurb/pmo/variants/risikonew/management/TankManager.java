@@ -133,12 +133,14 @@ public class TankManager extends AbstractTokenManager implements ITankManager {
 		super.removePlayerTokenAmount(player, this.defaultTokenType, amount);
 	}
 
-	private void removeTanksFromZone(String zone, int amount) {
+	@Override
+	public void removeTanksFromZone(String zone, int amount) {
 		int newAmount = this.territoryTanks.getOrDefault(zone, 0) - amount;
 		this.territoryTanks.put(zone, Math.max(newAmount, 0));
 	}
 
-	private void addTanksToZone(String zone, int amount) {
+	@Override
+	public void addTanksToZone(String zone, int amount) {
 		int newAmount = this.territoryTanks.getOrDefault(zone, 0) + amount;
 		this.territoryTanks.put(zone, newAmount);
 	}
