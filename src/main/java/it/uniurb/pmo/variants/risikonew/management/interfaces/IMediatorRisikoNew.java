@@ -52,7 +52,7 @@ public interface IMediatorRisikoNew extends IMediator {
         this.changeZoneOwnership(territory,newOwner);
     };
 
-    default void occupyTerritoryWithTanks(IPlayer player, String fromZone, String toZone, int tanks) {
+    default void transferTanks(IPlayer player, String fromZone, String toZone, int tanks) {
         if(this.getZoneOwner(toZone) != player){
             this.changeZoneOwnership(toZone,player);
         }

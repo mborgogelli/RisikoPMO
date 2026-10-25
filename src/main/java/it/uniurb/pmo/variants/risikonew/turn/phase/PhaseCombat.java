@@ -220,7 +220,7 @@ public class PhaseCombat implements IPhase {
 		boolean defenderIsDefeated = this.mediator.getZoneTank(this.defenderTerritory) == 0;
 		if (defenderIsDefeated) {
 			int attackerRemainingTanks = this.attackerTanks - attackerLosses;
-			this.mediator.occupyTerritoryWithTanks(this.attacker, this.attackerTerritory, this.defenderTerritory, attackerRemainingTanks);
+			this.mediator.transferTanks(this.attacker, this.attackerTerritory, this.defenderTerritory, attackerRemainingTanks);
 		}
 		return new CombatResultData(attackRolls, defenseRolls, attackerLosses, defenderLosses, defenderIsDefeated);
 
