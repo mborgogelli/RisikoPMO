@@ -1,10 +1,7 @@
 package it.uniurb.pmo.framework.management;
 
 
-import it.uniurb.pmo.framework.management.interfaces.IManager;
-import it.uniurb.pmo.framework.management.interfaces.IMapManager;
-import it.uniurb.pmo.framework.management.interfaces.IMediator;
-import it.uniurb.pmo.framework.management.interfaces.ITokenManager;
+import it.uniurb.pmo.framework.management.interfaces.*;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
 
@@ -20,25 +17,42 @@ import java.util.Map;
 public abstract class AbstractMediator implements IMediator {
 	
 	private final List<IManager> managers;
+	private IDirector director;
 
 	public AbstractMediator() {
 		this.managers = new ArrayList<>();
 	}
-	
-	// Metodi per accedere ai dati del MapManager
-    public abstract List<String> getAllZones();
-    public abstract List<String> getZonesOwnedBy(IPlayer player);
-    public abstract boolean canMoveBetween(IPlayer player, String toZone, String fromZone);
+
+	@Override
+	public void setDirector(IDirector director) {
+		this.director = director;
+	}
+
+	@Override
+	public void  notifyWinner(IPlayer player) {
+		this.director.declareWinner(player);
+	}
+
+    @Override
+    public List<String> getAllZones() {
+        return this.resolveManager(IMapManager.class).getAllZones();
+    }
+
+    @Override
+    public List<String> getZonesOwnedBy(IPlayer player) {
+        return this.resolveManager(IMapManager.class).getZonesOwnedBy(player);
+    }
+
+    @Override
+    public boolean canMoveBetween(IPlayer player, String toZone, String fromZone) {
+        return this.resolveManager(IMapManager.class).canMoveBetween(player, toZone, fromZone);
+    }
     
     @Override
     public void registerManager(IManager manager) {
         this.managers.add(manager);
     }
     
-	public void notifyWinner(IPlayer iPlayer) {
-		//TODO implement notification properly
-	}
-
 	@Override
 	public boolean checkVictory(IPlayer player) {
 		return false;   // To do delegate to MissionManager or CardManager

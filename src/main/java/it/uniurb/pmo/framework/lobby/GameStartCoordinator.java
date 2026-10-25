@@ -1,13 +1,12 @@
 package it.uniurb.pmo.framework.lobby;
 
-import java.util.List;
-
 import it.uniurb.pmo.framework.management.Director;
+import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.utils.EGameVersion;
+import java.util.List;
 
 @Component
 public class GameStartCoordinator {
@@ -21,9 +20,6 @@ public class GameStartCoordinator {
         this.gameSessionRegistry = gameSessionRegistry;
     }
 
-    /**
-     * Costruttore di compatibilita' per gli utilizzi non gestiti da Spring.
-     */
     public GameStartCoordinator() {
         this(new GameSessionRegistry());
     }

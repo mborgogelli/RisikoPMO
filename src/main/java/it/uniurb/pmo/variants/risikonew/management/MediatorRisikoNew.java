@@ -3,7 +3,6 @@ package it.uniurb.pmo.variants.risikonew.management;
 import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.card.ICardType;
 import it.uniurb.pmo.framework.management.AbstractMediator;
-import it.uniurb.pmo.framework.management.interfaces.IDirector;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.variants.risikonew.card.ITerritoryCard;
@@ -20,8 +19,6 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	private ICardManagerRisikoNew cardManager;
 	private ITankManager tankManager;
 	private ITurnManagerRisikoNew turnManager;
-	private IDirector director;
-
 
 	@Override
 	public void initManagers() {
@@ -49,27 +46,12 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 
 	@Override
 	public void notifyWinner(IPlayer player) {
-		this.director.declareWinner(player);
-	}
-
-	@Override
-	public List<String> getAllZones() {
-		return mapManager.getAllZones();
-	}
-
-	@Override
-	public List<String> getZonesOwnedBy(IPlayer player) {
-		return mapManager.getTerritoriesOwnedBy(player);
+		super.notifyWinner(player);
 	}
 
 	@Override
 	public int getZoneValue(String zone) {
 		return this.mapManager.getZoneValue(zone);
-	}
-
-	@Override
-	public boolean canMoveBetween(IPlayer player, String toZone, String fromZone) {
-		return mapManager.canMoveBetween(player, toZone, fromZone);
 	}
 
 	@Override
@@ -105,6 +87,16 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	@Override
 	public Map<ITokenType, Integer> getZoneTokens(String zone) {
 		return Map.of(ERisikoNewToken.TANK,this.getZoneTank(zone));
+	}
+
+	@Override
+	public IPlayer getZoneOwner(String zone) {
+		return this.mapManager.getOwner(zone);
+	}
+
+	@Override
+	public Map<ITokenType, Integer> getTokensOwnedBy(IPlayer player) {
+		return this.tankManager.getPlayerTokens(player);
 	}
 
 	@Override

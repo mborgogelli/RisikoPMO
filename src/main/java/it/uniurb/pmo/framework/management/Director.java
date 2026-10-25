@@ -1,7 +1,5 @@
 package it.uniurb.pmo.framework.management;
 
-import java.util.List;
-
 import it.uniurb.pmo.framework.management.interfaces.IDirector;
 import it.uniurb.pmo.framework.management.interfaces.IGameFactory;
 import it.uniurb.pmo.framework.management.interfaces.IManager;
@@ -9,8 +7,10 @@ import it.uniurb.pmo.framework.management.interfaces.IMediator;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
 import it.uniurb.pmo.framework.turn.IGameCoordinator;
-import it.uniurb.pmo.framework.utils.GameFactoryProvider;
 import it.uniurb.pmo.framework.utils.EGameVersion;
+import it.uniurb.pmo.framework.utils.GameFactoryProvider;
+
+import java.util.List;
 
 public class Director implements IDirector {
 	
@@ -70,6 +70,7 @@ public class Director implements IDirector {
 		IGameFactory factory = GameFactoryProvider.getFactory(version);
 		this.gameCoordinator = factory.getGameCoordinator();
 		this.mediator = factory.getMediator();
+		this.mediator.setDirector(this);
 		this.managers = factory.getManagers();
 		players.forEach(player -> player.setPlayerTurnStatus(PlayerTurnStatus.ACTIVE));
 		this.managers.forEach(managers -> managers.initializeGame(players));

@@ -24,10 +24,6 @@ public interface IMediatorRisikoNew extends IMediator {
         return this.getZonesOwnedBy(player);
     }
 
-    default List<String> getAllTerritories(){
-        return getAllZones();
-    }
-
     default int getZoneTank(String zone){
         return this.getZoneTokenByType(zone, ERisikoNewToken.TANK);
     };
@@ -36,20 +32,12 @@ public interface IMediatorRisikoNew extends IMediator {
         return getZoneValue(continent);
     };
 
-    default int getTerritoryValue(String territory) {
-        return getZoneValue(territory);
-    };
-
     default void reinforcePlayer(IPlayer player, int reinforcements) {
         this.addTokens(player, ERisikoNewToken.TANK, reinforcements);
     };
 
     default void applyLosses(String zone, int losses) {
         this.removeTokensFromZone(zone, ERisikoNewToken.TANK, losses);
-    };
-
-    default void conquerTerritory(String territory, IPlayer newOwner) {
-        this.changeZoneOwnership(territory,newOwner);
     };
 
     default void transferTanks(IPlayer player, String fromZone, String toZone, int tanks) {
