@@ -1,5 +1,6 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
+import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
@@ -37,6 +38,11 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
     @Override
     public Optional<IGameSnapshot> getLatestGameSnapshot() {
         return Optional.ofNullable(this.latestGameSnapshot);
+    }
+
+    @Override
+    public Optional<CurrentStateDTO> currentState(String roomId) {
+        return Optional.empty();
     }
 
     @Override

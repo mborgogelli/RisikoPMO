@@ -4,6 +4,7 @@ import it.uniurb.pmo.framework.turn.command.IGameCommandPublisher;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventReceiver;
 import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
+import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 
 import java.util.Optional;
 
@@ -18,5 +19,12 @@ public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublis
     Optional<IGameEvent> lastGameEvent();
 
     Optional<IGameSnapshot> getLatestGameSnapshot();
+
+    /**
+     * Proietta l'ultimo stato della partita nel DTO esposto alla view.
+     * La conversione comune è condivisa; i coordinator di variante aggiungono
+     * solo gli eventuali dati specifici della propria variante.
+     */
+    Optional<CurrentStateDTO> currentState(String roomId);
 
 }
