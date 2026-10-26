@@ -60,14 +60,18 @@ public class PhaseStrategic implements IPhase {
 
 	@Override
 	public IPhaseResult<? extends IPhasePayload> handleCommand(IGameCommand command) {
+		if (this.player == null || this.isCompleted) {
+			throw new IllegalArgumentException("Invalid command.");
+		}
+
 		if (command instanceof PassCommand) {
 			this.isCompleted = true;
-		} else{
-			if (isValidCommand(command)) {
-				MoveCommandRisikoNew moveCommand = (MoveCommandRisikoNew) command;
-				this.mediator.transferTanks(this.player,moveCommand.source(), moveCommand.destination(), moveCommand.tanks());
-				this.isCompleted = true;
-			}
+		} else if (this.isValidCommand(command)) {
+			MoveCommandRisikoNew moveCommand = (MoveCommandRisikoNew) command;
+			this.mediator.transferTanks(this.player, moveCommand.source(), moveCommand.destination(), moveCommand.tanks());
+			this.isCompleted = true;
+		} else {
+			throw new IllegalArgumentException("Invalid command.");
 		}
 		return new PhaseResult<>(this.isCompleted, Optional.empty());
 	}
@@ -80,9 +84,10 @@ public class PhaseStrategic implements IPhase {
 		}
 
 		boolean valid = false;
-		if (command instanceof MoveCommandRisikoNew(String source, String destination, int tanks)) {
+		if (!this.isCompleted && command instanceof MoveCommandRisikoNew(String source, String destination, int tanks)) {
 			valid = this.destinations.containsKey(source) &&
 					this.destinations.get(source).contains(destination) &&
+					tanks > 0 &&
 					this.moveableTanksPerTerritory.get(source) >= tanks;
 		}
 		return valid;
