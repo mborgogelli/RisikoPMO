@@ -18,6 +18,7 @@ public record CurrentStateDTO(
         String currentPlayerName,
         EColors currentPlayerColor,
         Map<String, PlayerStateDTO> players,
+        String winnerName,
         PendingActionDTO pendingAction,
         ICombatResultDTO combatResult) {
 

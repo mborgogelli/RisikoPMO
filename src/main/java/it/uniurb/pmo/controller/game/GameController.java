@@ -117,7 +117,7 @@ public class GameController {
                 ? risikoSnapshot.lastCombatResult().orElse(null)
                 : null;
         return new CurrentStateDTO(roomId, eventType, phaseId, currentPlayerName, currentPlayerColor,
-                players, pendingAction, combatResult);
+                players, snapshot.winnerName().orElse(null), pendingAction, combatResult);
     }
 
     private CurrentStateDTO.PlayerStateDTO toPlayerState(IPlayerStateDTO playerState) {
