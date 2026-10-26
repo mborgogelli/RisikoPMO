@@ -47,23 +47,8 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	// Board Management
 
 	@Override
-	public int getZoneValue(String zone) {
-		return this.mapManager.getZoneValue(zone);
-	}
-
-	@Override
-	public List<String> getNeighboursOf(String zone) {
-		return this.mapManager.getNeighboursOf(zone);
-	}
-
-	@Override
 	public List<String> getCompletedContinents(IPlayer player) {
 		return this.mapManager.checkZoneCompletion(player);
-	}
-
-	@Override
-	public void changeZoneOwnership(String zone, IPlayer newOwner) {
-		this.mapManager.updateOwnership(newOwner, zone);
 	}
 
 
@@ -72,16 +57,6 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	@Override
 	public List<ICard> getPlayerCardsByType(IPlayer player, ICardType cardType) {
 		return List.of();
-	}
-
-	@Override
-	public void playCard(IPlayer player, ICard card) {
-		this.cardManager.playCard(player, card);
-	}
-
-	@Override
-	public <T extends ICard> Stream<List<T>> getCombinationsOf(List<T> playerCards, int k) {
-		return cardManager.getCombinationsOf(playerCards, k);
 	}
 
 	@Override

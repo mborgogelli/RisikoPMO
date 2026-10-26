@@ -1,6 +1,7 @@
 package it.uniurb.pmo.framework.management;
 
 
+import it.uniurb.pmo.framework.card.ICard;
 import it.uniurb.pmo.framework.management.interfaces.*;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.ITokenType;
@@ -8,6 +9,7 @@ import it.uniurb.pmo.framework.players.ITokenType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * Classe astratta che implementa
@@ -46,6 +48,31 @@ public abstract class AbstractMediator implements IMediator {
     @Override
     public boolean canMoveBetween(IPlayer player, String toZone, String fromZone) {
         return this.resolveManager(IMapManager.class).canMoveBetween(player, toZone, fromZone);
+    }
+
+    @Override
+    public int getZoneValue(String zone) {
+        return this.resolveManager(IMapManager.class).getZoneValue(zone);
+    }
+
+    @Override
+    public List<String> getNeighboursOf(String zone) {
+        return this.resolveManager(IMapManager.class).getNeighboursOf(zone);
+    }
+
+    @Override
+    public void changeZoneOwnership(String zone, IPlayer newOwner) {
+        this.resolveManager(IMapManager.class).updateOwnership(newOwner, zone);
+    }
+
+    @Override
+    public void playCard(IPlayer player, ICard card) {
+        this.resolveManager(ICardManager.class).playCard(player, card);
+    }
+
+    @Override
+    public <T extends ICard> Stream<List<T>> getCombinationsOf(List<T> playerCards, int k) {
+        return this.resolveManager(ICardManager.class).getCombinationsOf(playerCards, k);
     }
     
 	@Override
