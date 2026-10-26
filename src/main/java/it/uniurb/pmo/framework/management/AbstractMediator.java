@@ -48,11 +48,6 @@ public abstract class AbstractMediator implements IMediator {
         return this.resolveManager(IMapManager.class).canMoveBetween(player, toZone, fromZone);
     }
     
-    @Override
-    public void registerManager(IManager manager) {
-        this.managers.add(manager);
-    }
-    
 	@Override
 	public Map<ITokenType, Integer> getZoneTokens(String zone) {
 		return this.resolveManager(ITokenManager.class).getZoneToken(zone);
@@ -66,6 +61,11 @@ public abstract class AbstractMediator implements IMediator {
 	@Override
 	public Map<ITokenType,Integer> getTokensOwnedBy(IPlayer player) {
 		return this.resolveManager(ITokenManager.class).getPlayerTokens(player);
+	}
+
+	@Override
+	public void registerManager(IManager manager) {
+		this.managers.add(manager);
 	}
 
 	protected <T extends IManager> T resolveManager(Class<T> managerType) {

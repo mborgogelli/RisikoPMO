@@ -44,11 +44,6 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public void notifyWinner(IPlayer player) {
-		super.notifyWinner(player);
-	}
-
 	// Board Management
 
 	@Override
@@ -64,11 +59,6 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	@Override
 	public List<String> getCompletedContinents(IPlayer player) {
 		return this.mapManager.checkZoneCompletion(player);
-	}
-
-	@Override
-	public IPlayer getZoneOwner(String zone) {
-		return this.mapManager.getOwner(zone);
 	}
 
 	@Override
@@ -120,11 +110,6 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	@Override
 	public Map<ITokenType, Integer> getZoneTokens(String zone) {
 		return Map.of(ERisikoNewToken.TANK,this.getZoneTank(zone));
-	}
-
-	@Override
-	public Map<ITokenType, Integer> getTokensOwnedBy(IPlayer player) {
-		return this.tankManager.getPlayerTokens(player);
 	}
 
 	@Override
