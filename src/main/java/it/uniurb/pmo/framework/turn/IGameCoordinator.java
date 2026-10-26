@@ -1,10 +1,11 @@
 package it.uniurb.pmo.framework.turn;
 
+import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.framework.turn.command.IGameCommandPublisher;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventReceiver;
+import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
 import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
-import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 
 import java.util.Optional;
 
@@ -21,10 +22,15 @@ public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublis
     Optional<IGameSnapshot> getLatestGameSnapshot();
 
     /**
-     * Proietta l'ultimo stato della partita nel DTO esposto alla view.
-     * La conversione comune è condivisa; i coordinator di variante aggiungono
-     * solo gli eventuali dati specifici della propria variante.
+     * Fornisce l'ultimo stato della partita nel DTO per la view.
      */
     Optional<CurrentStateDTO> currentState(String roomId);
+
+    /**
+     * Restituisce l'eventuale risultato di combattimento specifico della variante
+     */
+    default Optional<ICombatResultDTO> getCombatResult() {
+        return Optional.empty();
+    }
 
 }
