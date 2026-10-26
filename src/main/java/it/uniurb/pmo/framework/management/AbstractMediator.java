@@ -54,11 +54,6 @@ public abstract class AbstractMediator implements IMediator {
     }
     
 	@Override
-	public boolean checkVictory(IPlayer player) {
-		return false;   // To do delegate to MissionManager or CardManager
-	}
-
-	@Override
 	public Map<ITokenType, Integer> getZoneTokens(String zone) {
 		return this.resolveManager(ITokenManager.class).getZoneToken(zone);
 	}

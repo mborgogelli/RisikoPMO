@@ -79,9 +79,12 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 
 	@Override
 	public Optional<IPlayer> checkWinner() {
+		List<IPlayer> activePlayers = this.players.stream()
+				.filter(player -> player.getTurnStatus() != PlayerTurnStatus.ELIMINATED)
+				.toList();
 		Optional<IPlayer> winner = Optional.empty();
-		if (this.mediator.checkVictory(this.getCurrentPlayer())) {
-			winner = Optional.of(this.getCurrentPlayer());
+		if (activePlayers.size() == 1) {
+			winner = Optional.of(activePlayers.getFirst());
 		}
 		return winner;
 	}

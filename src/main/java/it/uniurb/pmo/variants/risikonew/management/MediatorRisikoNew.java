@@ -49,6 +49,8 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 		super.notifyWinner(player);
 	}
 
+	// Board Management
+
 	@Override
 	public int getZoneValue(String zone) {
 		return this.mapManager.getZoneValue(zone);
@@ -65,6 +67,19 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
+	public IPlayer getZoneOwner(String zone) {
+		return this.mapManager.getOwner(zone);
+	}
+
+	@Override
+	public void changeZoneOwnership(String zone, IPlayer newOwner) {
+		this.mapManager.updateOwnership(newOwner, zone);
+	}
+
+
+	// Card Management
+
+	@Override
 	public List<ICard> getPlayerCardsByType(IPlayer player, ICardType cardType) {
 		return List.of();
 	}
@@ -73,6 +88,24 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	public void playCard(IPlayer player, ICard card) {
 		this.cardManager.playCard(player, card);
 	}
+
+	@Override
+	public <T extends ICard> Stream<List<T>> getCombinationsOf(List<T> playerCards, int k) {
+		return cardManager.getCombinationsOf(playerCards, k);
+	}
+
+	@Override
+	public Stream<List<ITerritoryCard>> getAvailableTris(IPlayer player) {
+		return this.cardManager.getAvailableTris(player);
+	}
+
+	@Override
+	public void playTris(IPlayer player, List<? extends ITerritoryCard> cards) {
+		this.cardManager.playTris(player, cards);
+	}
+
+
+	// Tank Management
 
 	@Override
 	public int getPlayerTank(IPlayer player) {
@@ -90,11 +123,6 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	}
 
 	@Override
-	public IPlayer getZoneOwner(String zone) {
-		return this.mapManager.getOwner(zone);
-	}
-
-	@Override
 	public Map<ITokenType, Integer> getTokensOwnedBy(IPlayer player) {
 		return this.tankManager.getPlayerTokens(player);
 	}
@@ -107,11 +135,6 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	@Override
 	public void deployTank(IPlayer player, String zone, int tanks) {
 		this.tankManager.deployTank(player, zone, tanks);
-	}
-
-	@Override
-	public <T extends ICard> Stream<List<T>> getCombinationsOf(List<T> playerCards, int k) {
-		return cardManager.getCombinationsOf(playerCards, k);
 	}
 
 	@Override
@@ -133,21 +156,6 @@ public class MediatorRisikoNew extends AbstractMediator implements IMediatorRisi
 	public void transferTokens(String fromZone, String toZone, ITokenType tokenType, int tokens) {
 		this.tankManager.removeTanksFromZone(fromZone, tokens);
 		this.tankManager.addTanksToZone(toZone, tokens);
-	}
-
-	@Override
-	public void changeZoneOwnership(String zone, IPlayer newOwner) {
-		this.mapManager.updateOwnership(newOwner, zone);
-	}
-
-	@Override
-	public Stream<List<ITerritoryCard>> getAvailableTris(IPlayer player) {
-		return this.cardManager.getAvailableTris(player);
-	}
-
-	@Override
-	public void playTris(IPlayer player, List<? extends ITerritoryCard> cards) {
-		this.cardManager.playTris(player, cards);
 	}
 
 

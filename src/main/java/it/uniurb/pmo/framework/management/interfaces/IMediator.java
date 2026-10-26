@@ -32,11 +32,6 @@ public interface IMediator extends IGameConductor {
 	 */
 	void setDirector(IDirector director);
 
-	/**
-	 * Verifica se un giocatore ha soddisfatto le condizioni di vittoria
-	 */
-	boolean checkVictory(IPlayer player);
-
 	void notifyWinner(IPlayer iPlayer);
 
 	/**
