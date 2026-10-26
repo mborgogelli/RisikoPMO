@@ -2,6 +2,7 @@ package it.uniurb.pmo.variants.risikonew.turn.phase;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
+import it.uniurb.pmo.framework.turn.command.PassCommand;
 import it.uniurb.pmo.framework.turn.phase.IPhase;
 import it.uniurb.pmo.framework.turn.phase.IPhasePayload;
 import it.uniurb.pmo.framework.turn.phase.request.IGameRequest;
@@ -59,10 +60,18 @@ public class PhaseStrategic implements IPhase {
 
 	@Override
 	public IPhaseResult<? extends IPhasePayload> handleCommand(IGameCommand command) {
-		if (isValidCommand(command)){
+		if (command instanceof PassCommand) {
+			this.isCompleted = true;
+		} else{
+			if (isValidCommand(command)) {
+				MoveCommandRisikoNew moveCommand = (MoveCommandRisikoNew) command;
+				this.mediator.transferTanks(this.player,moveCommand.source(), moveCommand.destination(), moveCommand.tanks());
+				this.isCompleted = true;
+			}
 		}
-		return null;
+		return new PhaseResult<>(this.isCompleted, Optional.empty());
 	}
+
 
 	@Override
 	public boolean isValidCommand(IGameCommand command) {
