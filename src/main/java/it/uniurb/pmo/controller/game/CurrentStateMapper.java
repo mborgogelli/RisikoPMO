@@ -17,8 +17,7 @@ import java.util.stream.Collectors;
 
 /**
  * Converte gli eventi e gli snapshot del framework nello stato esposto alla view.
- * I dati specifici di una variante, come l'ultimo risultato di combattimento,
- * vengono forniti dal coordinator.
+ * I dati specifici di una variante vengono forniti dal coordinator.
  */
 public class CurrentStateMapper {
 

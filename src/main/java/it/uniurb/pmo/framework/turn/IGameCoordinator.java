@@ -10,10 +10,9 @@ import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
 import java.util.Optional;
 
 /**
- * Canale di comunicazione tra la logica di gioco e i giocatori.
- * Il AbstractGameCoordinator si occupa di inviare messaggi/richieste al giocatore
- * e di raccogliere la risposta, mantenendo il framework agnostico rispetto
- * alla variante di gioco concreta.
+ * Classe per o scambio di informazioni tra il modello e i controller
+ * Implementa il pattern Adapter per convertire le informazioni nella struttura
+ * gestita dai controller.
  */
 public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublisher {
 
@@ -27,7 +26,8 @@ public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublis
     Optional<CurrentStateDTO> currentState(String roomId);
 
     /**
-     * Restituisce l'eventuale risultato di combattimento specifico della variante
+     * Restituisce l'eventuale risultato di combattimento.
+     * La variante deve specificare il risultato di combattimento.
      */
     default Optional<ICombatResultDTO> getCombatResult() {
         return Optional.empty();

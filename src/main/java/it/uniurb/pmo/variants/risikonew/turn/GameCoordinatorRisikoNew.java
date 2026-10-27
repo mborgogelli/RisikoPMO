@@ -1,10 +1,13 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
+import it.uniurb.pmo.controller.game.CurrentStateMapper;
 import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
+import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
+import it.uniurb.pmo.variants.risikonew.turn.snapshot.IRisikoGameSnapshot;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +17,12 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
 
     private volatile IGameEvent lastGameEvent;
     private volatile IGameSnapshot latestGameSnapshot;
+    private final CurrentStateMapper currentStateMapper;
     private List<IGameCommandReceiver> commandReceivers;
 
     public GameCoordinatorRisikoNew() {
         this.commandReceivers = new CopyOnWriteArrayList<>();
+        this.currentStateMapper = new CurrentStateMapper();
     }
 
     @Override
@@ -42,7 +47,17 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
 
     @Override
     public Optional<CurrentStateDTO> currentState(String roomId) {
-        return Optional.empty();
+        return this.lastGameEvent().map(event -> this.currentStateMapper.toCurrentState(
+                roomId, event, this.getCombatResult().orElse(null)));
+    }
+
+    @Override
+    public Optional<ICombatResultDTO> getCombatResult() {
+        Optional<ICombatResultDTO> combatResult = Optional.empty();
+        if (this.latestGameSnapshot instanceof IRisikoGameSnapshot risikoSnapshot) {
+            combatResult = risikoSnapshot.lastCombatResult();
+        }
+        return combatResult;
     }
 
     @Override
