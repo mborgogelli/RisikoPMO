@@ -24,7 +24,6 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 	IMediatorRisikoNew mediator;
 
 	private boolean isReady;
-	private ICombatResultDTO lastCombatResult;
 
 	public TurnManagerRisikoNew() {
 		super();
@@ -79,9 +78,9 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 
 	@Override
 	protected IGameSnapshot createVariantSnapshot(GameSnapshotDTO commonSnapshot, IPhasePayload phasePayload) {
-		if (phasePayload instanceof ICombatResultDTO combatResult) {
-			this.lastCombatResult = combatResult;
-		}
+		Optional<ICombatResultDTO> combatResult = phasePayload instanceof ICombatResultDTO result
+				? Optional.of(result)
+				: Optional.empty();
 		return new RisikoGameSnapshotDTO(
 				commonSnapshot.turnNumber(),
 				commonSnapshot.phaseId(),
@@ -89,7 +88,7 @@ public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnMa
 				commonSnapshot.players(),
 				commonSnapshot.pendingAction(),
 				commonSnapshot.winnerName(),
-				Optional.ofNullable(this.lastCombatResult));
+				combatResult);
 	}
 
 	@Override

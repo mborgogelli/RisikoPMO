@@ -7,7 +7,6 @@ import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.variants.risikonew.management.*;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.GameCoordinatorRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.IGameCoordinatorRisikoNew;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
 public class GameFactoryRisikoNew implements IGameFactory {
 
 	private final IMediatorRisikoNew mediator;
-	private final IGameCoordinatorRisikoNew gameCoordinator;
+	private final IGameCoordinator gameCoordinator;
 	private final List<IManager> managers;
 	
 	public GameFactoryRisikoNew() {
@@ -51,7 +50,7 @@ public class GameFactoryRisikoNew implements IGameFactory {
 		this.managers.add(new MapManagerRisikoNew());
 		this.managers.add(new TankManager());
 		this.managers.add(new CardManagerRisikoNew());
-		TurnManagerRisikoNew turnManager = new TurnManagerRisikoNew(this.gameCoordinator);
+		TurnManagerRisikoNew turnManager = new TurnManagerRisikoNew();
 		turnManager.addObserver(this.gameCoordinator);
 		this.gameCoordinator.setCommandReceiver(turnManager);
 		this.managers.add(turnManager);

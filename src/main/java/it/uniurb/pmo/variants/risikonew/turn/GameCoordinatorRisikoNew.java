@@ -28,6 +28,7 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
 
     private volatile IGameEvent lastGameEvent;
     private volatile IGameSnapshot latestGameSnapshot;
+    private volatile ICombatResultDTO lastCombatResult;
     private final CurrentStateMapper currentStateMapper;
     private final DeployCommandMapperRisikoNew deployCommandMapper;
     private List<IGameCommandReceiver> commandReceivers;
@@ -41,6 +42,9 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
     @Override
     public void onGameEvent(IGameEvent event) {
         this.latestGameSnapshot = event.getSnapshot();
+        if (event.getSnapshot() instanceof IRisikoGameSnapshot risikoSnapshot) {
+            risikoSnapshot.combatResult().ifPresent(result -> this.lastCombatResult = result);
+        }
         this.lastGameEvent = event;
     }
 
@@ -66,11 +70,7 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
 
     @Override
     public Optional<ICombatResultDTO> getCombatResult() {
-        Optional<ICombatResultDTO> combatResult = Optional.empty();
-        if (this.latestGameSnapshot instanceof IRisikoGameSnapshot risikoSnapshot) {
-            combatResult = risikoSnapshot.lastCombatResult();
-        }
-        return combatResult;
+        return Optional.ofNullable(this.lastCombatResult);
     }
 
     @Override

@@ -7,7 +7,7 @@ import it.uniurb.pmo.framework.turn.snapshot.IPlayerStateDTO;
 import java.util.Map;
 import java.util.Optional;
 
-/** Snapshot comune più l'ultimo risultato di combattimento della variante. */
+/** Snapshot comune con l'eventuale risultato di combattimento dell'evento corrente. */
 public record RisikoGameSnapshotDTO(
         int turnNumber,
         Optional<String> phaseId,
@@ -15,7 +15,7 @@ public record RisikoGameSnapshotDTO(
         Map<String, IPlayerStateDTO> players,
         Optional<IGameRequest> pendingAction,
         Optional<String> winnerName,
-        Optional<ICombatResultDTO> lastCombatResult
+        Optional<ICombatResultDTO> combatResult
 ) implements IRisikoGameSnapshot {
 
     public RisikoGameSnapshotDTO {
@@ -27,6 +27,6 @@ public record RisikoGameSnapshotDTO(
         players = Map.copyOf(players);
         pendingAction = pendingAction == null ? Optional.empty() : pendingAction;
         winnerName = winnerName == null ? Optional.empty() : winnerName;
-        lastCombatResult = lastCombatResult == null ? Optional.empty() : lastCombatResult;
+        combatResult = combatResult == null ? Optional.empty() : combatResult;
     }
 }

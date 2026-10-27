@@ -8,5 +8,5 @@ import java.util.Optional;
 /** Informazioni aggiuntive dello snapshot specifiche della variante Risiko New. */
 public interface IRisikoGameSnapshot extends IGameSnapshot {
 
-    Optional<ICombatResultDTO> lastCombatResult();
+    Optional<ICombatResultDTO> combatResult();
 }
