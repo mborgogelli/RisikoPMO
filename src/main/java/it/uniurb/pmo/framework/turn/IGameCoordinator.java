@@ -21,7 +21,7 @@ public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublis
     Optional<IGameSnapshot> getLatestGameSnapshot();
 
     /**
-     * Fornisce l'ultimo stato della partita nel DTO per la view.
+     * Fornisce l'ultimo stato della partita nel DTO per il controller.
      */
     Optional<CurrentStateDTO> currentState(String roomId);
 

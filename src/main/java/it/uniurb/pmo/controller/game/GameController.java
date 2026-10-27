@@ -3,20 +3,11 @@ package it.uniurb.pmo.controller.game;
 import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.controller.game.dto.DeployCommandRequestDTO;
 import it.uniurb.pmo.framework.lobby.GameSessionRegistry;
-import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.framework.turn.command.IDeployCommand;
-import it.uniurb.pmo.framework.turn.event.EGameEventType;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
-import it.uniurb.pmo.framework.turn.phase.request.IAttackRequestDTO;
 import it.uniurb.pmo.framework.turn.phase.request.IDeployRequestDTO;
-import it.uniurb.pmo.framework.turn.phase.request.IGameRequest;
-import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
-import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
-import it.uniurb.pmo.framework.turn.snapshot.IPlayerStateDTO;
-import it.uniurb.pmo.framework.utils.EColors;
 import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.snapshot.IRisikoGameSnapshot;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/game")
@@ -42,9 +32,9 @@ public class GameController {
         Optional<IGameCoordinator> coordinator = this.gameSessions.getGameCoordinator(roomId);
         ResponseEntity<CurrentStateDTO> response;
         if (coordinator.isPresent()) {
-            Optional<IGameEvent> event = coordinator.get().lastGameEvent();
-            if (event.isPresent()) {
-                response = ResponseEntity.ok(this.toCurrentState(roomId, coordinator.get(), event.get()));
+            Optional<CurrentStateDTO> currentState = coordinator.get().currentState(roomId);
+            if (currentState.isPresent()) {
+                response = ResponseEntity.ok(currentState.get());
             } else {
                 response = ResponseEntity.notFound().build();
             }
@@ -76,65 +66,6 @@ public class GameController {
             }
         }
         return response;
-    }
-
-    private CurrentStateDTO toCurrentState(String roomId,
-                                           IGameCoordinator coordinator,
-                                           IGameEvent event) {
-        IGameSnapshot snapshot = event.getSnapshot();
-        Map<String, CurrentStateDTO.PlayerStateDTO> players = snapshot.players().entrySet().stream()
-                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, entry -> this.toPlayerState(entry.getValue())));
-
-        IPlayerStateDTO currentPlayer = snapshot.currentPlayerName()
-                .map(snapshot.players()::get)
-                .orElse(null);
-        String currentPlayerName = currentPlayer == null ? null : currentPlayer.playerName();
-        EColors currentPlayerColor = currentPlayer == null ? null : currentPlayer.playerColor();
-
-        String phaseId = snapshot.phaseId().orElse(null);
-        CurrentStateDTO.PendingActionDTO pendingAction = null;
-        IGameRequest action = snapshot.pendingAction().orElse(null);
-        if (action instanceof IDeployRequestDTO deployRequest) {
-            pendingAction = new CurrentStateDTO.PendingActionDTO(
-                    "DEPLOY",
-                    deployRequest.deployableZones(),
-                    this.toTokenMap(deployRequest.tokenToDeploy()),
-                    java.util.List.of(),
-                    Map.of());
-        } else if (action instanceof IAttackRequestDTO attackRequest
-                && !attackRequest.possibleTargets().isEmpty()) {
-            Map<String, java.util.List<String>> startingZones = attackRequest.possibleTargets().stream()
-                    .collect(Collectors.toUnmodifiableMap(
-                            target -> target,
-                            attackRequest::possibleStartingZones));
-            pendingAction = new CurrentStateDTO.PendingActionDTO(
-                    "ATTACK", java.util.List.of(), Map.of(),
-                    attackRequest.possibleTargets(), startingZones);
-        }
-
-        EGameEventType eventType = event.getEventType();
-        ICombatResultDTO combatResult = snapshot instanceof IRisikoGameSnapshot risikoSnapshot
-                ? risikoSnapshot.lastCombatResult().orElse(null)
-                : null;
-        return new CurrentStateDTO(roomId, eventType, phaseId, currentPlayerName, currentPlayerColor,
-                players, snapshot.winnerName().orElse(null), pendingAction, combatResult);
-    }
-
-    private CurrentStateDTO.PlayerStateDTO toPlayerState(IPlayerStateDTO playerState) {
-        Map<String, Map<String, Integer>> deployedTokensByTerritory = playerState.playerZoneStatus().entrySet().stream()
-                .collect(Collectors.toUnmodifiableMap(
-                        Map.Entry::getKey,
-                        entry -> this.toTokenMap(entry.getValue())));
-        return new CurrentStateDTO.PlayerStateDTO(
-                playerState.playerColor(),
-                playerState.playerTurnStatus().name(),
-                deployedTokensByTerritory,
-                this.toTokenMap(playerState.playerTokens()));
-    }
-
-    private Map<String, Integer> toTokenMap(Map<ITokenType, Integer> tokens) {
-        return tokens.entrySet().stream()
-                .collect(Collectors.toUnmodifiableMap(entry -> entry.getKey().getName(), Map.Entry::getValue));
     }
 
     private boolean isCurrentPlayer(IGameEvent event, DeployCommandRequestDTO request) {
@@ -171,9 +102,9 @@ public class GameController {
         ResponseEntity<?> response;
         try {
             coordinator.submitCommand(this.toDeployCommand(request));
-            Optional<IGameEvent> updatedEvent = coordinator.lastGameEvent();
-            if (updatedEvent.isPresent()) {
-                response = ResponseEntity.ok(this.toCurrentState(roomId, coordinator, updatedEvent.get()));
+            Optional<CurrentStateDTO> updatedState = coordinator.currentState(roomId);
+            if (updatedState.isPresent()) {
+                response = ResponseEntity.ok(updatedState.get());
             } else {
                 response = ResponseEntity.notFound().build();
             }
