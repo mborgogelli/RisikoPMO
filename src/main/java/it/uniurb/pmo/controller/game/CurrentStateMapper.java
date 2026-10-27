@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Converte gli eventi e gli snapshot del framework nello stato esposto alla view.
+ * Classe Adapter che converte gli eventi e gli snapshot del framework nello stato esposto alla view.
  * I dati specifici di una variante vengono forniti dal coordinator.
  */
 public class CurrentStateMapper {

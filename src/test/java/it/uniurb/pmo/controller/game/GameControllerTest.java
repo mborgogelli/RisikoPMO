@@ -31,7 +31,9 @@ class GameControllerTest {
                 Map.of(),
                 Optional.empty(),
                 Optional.of(winnerName));
-        when(coordinator.lastGameEvent()).thenReturn(Optional.of(new GameEvent(EGameEventType.GAME_ENDED, snapshot)));
+        when(coordinator.currentState(roomId)).thenReturn(Optional.of(new it.uniurb.pmo.controller.game.dto.CurrentStateDTO(
+                roomId, EGameEventType.GAME_ENDED, "REINFORCE", winnerName, null,
+                Map.of(), winnerName, null, null)));
         gameSessions.register(roomId, coordinator);
 
         var response = new GameController(gameSessions).getCurrentState(roomId);
@@ -40,4 +42,18 @@ class GameControllerTest {
         assertNotNull(response.getBody());
         assertEquals(winnerName, response.getBody().winnerName());
     }
+    @Test
+    void getCurrentStateReturnsNotFoundWhenCoordinatorHasNoState() {
+        String roomId = "room-2";
+        GameSessionRegistry gameSessions = new GameSessionRegistry();
+        IGameCoordinator coordinator = mock(IGameCoordinator.class);
+        when(coordinator.currentState(roomId)).thenReturn(Optional.empty());
+        gameSessions.register(roomId, coordinator);
+
+        var response = new GameController(gameSessions).getCurrentState(roomId);
+
+        assertEquals(404, response.getStatusCode().value());
+    }
+
 }
+
