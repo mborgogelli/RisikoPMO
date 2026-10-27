@@ -10,7 +10,6 @@ import it.uniurb.pmo.framework.turn.snapshot.GameSnapshotDTO;
 import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITurnManagerRisikoNew;
-import it.uniurb.pmo.variants.risikonew.turn.IGameCoordinatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase.PhaseCombat;
 import it.uniurb.pmo.variants.risikonew.turn.phase.PhaseInitialPlacement;
 import it.uniurb.pmo.variants.risikonew.turn.phase.PhaseReinforce;
@@ -23,14 +22,12 @@ import java.util.Optional;
 public class TurnManagerRisikoNew extends AbstractTurnManager implements ITurnManagerRisikoNew {
 
 	IMediatorRisikoNew mediator;
-	IGameCoordinatorRisikoNew coordinator;
 
 	private boolean isReady;
 	private ICombatResultDTO lastCombatResult;
 
-	public TurnManagerRisikoNew(IGameCoordinatorRisikoNew gameCoordinator) {
+	public TurnManagerRisikoNew() {
 		super();
-		this.coordinator = gameCoordinator;
 		this.isReady = false;
 	}
 

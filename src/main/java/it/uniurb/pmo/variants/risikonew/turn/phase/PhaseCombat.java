@@ -108,6 +108,9 @@ public class PhaseCombat implements IPhase {
 			throw new IllegalArgumentException("Player is null.");
 		}
 		boolean valid = false;
+		if (command instanceof PassCommand) {
+			valid = true;
+		}
 		if (command instanceof AttackCommandRisikoNew attackCommand) {
 			valid = this.checkAttackCommand(attackCommand);
 		}

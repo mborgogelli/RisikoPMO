@@ -40,6 +40,8 @@ public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublis
 
     void submitDefend(String playerName, ITokenType tokenType, int tokenAmount);
 
+    void submitPass(String playerName);
+
     /**
      * Restituisce l'eventuale risultato di combattimento.
      * La variante deve specificare il risultato di combattimento.

@@ -74,16 +74,18 @@ public class GameController {
         boolean valid = request != null
                 && request.type() != null
                 && request.playerName() != null
-                && !request.playerName().isBlank()
-                && request.tokenType() != null
-                && !request.tokenType().isBlank()
-                && request.tokenAmount() != null
-                && request.tokenAmount() > 0;
-        if (valid && "ATTACK".equals(request.type())) {
-            valid = request.attackerZone() != null && !request.attackerZone().isBlank()
-                    && request.defenderZone() != null && !request.defenderZone().isBlank();
+                && !request.playerName().isBlank();
+        if (valid && ("ATTACK".equals(request.type()) || "DEFEND".equals(request.type()))) {
+            valid = request.tokenType() != null
+                    && !request.tokenType().isBlank()
+                    && request.tokenAmount() != null
+                    && request.tokenAmount() > 0;
+            if (valid && "ATTACK".equals(request.type())) {
+                valid = request.attackerZone() != null && !request.attackerZone().isBlank()
+                        && request.defenderZone() != null && !request.defenderZone().isBlank();
+            }
         } else if (valid) {
-            valid = "DEFEND".equals(request.type());
+            valid = "PASS".equals(request.type());
         }
         return valid;
     }
@@ -92,12 +94,16 @@ public class GameController {
                                            CombatCommandRequestDTO request) {
         ResponseEntity<?> response;
         try {
-            ITokenType tokenType = coordinator.resolveTokenType(request.tokenType());
-            if ("ATTACK".equals(request.type())) {
-                coordinator.submitAttack(request.playerName(), request.attackerZone(),
-                        request.defenderZone(), tokenType, request.tokenAmount());
+            if ("PASS".equals(request.type())) {
+                coordinator.submitPass(request.playerName());
             } else {
-                coordinator.submitDefend(request.playerName(), tokenType, request.tokenAmount());
+                ITokenType tokenType = coordinator.resolveTokenType(request.tokenType());
+                if ("ATTACK".equals(request.type())) {
+                    coordinator.submitAttack(request.playerName(), request.attackerZone(),
+                            request.defenderZone(), tokenType, request.tokenAmount());
+                } else {
+                    coordinator.submitDefend(request.playerName(), tokenType, request.tokenAmount());
+                }
             }
             Optional<CurrentStateDTO> updatedState = coordinator.currentState(roomId);
             response = updatedState.<ResponseEntity<?>>map(ResponseEntity::ok)

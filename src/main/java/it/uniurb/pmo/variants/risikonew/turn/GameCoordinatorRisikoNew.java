@@ -4,6 +4,8 @@ import it.uniurb.pmo.controller.game.CurrentStateMapper;
 import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
+import it.uniurb.pmo.framework.turn.command.PassCommand;
+import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.phase.request.IAttackRequestDTO;
 import it.uniurb.pmo.framework.turn.phase.request.IDefendRequestDTO;
@@ -22,7 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
+public class GameCoordinatorRisikoNew implements IGameCoordinator {
 
     private volatile IGameEvent lastGameEvent;
     private volatile IGameSnapshot latestGameSnapshot;
@@ -124,10 +126,7 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
                              ITokenType tokenType, int tokenAmount) {
         this.validateCombatTokenType(tokenType);
         IGameSnapshot snapshot = this.currentSnapshot();
-        boolean attackIsPending = snapshot.pendingAction().orElse(null) instanceof IAttackRequestDTO
-                || snapshot.phaseId().filter("RISIKONEW_ATTACK"::equals).isPresent()
-                && this.getCombatResult().filter(result -> !result.possibleTargets().isEmpty()).isPresent();
-        if (!attackIsPending) {
+        if (!this.isAttackPending(snapshot)) {
             throw new IllegalArgumentException("La fase corrente non richiede un attacco.");
         }
         boolean matchesCurrentPlayer = snapshot.currentPlayerName()
@@ -148,6 +147,26 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
             throw new IllegalStateException("Non è il turno del giocatore indicato.");
         }
         this.submitCommand(new DefendCommandRisikoNew(tokenAmount));
+    }
+
+    @Override
+    public void submitPass(String playerName) {
+        IGameSnapshot snapshot = this.currentSnapshot();
+        if (!this.isAttackPending(snapshot)) {
+            throw new IllegalArgumentException("La fase corrente non consente di terminare gli attacchi.");
+        }
+        boolean matchesCurrentPlayer = snapshot.currentPlayerName()
+                .map(name -> Objects.equals(name, playerName)).orElse(false);
+        if (!matchesCurrentPlayer) {
+            throw new IllegalStateException("Non è il turno del giocatore indicato.");
+        }
+        this.submitCommand(new PassCommand());
+    }
+
+    private boolean isAttackPending(IGameSnapshot snapshot) {
+        return snapshot.pendingAction().orElse(null) instanceof IAttackRequestDTO
+                || snapshot.phaseId().filter("RISIKONEW_ATTACK"::equals).isPresent()
+                && this.getCombatResult().filter(result -> !result.possibleTargets().isEmpty()).isPresent();
     }
 
     private void validateCombatTokenType(ITokenType tokenType) {
