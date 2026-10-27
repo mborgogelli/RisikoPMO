@@ -7,6 +7,7 @@ import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventReceiver;
 import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
 import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -24,6 +25,12 @@ public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublis
      * Fornisce l'ultimo stato della partita nel DTO per il controller.
      */
     Optional<CurrentStateDTO> currentState(String roomId);
+
+    /**
+     * Invia al modello una richiesta di deploy.
+     * Il coordinator traduce la richiesta nel comando concreto.
+     */
+    void submitDeploy(String playerName, String tokenType, Map<String, Integer> deployment);
 
     /**
      * Restituisce l'eventuale risultato di combattimento.
