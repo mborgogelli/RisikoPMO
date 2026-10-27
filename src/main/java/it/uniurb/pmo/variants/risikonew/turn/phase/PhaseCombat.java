@@ -83,7 +83,7 @@ public class PhaseCombat implements IPhase {
 			return new PhaseResult<>(this.isCompleted, Optional.empty());
 		} else {
 			boolean valid = this.isValidCommand(command);
-			if (valid && command instanceof AttackCommandRisikoNew(IPlayer attacker, String attackerZone, String defenderZone, int tanks)) {
+			if (valid && command instanceof AttackCommandRisikoNew(String attackerZone, String defenderZone, int tanks)) {
 				this.defender = this.mediator.getZoneOwner(defenderZone);
 				this.attackerTerritory = attackerZone;
 				this.attackerTanks = tanks;

@@ -11,10 +11,14 @@ import java.util.Map;
 public class DeployCommandMapperRisikoNew {
 
     public IDeployCommand<ERisikoNewToken> toCommand(String tokenName, Map<String, Integer> deployment) {
-        ERisikoNewToken tokenType = Arrays.stream(ERisikoNewToken.values())
+        ERisikoNewToken tokenType = this.toTokenType(tokenName);
+        return new DeployCommandRisikoNew(tokenType, deployment);
+    }
+
+    public ERisikoNewToken toTokenType(String tokenName) {
+        return Arrays.stream(ERisikoNewToken.values())
                 .filter(token -> token.name().equals(tokenName) || token.getName().equals(tokenName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Unknown token type: " + tokenName));
-        return new DeployCommandRisikoNew(tokenType, deployment);
     }
 }

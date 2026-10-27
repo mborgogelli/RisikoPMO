@@ -1,6 +1,7 @@
 package it.uniurb.pmo.framework.turn;
 
 import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
+import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.turn.command.IGameCommandPublisher;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEventReceiver;
@@ -31,6 +32,13 @@ public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublis
      * Il coordinator traduce la richiesta nel comando concreto.
      */
     void submitDeploy(String playerName, String tokenType, Map<String, Integer> deployment);
+
+    ITokenType resolveTokenType(String tokenTypeName);
+
+    void submitAttack(String playerName, String attackerZone, String defenderZone,
+                      ITokenType tokenType, int tokenAmount);
+
+    void submitDefend(String playerName, ITokenType tokenType, int tokenAmount);
 
     /**
      * Restituisce l'eventuale risultato di combattimento.

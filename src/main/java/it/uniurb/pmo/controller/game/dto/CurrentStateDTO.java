@@ -47,7 +47,19 @@ public record CurrentStateDTO(
             List<String> deployableTerritories,
             Map<String, Integer> tokensToDeploy,
             List<String> possibleTargets,
-            Map<String, List<String>> possibleStartingZones) {
+            Map<String, List<String>> possibleStartingZones,
+            String defenderName,
+            String defenderTokenType,
+            Integer maxDefenderTokens) {
+
+        public PendingActionDTO(String type,
+                                List<String> deployableTerritories,
+                                Map<String, Integer> tokensToDeploy,
+                                List<String> possibleTargets,
+                                Map<String, List<String>> possibleStartingZones) {
+            this(type, deployableTerritories, tokensToDeploy, possibleTargets,
+                    possibleStartingZones, null, null, null);
+        }
 
         public PendingActionDTO {
             deployableTerritories = List.copyOf(deployableTerritories);

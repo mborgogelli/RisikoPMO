@@ -5,10 +5,16 @@ import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
+import it.uniurb.pmo.framework.turn.phase.request.IAttackRequestDTO;
+import it.uniurb.pmo.framework.turn.phase.request.IDefendRequestDTO;
 import it.uniurb.pmo.framework.turn.phase.request.IDeployRequestDTO;
 import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
 import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
+import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.variants.risikonew.turn.snapshot.IRisikoGameSnapshot;
+import it.uniurb.pmo.variants.risikonew.turn.command.AttackCommandRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.command.DefendCommandRisikoNew;
+import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
 import java.util.List;
 import java.util.Map;
@@ -106,5 +112,60 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
             throw new IllegalStateException("Non è il turno del giocatore indicato.");
         }
         this.submitCommand(this.deployCommandMapper.toCommand(tokenType, deployment));
+    }
+
+    @Override
+    public ITokenType resolveTokenType(String tokenTypeName) {
+        return this.deployCommandMapper.toTokenType(tokenTypeName);
+    }
+
+    @Override
+    public void submitAttack(String playerName, String attackerZone, String defenderZone,
+                             ITokenType tokenType, int tokenAmount) {
+        this.validateCombatTokenType(tokenType);
+        IGameSnapshot snapshot = this.currentSnapshot();
+        boolean attackIsPending = snapshot.pendingAction().orElse(null) instanceof IAttackRequestDTO
+                || snapshot.phaseId().filter("RISIKONEW_ATTACK"::equals).isPresent()
+                && this.getCombatResult().filter(result -> !result.possibleTargets().isEmpty()).isPresent();
+        if (!attackIsPending) {
+            throw new IllegalArgumentException("La fase corrente non richiede un attacco.");
+        }
+        boolean matchesCurrentPlayer = snapshot.currentPlayerName()
+                .map(name -> Objects.equals(name, playerName)).orElse(false);
+        if (!matchesCurrentPlayer) {
+            throw new IllegalStateException("Non è il turno del giocatore indicato.");
+        }
+        this.submitCommand(new AttackCommandRisikoNew(attackerZone, defenderZone, tokenAmount));
+    }
+
+    @Override
+    public void submitDefend(String playerName, ITokenType tokenType, int tokenAmount) {
+        this.validateCombatTokenType(tokenType);
+        IGameSnapshot snapshot = this.currentSnapshot();
+        IDefendRequestDTO request = this.requirePendingAction(snapshot, IDefendRequestDTO.class,
+                "La fase corrente non richiede una difesa.");
+        if (!Objects.equals(request.defenderName(), playerName)) {
+            throw new IllegalStateException("Non è il turno del giocatore indicato.");
+        }
+        this.submitCommand(new DefendCommandRisikoNew(tokenAmount));
+    }
+
+    private void validateCombatTokenType(ITokenType tokenType) {
+        if (tokenType != ERisikoNewToken.TANK) {
+            throw new IllegalArgumentException("Token type is not valid for combat.");
+        }
+    }
+
+    private IGameSnapshot currentSnapshot() {
+        return this.lastGameEvent().map(IGameEvent::getSnapshot)
+                .orElseThrow(() -> new IllegalStateException("Game state is not available."));
+    }
+
+    private <T> T requirePendingAction(IGameSnapshot snapshot, Class<T> actionType, String message) {
+        Object action = snapshot.pendingAction().orElse(null);
+        if (!actionType.isInstance(action)) {
+            throw new IllegalArgumentException(message);
+        }
+        return actionType.cast(action);
     }
 }

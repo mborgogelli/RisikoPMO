@@ -4,6 +4,7 @@ import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.phase.request.IAttackRequestDTO;
+import it.uniurb.pmo.framework.turn.phase.request.IDefendRequestDTO;
 import it.uniurb.pmo.framework.turn.phase.request.IDeployRequestDTO;
 import it.uniurb.pmo.framework.turn.phase.request.IGameRequest;
 import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
@@ -35,13 +36,13 @@ public class CurrentStateMapper {
         String currentPlayerName = currentPlayer == null ? null : currentPlayer.playerName();
         EColors currentPlayerColor = currentPlayer == null ? null : currentPlayer.playerColor();
 
-        CurrentStateDTO.PendingActionDTO pendingAction = this.toPendingAction(snapshot);
+        CurrentStateDTO.PendingActionDTO pendingAction = this.toPendingAction(snapshot, combatResult);
         return new CurrentStateDTO(roomId, event.getEventType(), snapshot.phaseId().orElse(null),
                 currentPlayerName, currentPlayerColor, players, snapshot.winnerName().orElse(null),
                 pendingAction, combatResult);
     }
 
-    private CurrentStateDTO.PendingActionDTO toPendingAction(IGameSnapshot snapshot) {
+    private CurrentStateDTO.PendingActionDTO toPendingAction(IGameSnapshot snapshot, ICombatResultDTO combatResult) {
         CurrentStateDTO.PendingActionDTO pendingAction = null;
         IGameRequest action = snapshot.pendingAction().orElse(null);
         if (action instanceof IDeployRequestDTO deployRequest) {
@@ -59,6 +60,21 @@ public class CurrentStateMapper {
                             attackRequest::possibleStartingZones));
             pendingAction = new CurrentStateDTO.PendingActionDTO(
                     "ATTACK", List.of(), Map.of(), attackRequest.possibleTargets(), startingZones);
+        } else if (action instanceof IDefendRequestDTO defendRequest) {
+            pendingAction = new CurrentStateDTO.PendingActionDTO(
+                    "DEFEND", List.of(), Map.of(), List.of(), Map.of(),
+                    defendRequest.defenderName(), defendRequest.defenderTokenType().getName(),
+                    defendRequest.maxDefenderTokens());
+        } else if (action == null
+                && snapshot.phaseId().filter("RISIKONEW_ATTACK"::equals).isPresent()
+                && combatResult != null
+                && !combatResult.possibleTargets().isEmpty()) {
+            Map<String, List<String>> startingZones = combatResult.possibleTargets().stream()
+                    .collect(Collectors.toUnmodifiableMap(
+                            target -> target,
+                            combatResult::possibleStartingZones));
+            pendingAction = new CurrentStateDTO.PendingActionDTO(
+                    "ATTACK", List.of(), Map.of(), combatResult.possibleTargets(), startingZones);
         }
         return pendingAction;
     }
