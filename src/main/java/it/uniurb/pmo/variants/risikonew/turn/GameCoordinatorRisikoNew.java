@@ -4,13 +4,10 @@ import it.uniurb.pmo.controller.game.CurrentStateMapper;
 import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
-import it.uniurb.pmo.framework.turn.command.IDeployCommand;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
 import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
 import it.uniurb.pmo.variants.risikonew.turn.snapshot.IRisikoGameSnapshot;
-import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
-import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
 import java.util.List;
 import java.util.Map;
@@ -22,11 +19,13 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
     private volatile IGameEvent lastGameEvent;
     private volatile IGameSnapshot latestGameSnapshot;
     private final CurrentStateMapper currentStateMapper;
+    private final DeployCommandMapperRisikoNew deployCommandMapper;
     private List<IGameCommandReceiver> commandReceivers;
 
     public GameCoordinatorRisikoNew() {
         this.commandReceivers = new CopyOnWriteArrayList<>();
         this.currentStateMapper = new CurrentStateMapper();
+        this.deployCommandMapper = new DeployCommandMapperRisikoNew();
     }
 
     @Override
@@ -92,18 +91,7 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
     }
 
     @Override
-    public void submitDeploy(String playerName, String tokenType, Map<String, Integer> deployment) {
-        this.submitCommand(this.toDeployCommand(tokenType, deployment));
-    }
-
-    private IDeployCommand<ERisikoNewToken> toDeployCommand(String tokenType, Map<String, Integer> deployment) {
-        return new DeployCommandRisikoNew(this.toRisikoNewToken(tokenType), deployment);
-    }
-
-    private ERisikoNewToken toRisikoNewToken(String tokenName) {
-        return java.util.Arrays.stream(ERisikoNewToken.values())
-                .filter(token -> token.name().equals(tokenName) || token.getName().equals(tokenName))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Unknown token type: " + tokenName));
+    public void submitDeploy(String tokenType, Map<String, Integer> deployment) {
+        this.submitCommand(this.deployCommandMapper.toCommand(tokenType, deployment));
     }
 }

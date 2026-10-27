@@ -4,11 +4,8 @@ import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.controller.game.dto.DeployCommandRequestDTO;
 import it.uniurb.pmo.framework.lobby.GameSessionRegistry;
 import it.uniurb.pmo.framework.turn.IGameCoordinator;
-import it.uniurb.pmo.framework.turn.command.IDeployCommand;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.phase.request.IDeployRequestDTO;
-import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
-import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -101,7 +98,7 @@ public class GameController {
                                                DeployCommandRequestDTO request) {
         ResponseEntity<?> response;
         try {
-            coordinator.submitCommand(this.toDeployCommand(request));
+            coordinator.submitDeploy(request.tokenType(), request.deployment());
             Optional<CurrentStateDTO> updatedState = coordinator.currentState(roomId);
             if (updatedState.isPresent()) {
                 response = ResponseEntity.ok(updatedState.get());
@@ -116,14 +113,4 @@ public class GameController {
         return response;
     }
 
-    private IDeployCommand<ERisikoNewToken> toDeployCommand(DeployCommandRequestDTO request) {
-        return new DeployCommandRisikoNew(this.toRisikoNewToken(request.tokenType()), request.deployment());
-    }
-
-    private ERisikoNewToken toRisikoNewToken(String tokenName) {
-        return java.util.Arrays.stream(ERisikoNewToken.values())
-                .filter(token -> token.name().equals(tokenName) || token.getName().equals(tokenName))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Unknown token type: " + tokenName));
-    }
 }

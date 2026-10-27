@@ -30,7 +30,7 @@ public interface IGameCoordinator extends IGameEventReceiver, IGameCommandPublis
      * Invia al modello una richiesta di deploy.
      * Il coordinator traduce la richiesta nel comando concreto.
      */
-    void submitDeploy(String playerName, String tokenType, Map<String, Integer> deployment);
+    void submitDeploy(String tokenType, Map<String, Integer> deployment);
 
     /**
      * Restituisce l'eventuale risultato di combattimento.
