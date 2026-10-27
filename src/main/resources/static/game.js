@@ -371,7 +371,10 @@ document.addEventListener('DOMContentLoaded', () => {
       updateActionSignature();
       elements.actionError.hidden = true;
       renderGameState();
-      setConnection(true, 'Piazzamento registrato');
+      const confirmation = currentState.phaseId === 'RISIKONEW_INITIAL_PLACEMENT'
+        ? 'Piazzamento registrato'
+        : 'Rinforzi registrati';
+      setConnection(true, confirmation);
     } catch (error) {
       elements.actionError.textContent = error.message;
       elements.actionError.hidden = false;

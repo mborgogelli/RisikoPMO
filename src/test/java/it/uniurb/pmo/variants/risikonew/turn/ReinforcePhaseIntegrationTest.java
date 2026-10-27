@@ -148,6 +148,35 @@ public class ReinforcePhaseIntegrationTest extends RisikoNewTestSetup {
     }
 
     @Test
+    @DisplayName("Rifiuta il deploy su un territorio non posseduto")
+    void testRejectsDeploymentToUnownedTerritory() {
+        IPlayer player = players.getFirst();
+        PhaseReinforce phase = new PhaseReinforce(mediator);
+        phase.playPhase(player);
+
+        DeployCommandRisikoNew command = new DeployCommandRisikoNew(
+                ERisikoNewToken.TANK, Map.of("not-owned", 1));
+
+        assertFalse(phase.isValidCommand(command));
+        assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(command));
+    }
+
+    @Test
+    @DisplayName("Rifiuta il deploy di più carri di quelli disponibili")
+    void testRejectsDeploymentAboveAvailableTanks() {
+        IPlayer player = players.getFirst();
+        PhaseReinforce phase = new PhaseReinforce(mediator);
+        phase.playPhase(player);
+        int tanksAvailable = mediator.getPlayerTank(player);
+        String ownedTerritory = mediator.getZonesOwnedBy(player).getFirst();
+        DeployCommandRisikoNew command = new DeployCommandRisikoNew(
+                ERisikoNewToken.TANK, Map.of(ownedTerritory, tanksAvailable + 1));
+
+        assertFalse(phase.isValidCommand(command));
+        assertThrows(IllegalArgumentException.class, () -> phase.handleCommand(command));
+    }
+
+    @Test
     @DisplayName("Gestione di un comando su una fase non avviata")
     void testInvalidPlayer(){
 
