@@ -2,7 +2,9 @@ package it.uniurb.pmo.controller.game;
 
 import it.uniurb.pmo.framework.lobby.GameSessionRegistry;
 import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
+import it.uniurb.pmo.controller.game.dto.CombatCommandRequestDTO;
 import it.uniurb.pmo.controller.game.dto.DeployCommandRequestDTO;
+import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
 import it.uniurb.pmo.framework.turn.event.GameEvent;
@@ -63,6 +65,61 @@ class GameControllerTest {
         assertEquals(200, response.getStatusCode().value());
         assertEquals(state, response.getBody());
         verify(coordinator).submitDeploy("Player1", "TANK", Map.of("Alaska", 2));
+    }
+
+    @Test
+    void combatAttackSubmitsCommandAndReturnsUpdatedState() {
+        String roomId = "room-combat-attack";
+        GameSessionRegistry gameSessions = new GameSessionRegistry();
+        IGameCoordinator coordinator = mock(IGameCoordinator.class);
+        CurrentStateDTO state = emptyState(roomId);
+        ITokenType tokenType = it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken.TANK;
+        when(coordinator.currentState(roomId)).thenReturn(Optional.of(state));
+        when(coordinator.resolveTokenType("TANK")).thenReturn(tokenType);
+        gameSessions.register(roomId, coordinator);
+        CombatCommandRequestDTO request = new CombatCommandRequestDTO(
+                "ATTACK", "Player1", "Alaska", "Northwest Territory", "TANK", 2);
+
+        var response = new GameController(gameSessions).combat(roomId, request);
+
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(state, response.getBody());
+        verify(coordinator).submitAttack("Player1", "Alaska", "Northwest Territory", tokenType, 2);
+    }
+
+    @Test
+    void combatDefenseSubmitsCommandAndReturnsUpdatedState() {
+        String roomId = "room-combat-defend";
+        GameSessionRegistry gameSessions = new GameSessionRegistry();
+        IGameCoordinator coordinator = mock(IGameCoordinator.class);
+        CurrentStateDTO state = emptyState(roomId);
+        ITokenType tokenType = it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken.TANK;
+        when(coordinator.currentState(roomId)).thenReturn(Optional.of(state));
+        when(coordinator.resolveTokenType("TANK")).thenReturn(tokenType);
+        gameSessions.register(roomId, coordinator);
+        CombatCommandRequestDTO request = new CombatCommandRequestDTO(
+                "DEFEND", "Player2", null, null, "TANK", 2);
+
+        var response = new GameController(gameSessions).combat(roomId, request);
+
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(state, response.getBody());
+        verify(coordinator).submitDefend("Player2", tokenType, 2);
+    }
+
+    @Test
+    void combatRejectsUnknownActionType() {
+        String roomId = "room-combat-invalid";
+        GameSessionRegistry gameSessions = new GameSessionRegistry();
+        IGameCoordinator coordinator = mock(IGameCoordinator.class);
+        when(coordinator.currentState(roomId)).thenReturn(Optional.of(emptyState(roomId)));
+        gameSessions.register(roomId, coordinator);
+        CombatCommandRequestDTO request = new CombatCommandRequestDTO(
+                "MOVE", "Player1", null, null, "TANK", 2);
+
+        var response = new GameController(gameSessions).combat(roomId, request);
+
+        assertEquals(400, response.getStatusCode().value());
     }
 
     @Test
