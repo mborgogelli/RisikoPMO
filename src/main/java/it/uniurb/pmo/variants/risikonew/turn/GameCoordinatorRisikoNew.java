@@ -5,12 +5,14 @@ import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
+import it.uniurb.pmo.framework.turn.phase.request.IDeployRequestDTO;
 import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
 import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
 import it.uniurb.pmo.variants.risikonew.turn.snapshot.IRisikoGameSnapshot;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -91,7 +93,18 @@ public class GameCoordinatorRisikoNew implements IGameCoordinatorRisikoNew {
     }
 
     @Override
-    public void submitDeploy(String tokenType, Map<String, Integer> deployment) {
+    public void submitDeploy(String playerName, String tokenType, Map<String, Integer> deployment) {
+        IGameEvent currentEvent = this.lastGameEvent()
+                .orElseThrow(() -> new IllegalStateException("Game state is not available."));
+        if (!(currentEvent.getSnapshot().pendingAction().orElse(null) instanceof IDeployRequestDTO)) {
+            throw new IllegalArgumentException("La fase corrente non richiede un piazzamento.");
+        }
+        boolean matchesCurrentPlayer = currentEvent.getSnapshot().currentPlayerName()
+                .map(name -> Objects.equals(name, playerName))
+                .orElse(false);
+        if (!matchesCurrentPlayer) {
+            throw new IllegalStateException("Non è il turno del giocatore indicato.");
+        }
         this.submitCommand(this.deployCommandMapper.toCommand(tokenType, deployment));
     }
 }

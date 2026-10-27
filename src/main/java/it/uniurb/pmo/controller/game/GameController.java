@@ -4,14 +4,11 @@ import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.controller.game.dto.DeployCommandRequestDTO;
 import it.uniurb.pmo.framework.lobby.GameSessionRegistry;
 import it.uniurb.pmo.framework.turn.IGameCoordinator;
-import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
-import it.uniurb.pmo.framework.turn.phase.request.IDeployRequestDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -47,32 +44,14 @@ public class GameController {
         Optional<IGameCoordinator> coordinator = this.gameSessions.getGameCoordinator(roomId);
         if (coordinator.isEmpty()) {
             response = ResponseEntity.notFound().build();
+        } else if (coordinator.get().currentState(roomId).isEmpty()) {
+            response = ResponseEntity.notFound().build();
+        } else if (!this.isValidDeploymentPayload(request)) {
+            response = ResponseEntity.badRequest().body(Map.of("error", "Inserisci almeno un territorio e un numero di carri valido."));
         } else {
-            Optional<IGameEvent> currentEvent = coordinator.get().lastGameEvent();
-            if (currentEvent.isEmpty()) {
-                response = ResponseEntity.notFound().build();
-            } else if (!(currentEvent.get().getSnapshot().pendingAction().orElse(null) instanceof IDeployRequestDTO)) {
-                response = ResponseEntity.badRequest().body(Map.of("error", "La fase corrente non richiede un piazzamento."));
-            } else if (!this.isCurrentPlayer(currentEvent.get(), request)) {
-                response = ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body(Map.of("error", "Non è il turno del giocatore indicato."));
-            } else if (!this.isValidDeploymentPayload(request)) {
-                response = ResponseEntity.badRequest().body(Map.of("error", "Inserisci almeno un territorio e un numero di carri valido."));
-            } else {
-                response = this.submitDeployment(roomId, coordinator.get(), request);
-            }
+            response = this.submitDeployment(roomId, coordinator.get(), request);
         }
         return response;
-    }
-
-    private boolean isCurrentPlayer(IGameEvent event, DeployCommandRequestDTO request) {
-        boolean matchesCurrentPlayer = false;
-        if (request != null) {
-            matchesCurrentPlayer = event.getSnapshot().currentPlayerName()
-                    .map(name -> Objects.equals(name, request.playerName()))
-                    .orElse(false);
-        }
-        return matchesCurrentPlayer;
     }
 
     private boolean isValidDeploymentPayload(DeployCommandRequestDTO request) {
@@ -98,7 +77,7 @@ public class GameController {
                                                DeployCommandRequestDTO request) {
         ResponseEntity<?> response;
         try {
-            coordinator.submitDeploy(request.tokenType(), request.deployment());
+            coordinator.submitDeploy(request.playerName(), request.tokenType(), request.deployment());
             Optional<CurrentStateDTO> updatedState = coordinator.currentState(roomId);
             if (updatedState.isPresent()) {
                 response = ResponseEntity.ok(updatedState.get());
