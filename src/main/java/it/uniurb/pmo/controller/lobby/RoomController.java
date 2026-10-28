@@ -40,7 +40,7 @@ public class RoomController {
         
         // Valida i dati recuperati
         if (nomeGiocatore == null ||
-            nomeGiocatore.isEmpty()) {
+            nomeGiocatore.isEmpty() || maxPlayer < 3 || maxPlayer > 6) {
             //TO DO impostare min player in base alla versione
             return ResponseEntity.badRequest().build();
         }
@@ -129,7 +129,7 @@ public class RoomController {
     }
 
     /**
-     * Endpoint per iniziare il gioco quando la stanza è piena
+     * Endpoint per iniziare il gioco quando almeno tre giocatori sono pronti
      */
     @PostMapping("/{roomId}/avvia-gioco")
     public ResponseEntity<?> avviaGioco(@PathVariable String roomId) {

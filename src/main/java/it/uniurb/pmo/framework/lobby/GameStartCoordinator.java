@@ -24,11 +24,13 @@ public class GameStartCoordinator {
         this(new GameSessionRegistry());
     }
 
-    //TODO: Verifica se i giocatori sono tutti pronti
-
-    public GameStartResult startGame(String roomId) {
-        if (!this.roomManager.isFull(roomId)) {
-            throw new IllegalStateException("La stanza non è ancora piena");
+    public synchronized GameStartResult startGame(String roomId) {
+        int playersCount = this.roomManager.getPlayersNumber(roomId);
+        if (playersCount < 3 || playersCount > 6) {
+            throw new IllegalStateException("Servono da 3 a 6 giocatori per iniziare");
+        }
+        if (!this.roomManager.areAllPlayersReady(roomId)) {
+            throw new IllegalStateException("Tutti i giocatori devono essere pronti");
         }
 
         EGameVersion gameVersion = this.roomManager.getGameVersion(roomId);
@@ -38,6 +40,6 @@ public class GameStartCoordinator {
         this.gameSessionRegistry.register(roomId, director.getGameCoordinator());
         this.roomManager.closeRoom(roomId);
 
-        return new GameStartResult(roomId, players.size());
+        return new GameStartResult(roomId, playersCount);
     }
 }

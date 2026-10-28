@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const ROOM_LIST_REFRESH_INTERVAL_MS = 1500;
     const statoRefreshStanza = { timer: null };
     const statoRefreshLobby = { timer: null };
-    const autoReadyRooms = new Set();
+    let readyRequestInFlight = false;
+    let pendingReadyValue = null;
 
     // --- CARICAMENTO INIZIALE STANZE ---
     caricaStanze();
@@ -143,10 +144,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const nomeCorrente = inputNome.value || '';
 
         Object.entries(players).forEach(([playerName, color]) => {
-            const isReady = !!readyStates[playerName];
+            const isCurrentPlayer = playerName === nomeCorrente;
+            const isReady = isCurrentPlayer && pendingReadyValue !== null
+                ? pendingReadyValue : readyStates[playerName] === true;
             const readyLabel = isReady ? 'Pronto' : 'Non pronto';
             const readyClass = isReady ? 'ready' : 'not-ready';
-            const readyControl = `<span class="ready-status ${readyClass}">${readyLabel}</span>`;
+            const readyControl = isCurrentPlayer
+                ? `<label class="ready-toggle"><input class="ready-checkbox" type="checkbox" ${isReady ? 'checked' : ''} ${readyRequestInFlight ? 'disabled' : ''}> Sono pronto</label>`
+                : `<span class="ready-status ${readyClass}">${readyLabel}</span>`;
 
             // Crea HTML per ogni giocatore
             const htmlGiocatore = `
@@ -166,71 +171,60 @@ document.addEventListener('DOMContentLoaded', function() {
             playersContainer.insertAdjacentHTML('beforeend', htmlGiocatore);
         });
 
-        impostaProntoAutomatico(stanza.roomId, nomeCorrente, readyStates);
+        const playerNames = Object.keys(players);
+        const allReady = playerNames.length === stanza.currentPlayers
+            && playerNames.every(playerName => readyStates[playerName] === true);
+        const enoughPlayers = stanza.currentPlayers >= 3 && stanza.currentPlayers <= 6;
 
-        const allReady = Object.values(readyStates).length > 0 && Object.values(readyStates).every(Boolean);
-        const isFull = stanza.currentPlayers >= stanza.maxPlayers;
-        console.log(`DEBUG: roomId=${stanza.roomId}, isFull=${isFull}, allReady=${allReady}, gameStarted=${gameStarted}, startRequestInFlight=${startRequestInFlight}`);
-        console.log(`DEBUG: readyStates=${JSON.stringify(readyStates)}`);
-
-        if (!gameStarted && !startRequestInFlight && isFull && allReady) {
-            console.log('DEBUG: Condizioni soddisfatte, avvio gioco...');
+        if (!gameStarted && !startRequestInFlight && enoughPlayers && allReady) {
             startRequestInFlight = true;
             fetch(`/api/stanze/${stanza.roomId}/avvia-gioco`, { method: 'POST' })
                 .then(async response => {
                     const payload = await response.json().catch(() => ({}));
-                    console.log(`DEBUG: avvia-gioco response status=${response.status}, payload=${JSON.stringify(payload)}`);
-                    return { ok: response.ok, payload };
-                })
-                .then(({ ok, payload }) => {
-                    console.log(`DEBUG: ok=${ok}, gameStarted=${gameStarted}`);
-                    if (!ok) {
-                        const errorMessage = (payload && payload.error ? payload.error : '').toLowerCase();
-                        const partitaGiaAvviata = errorMessage.includes('gia') || errorMessage.includes('già') || errorMessage.includes('already');
-                        if (!partitaGiaAvviata) {
-                            throw new Error(payload.error || 'Errore avvio gioco');
-                        }
+                    if (!response.ok) {
+                        throw new Error(payload.error || 'Errore avvio gioco');
                     }
-
                     gameStarted = true;
-                    console.log('DEBUG: Reindirizzamento a game.html');
                     vaiAllaPaginaPartita(stanza.roomId, nomeCorrente);
                 })
                 .catch(err => console.error('Errore avvio gioco:', err))
                 .finally(() => {
-                    if (!gameStarted) {
-                        startRequestInFlight = false;
-                    }
+                    startRequestInFlight = false;
                 });
-        } else if (!stanza.isFull || !allReady) {
-            startRequestInFlight = false;
         }
     }
 
-    function impostaProntoAutomatico(roomId, playerName, readyStates) {
-        if (!roomId || !playerName || autoReadyRooms.has(roomId)) {
-            return;
+    playersContainer.addEventListener('change', function(event) {
+        const checkbox = event.target;
+        if (checkbox.classList.contains('ready-checkbox') && currentRoomId && !readyRequestInFlight) {
+            const ready = checkbox.checked;
+            readyRequestInFlight = true;
+            pendingReadyValue = ready;
+            checkbox.disabled = true;
+            fetch(`/api/stanze/${currentRoomId}/pronto`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ playerName: inputNome.value, ready })
+            })
+                .then(async response => {
+                    const payload = await response.json().catch(() => ({}));
+                    if (!response.ok) {
+                        throw new Error(payload.error || 'Errore aggiornamento stato pronto');
+                    }
+                    return payload;
+                })
+                .then(renderLobby)
+                .catch(err => {
+                    console.error('Errore stato pronto:', err);
+                    checkbox.checked = !ready;
+                })
+                .finally(() => {
+                    readyRequestInFlight = false;
+                    pendingReadyValue = null;
+                    aggiornaStanzaCorrente();
+                });
         }
-
-        if (readyStates[playerName] === true) {
-            autoReadyRooms.add(roomId);
-            return;
-        }
-
-        fetch(`/api/stanze/${roomId}/pronto`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ playerName: playerName, ready: true })
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => { throw new Error(err.error || 'Errore auto-ready'); });
-            }
-            autoReadyRooms.add(roomId);
-            return response.json();
-        })
-        .catch(err => console.error('Errore auto-ready:', err));
-    }
+    });
 
     function vaiAllaPaginaPartita(roomId, playerName) {
         const params = new URLSearchParams({

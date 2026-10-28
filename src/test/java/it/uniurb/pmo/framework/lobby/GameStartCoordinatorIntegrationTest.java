@@ -29,6 +29,9 @@ class GameStartCoordinatorTest {
         this.roomId = this.roomManager.createRoom("Alice", 3, EGameVersion.RISIKONEW);
         this.roomManager.enterRoom(this.roomId, "Bob");
         this.roomManager.enterRoom(this.roomId, "Charlie");
+        this.roomManager.setPlayerReady(this.roomId, "Alice", true);
+        this.roomManager.setPlayerReady(this.roomId, "Bob", true);
+        this.roomManager.setPlayerReady(this.roomId, "Charlie", true);
 
         GameStartResult result = new GameStartCoordinator().startGame(this.roomId);
 
@@ -45,6 +48,9 @@ class GameStartCoordinatorTest {
         this.roomId = this.roomManager.createRoom("Alice", 3, EGameVersion.RISIKONEW);
         this.roomManager.enterRoom(this.roomId, "Bob");
         this.roomManager.enterRoom(this.roomId, "Charlie");
+        this.roomManager.setPlayerReady(this.roomId, "Alice", true);
+        this.roomManager.setPlayerReady(this.roomId, "Bob", true);
+        this.roomManager.setPlayerReady(this.roomId, "Charlie", true);
         new GameStartCoordinator(gameSessions).startGame(this.roomId);
 
         assertTrue(gameSessions.getGameCoordinator(this.roomId).isPresent());
@@ -53,12 +59,43 @@ class GameStartCoordinatorTest {
     }
 
     @Test
-    void startGameRejectsNotFullRoom() {
-        this.roomId = this.roomManager.createRoom("Alice", 4, EGameVersion.RISIKONEW);
+    void startGameAllowsThreeReadyPlayersInSixSeatRoom() {
+        this.roomId = this.roomManager.createRoom("Alice", 6, EGameVersion.RISIKONEW);
+        this.roomManager.enterRoom(this.roomId, "Bob");
+        this.roomManager.enterRoom(this.roomId, "Charlie");
+        this.roomManager.setPlayerReady(this.roomId, "Alice", true);
+        this.roomManager.setPlayerReady(this.roomId, "Bob", true);
+        this.roomManager.setPlayerReady(this.roomId, "Charlie", true);
+
+        GameStartResult result = new GameStartCoordinator().startGame(this.roomId);
+
+        assertEquals(3, result.playersCount());
+    }
+
+    @Test
+    void startGameRejectsFewerThanThreePlayers() {
+        this.roomId = this.roomManager.createRoom("Alice", 6, EGameVersion.RISIKONEW);
+        this.roomManager.enterRoom(this.roomId, "Bob");
+        this.roomManager.setPlayerReady(this.roomId, "Alice", true);
+        this.roomManager.setPlayerReady(this.roomId, "Bob", true);
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> new GameStartCoordinator().startGame(this.roomId));
 
-        assertEquals("La stanza non è ancora piena", exception.getMessage());
+        assertEquals("Servono da 3 a 6 giocatori per iniziare", exception.getMessage());
+    }
+
+    @Test
+    void startGameRejectsWhenAPlayerIsNotReady() {
+        this.roomId = this.roomManager.createRoom("Alice", 6, EGameVersion.RISIKONEW);
+        this.roomManager.enterRoom(this.roomId, "Bob");
+        this.roomManager.enterRoom(this.roomId, "Charlie");
+        this.roomManager.setPlayerReady(this.roomId, "Alice", true);
+        this.roomManager.setPlayerReady(this.roomId, "Bob", true);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> new GameStartCoordinator().startGame(this.roomId));
+
+        assertEquals("Tutti i giocatori devono essere pronti", exception.getMessage());
     }
 }

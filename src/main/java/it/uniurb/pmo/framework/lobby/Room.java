@@ -21,6 +21,9 @@ public class Room implements IRoom {
 
 	
 	public Room(int maxPlayers, EGameVersion gameVersion) {
+		if (maxPlayers < 3 || maxPlayers > 6) {
+			throw new IllegalArgumentException("A room must allow from 3 to 6 players.");
+		}
 		this.maxPlayers = maxPlayers;
 		this.gameVersion = gameVersion;
 		this.players = new ArrayList<>();
