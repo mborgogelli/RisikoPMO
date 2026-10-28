@@ -1,21 +1,23 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
-import it.uniurb.pmo.controller.game.CurrentStateMapper;
 import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
+import it.uniurb.pmo.framework.players.ITokenType;
+import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.framework.turn.command.IGameCommand;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.command.PassCommand;
-import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.phase.request.IAttackRequestDTO;
 import it.uniurb.pmo.framework.turn.phase.request.IDefendRequestDTO;
 import it.uniurb.pmo.framework.turn.phase.request.IDeployRequestDTO;
-import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
+import it.uniurb.pmo.framework.turn.phase.request.IMovementRequest;
 import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
-import it.uniurb.pmo.framework.players.ITokenType;
-import it.uniurb.pmo.variants.risikonew.turn.snapshot.IRisikoGameSnapshot;
+import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
+import it.uniurb.pmo.framework.utils.CurrentStateMapper;
 import it.uniurb.pmo.variants.risikonew.turn.command.AttackCommandRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.command.DefendCommandRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.command.MoveCommandRisikoNew;
+import it.uniurb.pmo.variants.risikonew.turn.snapshot.IRisikoGameSnapshot;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
 import java.util.List;
@@ -124,7 +126,7 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
     @Override
     public void submitAttack(String playerName, String attackerZone, String defenderZone,
                              ITokenType tokenType, int tokenAmount) {
-        this.validateCombatTokenType(tokenType);
+        this.validateRisikoNewTokenType(tokenType);
         IGameSnapshot snapshot = this.currentSnapshot();
         if (!this.isAttackPending(snapshot)) {
             throw new IllegalArgumentException("La fase corrente non richiede un attacco.");
@@ -139,7 +141,7 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
 
     @Override
     public void submitDefend(String playerName, ITokenType tokenType, int tokenAmount) {
-        this.validateCombatTokenType(tokenType);
+        this.validateRisikoNewTokenType(tokenType);
         IGameSnapshot snapshot = this.currentSnapshot();
         IDefendRequestDTO request = this.requirePendingAction(snapshot, IDefendRequestDTO.class,
                 "La fase corrente non richiede una difesa.");
@@ -152,8 +154,10 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
     @Override
     public void submitPass(String playerName) {
         IGameSnapshot snapshot = this.currentSnapshot();
-        if (!this.isAttackPending(snapshot)) {
-            throw new IllegalArgumentException("La fase corrente non consente di terminare gli attacchi.");
+        boolean canPass = this.isAttackPending(snapshot)
+                || snapshot.pendingAction().orElse(null) instanceof IMovementRequest;
+        if (!canPass) {
+            throw new IllegalArgumentException("La fase corrente non consente di saltare l'azione.");
         }
         boolean matchesCurrentPlayer = snapshot.currentPlayerName()
                 .map(name -> Objects.equals(name, playerName)).orElse(false);
@@ -163,13 +167,29 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
         this.submitCommand(new PassCommand());
     }
 
+    @Override
+    public void submitMovement(String playerName, ITokenType tokenType, String source,
+                               String destination, int tokenAmount) {
+        this.validateRisikoNewTokenType(tokenType);
+        IGameSnapshot snapshot = this.currentSnapshot();
+        if (!(snapshot.pendingAction().orElse(null) instanceof IMovementRequest)) {
+            throw new IllegalArgumentException("La fase corrente non richiede uno spostamento.");
+        }
+        boolean matchesCurrentPlayer = snapshot.currentPlayerName()
+                .map(name -> Objects.equals(name, playerName)).orElse(false);
+        if (!matchesCurrentPlayer) {
+            throw new IllegalStateException("Non è il turno del giocatore indicato.");
+        }
+        this.submitCommand(new MoveCommandRisikoNew(source, destination, tokenAmount));
+    }
+
     private boolean isAttackPending(IGameSnapshot snapshot) {
         return snapshot.pendingAction().orElse(null) instanceof IAttackRequestDTO
                 || snapshot.phaseId().filter("RISIKONEW_ATTACK"::equals).isPresent()
                 && this.getCombatResult().filter(result -> !result.possibleTargets().isEmpty()).isPresent();
     }
 
-    private void validateCombatTokenType(ITokenType tokenType) {
+    private void validateRisikoNewTokenType(ITokenType tokenType) {
         if (tokenType != ERisikoNewToken.TANK) {
             throw new IllegalArgumentException("Token type is not valid for combat.");
         }

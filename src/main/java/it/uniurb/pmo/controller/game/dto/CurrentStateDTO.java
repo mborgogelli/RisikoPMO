@@ -50,7 +50,9 @@ public record CurrentStateDTO(
             Map<String, List<String>> possibleStartingZones,
             String defenderName,
             String defenderTokenType,
-            Integer maxDefenderTokens) {
+            Integer maxDefenderTokens,
+            Map<String, List<String>> possibleMoves,
+            Map<String, Map<String, Integer>> moveableTokens) {
 
         public PendingActionDTO(String type,
                                 List<String> deployableTerritories,
@@ -58,7 +60,20 @@ public record CurrentStateDTO(
                                 List<String> possibleTargets,
                                 Map<String, List<String>> possibleStartingZones) {
             this(type, deployableTerritories, tokensToDeploy, possibleTargets,
-                    possibleStartingZones, null, null, null);
+                    possibleStartingZones, null, null, null, Map.of(), Map.of());
+        }
+
+        public PendingActionDTO(String type,
+                                List<String> deployableTerritories,
+                                Map<String, Integer> tokensToDeploy,
+                                List<String> possibleTargets,
+                                Map<String, List<String>> possibleStartingZones,
+                                String defenderName,
+                                String defenderTokenType,
+                                Integer maxDefenderTokens) {
+            this(type, deployableTerritories, tokensToDeploy, possibleTargets,
+                    possibleStartingZones, defenderName, defenderTokenType,
+                    maxDefenderTokens, Map.of(), Map.of());
         }
 
         public PendingActionDTO {
@@ -67,6 +82,10 @@ public record CurrentStateDTO(
             possibleTargets = List.copyOf(possibleTargets);
             possibleStartingZones = possibleStartingZones.entrySet().stream()
                     .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, entry -> List.copyOf(entry.getValue())));
+            possibleMoves = possibleMoves.entrySet().stream()
+                    .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, entry -> List.copyOf(entry.getValue())));
+            moveableTokens = moveableTokens.entrySet().stream()
+                    .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, entry -> Map.copyOf(entry.getValue())));
         }
     }
 }

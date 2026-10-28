@@ -1,8 +1,9 @@
 package it.uniurb.pmo.controller.game;
 
+import it.uniurb.pmo.controller.game.dto.CombatCommandRequestDTO;
 import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.controller.game.dto.DeployCommandRequestDTO;
-import it.uniurb.pmo.controller.game.dto.CombatCommandRequestDTO;
+import it.uniurb.pmo.controller.game.dto.MovementCommandRequestDTO;
 import it.uniurb.pmo.framework.lobby.GameSessionRegistry;
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.turn.IGameCoordinator;
@@ -70,6 +71,60 @@ public class GameController {
         return response;
     }
 
+    @PostMapping("/{roomId}/movement")
+    public ResponseEntity<?> movement(@PathVariable String roomId, @RequestBody MovementCommandRequestDTO request) {
+        ResponseEntity<?> response;
+        Optional<IGameCoordinator> coordinator = this.gameSessions.getGameCoordinator(roomId);
+        if (coordinator.isEmpty() || coordinator.get().currentState(roomId).isEmpty()) {
+            response = ResponseEntity.notFound().build();
+        } else if (!this.isValidMovementPayload(request)) {
+            response = ResponseEntity.badRequest().body(Map.of("error", "Richiesta di spostamento non valida."));
+        } else {
+            response = this.submitMovement(roomId, coordinator.get(), request);
+        }
+        return response;
+    }
+
+    // Gestione della richiesta di Spostamento Strategico
+    private boolean isValidMovementPayload(MovementCommandRequestDTO request) {
+        boolean valid = request != null
+                && request.type() != null
+                && request.playerName() != null
+                && !request.playerName().isBlank();
+        if (valid && "MOVE".equals(request.type())) {
+            valid = request.tokenType() != null && !request.tokenType().isBlank()
+                    && request.source() != null && !request.source().isBlank()
+                    && request.destination() != null && !request.destination().isBlank()
+                    && request.tokenAmount() != null && request.tokenAmount() > 0;
+        } else if (valid) {
+            valid = "PASS".equals(request.type());
+        }
+        return valid;
+    }
+
+    private ResponseEntity<?> submitMovement(String roomId, IGameCoordinator coordinator,
+                                             MovementCommandRequestDTO request) {
+        ResponseEntity<?> response;
+        try {
+            if ("PASS".equals(request.type())) {
+                coordinator.submitPass(request.playerName());
+            } else {
+                ITokenType tokenType = coordinator.resolveTokenType(request.tokenType());
+                coordinator.submitMovement(request.playerName(), tokenType, request.source(),
+                        request.destination(), request.tokenAmount());
+            }
+            Optional<CurrentStateDTO> updatedState = coordinator.currentState(roomId);
+            response = updatedState.<ResponseEntity<?>>map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (IllegalArgumentException ex) {
+            response = ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+        } catch (IllegalStateException ex) {
+            response = ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", ex.getMessage()));
+        }
+        return response;
+    }
+
+    // Gestione della richiesta di Combattimento (Attacco/Difesa)
     private boolean isValidCombatPayload(CombatCommandRequestDTO request) {
         boolean valid = request != null
                 && request.type() != null
@@ -116,6 +171,7 @@ public class GameController {
         return response;
     }
 
+    // Gestione della richiesta di Deployment
     private boolean isValidDeploymentPayload(DeployCommandRequestDTO request) {
         boolean valid = request != null
                 && request.playerName() != null

@@ -1,16 +1,12 @@
-package it.uniurb.pmo.controller.game;
+package it.uniurb.pmo.framework.utils;
 
 import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
-import it.uniurb.pmo.framework.turn.phase.request.IAttackRequestDTO;
-import it.uniurb.pmo.framework.turn.phase.request.IDefendRequestDTO;
-import it.uniurb.pmo.framework.turn.phase.request.IDeployRequestDTO;
-import it.uniurb.pmo.framework.turn.phase.request.IGameRequest;
+import it.uniurb.pmo.framework.turn.phase.request.*;
 import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
 import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
 import it.uniurb.pmo.framework.turn.snapshot.IPlayerStateDTO;
-import it.uniurb.pmo.framework.utils.EColors;
 
 import java.util.List;
 import java.util.Map;
@@ -65,6 +61,13 @@ public class CurrentStateMapper {
                     "DEFEND", List.of(), Map.of(), List.of(), Map.of(),
                     defendRequest.defenderName(), defendRequest.defenderTokenType().getName(),
                     defendRequest.maxDefenderTokens());
+        } else if (action instanceof IMovementRequest movementRequest) {
+            Map<String, Map<String, Integer>> moveableTokens = movementRequest.moveableTokens().entrySet().stream()
+                    .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey,
+                            entry -> this.toTokenMap(entry.getValue())));
+            pendingAction = new CurrentStateDTO.PendingActionDTO(
+                    "MOVE", List.of(), Map.of(), List.of(), Map.of(), null, null, null,
+                    movementRequest.destinations(), moveableTokens);
         } else if (action == null
                 && snapshot.phaseId().filter("RISIKONEW_ATTACK"::equals).isPresent()
                 && combatResult != null
