@@ -1,6 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.turn.command.PassCommand;
 import it.uniurb.pmo.framework.turn.phase.request.IGameRequest;
 import it.uniurb.pmo.framework.turn.phase.result.IPhaseResult;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
@@ -81,6 +82,12 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
         AttackCommandRisikoNew attackCommand = new AttackCommandRisikoNew(attacker, "topolinia", "gondor", 3);
 
         assertFalse(phaseCombat.isValidCommand(attackCommand));
+    }
+
+    @Test
+    @DisplayName("Verifica che il giocatore possa terminare la fase di attacco")
+    void testPassCommand() {
+        assertTrue(phaseCombat.isValidCommand(new PassCommand()));
     }
 
 }

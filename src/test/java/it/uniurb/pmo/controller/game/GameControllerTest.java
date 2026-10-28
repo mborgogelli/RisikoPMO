@@ -123,6 +123,24 @@ class GameControllerTest {
     }
 
     @Test
+    void combatPassSubmitsPassWithoutTokenFields() {
+        String roomId = "room-combat-pass";
+        GameSessionRegistry gameSessions = new GameSessionRegistry();
+        IGameCoordinator coordinator = mock(IGameCoordinator.class);
+        CurrentStateDTO state = emptyState(roomId);
+        when(coordinator.currentState(roomId)).thenReturn(Optional.of(state));
+        gameSessions.register(roomId, coordinator);
+        CombatCommandRequestDTO request = new CombatCommandRequestDTO(
+                "PASS", "Player1", null, null, null, null);
+
+        var response = new GameController(gameSessions).combat(roomId, request);
+
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(state, response.getBody());
+        verify(coordinator).submitPass("Player1");
+    }
+
+    @Test
     void deployReturnsNotFoundWhenRoomHasNoGame() {
         var response = new GameController(new GameSessionRegistry()).deploy("missing",
                 new DeployCommandRequestDTO("Player1", "TANK", Map.of("Alaska", 2)));

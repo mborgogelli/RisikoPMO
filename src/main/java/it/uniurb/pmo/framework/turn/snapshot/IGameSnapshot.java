@@ -14,8 +14,16 @@ public interface IGameSnapshot {
 
     Optional<String> currentPlayerName();
 
+    /**
+     * Restituisce lo stato dei giocatori.
+     * @return  Stato dei giocatori.
+     */
     Map<String, IPlayerStateDTO> players();
 
+    /**
+     * Restituisce l'azione pendente.
+     * @return  Azione pendente.
+     */
     Optional<IGameRequest> pendingAction();
 
     Optional<String> winnerName();

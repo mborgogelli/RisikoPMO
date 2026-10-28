@@ -3,6 +3,7 @@ package it.uniurb.pmo.variants.risikonew.turn;
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
 import it.uniurb.pmo.framework.turn.event.GameEvent;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
+import it.uniurb.pmo.framework.turn.command.PassCommand;
 import it.uniurb.pmo.framework.turn.phase.request.IDeployRequestDTO;
 import it.uniurb.pmo.framework.turn.phase.request.IAttackRequestDTO;
 import it.uniurb.pmo.framework.turn.phase.request.IDefendRequestDTO;
@@ -94,6 +95,23 @@ class GameCoordinatorRisikoNewTest {
         coordinator.submitDefend("Player2", ERisikoNewToken.TANK, 2);
 
         verify(receiver).handleCommand(new DefendCommandRisikoNew(2));
+    }
+
+    @Test
+    void submitPassForwardsPassCommandDuringAttackRequest() {
+        IAttackRequestDTO pendingAction = mock(IAttackRequestDTO.class);
+        RisikoGameSnapshotDTO snapshot = new RisikoGameSnapshotDTO(
+                2, Optional.of("RISIKONEW_ATTACK"), Optional.of("Player1"), Map.of(),
+                Optional.of(pendingAction), Optional.empty(), Optional.empty());
+        GameCoordinatorRisikoNew coordinator = new GameCoordinatorRisikoNew();
+        IGameCommandReceiver receiver = mock(IGameCommandReceiver.class);
+        when(receiver.isValidCommand(any())).thenReturn(true);
+        coordinator.setCommandReceiver(receiver);
+        coordinator.onGameEvent(new GameEvent(EGameEventType.CHOICE_REQUIRED, snapshot));
+
+        coordinator.submitPass("Player1");
+
+        verify(receiver).handleCommand(new PassCommand());
     }
 
     @Test
