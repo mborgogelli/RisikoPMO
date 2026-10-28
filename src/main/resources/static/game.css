@@ -214,6 +214,7 @@ h2 {
   display: grid;
   min-height: 260px;
   place-items: center;
+  padding: 12px 12px 36px;
   overflow: hidden;
   border: 1px solid #455347;
   border-radius: 13px;
@@ -224,8 +225,7 @@ h2 {
 
 .board-map {
   display: block;
-  width: min(100%, 760px);
-  max-height: 430px;
+  width: min(100%, 680px);
   filter: drop-shadow(0 9px 15px rgba(0, 0, 0, 0.2));
 }
 
@@ -233,19 +233,38 @@ h2 {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 430px;
   overflow: visible;
+}
+
+.army-marker {
+  pointer-events: none;
+}
+
+.army-badge {
+  fill: var(--army-owner-color, #334155);
+  stroke: #fff;
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9));
 }
 
 .army-count {
   fill: #fff;
   stroke: #17231d;
-  stroke-width: 2.5px;
+  stroke-width: 1.5px;
   paint-order: stroke;
-  font: 800 12px system-ui, sans-serif;
+  font: 800 11px system-ui, sans-serif;
   text-anchor: middle;
   dominant-baseline: central;
-  pointer-events: none;
+}
+
+.territory-name {
+  fill: #fff;
+  stroke: #17231d;
+  stroke-width: 2px;
+  paint-order: stroke fill;
+  font: 700 8px system-ui, sans-serif;
+  text-anchor: middle;
 }
 
 .map-key {
@@ -599,9 +618,26 @@ h2 {
   display: grid;
   gap: 6px;
   min-height: 34px;
-  max-height: 132px;
+  max-height: 190px;
   overflow: auto;
   margin: 12px 0;
+}
+
+.action-field {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.action-input {
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-muted);
+  color: var(--text);
+  padding: 6px 8px;
 }
 
 .selection-row {
@@ -649,6 +685,27 @@ h2 {
   box-shadow: 0 5px 15px rgba(132, 168, 83, 0.16);
 }
 
+.secondary-button {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface-muted);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.secondary-button:hover:not(:disabled) {
+  border-color: var(--gold);
+}
+
+.secondary-button:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
 .primary-button:hover:not(:disabled) {
   filter: brightness(1.07);
 }
@@ -663,6 +720,7 @@ h2 {
 
 .log-panel .muted-copy {
   margin-top: 12px;
+  white-space: pre-line;
 }
 
 :focus-visible {

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Risiko New — Partita</title>
-  <link rel="stylesheet" href="game.css" />
+  <link rel="stylesheet" href="game.css?v=20261028-4" />
 </head>
 <body>
   <div class="app-shell">
@@ -90,7 +90,8 @@
             <p class="empty-state">Nessun carro selezionato.</p>
           </div>
           <p id="actionError" class="action-error" role="alert" hidden></p>
-          <button id="submitDeployment" class="primary-button" type="button" disabled>Conferma piazzamento</button>
+          <button id="submitAction" class="primary-button" type="button" disabled>Conferma piazzamento</button>
+          <button id="passAction" class="secondary-button" type="button" hidden>Termina attacchi</button>
         </section>
 
         <section class="log-panel panel" aria-labelledby="logTitle">
@@ -106,6 +107,6 @@
     </main>
   </div>
 
-  <script src="game.js"></script>
+  <script src="game.js?v=20261028-4"></script>
 </body>
 </html>
