@@ -84,6 +84,9 @@ public class PhaseStrategic implements IPhase {
 		}
 
 		boolean valid = false;
+		if (!this.isCompleted && command instanceof PassCommand) {
+			valid = true;
+		}
 		if (!this.isCompleted && command instanceof MoveCommandRisikoNew(String source, String destination, int tanks)) {
 			valid = this.destinations.containsKey(source) &&
 					this.destinations.get(source).contains(destination) &&
