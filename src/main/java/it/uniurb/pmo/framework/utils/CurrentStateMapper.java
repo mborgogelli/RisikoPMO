@@ -6,7 +6,7 @@ import it.uniurb.pmo.framework.turn.event.interfaces.IGameEvent;
 import it.uniurb.pmo.framework.turn.phase.request.*;
 import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
 import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
-import it.uniurb.pmo.framework.turn.snapshot.IPlayerStateDTO;
+import it.uniurb.pmo.framework.turn.snapshot.IPlayerSnapshot;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +26,7 @@ public class CurrentStateMapper {
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey,
                         entry -> this.toPlayerState(entry.getValue())));
 
-        IPlayerStateDTO currentPlayer = snapshot.currentPlayerName()
+        IPlayerSnapshot currentPlayer = snapshot.currentPlayerName()
                 .map(snapshot.players()::get)
                 .orElse(null);
         String currentPlayerName = currentPlayer == null ? null : currentPlayer.playerName();
@@ -83,7 +83,7 @@ public class CurrentStateMapper {
         return pendingAction;
     }
 
-    private CurrentStateDTO.PlayerStateDTO toPlayerState(IPlayerStateDTO playerState) {
+    private CurrentStateDTO.PlayerStateDTO toPlayerState(IPlayerSnapshot playerState) {
         Map<String, Map<String, Integer>> deployedTokensByTerritory = playerState.playerZoneStatus().entrySet().stream()
                 .collect(Collectors.toUnmodifiableMap(
                         Map.Entry::getKey,

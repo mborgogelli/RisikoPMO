@@ -10,7 +10,7 @@ public record GameSnapshotDTO(
         int turnNumber,
         Optional<String> phaseId,
         Optional<String> currentPlayerName,
-        Map<String, IPlayerStateDTO> players,
+        Map<String, IPlayerSnapshot> players,
         Optional<IGameRequest> pendingAction,
         Optional<String> winnerName
 ) implements IGameSnapshot {

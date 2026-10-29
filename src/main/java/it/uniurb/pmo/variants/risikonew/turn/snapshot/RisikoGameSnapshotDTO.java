@@ -2,7 +2,7 @@ package it.uniurb.pmo.variants.risikonew.turn.snapshot;
 
 import it.uniurb.pmo.framework.turn.phase.request.IGameRequest;
 import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
-import it.uniurb.pmo.framework.turn.snapshot.IPlayerStateDTO;
+import it.uniurb.pmo.framework.turn.snapshot.IPlayerSnapshot;
 
 import java.util.Map;
 import java.util.Optional;
@@ -12,7 +12,7 @@ public record RisikoGameSnapshotDTO(
         int turnNumber,
         Optional<String> phaseId,
         Optional<String> currentPlayerName,
-        Map<String, IPlayerStateDTO> players,
+        Map<String, IPlayerSnapshot> players,
         Optional<IGameRequest> pendingAction,
         Optional<String> winnerName,
         Optional<ICombatResultDTO> combatResult

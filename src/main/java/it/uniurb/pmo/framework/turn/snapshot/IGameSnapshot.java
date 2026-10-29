@@ -18,7 +18,7 @@ public interface IGameSnapshot {
      * Restituisce lo stato dei giocatori.
      * @return  Stato dei giocatori.
      */
-    Map<String, IPlayerStateDTO> players();
+    Map<String, IPlayerSnapshot> players();
 
     /**
      * Restituisce l'azione pendente.

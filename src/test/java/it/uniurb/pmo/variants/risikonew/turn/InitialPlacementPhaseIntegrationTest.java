@@ -2,7 +2,7 @@ package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.phase.result.IPhaseResult;
-import it.uniurb.pmo.framework.turn.snapshot.IPlayerStateDTO;
+import it.uniurb.pmo.framework.turn.snapshot.IPlayerSnapshot;
 import it.uniurb.pmo.framework.utils.EColors;
 import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.phase.PhaseInitialPlacement;
@@ -147,7 +147,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         assertTrue(phase.isValidCommand(command));
         IPhaseResult result = phase.handleCommand(command);
 
-        IPlayerStateDTO playerState = turnManager.gameSnapshot().get(playerName);
+        IPlayerSnapshot playerState = turnManager.gameSnapshot().get(playerName);
 
         //Nuovo stato del giocatore
         assertEquals(playerState.playerName(), playerName);

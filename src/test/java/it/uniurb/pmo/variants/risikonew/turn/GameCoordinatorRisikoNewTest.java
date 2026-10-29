@@ -12,7 +12,7 @@ import it.uniurb.pmo.variants.risikonew.turn.command.DefendCommandRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.command.DeployCommandRisikoNew;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
-import it.uniurb.pmo.framework.turn.snapshot.PlayerStateDTO;
+import it.uniurb.pmo.framework.turn.snapshot.PlayerSnapshot;
 import it.uniurb.pmo.framework.utils.EColors;
 import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
 import it.uniurb.pmo.variants.risikonew.turn.snapshot.RisikoGameSnapshotDTO;
@@ -48,7 +48,7 @@ class GameCoordinatorRisikoNewTest {
         when(pendingAction.deployableZones()).thenReturn(List.of(territory));
         RisikoGameSnapshotDTO snapshot = new RisikoGameSnapshotDTO(
                 2, Optional.of("REINFORCE"), Optional.of("Player1"),
-                Map.of("Player1", new PlayerStateDTO("Player1", EColors.RED,
+                Map.of("Player1", new PlayerSnapshot("Player1", EColors.RED,
                         PlayerTurnStatus.ACTIVE, Map.of(), Map.of())),
                 Optional.of(pendingAction), Optional.empty(), Optional.empty());
         GameCoordinatorRisikoNew coordinator = new GameCoordinatorRisikoNew();
@@ -142,7 +142,7 @@ class GameCoordinatorRisikoNewTest {
                 2,
                 Optional.of("REINFORCE"),
                 Optional.of("Player1"),
-                Map.of("Player1", new PlayerStateDTO("Player1", EColors.RED,
+                Map.of("Player1", new PlayerSnapshot("Player1", EColors.RED,
                         PlayerTurnStatus.ACTIVE, Map.of(), Map.of())),
                 Optional.empty(),
                 Optional.empty(),

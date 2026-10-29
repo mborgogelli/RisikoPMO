@@ -2,7 +2,7 @@ package it.uniurb.pmo.framework.management.interfaces;
 
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.turn.phase.IPhase;
-import it.uniurb.pmo.framework.turn.snapshot.IPlayerStateDTO;
+import it.uniurb.pmo.framework.turn.snapshot.IPlayerSnapshot;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ public interface ITurnManager extends IManager, IGameConductor {
 
 	List<IPlayer> getPlayers();
 
-	Map<String, IPlayerStateDTO> gameSnapshot();
+	Map<String, IPlayerSnapshot> gameSnapshot();
 
 }
 

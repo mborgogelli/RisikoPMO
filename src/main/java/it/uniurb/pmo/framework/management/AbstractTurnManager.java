@@ -19,8 +19,8 @@ import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
 import it.uniurb.pmo.framework.turn.phase.result.IPhaseResult;
 import it.uniurb.pmo.framework.turn.snapshot.GameSnapshotDTO;
 import it.uniurb.pmo.framework.turn.snapshot.IGameSnapshot;
-import it.uniurb.pmo.framework.turn.snapshot.IPlayerStateDTO;
-import it.uniurb.pmo.framework.turn.snapshot.PlayerStateDTO;
+import it.uniurb.pmo.framework.turn.snapshot.IPlayerSnapshot;
+import it.uniurb.pmo.framework.turn.snapshot.PlayerSnapshot;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -203,7 +203,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	}
 
 	@Override
-	public Map<String, IPlayerStateDTO> gameSnapshot() {
+	public Map<String, IPlayerSnapshot> gameSnapshot() {
 		return this.players.stream()
 				.collect(Collectors.toUnmodifiableMap(IPlayer::getName, this::playerState));
 	}
@@ -324,12 +324,12 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		}
 	}
 
-	private IPlayerStateDTO playerState(IPlayer player) {
+	private IPlayerSnapshot playerState(IPlayer player) {
 		Map<String,Map<ITokenType,Integer>> playerTerritories = this.mediator.getZonesOwnedBy(player)
 				.stream()
 				.collect(Collectors.toMap(t -> t, t -> this.mediator.getZoneTokens(t)));
 		Map<ITokenType,Integer> playerTokens = this.mediator.getTokensOwnedBy(player);
-		return new PlayerStateDTO(
+		return new PlayerSnapshot(
 				player.getName(),
 				player.getColor(),
 				player.getTurnStatus(),
