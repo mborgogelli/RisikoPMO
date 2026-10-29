@@ -5,7 +5,8 @@ import it.uniurb.pmo.framework.players.ITokenType;
 import it.uniurb.pmo.framework.turn.phase.request.IDefendRequestDTO;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
-public record DefendRequestRisikoNewDTO(IPlayer player, int maxDefenderTokens) implements IDefendRequestDTO {
+public record DefendRequestRisikoNewDTO(IPlayer player, String attackerName, String attackerTerritory,
+                                        String defenderTerritory, int maxDefenderTokens) implements IDefendRequestDTO {
 
     @Override
     public String defenderName() {

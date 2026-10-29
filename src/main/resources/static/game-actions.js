@@ -119,7 +119,7 @@ export function createGameActions(elements, dependencies) {
     elements.passAction.hidden = true;
     elements.passAction.disabled = true;
     elements.actionInstruction.textContent = canAct
-      ? 'Scegli quante armate usare per difendere.'
+      ? `${pending.attackerName || 'Un avversario'} attacca ${dependencies.readableName(pending.defenderTerritory || 'il tuo territorio')} da ${dependencies.readableName(pending.attackerTerritory || 'un territorio vicino')}. Scegli quante armate usare per difendere.`
       : `La difesa è in attesa di ${pending.defenderName || 'un altro giocatore'}.`;
     renderActionControls(
       actionNumber(`Armate ${dependencies.readableName(pending.defenderTokenType || 'unità')}`, 'tokenAmount', amount, 1, maxAmount)

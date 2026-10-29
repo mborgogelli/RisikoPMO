@@ -60,7 +60,8 @@ public class CurrentStateMapper {
             pendingAction = new CurrentStateDTO.PendingActionDTO(
                     "DEFEND", List.of(), Map.of(), List.of(), Map.of(),
                     defendRequest.defenderName(), defendRequest.defenderTokenType().getName(),
-                    defendRequest.maxDefenderTokens());
+                    defendRequest.maxDefenderTokens(), Map.of(), Map.of(), defendRequest.attackerName(),
+                    defendRequest.attackerTerritory(), defendRequest.defenderTerritory());
         } else if (action instanceof IMovementRequest movementRequest) {
             Map<String, Map<String, Integer>> moveableTokens = movementRequest.moveableTokens().entrySet().stream()
                     .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey,

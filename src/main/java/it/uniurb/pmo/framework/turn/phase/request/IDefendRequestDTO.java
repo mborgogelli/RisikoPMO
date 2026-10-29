@@ -6,6 +6,12 @@ public interface IDefendRequestDTO extends IGameRequest {
 
     String defenderName();
 
+    String attackerName();
+
+    String attackerTerritory();
+
+    String defenderTerritory();
+
     ITokenType defenderTokenType();
 
     int maxDefenderTokens();

@@ -173,7 +173,8 @@ public class PhaseCombat implements IPhase {
 
 	private IDefendRequestDTO defendRequestDTO() {
 		int maxDefenderTanks = Math.min(this.mediator.getZoneTank(this.defenderTerritory), 3);
-		return new DefendRequestRisikoNewDTO(this.defender, maxDefenderTanks);
+		return new DefendRequestRisikoNewDTO(this.defender, this.attacker.getName(),
+				this.attackerTerritory, this.defenderTerritory, maxDefenderTanks);
 	}
 
 	private CombatResultRisikoNewDTO combatResultDTO(CombatResultData result) {

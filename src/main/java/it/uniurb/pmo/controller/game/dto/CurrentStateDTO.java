@@ -52,7 +52,10 @@ public record CurrentStateDTO(
             String defenderTokenType,
             Integer maxDefenderTokens,
             Map<String, List<String>> possibleMoves,
-            Map<String, Map<String, Integer>> moveableTokens) {
+            Map<String, Map<String, Integer>> moveableTokens,
+            String attackerName,
+            String attackerTerritory,
+            String defenderTerritory) {
 
         public PendingActionDTO(String type,
                                 List<String> deployableTerritories,
@@ -60,7 +63,7 @@ public record CurrentStateDTO(
                                 List<String> possibleTargets,
                                 Map<String, List<String>> possibleStartingZones) {
             this(type, deployableTerritories, tokensToDeploy, possibleTargets,
-                    possibleStartingZones, null, null, null, Map.of(), Map.of());
+                    possibleStartingZones, null, null, null, Map.of(), Map.of(), null, null, null);
         }
 
         public PendingActionDTO(String type,
@@ -73,7 +76,18 @@ public record CurrentStateDTO(
                                 Integer maxDefenderTokens) {
             this(type, deployableTerritories, tokensToDeploy, possibleTargets,
                     possibleStartingZones, defenderName, defenderTokenType,
-                    maxDefenderTokens, Map.of(), Map.of());
+                    maxDefenderTokens, Map.of(), Map.of(), null, null, null);
+        }
+
+        public PendingActionDTO(String type, List<String> deployableTerritories,
+                                Map<String, Integer> tokensToDeploy, List<String> possibleTargets,
+                                Map<String, List<String>> possibleStartingZones, String defenderName,
+                                String defenderTokenType, Integer maxDefenderTokens,
+                                Map<String, List<String>> possibleMoves,
+                                Map<String, Map<String, Integer>> moveableTokens) {
+            this(type, deployableTerritories, tokensToDeploy, possibleTargets, possibleStartingZones,
+                    defenderName, defenderTokenType, maxDefenderTokens, possibleMoves, moveableTokens,
+                    null, null, null);
         }
 
         public PendingActionDTO {
