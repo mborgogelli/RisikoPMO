@@ -2,6 +2,7 @@ package it.uniurb.pmo.framework.lobby;
 
 import it.uniurb.pmo.framework.utils.EGameVersion;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,6 +22,7 @@ public class RoomManagerUnitTest {
     }
 
     @Test
+    @DisplayName("Verifica il numero di giocatori e la capienza della stanza")
     public void checkPeopleInTheRoom() {
         assertEquals(4, roomManager.getPlayersNumber(roomId));
         assertEquals(4, roomManager.getMaxPlayers(roomId));
@@ -28,6 +30,7 @@ public class RoomManagerUnitTest {
     }
 
     @Test
+    @DisplayName("Impedisce l'ingresso quando la stanza è piena")
     public void ingressToRoom() {
         RuntimeException ex = assertThrows(
                 RuntimeException.class,

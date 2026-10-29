@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import it.uniurb.pmo.framework.board.IGameBoard;
@@ -26,6 +27,7 @@ public class GameBoardIntegrationTest {
     }
     
     @Test
+    @DisplayName("Restituisce i continenti presenti sulla plancia")
     void testGetContinents() {
         List<IZone> continents = gameBoard.getRootZones();
         assertNotNull(continents);
@@ -33,6 +35,7 @@ public class GameBoardIntegrationTest {
     }
     
     @Test
+    @DisplayName("Restituisce i territori contenuti nei continenti")
     void testGetTerritories() {
         List<IZone> territories = gameBoard.getRootZones().stream()
 				.flatMap(continent -> continent.getChildZones().stream())
@@ -42,6 +45,7 @@ public class GameBoardIntegrationTest {
     }
     
     @Test
+    @DisplayName("Restituisce la versione di gioco della plancia")
     void testGetGameVersion() {
         EGameVersion version = gameBoard.getGameVersion();
         assertNotNull(version);
@@ -49,6 +53,7 @@ public class GameBoardIntegrationTest {
     }
     
     @Test
+    @DisplayName("Trova una zona senza distinzione tra maiuscole e minuscole")
     void testFindZoneByName() {
         // Get first territory name for testing
         String territoryName = gameBoard.getRootZones().stream()
@@ -74,6 +79,7 @@ public class GameBoardIntegrationTest {
     }
     
     @Test
+    @DisplayName("Restituisce i vicini di un territorio e gestisce quelli inesistenti")
     void testGetNeighbours() {
         // Get first territory name for testing
         String territoryName = gameBoard.getRootZones().stream()
@@ -95,6 +101,7 @@ public class GameBoardIntegrationTest {
     }
     
     @Test
+    @DisplayName("Individua il continente che contiene un territorio")
     void testWhereIsZone() {
         // Get first territory name for testing
         String territoryName = gameBoard.getRootZones().stream()
@@ -116,6 +123,7 @@ public class GameBoardIntegrationTest {
     }
     
     @Test
+    @DisplayName("Verifica se un territorio è raggiungibile da un vicino")
     void testCanReach() {
         // Get first territory and its neighbors for testing
         String territoryName = gameBoard.getRootZones().stream()
@@ -141,6 +149,7 @@ public class GameBoardIntegrationTest {
     }
     
     @Test
+    @DisplayName("Restituisce il valore associato a una zona")
     void testGetValue() {
         // Get first territory name for testing
         String territoryName = gameBoard.getRootZones().stream()
@@ -157,6 +166,7 @@ public class GameBoardIntegrationTest {
     }
     
     @Test
+    @DisplayName("Restituisce il bonus di armate della zona")
     void testGetArmyBonus() {
         // Get first territory name for testing
         String territoryName = gameBoard.getRootZones().stream()

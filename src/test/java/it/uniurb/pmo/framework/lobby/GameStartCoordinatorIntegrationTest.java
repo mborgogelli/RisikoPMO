@@ -2,11 +2,13 @@ package it.uniurb.pmo.framework.lobby;
 
 import it.uniurb.pmo.framework.utils.EGameVersion;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GameStartCoordinatorTest {
+@DisplayName("Avvio della partita dalla lobby")
+class GameStartCoordinatorIntegrationTest {
 
     private final RoomManager roomManager = RoomManager.getInstance();
     private String roomId;
@@ -25,6 +27,7 @@ class GameStartCoordinatorTest {
     }
 
     @Test
+    @DisplayName("Avvia la partita, chiude la stanza e restituisce il risultato")
     void startGameClosesRoomAndReturnsResult() {
         this.roomId = this.roomManager.createRoom("Alice", 3, EGameVersion.RISIKONEW);
         this.roomManager.enterRoom(this.roomId, "Bob");
@@ -43,6 +46,7 @@ class GameStartCoordinatorTest {
     }
 
     @Test
+    @DisplayName("Registra il coordinatore della partita nella stanza")
     void startGameRegistersTheGameCoordinatorForTheRoom() {
         GameSessionRegistry gameSessions = new GameSessionRegistry();
         this.roomId = this.roomManager.createRoom("Alice", 3, EGameVersion.RISIKONEW);
@@ -59,6 +63,7 @@ class GameStartCoordinatorTest {
     }
 
     @Test
+    @DisplayName("Avvia la partita con tre giocatori pronti in una stanza da sei posti")
     void startGameAllowsThreeReadyPlayersInSixSeatRoom() {
         this.roomId = this.roomManager.createRoom("Alice", 6, EGameVersion.RISIKONEW);
         this.roomManager.enterRoom(this.roomId, "Bob");
@@ -73,6 +78,7 @@ class GameStartCoordinatorTest {
     }
 
     @Test
+    @DisplayName("Rifiuta l'avvio con meno di tre giocatori")
     void startGameRejectsFewerThanThreePlayers() {
         this.roomId = this.roomManager.createRoom("Alice", 6, EGameVersion.RISIKONEW);
         this.roomManager.enterRoom(this.roomId, "Bob");
@@ -86,6 +92,7 @@ class GameStartCoordinatorTest {
     }
 
     @Test
+    @DisplayName("Rifiuta l'avvio se un giocatore non è pronto")
     void startGameRejectsWhenAPlayerIsNotReady() {
         this.roomId = this.roomManager.createRoom("Alice", 6, EGameVersion.RISIKONEW);
         this.roomManager.enterRoom(this.roomId, "Bob");

@@ -6,6 +6,7 @@ import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 
@@ -15,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class TankManagerIntegrationTest extends RisikoNewTestSetup {
 
     @Test
+    @DisplayName("Rifiuta l'inizializzazione con meno di tre giocatori")
     void testInitializeGame_TooFewPlayers() {
-        // Usa una factory fresca per evitare che il tokenManager sia già inizializzato
         GameFactoryRisikoNew freshFactory = new GameFactoryRisikoNew();
         ITankManager freshTokenManager = freshFactory.getManagers().stream()
             .filter(ITankManager.class::isInstance)
@@ -40,6 +41,7 @@ public class TankManagerIntegrationTest extends RisikoNewTestSetup {
     }
     
    @Test
+    @DisplayName("Rifiuta una seconda inizializzazione del gestore dei carri")
     void testInitializeGame_AlreadyInitialized() {
         // tokenManager è già inizializzato dal setup
         if (tankManager.isReady()) {
@@ -53,16 +55,13 @@ public class TankManagerIntegrationTest extends RisikoNewTestSetup {
     }
     
     @Test
+    @DisplayName("Verifica l'assegnazione e il totale dei carri dei giocatori")
     void testTanksAssignment() {
-        var myAvailableTanks = tankManager.getPlayerTank(players.getFirst());
-        var myTerritoriesCount = mapManager.getTerritoriesOwnedBy(players.getFirst()).size();
-        //var myTerritories = mapManager.getTerritoriesOwnedBy(players.get(0));
-        var totalDeployed = tankManager.getTotalDeployed(players.getFirst());
-        //var deployedPerZone = tokenManager.getDeployedPerZone(players.get(0));
-        
+        int myAvailableTanks = tankManager.getPlayerTank(players.getFirst());
+        int myTerritoriesCount = mapManager.getTerritoriesOwnedBy(players.getFirst()).size();
+        int totalDeployed = tankManager.getTotalDeployed(players.getFirst());
+
         assertEquals(myAvailableTanks + myTerritoriesCount, 30); // 30 tank totali per 4 giocatori
         assertEquals(myTerritoriesCount, totalDeployed);
-        /*assertTrue(deployedPerZone.keySet().stream()
-                                .allMatch(zone -> myTerritories.contains(zone)));*/
     }
 }

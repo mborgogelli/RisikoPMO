@@ -1,46 +1,19 @@
 package it.uniurb.pmo.variants.risikonew.board;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-import java.util.Optional;
-
+import it.uniurb.pmo.framework.board.IZone;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import it.uniurb.pmo.framework.board.IZone;
-import it.uniurb.pmo.framework.utils.EGameVersion;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class GameBoardUnitTest {
 
 	private GameBoardRisikoNew gameBoard;
-
-	private List<IZone> buildContinents() {
-		Continent europa = new Continent("europa");
-		Territory islanda = new Territory("islanda");
-		Territory granBretagna = new Territory("gran_bretagna");
-		islanda.setNeighbours(List.of("gran_bretagna", "scandinavia"));
-		granBretagna.setNeighbours(List.of("islanda"));
-		islanda.setValue(3);
-		granBretagna.setValue(4);
-		europa.setChildZones(List.of(islanda, granBretagna));
-
-		Continent asia = new Continent("asia");
-		Territory kamchatka = new Territory("kamchatka");
-		Territory urali = new Territory("urali");
-		kamchatka.setNeighbours(List.of("urali"));
-		urali.setNeighbours(List.of("kamchatka", "islanda"));
-		kamchatka.setValue(5);
-		urali.setValue(2);
-		asia.setChildZones(List.of(kamchatka, urali));
-
-		return List.of(europa, asia);
-	}
 
 	@BeforeEach
 	void setUp() {
@@ -115,6 +88,28 @@ class GameBoardUnitTest {
 		assertEquals(3, this.gameBoard.getZoneValue("islanda"));
 		assertEquals(4, this.gameBoard.getZoneValue("gran_bretagna"));
 		assertEquals(5, this.gameBoard.getZoneValue("kamchatka"));
+	}
+
+	private List<IZone> buildContinents() {
+		Continent europa = new Continent("europa");
+		Territory islanda = new Territory("islanda");
+		Territory granBretagna = new Territory("gran_bretagna");
+		islanda.setNeighbours(List.of("gran_bretagna", "scandinavia"));
+		granBretagna.setNeighbours(List.of("islanda"));
+		islanda.setValue(3);
+		granBretagna.setValue(4);
+		europa.setChildZones(List.of(islanda, granBretagna));
+
+		Continent asia = new Continent("asia");
+		Territory kamchatka = new Territory("kamchatka");
+		Territory urali = new Territory("urali");
+		kamchatka.setNeighbours(List.of("urali"));
+		urali.setNeighbours(List.of("kamchatka", "islanda"));
+		kamchatka.setValue(5);
+		urali.setValue(2);
+		asia.setChildZones(List.of(kamchatka, urali));
+
+		return List.of(europa, asia);
 	}
 }
 

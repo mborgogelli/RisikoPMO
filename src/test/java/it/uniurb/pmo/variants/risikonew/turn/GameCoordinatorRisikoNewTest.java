@@ -1,6 +1,7 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.framework.turn.event.EGameEventType;
+import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.framework.turn.event.GameEvent;
 import it.uniurb.pmo.framework.turn.command.IGameCommandReceiver;
 import it.uniurb.pmo.framework.turn.command.PassCommand;
@@ -16,6 +17,7 @@ import it.uniurb.pmo.framework.turn.snapshot.PlayerSnapshot;
 import it.uniurb.pmo.framework.utils.EColors;
 import it.uniurb.pmo.framework.turn.phase.result.ICombatResultDTO;
 import it.uniurb.pmo.variants.risikonew.turn.snapshot.RisikoGameSnapshotDTO;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -35,6 +37,7 @@ import static org.mockito.Mockito.mock;
 class GameCoordinatorRisikoNewTest {
 
     @Test
+    @DisplayName("Non restituisce uno stato prima del primo evento di gioco")
     void currentStateIsEmptyBeforeFirstGameEvent() {
         GameCoordinatorRisikoNew coordinator = new GameCoordinatorRisikoNew();
 
@@ -42,6 +45,7 @@ class GameCoordinatorRisikoNewTest {
     }
 
     @Test
+    @DisplayName("Inoltra al ricevitore il comando di rinforzo")
     void submitDeployForPendingReinforceActionForwardsTankDeployment() {
         String territory = "Alaska";
         IDeployRequestDTO pendingAction = mock(IDeployRequestDTO.class);
@@ -63,6 +67,7 @@ class GameCoordinatorRisikoNewTest {
     }
 
     @Test
+    @DisplayName("Inoltra il comando di attacco durante la fase di combattimento")
     void submitAttackForwardsAttackCommandDuringAttackRequest() {
         IAttackRequestDTO pendingAction = mock(IAttackRequestDTO.class);
         RisikoGameSnapshotDTO snapshot = new RisikoGameSnapshotDTO(
@@ -80,6 +85,7 @@ class GameCoordinatorRisikoNewTest {
     }
 
     @Test
+    @DisplayName("Inoltra il comando di difesa al turno del difensore indicato")
     void submitDefendForwardsDefenseCommandForNamedDefender() {
         IDefendRequestDTO pendingAction = mock(IDefendRequestDTO.class);
         when(pendingAction.defenderName()).thenReturn("Player2");
@@ -98,6 +104,7 @@ class GameCoordinatorRisikoNewTest {
     }
 
     @Test
+    @DisplayName("Inoltra il comando per passare durante la fase di attacco")
     void submitPassForwardsPassCommandDuringAttackRequest() {
         IAttackRequestDTO pendingAction = mock(IAttackRequestDTO.class);
         RisikoGameSnapshotDTO snapshot = new RisikoGameSnapshotDTO(
@@ -115,6 +122,7 @@ class GameCoordinatorRisikoNewTest {
     }
 
     @Test
+    @DisplayName("Include i dettagli della difesa pendente nello stato corrente")
     void currentStateMapsPendingDefenseDetails() {
         IDefendRequestDTO pendingAction = mock(IDefendRequestDTO.class);
         when(pendingAction.defenderName()).thenReturn("Player2");
@@ -126,7 +134,7 @@ class GameCoordinatorRisikoNewTest {
         GameCoordinatorRisikoNew coordinator = new GameCoordinatorRisikoNew();
         coordinator.onGameEvent(new GameEvent(EGameEventType.CHOICE_REQUIRED, snapshot));
 
-        var state = coordinator.currentState("room-combat").orElseThrow();
+        CurrentStateDTO state = coordinator.currentState("room-combat").orElseThrow();
 
         assertEquals("DEFEND", state.pendingAction().type());
         assertEquals("Player2", state.pendingAction().defenderName());
@@ -135,6 +143,7 @@ class GameCoordinatorRisikoNewTest {
     }
 
     @Test
+    @DisplayName("Mappa lo snapshot e il risultato del combattimento nello stato corrente")
     void currentStateMapsSnapshotAndRisikoNewCombatResult() {
         String roomId = "room-1";
         ICombatResultDTO combatResult = mock(ICombatResultDTO.class);
@@ -150,7 +159,7 @@ class GameCoordinatorRisikoNewTest {
         GameCoordinatorRisikoNew coordinator = new GameCoordinatorRisikoNew();
         coordinator.onGameEvent(new GameEvent(EGameEventType.PHASE_STARTED, snapshot));
 
-        var currentState = coordinator.currentState(roomId);
+        Optional<CurrentStateDTO> currentState = coordinator.currentState(roomId);
 
         assertTrue(currentState.isPresent());
         assertEquals(roomId, currentState.orElseThrow().roomId());

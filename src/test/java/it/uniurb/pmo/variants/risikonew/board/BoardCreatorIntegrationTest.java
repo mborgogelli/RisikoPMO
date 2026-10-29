@@ -1,46 +1,25 @@
 package it.uniurb.pmo.variants.risikonew.board;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-import java.util.stream.StreamSupport;
-
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.uniurb.pmo.framework.board.BoardCreator;
+import it.uniurb.pmo.framework.board.IGameBoard;
+import it.uniurb.pmo.framework.board.IZone;
 import it.uniurb.pmo.framework.utils.EGameVersion;
+import it.uniurb.pmo.framework.utils.RiskJsonParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
-import it.uniurb.pmo.framework.board.IGameBoard;
-import it.uniurb.pmo.framework.board.IZone;
-import it.uniurb.pmo.framework.utils.RiskJsonParser;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BoardCreatorIntegrationTest {
 
 	private JsonObject jsonMap;
-
-	private JsonObject getLoadedMap() {
-		return new BoardCreatorTestSupport().getLoadedMap();
-	}
-
-	private List<JsonElement> getValues(String key, JsonElement element) {
-		return RiskJsonParser.getValues(key, element);
-	}
-
-	private List<JsonElement> getValues(String key, List<JsonElement> elements) {
-		return RiskJsonParser.getValues(key, elements);
-	}
-
-	private <T> List<T> getValues(String key, List<JsonElement> elements, Class<T> type) {
-		return RiskJsonParser.getValues(key, elements, type);
-	}
 
 	@BeforeEach
 	public void setUp() {
@@ -48,7 +27,7 @@ class BoardCreatorIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("Integration: Get continents name from json")
+	@DisplayName("Legge dal JSON i nomi dei sei continenti")
 	public void getContinentsNameFromJson(){
 		List<JsonElement> continents = getValues("continents", this.jsonMap);
 		List<String> list = getValues("name", continents, String.class);
@@ -64,7 +43,7 @@ class BoardCreatorIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("Integration: Continents creation")
+	@DisplayName("Crea sei zone radice di tipo continente")
 	public void createContinents() {
 		List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
 
@@ -73,7 +52,7 @@ class BoardCreatorIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("Integration: Territories creation")
+	@DisplayName("Crea i territori del primo continente")
 	public void createTerritories() {
 		List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
 
@@ -82,7 +61,7 @@ class BoardCreatorIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("Integration: Get army bonus from continent")
+	@DisplayName("Assegna a ogni continente il bonus di armate previsto")
 	public void getArmyFromContinent() {
 		List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
 
@@ -95,7 +74,7 @@ class BoardCreatorIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("Integration: Get continents bonus from json")
+	@DisplayName("Legge dal JSON i bonus di armate dei continenti")
 	public void getContinentsArmyFromJson(){
 		List<JsonElement> continents = getValues("continents", this.jsonMap);
 		List<Integer> list = getValues("armybonus", continents, Integer.class);
@@ -108,7 +87,7 @@ class BoardCreatorIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("Integration: Get Europe bonus points from json")
+	@DisplayName("Verifica i valori dei territori europei nella mappa")
 	public void testEuropaTerritoriesBonusPoints() {
 	    List<IZone> continents = BoardCreatorRisikoNew.getInstance().getMap().getRootZones();
 	    IZone europa = continents.stream()
@@ -128,7 +107,7 @@ class BoardCreatorIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("Integration: Get Europe territories from json")
+	@DisplayName("Legge dal JSON i territori appartenenti all'Europa")
 	public void getEuropaTerritoriesFromJson(){
 		List<JsonElement> continents = getValues("continents", this.jsonMap);
 		JsonArray continentsArray = continents.getFirst().getAsJsonArray();
@@ -155,7 +134,7 @@ class BoardCreatorIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("Integration: Cannot return empty list")
+	@DisplayName("Rifiuta la lettura di una lista di vicini vuota")
 	public void cannotReturnEmptyList() {
 	    List<JsonElement> continents = getValues("continents", this.jsonMap);
 	    List<JsonElement> territories = getValues("territories", continents);
@@ -166,7 +145,7 @@ class BoardCreatorIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("Integration: Check neighbours")
+	@DisplayName("Verifica i collegamenti tra Islanda, Ucraina e territori vicini")
 	public void testSetNeighbours() {
 	    IGameBoard gameBoard = BoardCreatorRisikoNew.getInstance().getMap();
 
@@ -191,7 +170,25 @@ class BoardCreatorIntegrationTest {
 	/**
 	 * Inner class for testing purposes
 	 */
+	private JsonObject getLoadedMap() {
+		return new BoardCreatorTestSupport().getLoadedMap();
+	}
+
+	private List<JsonElement> getValues(String key, JsonElement element) {
+		return RiskJsonParser.getValues(key, element);
+	}
+
+	private List<JsonElement> getValues(String key, List<JsonElement> elements) {
+		return RiskJsonParser.getValues(key, elements);
+	}
+
+	private <T> List<T> getValues(String key, List<JsonElement> elements, Class<T> type) {
+		return RiskJsonParser.getValues(key, elements, type);
+	}
+
+
 	private static class BoardCreatorTestSupport extends BoardCreator {
+
 
 		public BoardCreatorTestSupport() {
 			super(EGameVersion.RISIKONEW);
@@ -206,7 +203,7 @@ class BoardCreatorIntegrationTest {
 		public JsonObject getLoadedMap() {
 			return super.getLoadedMap();
 		}
-	}
 
+	}
 
 }

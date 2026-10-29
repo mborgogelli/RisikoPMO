@@ -3,12 +3,12 @@ package it.uniurb.pmo.variants.risikonew.utils;
 import it.uniurb.pmo.framework.management.interfaces.IManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.Player;
+import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import it.uniurb.pmo.variants.risikonew.GameFactoryRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMapManagerRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.IMediatorRisikoNew;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITankManager;
 import it.uniurb.pmo.variants.risikonew.management.interfaces.ITurnManagerRisikoNew;
-import it.uniurb.pmo.framework.turn.IGameCoordinator;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
@@ -65,11 +65,4 @@ public abstract class RisikoNewTestSetup {
         return players;
     }
 
-    protected IMediatorRisikoNew getMediator() {
-        return mediator;
-    }
-
-    protected IGameCoordinator getGameCoordinator() {
-        return this.gameCoordinator;
-    }
 }

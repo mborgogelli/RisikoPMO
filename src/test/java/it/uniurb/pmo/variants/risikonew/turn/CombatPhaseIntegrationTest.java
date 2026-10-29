@@ -22,7 +22,6 @@ import static org.mockito.Mockito.spy;
 
 public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
 
-    private IMediatorRisikoNew phaseMediator;
     private IPlayer attacker;
     private IPhaseResult<IGameRequest> result;
     private PhaseCombat phaseCombat;
@@ -31,7 +30,7 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
     public void setUp() {
         super.setUpRisikoNew();
         this.attacker = players.getFirst();
-        this.phaseMediator = spy(this.mediator);
+        IMediatorRisikoNew phaseMediator = spy(this.mediator);
 
         //Costruzione dei territori posseduti dall'attaccante e dei loro vicini
         doReturn(List.of("topolinia", "paperopoli", "centinarola"))
@@ -57,7 +56,7 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
     }
 
     @Test
-    @DisplayName("Verifica che la lista dei target sia corretta.")
+    @DisplayName("Calcola i territori attaccabili e i limiti di carri per zona")
     public void testPossibleTargets() {
 
         assertTrue(result.phasePayload().isPresent());
@@ -73,19 +72,15 @@ public class CombatPhaseIntegrationTest extends RisikoNewTestSetup {
     }
 
     @Test
-    @DisplayName("Verifica il comando di attacco")
+    @DisplayName("Rifiuta un attacco che supera i carri disponibili")
     void testAttackCommand() {
 
-        AttackRequestRisikoNewDTO attackRequest = (AttackRequestRisikoNewDTO) result.phasePayload().get();
-        List<String> targets = attackRequest.possibleTargets();
-
         AttackCommandRisikoNew attackCommand = new AttackCommandRisikoNew(attacker, "topolinia", "gondor", 3);
-
         assertFalse(phaseCombat.isValidCommand(attackCommand));
     }
 
     @Test
-    @DisplayName("Verifica che il giocatore possa terminare la fase di attacco")
+    @DisplayName("Accetta il comando per terminare la fase di combattimento")
     void testPassCommand() {
         assertTrue(phaseCombat.isValidCommand(new PassCommand()));
     }

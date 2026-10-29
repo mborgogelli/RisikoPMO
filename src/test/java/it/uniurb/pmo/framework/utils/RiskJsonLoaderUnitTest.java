@@ -16,14 +16,14 @@ public class RiskJsonLoaderUnitTest {
 	private JsonObject map;
 	
 	@Test
-	@DisplayName("Unit: Map Loader")
+	@DisplayName("Carica correttamente la mappa JSON di Risiko New")
 	void testingMapLoader() throws JsonSyntaxException, IOException {
 		this.map = RiskJsonLoader.loadJsonFile(JSON_MAP);
 		assertNotNull(map);
 	}
 	
 	@Test
-	@DisplayName("Unit: Empty Argument")
+	@DisplayName("Rifiuta una versione di gioco vuota")
 	void testingEmptyArgument()throws IllegalArgumentException {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 														() -> RiskJsonLoader.loadJsonFile(""));
@@ -31,7 +31,7 @@ public class RiskJsonLoaderUnitTest {
 	}
 	
 	@Test
-	@DisplayName("Unit: File Not Found")
+	@DisplayName("Segnala l'assenza del file della mappa richiesto")
 	void testingFileNotFound() {
 		FileNotFoundException exception = assertThrows(FileNotFoundException.class,
 														() -> RiskJsonLoader.loadJsonFile("risikoantartide"));
@@ -39,7 +39,7 @@ public class RiskJsonLoaderUnitTest {
 	}
 	
 	@Test
-	@DisplayName("Unit: Json Syntax Exception")
+	@DisplayName("Segnala un errore di sintassi nel file JSON")
 	void testingJsonSyntaxException()throws JsonSyntaxException {
 		JsonSyntaxException exception = assertThrows(JsonSyntaxException.class,
 														() -> RiskJsonLoader.loadJsonFile("risikotest_map"));
@@ -47,7 +47,7 @@ public class RiskJsonLoaderUnitTest {
 	}
 	
 	@Test
-	@DisplayName("Unit: Json Keys")
+	@DisplayName("Verifica che la mappa caricata contenga la chiave continenti")
 	void testingJsonKeys() throws JsonSyntaxException, IOException {
 		this.map = RiskJsonLoader.loadJsonFile(JSON_MAP);
 		assertTrue(map.has("continents"));

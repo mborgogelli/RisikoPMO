@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,14 +26,14 @@ class MapManagerRisikoNewIntegrationTest extends MapManagerRisikoNew {
     }
 
     @Test
-    @DisplayName("Integration: Map Initialization")
+    @DisplayName("Distribuisce equamente i territori tra i giocatori")
 	void testMapInitialization() {
-		var allZones = mapManager.getAllTerritories();
-		var totalTerritories = allZones.size();
-		var territoriesPerPlayer = totalTerritories / players.size();
+		List<String> allZones = mapManager.getAllTerritories();
+		int totalTerritories = allZones.size();
+		int territoriesPerPlayer = totalTerritories / players.size();
 
 		for (IPlayer player : players) {
-			var ownedZones = mapManager.getZonesOwnedBy(player);
+			List<String> ownedZones = mapManager.getZonesOwnedBy(player);
 			
 			assertNotNull(ownedZones, "Owned zones should not be null.");
 			assertEquals(territoriesPerPlayer, ownedZones.size(),
@@ -41,10 +42,10 @@ class MapManagerRisikoNewIntegrationTest extends MapManagerRisikoNew {
 	}
     
     @Test
-    @DisplayName("Integration: Get All Territories")
+    @DisplayName("Restituisce tutti i territori assegnati sulla mappa")
     void testGetAllTerritories() {
-        var allTerritories = mapManager.getAllTerritories();
-        var allTerritoriesFromMap = mapManager.getTerritoriesAssignment().values().stream()
+        List<String> allTerritories = mapManager.getAllTerritories();
+        List<String> allTerritoriesFromMap = mapManager.getTerritoriesAssignment().values().stream()
         													.flatMap(List::stream)
         													.toList();
         
@@ -52,28 +53,28 @@ class MapManagerRisikoNewIntegrationTest extends MapManagerRisikoNew {
     }
     
     @Test
-    @DisplayName("Integration: Get Territory Owner")
+    @DisplayName("Restituisce il proprietario di un territorio assegnato")
     void testGetOwner() {
     	
-        var allTerritories = mapManager.getAllTerritories();
+        List<String> allTerritories = mapManager.getAllTerritories();
         assertFalse(allTerritories.isEmpty(), "Should have territories after initialization");
 
-        var territory = allTerritories.getFirst();
-        var owner = mapManager.getOwner(territory);
-        var ownedTerritories = mapManager.getTerritoriesOwnedBy(owner);
+        String territory = allTerritories.getFirst();
+        IPlayer owner = mapManager.getOwner(territory);
+        List<String> ownedTerritories = mapManager.getTerritoriesOwnedBy(owner);
         
         assertTrue(ownedTerritories.contains(territory),
                    "Territory should be in the owner's territory list");
     }
     
     @Test
-    @DisplayName("Integration: Get Owner for All Territories")
+    @DisplayName("Associa ogni territorio al rispettivo proprietario")
     void testGetOwnerForAllTerritories() {
-        var allTerritories = mapManager.getAllTerritories();
+        List<String> allTerritories = mapManager.getAllTerritories();
 
         for (String territory : allTerritories) {
-            var owner = mapManager.getOwner(territory);
-            var ownedByPlayer = mapManager.getTerritoriesOwnedBy(owner);
+            IPlayer owner = mapManager.getOwner(territory);
+            List<String> ownedByPlayer = mapManager.getTerritoriesOwnedBy(owner);
             
             assertTrue(ownedByPlayer.contains(territory),
                        "Territory should be in owner's list");
@@ -81,22 +82,22 @@ class MapManagerRisikoNewIntegrationTest extends MapManagerRisikoNew {
     }
     
     @Test
-    @DisplayName("Integration: Check Zone Completion")
+    @DisplayName("Rileva il completamento di un continente da parte di un giocatore")
     void testCheckZoneCompletion() {
-        var player = players.getFirst();
+        IPlayer player = players.getFirst();
 
         // Ottieni tutti i continenti disponibili
-        var allParentZones = super.getParentZones();
+        List<String> allParentZones = super.getParentZones();
         if (!allParentZones.isEmpty()) {
-            var continent = allParentZones.getFirst();
-            var continentTerritories = super.getChildZones(continent);
+            String continent = allParentZones.getFirst();
+            List<String> continentTerritories = super.getChildZones(continent);
 
             // Assegna manualmente tutti i territori di un continente al giocatore
             for (String territory : continentTerritories) {
                     mapManager.updateOwnership(player, territory);
             }
 
-            var completedContinents = mapManager.checkZoneCompletion(player);
+            List<String> completedContinents = mapManager.checkZoneCompletion(player);
 
             assertNotNull(completedContinents);
             assertFalse(completedContinents.isEmpty());

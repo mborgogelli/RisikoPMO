@@ -29,9 +29,8 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     }
 
     @Test
-    @DisplayName("Verify deployment request data")
+    @DisplayName("Verifica la richiesta di schieramento e il numero di carri disponibili")
     void testPlayPhaseDeploysAllTanks() {
-
 
         // Rimuove tutti i tank dai giocatori e assegna 3 tank al giocatore ultimo
         for (IPlayer player : this.players) {
@@ -54,7 +53,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     }
 
     @Test
-    @DisplayName("Verify command execution with invalid territories")
+    @DisplayName("Rifiuta lo schieramento su territori non disponibili")
     void testDeployCommandWithWrongZones() {
 
         PhaseInitialPlacement phase = new PhaseInitialPlacement(mediator);
@@ -80,7 +79,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     }
 
     @Test
-    @DisplayName("Verify command execution with invalid tanks number")
+    @DisplayName("Rifiuta lo schieramento con un numero errato di carri")
     void testDeployCommandWithWrongTanksNumber() {
 
         PhaseInitialPlacement phase = new PhaseInitialPlacement(mediator);
@@ -107,7 +106,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     }
 
     @Test
-    @DisplayName("Reject a deployment command without a token type")
+    @DisplayName("Rifiuta un comando di schieramento senza tipo di unità")
     void testDeployCommandWithoutTokenType() {
         PhaseInitialPlacement phase = new PhaseInitialPlacement(mediator);
         DeployRequestRisikoNewDTO request = (DeployRequestRisikoNewDTO) phase.playPhase(this.players.getFirst()).phasePayload().orElseThrow();
@@ -118,7 +117,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
     }
 
     @Test
-    @DisplayName("Verify Player phasePayload after command execution")
+    @DisplayName("Aggiorna le riserve e i territori dopo lo schieramento")
     void testPlayerStateAfterCommandExecution() {
 
         IPlayer currentPlayer = this.players.getFirst();
