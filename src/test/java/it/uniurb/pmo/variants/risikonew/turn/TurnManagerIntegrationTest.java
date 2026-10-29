@@ -7,11 +7,29 @@ import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TurnManagerIntegrationTest extends RisikoNewTestSetup {
+
+    @Test
+    void initialDeploymentUpdatesTerritoryCountInCurrentState() {
+        this.players.forEach(player -> player.setPlayerTurnStatus(PlayerTurnStatus.ACTIVE));
+        this.turnManager.startGame();
+
+        var before = this.gameCoordinator.currentState("room").orElseThrow();
+        String player = before.currentPlayerName();
+        String territory = before.pendingAction().deployableTerritories().getFirst();
+        int countBefore = before.players().get(player).deployedTokensByTerritory().get(territory).get("Tank");
+
+        this.gameCoordinator.submitDeploy(player, "Tank", Map.of(territory, 3));
+
+        var after = this.gameCoordinator.currentState("room").orElseThrow();
+        assertEquals(countBefore + 3,
+                after.players().get(player).deployedTokensByTerritory().get(territory).get("Tank"));
+    }
 
     @Test
     void testTurnSequenceAndWrapAround() {

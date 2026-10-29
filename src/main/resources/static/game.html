@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Risiko New — Partita</title>
-  <link rel="stylesheet" href="game.css?v=20261028-4" />
+  <link rel="stylesheet" href="game.css?v=20261028-6" />
 </head>
 <body>
   <div class="app-shell">
@@ -38,6 +38,11 @@
 
         <div class="board-visual">
           <div id="boardMap" class="board-map" role="img" aria-label="Mappa del mondo di Risiko New"></div>
+          <div class="map-zoom-controls" role="group" aria-label="Zoom della mappa">
+            <button id="mapZoomIn" type="button" aria-label="Ingrandisci la mappa" title="Ingrandisci" disabled>+</button>
+            <button id="mapZoomOut" type="button" aria-label="Riduci la mappa" title="Riduci" disabled>−</button>
+            <button id="mapZoomReset" type="button" aria-label="Ripristina la mappa" title="Ripristina" disabled>↺</button>
+          </div>
           <div class="map-key">
             <span class="key-dot key-owned"></span> Territorio occupato
             <span class="key-dot key-selectable"></span> Selezionabile
@@ -107,6 +112,6 @@
     </main>
   </div>
 
-  <script src="game.js?v=20261028-4"></script>
+  <script type="module" src="game.js?v=20261029-3"></script>
 </body>
 </html>
