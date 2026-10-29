@@ -1,17 +1,14 @@
 package it.uniurb.pmo.variants.risikonew.management;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-import java.util.Map;
+import it.uniurb.pmo.framework.players.IPlayer;
+import it.uniurb.pmo.framework.players.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import it.uniurb.pmo.framework.players.IPlayer;
-import it.uniurb.pmo.framework.players.Player;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class MapManagerRisikoNewIntegrationTest extends MapManagerRisikoNew {
 

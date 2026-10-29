@@ -1,9 +1,9 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
+import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.framework.management.interfaces.ITurnManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
-import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -91,7 +91,7 @@ public class TurnManagerIntegrationTest extends RisikoNewTestSetup {
         turnManager.initializeGame(this.players);
         this.players.forEach(player -> player.setPlayerTurnStatus(PlayerTurnStatus.ELIMINATED));
 
-        assertThrows(IllegalStateException.class, () -> turnManager.getNextPlayer());
+        assertThrows(IllegalStateException.class, turnManager::getNextPlayer);
     }
 
 }

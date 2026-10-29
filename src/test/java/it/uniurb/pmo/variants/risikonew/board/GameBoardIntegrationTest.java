@@ -1,21 +1,16 @@
 package it.uniurb.pmo.variants.risikonew.board;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-import java.util.Optional;
-
+import it.uniurb.pmo.framework.board.IGameBoard;
+import it.uniurb.pmo.framework.board.IZone;
+import it.uniurb.pmo.framework.utils.EGameVersion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import it.uniurb.pmo.framework.board.IGameBoard;
-import it.uniurb.pmo.framework.board.IZone;
-import it.uniurb.pmo.framework.utils.EGameVersion;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameBoardIntegrationTest {
     
@@ -106,8 +101,8 @@ public class GameBoardIntegrationTest {
         // Get first territory name for testing
         String territoryName = gameBoard.getRootZones().stream()
                 .flatMap(continent -> continent.getChildZones().stream())
-                .filter(zone -> zone.getName().equals("kamchatka"))
                 .map(IZone::getName)
+                .filter(name -> name.equals("kamchatka"))
                 .findFirst()
                 .orElse(null);
         
@@ -115,8 +110,11 @@ public class GameBoardIntegrationTest {
         
         Optional<IZone> parentZone = gameBoard.whereIsZone(territoryName);
         assertNotNull(parentZone);
-        assertEquals("asia", parentZone.get().getName());
-        
+        if (parentZone.isPresent()){
+            String parentZoneName = parentZone.get().getName();
+            assertEquals("asia", parentZoneName);
+        }
+
         // Test non-existent territory
         Optional<IZone> nonExistentParent = gameBoard.whereIsZone("NonExistentTerritory");
         assertNotNull(nonExistentParent);

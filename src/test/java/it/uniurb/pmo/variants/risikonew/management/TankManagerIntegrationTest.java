@@ -61,7 +61,7 @@ public class TankManagerIntegrationTest extends RisikoNewTestSetup {
         int myTerritoriesCount = mapManager.getTerritoriesOwnedBy(players.getFirst()).size();
         int totalDeployed = tankManager.getTotalDeployed(players.getFirst());
 
-        assertEquals(myAvailableTanks + myTerritoriesCount, 30); // 30 tank totali per 4 giocatori
+        assertEquals(30, myAvailableTanks + myTerritoriesCount); // 30 tank totali per 4 giocatori
         assertEquals(myTerritoriesCount, totalDeployed);
     }
 }
