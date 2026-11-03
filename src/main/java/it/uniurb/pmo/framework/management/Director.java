@@ -54,7 +54,7 @@ public class Director implements IDirector {
 	@Override
 	public void stopGame() {
 		this.isReady = false;
-		this.players.forEach(this::exitGame);
+		List.copyOf(this.players).forEach(this::exitGame);
 		this.players.clear();
 		this.managers.forEach(IManager::resetGame);
 	}
