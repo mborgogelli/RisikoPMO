@@ -1,9 +1,11 @@
 package it.uniurb.pmo.variants.risikonew.turn;
 
 import it.uniurb.pmo.controller.game.dto.CurrentStateDTO;
+import it.uniurb.pmo.framework.management.interfaces.IDirector;
 import it.uniurb.pmo.framework.management.interfaces.ITurnManager;
 import it.uniurb.pmo.framework.players.IPlayer;
 import it.uniurb.pmo.framework.players.PlayerTurnStatus;
+import it.uniurb.pmo.framework.turn.event.EGameEventType;
 import it.uniurb.pmo.variants.risikonew.utils.RisikoNewTestSetup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -92,6 +94,65 @@ public class TurnManagerIntegrationTest extends RisikoNewTestSetup {
         this.players.forEach(player -> player.setPlayerTurnStatus(PlayerTurnStatus.ELIMINATED));
 
         assertThrows(IllegalStateException.class, turnManager::getNextPlayer);
+    }
+
+    @Test
+    @DisplayName("Pubblica la vittoria prima di inoltrarla al director")
+    void endTurnPublishesWinnerBeforeNotifyingDirector() {
+        IPlayer winner = this.players.getFirst();
+        this.players.forEach(player -> player.setPlayerTurnStatus(PlayerTurnStatus.ELIMINATED));
+        winner.setPlayerTurnStatus(PlayerTurnStatus.ACTIVE);
+        boolean[] directorNotified = {false};
+        IDirector director = new IDirector() {
+            @Override
+            public void declareWinner(IPlayer player) {
+                CurrentStateDTO stateAtNotification = gameCoordinator.currentState("room").orElseThrow();
+                assertSame(winner, player);
+                assertEquals(EGameEventType.GAME_ENDED, stateAtNotification.eventType());
+                assertEquals(winner.getName(), stateAtNotification.winnerName());
+                directorNotified[0] = true;
+            }
+
+            @Override
+            public void exitGame(IPlayer player) {
+            }
+
+            @Override
+            public void startGame() {
+            }
+
+            @Override
+            public void stopGame() {
+            }
+
+            @Override
+            public void resetGame() {
+            }
+        };
+        this.mediator.setDirector(director);
+
+        this.turnManager.endTurn(winner);
+
+        CurrentStateDTO finalState = this.gameCoordinator.currentState("room").orElseThrow();
+        assertEquals(EGameEventType.GAME_ENDED, finalState.eventType());
+        assertEquals(winner.getName(), finalState.winnerName());
+        assertTrue(directorNotified[0]);
+    }
+
+    @Test
+    @DisplayName("Avanza il turno senza dichiarare una vittoria quando restano più giocatori")
+    void endTurnWithoutWinnerAdvancesToNextActivePlayer() {
+        this.players.forEach(player -> player.setPlayerTurnStatus(PlayerTurnStatus.ACTIVE));
+        IPlayer currentPlayer = this.turnManager.getNextPlayer();
+        this.turnManager.startTurn(currentPlayer);
+        IPlayer expectedNextPlayer = this.turnManager.getNextPlayer();
+
+        this.turnManager.endTurn(currentPlayer);
+
+        assertSame(expectedNextPlayer, this.turnManager.getCurrentPlayer());
+        CurrentStateDTO state = this.gameCoordinator.currentState("room").orElseThrow();
+        assertNotEquals(EGameEventType.GAME_ENDED, state.eventType());
+        assertEquals(expectedNextPlayer.getName(), state.currentPlayerName());
     }
 
 }

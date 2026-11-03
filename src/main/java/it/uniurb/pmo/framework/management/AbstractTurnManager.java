@@ -113,8 +113,11 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 
 	@Override
 	public void endTurn(IPlayer player){
-		if(this.checkWinner().isPresent()) {
-			this.mediator.notifyWinner(this.checkWinner().get());
+		Optional<IPlayer> winner = this.checkWinner();
+		if(winner.isPresent()) {
+			IPlayer winningPlayer = winner.get();
+			this.publish(updateEvent(EGameEventType.GAME_ENDED, Optional.of(winningPlayer.getName())));
+			this.mediator.notifyWinner(winningPlayer);
 		}else{
 			this.startTurn(this.getNextPlayer());
 		}
@@ -342,11 +345,19 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		return new GameEvent(eventType, this.createGameSnapshot(null));
 	}
 
+	private GameEvent updateEvent(EGameEventType eventType, Optional<String> winnerName) {
+		return new GameEvent(eventType, this.createGameSnapshot(null, winnerName));
+	}
+
 	private IGameSnapshot createGameSnapshot(IPhasePayload phasePayload) {
+		Optional<String> winnerName = this.checkWinner().map(IPlayer::getName);
+		return this.createGameSnapshot(phasePayload, winnerName);
+	}
+
+	private IGameSnapshot createGameSnapshot(IPhasePayload phasePayload, Optional<String> winnerName) {
 		Optional<String> phaseId = Optional.ofNullable(this.currentPhase)
 				.map(phase -> phase.getPhaseType().phaseCode());
 		Optional<String> currentPlayerName = Optional.ofNullable(this.currentPlayer).map(IPlayer::getName);
-		Optional<String> winnerName = this.checkWinner().map(IPlayer::getName);
 		Optional<IGameRequest> pendingAction = phasePayload instanceof IGameRequest action
 				&& !(phasePayload instanceof ICombatResultDTO)
 				? Optional.of(action)
