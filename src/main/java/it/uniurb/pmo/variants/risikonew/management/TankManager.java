@@ -103,8 +103,8 @@ public class TankManager extends AbstractTokenManager implements ITankManager {
 
 	@Override
 	protected void resetTokenData() {
-		checkInitialized();
 		this.territoryTanks.clear();
+		this.isReady = false;
 	}
 
 	private void initTokensPerPlayer(List<IPlayer> players) {
