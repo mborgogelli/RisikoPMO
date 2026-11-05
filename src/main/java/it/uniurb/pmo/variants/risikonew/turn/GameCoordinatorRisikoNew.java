@@ -138,11 +138,13 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
     public void submitDefend(String playerName, ITokenType tokenType, int tokenAmount) {
         this.validateRisikoNewTokenType(tokenType);
         IGameSnapshot snapshot = this.currentSnapshot();
-        IDefendRequestDTO request = (IDefendRequestDTO) snapshot.pendingAction().get();
-        if (!request.defenderName().equals(playerName)) {
-            throw new IllegalStateException("Non è il turno del giocatore indicato.");
+        if (snapshot.pendingAction().isPresent() &&
+            snapshot.pendingAction().get() instanceof IDefendRequestDTO request) {
+            if (!request.defenderName().equals(playerName)) {
+                throw new IllegalStateException("Non è il turno del giocatore indicato.");
+            }
+            this.submitCommand(new DefendCommandRisikoNew(tokenAmount));
         }
-        this.submitCommand(new DefendCommandRisikoNew(tokenAmount));
     }
 
     @Override
