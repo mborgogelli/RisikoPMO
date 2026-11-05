@@ -20,11 +20,7 @@ import it.uniurb.pmo.variants.risikonew.turn.command.MoveCommandRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.snapshot.IRisikoGameSnapshot;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
 
 public class GameCoordinatorRisikoNew implements IGameCoordinator {
 
@@ -33,10 +29,10 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
     private volatile ICombatResultDTO lastCombatResult;
     private final CurrentStateMapper currentStateMapper;
     private final DeployCommandMapperRisikoNew deployCommandMapper;
-    private List<IGameCommandReceiver> commandReceivers;
+    private final List<IGameCommandReceiver> commandReceivers;
 
     public GameCoordinatorRisikoNew() {
-        this.commandReceivers = new CopyOnWriteArrayList<>();
+        this.commandReceivers = new ArrayList<>();
         this.currentStateMapper = new CurrentStateMapper();
         this.deployCommandMapper = new DeployCommandMapperRisikoNew();
     }
@@ -94,12 +90,7 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
             throw new IllegalStateException("Exactly one game command receiver must be registered");
         }
 
-        IGameCommandReceiver receiver = this.commandReceivers.getFirst();
-        if (receiver.isValidCommand(command)) {
-            receiver.handleCommand(command);
-        } else {
-            throw new IllegalArgumentException("Not valid command.");
-        }
+        this.commandReceivers.forEach(commandReceiver -> commandReceiver.handleCommand(command));
     }
 
     @Override
