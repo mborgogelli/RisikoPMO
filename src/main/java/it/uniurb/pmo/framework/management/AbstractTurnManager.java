@@ -82,11 +82,9 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		List<IPlayer> activePlayers = this.players.stream()
 				.filter(player -> player.getTurnStatus() != PlayerTurnStatus.ELIMINATED)
 				.toList();
-		Optional<IPlayer> winner = Optional.empty();
-		if (activePlayers.size() == 1) {
-			winner = Optional.of(activePlayers.getFirst());
-		}
-		return winner;
+		return activePlayers.size() == 1
+				? Optional.of(activePlayers.getFirst())
+				: Optional.empty();
 	}
 
 	@Override
@@ -101,63 +99,54 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	public void startTurn(IPlayer player) {
 		this.currentPlayer = player;
 		this.currentPhaseIndex = 0;
-		this.currentPhase = null;
-		if (this.phases != null && !this.phases.isEmpty()) {
-			this.currentPhase = this.phases.getFirst();
-		}
-		this.publish(updateEvent(EGameEventType.TURN_STARTED));
-		if (this.phases != null && !this.phases.isEmpty()) {
-			this.startPhase(this.phases.getFirst());
+		this.currentPhase = (this.phases != null && !this.phases.isEmpty())
+				? this.phases.getFirst()
+				: null;
+
+		this.publish(this.updateEvent(EGameEventType.TURN_STARTED));
+
+		if (this.currentPhase != null) {
+			this.startPhase(this.currentPhase);
 		}
 	}
 
 	@Override
-	public void endTurn(IPlayer player){
-		Optional<IPlayer> winner = this.checkWinner();
-		if(winner.isPresent()) {
-			IPlayer winningPlayer = winner.get();
-			this.publish(updateEvent(EGameEventType.GAME_ENDED, Optional.of(winningPlayer.getName())));
-			this.mediator.notifyWinner(winningPlayer);
-		}else{
-			this.startTurn(this.getNextPlayer());
-		}
+	public void endTurn(IPlayer player) {
+		this.checkWinner().ifPresentOrElse(
+				winningPlayer -> {
+					this.publish(this.updateEvent(EGameEventType.GAME_ENDED));
+					this.mediator.notifyWinner(winningPlayer);
+				},
+				() -> this.startTurn(this.getNextPlayer())
+		);
 	}
 
 	@Override
 	public IPlayer getNextPlayer() {
-		IPlayer currentPlayer = this.getCurrentPlayer();
-		int currentIndex = (currentPlayer == null) ? -1 : this.players.indexOf(currentPlayer);
-		IPlayer nextPlayer = null;
-		boolean found = false;
+		int currentIndex = (this.currentPlayer == null) ? -1 : this.players.indexOf(this.currentPlayer);
 
-		for (int i = 1; i <= this.players.size() && !found; i++) {
+		for (int i = 1; i <= this.players.size(); i++) {
 			int nextIndex = (currentIndex + i) % this.players.size();
 			IPlayer candidate = this.players.get(nextIndex);
 
-
-			 // Trova il prossimo giocatore attivo
+			// Trova il prossimo giocatore attivo
 			if (candidate.getTurnStatus() == PlayerTurnStatus.ACTIVE) {
 				/*
-				 * Se l'indice del prossimo giocatore è uguale a zero e l'indice corrente
-				 * è maggiore o uguale a zero, incrementa il turno corrente.
+				 * Se avevamo già un giocatore attivo e l'indice del prossimo è minore o uguale
+				 * all'indice corrente (wrap-around della lista circolare), incrementa il turno.
 				 */
-				if (nextIndex == 0 && currentIndex >= 0) {
+				if (currentIndex >= 0 && nextIndex <= currentIndex) {
 					this.currentTurn++;
 				}
-				nextPlayer = candidate;
-				found = true;
+				return candidate;
 			}
 		}
 
-		if (!found) {
-			throw new IllegalStateException("Nessun giocatore attivo disponibile.");
-		}
-
-		return nextPlayer;
+		throw new IllegalStateException("Nessun giocatore attivo disponibile.");
 	}
 
 	@Override
-	public void startPhase(IPhase currentPhase){
+	public void startPhase(IPhase currentPhase) {
 		this.currentPhase = currentPhase;
 		this.processPhaseResult(currentPhase.playPhase(this.currentPlayer));
 	}
@@ -217,7 +206,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	protected abstract List<IPhase> createPhases();
 
 	/**
-	 * Metodo astratto per ottenere la lista di eventuali fasi di setup del gioco
+	 * Metodo astratto per ottenere la lista di eventuali fasi di setup del gioco.
 	 */
 	protected abstract List<IPhase> createSetupPhases();
 
@@ -233,13 +222,13 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	/**
 	 * Restituisce il prossimo giocatore che deve eseguire una setup phase.
 	 * Le varianti possono ridefinirlo, ad esempio per saltare un giocatore che
-	 * ha gia' terminato il piazzamento iniziale.
+	 * ha già terminato il piazzamento iniziale.
 	 */
 	protected IPlayer getNextSetupPlayer() {
 		return this.getNextPlayer();
 	}
 
-	protected List<IPlayer> shufflePlayers(List<IPlayer> players){
+	protected List<IPlayer> shufflePlayers(List<IPlayer> players) {
 		List<IPlayer> shuffledPlayers = new ArrayList<>(players);
 		Collections.shuffle(shuffledPlayers);
 		return shuffledPlayers;
@@ -258,6 +247,12 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 		return this.mediator;
 	}
 
+	/**
+	 * Crea un nuovo snapshot di gioco variante a partire da uno snapshot comune.
+	 * @param commonSnapshot lo snapshot comune da cui partire
+	 * @param phasePayload il payload della fase corrente
+	 * @return il nuovo snapshot di gioco variante
+	 */
 	protected IGameSnapshot createVariantSnapshot(GameSnapshotDTO commonSnapshot, IPhasePayload phasePayload) {
 		return commonSnapshot;
 	}
@@ -271,7 +266,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	private void startSetupPhase() {
 		this.currentPlayer = this.getNextSetupPlayer();
 		this.currentPhase = this.setupPhases.get(this.currentSetupPhaseIndex);
-		this.publish(updateEvent(EGameEventType.PHASE_STARTED));
+		this.publish(this.updateEvent(EGameEventType.PHASE_STARTED));
 		this.processPhaseResult(this.currentPhase.playPhase(this.currentPlayer));
 	}
 
@@ -285,7 +280,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 					: EGameEventType.CHOICE_REQUIRED;
 			event = new GameEvent(eventType, this.createGameSnapshot(state));
 		} else if (result.isCompleted()) {
-			event = updateEvent(EGameEventType.PHASE_COMPLETED);
+			event = this.updateEvent(EGameEventType.PHASE_COMPLETED);
 		}
 
 		this.publish(event);
@@ -328,10 +323,10 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	}
 
 	private IPlayerSnapshot playerState(IPlayer player) {
-		Map<String,Map<ITokenType,Integer>> playerTerritories = this.mediator.getZonesOwnedBy(player)
+		Map<String, Map<ITokenType, Integer>> playerTerritories = this.mediator.getZonesOwnedBy(player)
 				.stream()
 				.collect(Collectors.toMap(t -> t, t -> this.mediator.getZoneTokens(t)));
-		Map<ITokenType,Integer> playerTokens = this.mediator.getTokensOwnedBy(player);
+		Map<ITokenType, Integer> playerTokens = this.mediator.getTokensOwnedBy(player);
 		return new PlayerSnapshot(
 				player.getName(),
 				player.getColor(),
@@ -339,29 +334,22 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 				playerTerritories,
 				playerTokens);
 	}
-	//TODO Semplificare metodo
 
-	private GameEvent updateEvent (EGameEventType eventType) {
+	private GameEvent updateEvent(EGameEventType eventType) {
 		return new GameEvent(eventType, this.createGameSnapshot(null));
 	}
 
-	private GameEvent updateEvent(EGameEventType eventType, Optional<String> winnerName) {
-		return new GameEvent(eventType, this.createGameSnapshot(null, winnerName));
-	}
-
 	private IGameSnapshot createGameSnapshot(IPhasePayload phasePayload) {
-		Optional<String> winnerName = this.checkWinner().map(IPlayer::getName);
-		return this.createGameSnapshot(phasePayload, winnerName);
-	}
-
-	private IGameSnapshot createGameSnapshot(IPhasePayload phasePayload, Optional<String> winnerName) {
 		Optional<String> phaseId = Optional.ofNullable(this.currentPhase)
 				.map(phase -> phase.getPhaseType().phaseCode());
-		Optional<String> currentPlayerName = Optional.ofNullable(this.currentPlayer).map(IPlayer::getName);
-		Optional<IGameRequest> pendingAction = phasePayload instanceof IGameRequest action
-				&& !(phasePayload instanceof ICombatResultDTO)
+		Optional<String> currentPlayerName = Optional.ofNullable(this.currentPlayer)
+				.map(IPlayer::getName);
+		Optional<String> winnerName = this.checkWinner()
+				.map(IPlayer::getName);
+		Optional<IGameRequest> pendingAction = (phasePayload instanceof IGameRequest action)
 				? Optional.of(action)
 				: Optional.empty();
+
 		GameSnapshotDTO commonSnapshot = new GameSnapshotDTO(
 				this.currentTurn, phaseId, currentPlayerName, this.gameSnapshot(), pendingAction, winnerName);
 		return this.createVariantSnapshot(commonSnapshot, phasePayload);
