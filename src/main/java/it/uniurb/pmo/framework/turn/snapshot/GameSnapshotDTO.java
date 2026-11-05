@@ -19,10 +19,6 @@ public record GameSnapshotDTO(
         if (turnNumber < 0) {
             throw new IllegalArgumentException("Turn number cannot be negative.");
         }
-        phaseId = phaseId == null ? Optional.empty() : phaseId;
-        currentPlayerName = currentPlayerName == null ? Optional.empty() : currentPlayerName;
         players = Map.copyOf(players);
-        pendingAction = pendingAction == null ? Optional.empty() : pendingAction;
-        winnerName = winnerName == null ? Optional.empty() : winnerName;
     }
 }
