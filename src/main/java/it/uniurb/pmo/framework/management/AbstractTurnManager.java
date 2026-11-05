@@ -195,7 +195,7 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	}
 
 	@Override
-	public Map<String, IPlayerSnapshot> gameSnapshot() {
+	public Map<String, IPlayerSnapshot> playerSnapshot() {
 		return this.players.stream()
 				.collect(Collectors.toUnmodifiableMap(IPlayer::getName, this::playerState));
 	}
@@ -272,16 +272,11 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 
 	//TODO Non abbastanza generica
 	private IGameEvent processPhaseResult(IPhaseResult<? extends IPhasePayload> result) {
-		IGameEvent event = null;
-		if (result.phasePayload().isPresent()) {
-			IPhasePayload state = result.phasePayload().get();
-			EGameEventType eventType = state instanceof ICombatResultDTO
-					? EGameEventType.COMBAT_RESOLVED
-					: EGameEventType.CHOICE_REQUIRED;
-			event = new GameEvent(eventType, this.createGameSnapshot(state));
-		} else if (result.isCompleted()) {
-			event = this.updateEvent(EGameEventType.PHASE_COMPLETED);
-		}
+		IGameEvent event = result.phasePayload()
+				.map(this::createPayloadEvent)
+				.orElseGet(() -> result.isCompleted()
+						? this.updateEvent(EGameEventType.PHASE_COMPLETED)
+						: null);
 
 		this.publish(event);
 		if (result.isCompleted()) {
@@ -336,23 +331,33 @@ public abstract class AbstractTurnManager implements ITurnManager, IGameEventPub
 	}
 
 	private GameEvent updateEvent(EGameEventType eventType) {
-		return new GameEvent(eventType, this.createGameSnapshot(null));
+		GameSnapshotDTO commonSnapshot = new GameSnapshotDTO(
+				this.currentTurn,
+				Optional.ofNullable(this.currentPhase).map(phase -> phase.getPhaseType().phaseCode()),
+				Optional.ofNullable(this.currentPlayer).map(IPlayer::getName),
+				this.playerSnapshot(),
+				Optional.empty(),
+				this.checkWinner().map(IPlayer::getName));
+		return new GameEvent(eventType, this.createVariantSnapshot(commonSnapshot, null));
 	}
 
-	private IGameSnapshot createGameSnapshot(IPhasePayload phasePayload) {
-		Optional<String> phaseId = Optional.ofNullable(this.currentPhase)
-				.map(phase -> phase.getPhaseType().phaseCode());
-		Optional<String> currentPlayerName = Optional.ofNullable(this.currentPlayer)
-				.map(IPlayer::getName);
-		Optional<String> winnerName = this.checkWinner()
-				.map(IPlayer::getName);
-		Optional<IGameRequest> pendingAction = (phasePayload instanceof IGameRequest action)
+	private GameEvent createPayloadEvent(IPhasePayload payload) {
+		EGameEventType eventType = payload instanceof ICombatResultDTO
+				? EGameEventType.COMBAT_RESOLVED
+				: EGameEventType.CHOICE_REQUIRED;
+		Optional<IGameRequest> pendingAction = (payload instanceof IGameRequest action
+				&& !(payload instanceof ICombatResultDTO))
 				? Optional.of(action)
 				: Optional.empty();
 
 		GameSnapshotDTO commonSnapshot = new GameSnapshotDTO(
-				this.currentTurn, phaseId, currentPlayerName, this.gameSnapshot(), pendingAction, winnerName);
-		return this.createVariantSnapshot(commonSnapshot, phasePayload);
+				this.currentTurn,
+				Optional.ofNullable(this.currentPhase).map(phase -> phase.getPhaseType().phaseCode()),
+				Optional.ofNullable(this.currentPlayer).map(IPlayer::getName),
+				this.playerSnapshot(),
+				pendingAction,
+				this.checkWinner().map(IPlayer::getName));
+		return new GameEvent(eventType, this.createVariantSnapshot(commonSnapshot, payload));
 	}
 
 }

@@ -28,7 +28,7 @@ public interface ITurnManager extends IManager, IGameConductor {
 
 	List<IPlayer> getPlayers();
 
-	Map<String, IPlayerSnapshot> gameSnapshot();
+	Map<String, IPlayerSnapshot> playerSnapshot();
 
 }
 

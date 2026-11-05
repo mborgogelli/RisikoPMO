@@ -145,7 +145,7 @@ public class InitialPlacementPhaseIntegrationTest extends RisikoNewTestSetup {
         assertTrue(phase.isValidCommand(command));
         phase.handleCommand(command);
 
-        IPlayerSnapshot playerState = turnManager.gameSnapshot().get(playerName);
+        IPlayerSnapshot playerState = turnManager.playerSnapshot().get(playerName);
 
         //Nuovo stato del giocatore
         assertEquals(playerState.playerName(), playerName);
