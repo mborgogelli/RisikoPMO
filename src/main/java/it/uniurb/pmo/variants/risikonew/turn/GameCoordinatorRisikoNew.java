@@ -20,7 +20,10 @@ import it.uniurb.pmo.variants.risikonew.turn.command.MoveCommandRisikoNew;
 import it.uniurb.pmo.variants.risikonew.turn.snapshot.IRisikoGameSnapshot;
 import it.uniurb.pmo.variants.risikonew.utils.ERisikoNewToken;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class GameCoordinatorRisikoNew implements IGameCoordinator {
 
@@ -101,7 +104,7 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
             throw new IllegalArgumentException("La fase corrente non richiede un piazzamento.");
         }
         boolean matchesCurrentPlayer = currentEvent.getSnapshot().currentPlayerName()
-                .map(name -> Objects.equals(name, playerName))
+                .map(name -> name.equals(playerName))
                 .orElse(false);
         if (!matchesCurrentPlayer) {
             throw new IllegalStateException("Non è il turno del giocatore indicato.");
@@ -123,7 +126,8 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
             throw new IllegalArgumentException("La fase corrente non richiede un attacco.");
         }
         boolean matchesCurrentPlayer = snapshot.currentPlayerName()
-                .map(name -> Objects.equals(name, playerName)).orElse(false);
+                .map(name -> name.equals(playerName))
+                .orElse(false);
         if (!matchesCurrentPlayer) {
             throw new IllegalStateException("Non è il turno del giocatore indicato.");
         }
@@ -134,9 +138,8 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
     public void submitDefend(String playerName, ITokenType tokenType, int tokenAmount) {
         this.validateRisikoNewTokenType(tokenType);
         IGameSnapshot snapshot = this.currentSnapshot();
-        IDefendRequestDTO request = this.requirePendingAction(snapshot, IDefendRequestDTO.class,
-                "La fase corrente non richiede una difesa.");
-        if (!Objects.equals(request.defenderName(), playerName)) {
+        IDefendRequestDTO request = (IDefendRequestDTO) snapshot.pendingAction().get();
+        if (!request.defenderName().equals(playerName)) {
             throw new IllegalStateException("Non è il turno del giocatore indicato.");
         }
         this.submitCommand(new DefendCommandRisikoNew(tokenAmount));
@@ -151,7 +154,8 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
             throw new IllegalArgumentException("La fase corrente non consente di saltare l'azione.");
         }
         boolean matchesCurrentPlayer = snapshot.currentPlayerName()
-                .map(name -> Objects.equals(name, playerName)).orElse(false);
+                .map(name -> name.equals(playerName))
+                .orElse(false);
         if (!matchesCurrentPlayer) {
             throw new IllegalStateException("Non è il turno del giocatore indicato.");
         }
@@ -167,7 +171,8 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
             throw new IllegalArgumentException("La fase corrente non richiede uno spostamento.");
         }
         boolean matchesCurrentPlayer = snapshot.currentPlayerName()
-                .map(name -> Objects.equals(name, playerName)).orElse(false);
+                .map(name -> name.equals(playerName))
+                .orElse(false);
         if (!matchesCurrentPlayer) {
             throw new IllegalStateException("Non è il turno del giocatore indicato.");
         }
@@ -191,11 +196,4 @@ public class GameCoordinatorRisikoNew implements IGameCoordinator {
                 .orElseThrow(() -> new IllegalStateException("Game state is not available."));
     }
 
-    private <T> T requirePendingAction(IGameSnapshot snapshot, Class<T> actionType, String message) {
-        Object action = snapshot.pendingAction().orElse(null);
-        if (!actionType.isInstance(action)) {
-            throw new IllegalArgumentException(message);
-        }
-        return actionType.cast(action);
-    }
 }
